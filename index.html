@@ -460,21 +460,36 @@ Notas tomadas por Julián:
 
           <!-- Módulo Estratégico: Propiedad Intelectual y APIs -->
           <div class="tool-container" style="border-left: 4px solid var(--color-primary);">
-            <h3>⚖️ Módulo Estratégico: Propiedad Intelectual y Consumo Seguro de APIs</h3>
-            <p>Directrices técnicas y legales que todo profesional debe aplicar al crear código con IA o conectar servicios comerciales.</p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div>
+                <h3 style="margin: 0;">⚖️ Módulo Estratégico: Propiedad Intelectual, Licenciamiento y Seguridad en APIs</h3>
+                <p style="margin: 0.25rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Marco legal, riesgo de contaminación por licencias recíprocas y arquitectura para el consumo seguro de modelos comerciales.</p>
+              </div>
+              <a href="materiales/dia3_agentes_web/guia_propiedad_intelectual_y_apis.md" target="_blank" class="material-link" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+                📄 Leer Guía Completa (.md)
+              </a>
+            </div>
 
-            <div class="hero-stats" style="border-top: none; padding-top: 0;">
+            <div class="hero-stats" style="border-top: none; padding-top: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
               <div class="stat-box" style="text-align: left;">
-                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.25rem;">1. Autoría Humana vs. IA</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Por ley internacional, solo las personas tienen derechos morales y patrimoniales. El código generado 100% por un prompt es de dominio público; la autoría se protege sobre las adaptaciones y la arquitectura humana.</p>
+                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.35rem;">1. Autoría Humana vs. Dominio Público</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Por jurisprudencia internacional (US Copyright Office) y nacional (DNDA / Ley 23 de 1982), <strong>solo las personas físicas pueden ser autoras</strong>. El código generado 100% por un prompt simple no es protegible y pasa a ser de dominio público.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Aporte protegible:</strong> La protección recae exclusivamente sobre la arquitectura global, la lógica de negocio humana y las adaptaciones sustanciales escritas por el desarrollador.</small>
               </div>
               <div class="stat-box" style="text-align: left;">
-                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.25rem;">2. Blindaje Anti-Copyleft</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Los modelos pueden reproducir fragmentos bajo licencias restrictivas (GPL). Activa siempre filtros de coincidencia de código público para no poner en riesgo el software propietario de la organización.</p>
+                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.35rem;">2. Blindaje Anti-Copyleft y Licencias</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Los modelos pueden memorizar y regurgitar código bajo licencias recíprocas fuertes (GPL / AGPL). Incorporar estos fragmentos en un software propietario genera <strong>riesgo de contaminación viral</strong> de licencia.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Control técnico:</strong> Activa siempre el filtro de coincidencia de código público (*Public Code Match Filter*) en Copilot/Cursor y ejecuta auditoría de dependencias (SCA).</small>
               </div>
               <div class="stat-box" style="text-align: left;">
-                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.25rem;">3. Cero Claves en Git</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Nunca incluyas tokens ni claves de API en archivos rastreados. Utiliza variables de entorno o almacenes de credenciales locales (Windows Credential Manager) para evitar cobros sorpresa.</p>
+                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.35rem;">3. Arquitectura BFF: Cero Claves en Git</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Prohibición absoluta de quemar (*hardcodear*) claves de API (<code>sk-...</code>, <code>AIza...</code>) en el frontend o repositorios. Bots automatizados escanean Git y pueden comprometer tu cuenta en segundos.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Patrón seguro:</strong> Utiliza el patrón <em>Backend-for-Frontend (BFF)</em>. El cliente consulta tu servidor y el backend custodia la clave en variables de entorno o Windows Credential Manager.</small>
+              </div>
+              <div class="stat-box" style="text-align: left;">
+                <strong style="color: var(--color-primary); display:block; margin-bottom: 0.35rem;">4. Guardrails de Costo y Términos de API</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">El cobro en APIs se tasa por tokens. Un bucle infinito en un script puede costar cientos de dólares. Configura techos de gasto duros (*Hard Limits*), alertas blandas y disyuntores (*circuit breakers*).</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Privacidad de API:</strong> A diferencia del chat web gratuito, las APIs comerciales garantizan por contrato que <strong>no usan tus datos para reentrenar modelos públicos</strong>.</small>
               </div>
             </div>
           </div>
@@ -547,21 +562,36 @@ Requisitos:
 
           <!-- Módulo Estratégico: Dilemas Éticos y Gobernanza -->
           <div class="tool-container" style="border-left: 4px solid var(--color-instructor);">
-            <h3>🛡️ Módulo Estratégico: Dilemas Éticos, Sesgos y Privacidad Corporativa</h3>
-            <p>Principios fundamentales para asegurar que las soluciones tecnológicas no discriminen ni vulneren la seguridad institucional.</p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div>
+                <h3 style="margin: 0;">🛡️ Módulo Estratégico: Dilemas Éticos, Gobernanza y el Futuro del Desarrollo</h3>
+                <p style="margin: 0.25rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Marco analítico para auditar sesgos algorítmicos, garantizar la privacidad corporativa y evolucionar el rol profesional.</p>
+              </div>
+              <a href="materiales/dia4_agentes_integrador/guia_gobernanza_sesgos_corporativos.md" target="_blank" class="material-link" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">
+                📄 Leer Guía Completa (.md)
+              </a>
+            </div>
 
-            <div class="hero-stats" style="border-top: none; padding-top: 0;">
+            <div class="hero-stats" style="border-top: none; padding-top: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
               <div class="stat-box" style="text-align: left;">
-                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.25rem;">1. Auditoría de Sesgos</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Realiza pruebas a ciegas variando únicamente género, nombres o procedencia en los textos evaluados. Si el resultado cambia, el prompt carece de equidad y debe calibrarse.</p>
+                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.35rem;">1. Auditoría de Sesgos Algorítmicos</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Los modelos replican asimetrías de datos anglosajones e históricos. Pueden discriminar en selección de hojas de vida, triaje de PQRS o evaluación formativa.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Protocolo de mitigación:</strong> Aplica pruebas a ciegas variando solo nombres o regiones, fija temperatura baja (0.0 a 0.2) y exige revisión humana obligatoria (<em>Human-in-the-loop</em>).</small>
               </div>
               <div class="stat-box" style="text-align: left;">
-                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.25rem;">2. Información Confidencial</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Datos médicos, contraseñas, notas personales o información de menores de edad nunca deben enviarse a modelos gratuitos en la nube. Requieren modelos locales o anonimización previa.</p>
+                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.35rem;">2. Privacidad de Datos y Ley 1581</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Bajo la Ley 1581 de 2012 y el principio de finalidad, datos médicos, calificaciones, identidades y contraseñas jamás deben remitirse a chats web públicos que reentrenan modelos.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Gobernanza AUP:</strong> Clasifica datos (público, interno, confidencial, sensible), anonimiza identificadores antes del prompt y exige contratos Enterprise con retención cero.</small>
               </div>
               <div class="stat-box" style="text-align: left;">
-                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.25rem;">3. Decálogo de Uso Aceptable</strong>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Toda entidad debe estipular qué herramientas están avaladas, cómo declarar la asistencia de la IA y asegurar que siempre exista una decisión humana final (*human-in-the-loop*).</p>
+                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.35rem;">3. Dilemas Éticos y Sycophancy</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Cuidado con el <em>sesgo de complacencia (sycophancy)</em>: los LLMs tienden a validar acríticamente hipótesis erróneas del usuario y generar alucinaciones con apariencia jurídica formal.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Postura ética:</strong> Ninguna decisión que comprometa derechos de personas puede delegarse al 100% en un modelo de caja negra sin trazabilidad explicable.</small>
+              </div>
+              <div class="stat-box" style="text-align: left;">
+                <strong style="color: var(--color-instructor); display:block; margin-bottom: 0.35rem;">4. El Futuro del Desarrollo de Software</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">El valor del desarrollador no está en mecanografiar sintaxis repetitiva (*boilerplate*), sino en formular problemas con rigor, diseñar arquitecturas robustas y auditar la seguridad.</p>
+                <small style="color: var(--text-main); font-size: 0.78rem;"><strong>Habilidad central:</strong> Pensamiento crítico para detectar dependencias inventadas (*package hallucination*), diseñar pruebas automatizadas y supervisar agentes con guardrails.</small>
               </div>
             </div>
           </div>
