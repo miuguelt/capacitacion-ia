@@ -39,19 +39,21 @@
       "checklist": [
         "Los 200 archivos de prueba se organizaron en carpetas temáticas.",
         "Se generó el reporte HTML con el resumen de conteo y tablas.",
-        "El Panel de Instructores carga datos en una gráfica Chart.js y permite filtrar por texto."
+        "El Panel de Instructores carga datos en una gráfica Chart.js y permite filtrar por texto.",
+        "Aplica buenas prácticas de licenciamiento y no expone claves de API en el código."
       ]
     },
     {
       "id": "evidencia-dia-4",
       "station": { "sectionId": "dia-4" },
-      "title": "Proyecto Integrador en Vivo y Asistente Personalizado",
-      "purpose": "Consolidar las herramientas aprendidas en una solución a un problema real de la entidad o el trabajo, presentada en el Demo Day.",
+      "title": "Proyecto Integrador en Vivo, Gobernanza y Asistente Personalizado",
+      "purpose": "Consolidar las herramientas aprendidas en una solución a un problema real de la entidad o el trabajo, presentada en el Demo Day con enfoque ético.",
       "evidenceType": "proyecto_integrador",
-      "criterion": "Configura un asistente con System Prompt especializado y sustenta una solución funcional en vivo.",
+      "criterion": "Configura un asistente con System Prompt especializado, demuestra mitigación de sesgos algorítmicos y sustenta una solución funcional en vivo.",
       "instrument": "Rúbrica de valoración del Demo Day",
       "checklist": [
         "El asistente personalizado cuenta con instrucciones de sistema delimitadas y método socrático.",
+        "Aplica criterios de gobernanza, privacidad de datos y prevención de sesgos algorítmicos.",
         "El proyecto integra dos o más pilares trabajados en la semana.",
         "La sustentación en vivo de 5 minutos demuestra funcionamiento real y valor laboral."
       ]

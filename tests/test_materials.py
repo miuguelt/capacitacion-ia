@@ -46,6 +46,9 @@ def test_dia3_files_exist():
     assert gen_ps.exists() and gen_ps.stat().st_size > 50
     assert organizador.exists() and organizador.stat().st_size > 50
     assert json_data.exists() and json_data.stat().st_size > 50
+    guia_pi = d3 / "guia_propiedad_intelectual_y_apis.md"
+    assert guia_pi.exists() and guia_pi.stat().st_size > 50
+    assert "Copyleft" in guia_pi.read_text(encoding="utf-8")
     assert (plantilla / "index.html").exists()
     assert (plantilla / "styles.css").exists()
     assert (plantilla / "app.js").exists()
@@ -54,9 +57,12 @@ def test_dia4_files_exist():
     d4 = MATERIALES_DIR / "dia4_agentes_integrador"
     tutor = d4 / "plantilla_system_prompt_tutor.md"
     rubrica = d4 / "rubrica_evaluacion_demo_day.md"
+    guia_gob = d4 / "guia_gobernanza_sesgos_corporativos.md"
     
     assert tutor.exists() and tutor.stat().st_size > 50
     assert rubrica.exists() and rubrica.stat().st_size > 50
+    assert guia_gob.exists() and guia_gob.stat().st_size > 50
+    assert "sesgos" in guia_gob.read_text(encoding="utf-8").lower()
     assert "System Prompt" in tutor.read_text(encoding="utf-8")
 
 def test_generator_and_organizer_execution(tmp_path):
