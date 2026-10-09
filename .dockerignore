@@ -1,0 +1,4 @@
+# --- DevBrain repo hygiene (managed block) ---
+vendor/
+.pytest_cache/
+# --- end DevBrain repo hygiene ---

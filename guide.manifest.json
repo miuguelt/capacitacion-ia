@@ -1,0 +1,87 @@
+{
+  "standard": {
+    "id": "devbrain.educational-guide",
+    "version": "2.5.0"
+  },
+  "guide": {
+    "id": "capacitacion-ia-intensiva-4d",
+    "title": "Capacitación Práctica e Intensiva en Inteligencia Artificial (4 Días)",
+    "format": "web",
+    "entrypoint": "./index.html",
+    "language": "es-CO",
+    "version": "1.0.0",
+    "summary": "Portal interactivo y guía metodológica completa de 4 días intensivos (7:00 a.m. a 5:00 p.m.) para la formación práctica en inteligencia artificial aplicada. Incluye modo instructor con recomendaciones pedagógicas, modo aprendiz con retos paso a paso, generadores interactivos, insumos de práctica y rúbricas de evaluación.",
+    "schedule": {
+      "dates": "4 jornadas intensivas de formación continua",
+      "dailyHours": "7:00 a.m. a 5:00 p.m. (10 horas de reloj por jornada: 8.5 horas de formación directa y 1.5 horas de pausas y almuerzo)",
+      "venue": "Ambiente de formación técnica y laboratorio de cómputo",
+      "modality": "Presencial asistida por tecnología (Taller práctico 80% / Demostración 20%)",
+      "breaks": "Pausas activas: 9:30 a.m. - 9:50 a.m. y 3:30 p.m. - 3:50 p.m. Almuerzo: 12:00 m. - 1:00 p.m."
+    }
+  },
+  "curricularAlignment": {
+    "program": {
+      "code": "21720210",
+      "name": "Implementación de herramientas de inteligencia artificial en la optimización de la productividad",
+      "version": "1"
+    },
+    "competency": {
+      "code": "220501094",
+      "name": "Estructurar propuesta técnica de servicio de tecnología de acuerdo con marcos de referencia"
+    },
+    "learningResults": [
+      {
+        "code": "RAP-01",
+        "name": "Dominar técnicas de ingeniería de prompts y análisis documental profundo con modelos de lenguaje."
+      },
+      {
+        "code": "RAP-02",
+        "name": "Producir activos multimedia, presentaciones de impacto y narrativas audiovisuales consistentes con IA."
+      },
+      {
+        "code": "RAP-03",
+        "name": "Automatizar tareas de sistema de archivos y prototipar interfaces web interactivas mediante asistentes agénticos."
+      },
+      {
+        "code": "RAP-04",
+        "name": "Configurar asistentes personalizados e integrar soluciones funcionales en un proyecto integrador evaluable."
+      }
+    ]
+  },
+  "duration": {
+    "hours": 40,
+    "directHours": 34,
+    "autonomousHours": 6,
+    "breakdownStatus": "4 días de 7:00 a.m. a 5:00 p.m."
+  },
+  "modules": [
+    {
+      "id": "dia-1",
+      "number": "01",
+      "title": "Día 1 · Modelos de Lenguaje, Prompting Profesional y Análisis Documental",
+      "hours": 10,
+      "deliverableId": "evidencia-dia-1"
+    },
+    {
+      "id": "dia-2",
+      "number": "02",
+      "title": "Día 2 · Laboratorio Multimedia, Consistencia Visual y Narrativa Digital",
+      "hours": 10,
+      "deliverableId": "evidencia-dia-2"
+    },
+    {
+      "id": "dia-3",
+      "number": "03",
+      "title": "Día 3 · IA Agéntica, Diagnóstico y Construcción Web en 3 Archivos",
+      "hours": 10,
+      "deliverableId": "evidencia-dia-3"
+    },
+    {
+      "id": "dia-4",
+      "number": "04",
+      "title": "Día 4 · Asistentes a la Medida, Flujos y Proyecto Integrador (Demo Day)",
+      "hours": 10,
+      "deliverableId": "evidencia-dia-4"
+    }
+  ]
+}

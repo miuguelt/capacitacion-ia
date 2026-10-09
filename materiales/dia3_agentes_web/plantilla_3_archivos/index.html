@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Instructores · Seguimiento de Aprendices</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js para visualización de métricas en tiempo real -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-nav">
+      <div class="brand">
+        <span class="logo-icon">📊</span>
+        <h1>Panel de Instructores <small>CGAO · ADSO</small></h1>
+      </div>
+      <div class="user-badge">
+        <span>Instructor: Carlos Gómez</span>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <!-- Tarjetas de Resumen Rápido -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-title">Total Aprendices</span>
+          <span class="kpi-value" id="kpi-total">8</span>
+          <span class="kpi-hint">Fichas 2871 y 2872</span>
+        </div>
+        <div class="kpi-card highlight">
+          <span class="kpi-title">Al Día (100% Evidencias)</span>
+          <span class="kpi-value" id="kpi-al-dia">3</span>
+          <span class="kpi-hint">37.5% de la cohorte</span>
+        </div>
+        <div class="kpi-card warning">
+          <span class="kpi-title">Requieren Apoyo</span>
+          <span class="kpi-value" id="kpi-apoyo">2</span>
+          <span class="kpi-hint">Plan de mejoramiento</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Promedio Asistencia</span>
+          <span class="kpi-value" id="kpi-asistencia">85.6%</span>
+          <span class="kpi-hint">Meta mínima: 80%</span>
+        </div>
+      </section>
+
+      <!-- Gráfica de Métricas -->
+      <section class="chart-section">
+        <h2>Distribución de Asistencia y Rendimiento</h2>
+        <div class="chart-wrapper">
+          <canvas id="performanceChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Tabla de Detalle con Filtro -->
+      <section class="table-section">
+        <div class="table-header">
+          <h2>Listado de Aprendices</h2>
+          <div class="controls">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o ficha..." aria-label="Buscar aprendiz">
+            <select id="statusFilter" aria-label="Filtrar por estado">
+              <option value="todos">Todos los estados</option>
+              <option value="Al día">Al día</option>
+              <option value="En progreso">En progreso</option>
+              <option value="Requiere apoyo">Requiere apoyo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table id="aprendicesTable">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Ficha</th>
+                <th>Evidencias</th>
+                <th>Asistencia</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Renderizado dinámico desde app.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

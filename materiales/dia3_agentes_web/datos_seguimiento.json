@@ -1,0 +1,10 @@
+[
+  { "id": 1, "nombre": "Andrés Gómez", "ficha": "ADSO-2871", "evidencias_entregadas": 8, "total_evidencias": 8, "asistencia_porcentaje": 95, "estado": "Al día" },
+  { "id": 2, "nombre": "Laura Morales", "ficha": "ADSO-2871", "evidencias_entregadas": 7, "total_evidencias": 8, "asistencia_porcentaje": 88, "estado": "En progreso" },
+  { "id": 3, "nombre": "Carlos Rojas", "ficha": "ADSO-2871", "evidencias_entregadas": 4, "total_evidencias": 8, "asistencia_porcentaje": 72, "estado": "Requiere apoyo" },
+  { "id": 4, "nombre": "Diana Castillo", "ficha": "ADSO-2872", "evidencias_entregadas": 8, "total_evidencias": 8, "asistencia_porcentaje": 100, "estado": "Al día" },
+  { "id": 5, "nombre": "Miguel Vélez", "ficha": "ADSO-2872", "evidencias_entregadas": 6, "total_evidencias": 8, "asistencia_porcentaje": 85, "estado": "En progreso" },
+  { "id": 6, "nombre": "Valentina Duarte", "ficha": "ADSO-2872", "evidencias_entregadas": 8, "total_evidencias": 8, "asistencia_porcentaje": 98, "estado": "Al día" },
+  { "id": 7, "nombre": "Julián Parra", "ficha": "ADSO-2871", "evidencias_entregadas": 3, "total_evidencias": 8, "asistencia_porcentaje": 65, "estado": "Requiere apoyo" },
+  { "id": 8, "nombre": "Sofía Cárdenas", "ficha": "ADSO-2872", "evidencias_entregadas": 7, "total_evidencias": 8, "asistencia_porcentaje": 92, "estado": "En progreso" }
+]

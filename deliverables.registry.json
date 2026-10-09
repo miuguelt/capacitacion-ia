@@ -1,0 +1,60 @@
+{
+  "deliverables": [
+    {
+      "id": "evidencia-dia-1",
+      "station": { "sectionId": "dia-1" },
+      "title": "Acta Estructurada y Base Documental en NotebookLM",
+      "purpose": "Demostrar habilidad para extraer compromisos de textos desordenados y realizar consultas ancladas a fuentes PDF con citación de páginas exactas.",
+      "evidenceType": "documento",
+      "criterion": "Aplica técnicas de ingeniería de prompts (R-C-I-R-F) y valida que las respuestas documentales no contengan alucinaciones.",
+      "instrument": "Lista de chequeo de calidad de prompt y verificación de citas",
+      "checklist": [
+        "El prompt utiliza Rol, Contexto, Instrucción, Restricciones y Formato.",
+        "La tabla de compromisos extrae responsables y fechas sin inventar datos.",
+        "La libreta de NotebookLM responde 5 preguntas con referencia de página exacta."
+      ]
+    },
+    {
+      "id": "evidencia-dia-2",
+      "station": { "sectionId": "dia-2" },
+      "title": "Cápsula de Aprendizaje Multimedia y Presentación en Gamma",
+      "purpose": "Crear un paquete de recursos audiovisuales con estilo consistente, tipografía nítida y voz sintética profesional.",
+      "evidenceType": "multimedia",
+      "criterion": "Genera activos visuales con tipografía legible, conserva la paleta de estilo y sincroniza diapositivas con locución IA.",
+      "instrument": "Rúbrica de coherencia gráfica y narrativa digital",
+      "checklist": [
+        "Las imágenes generadas en Ideogram contienen textos legibles en español.",
+        "Se mantiene la misma paleta de color y estilo visual en las 3 imágenes de la serie.",
+        "La presentación interactiva en Gamma está acompañada de locución sintética."
+      ]
+    },
+    {
+      "id": "evidencia-dia-3",
+      "station": { "sectionId": "dia-3" },
+      "title": "Script de Organización con Reporte y Panel Web de 3 Archivos",
+      "purpose": "Utilizar asistentes agénticos para clasificar archivos del sistema y crear un panel web funcional que visualice métricas en el navegador.",
+      "evidenceType": "codigo_y_producto_web",
+      "criterion": "Ejecuta scripts de automatización local y construye una página web interactiva con la regla de 3 archivos (HTML/CSS/JS).",
+      "instrument": "Lista de chequeo de ejecución técnica y funcionalidad web",
+      "checklist": [
+        "Los 200 archivos de prueba se organizaron en carpetas temáticas.",
+        "Se generó el reporte HTML con el resumen de conteo y tablas.",
+        "El Panel de Instructores carga datos en una gráfica Chart.js y permite filtrar por texto."
+      ]
+    },
+    {
+      "id": "evidencia-dia-4",
+      "station": { "sectionId": "dia-4" },
+      "title": "Proyecto Integrador en Vivo y Asistente Personalizado",
+      "purpose": "Consolidar las herramientas aprendidas en una solución a un problema real de la entidad o el trabajo, presentada en el Demo Day.",
+      "evidenceType": "proyecto_integrador",
+      "criterion": "Configura un asistente con System Prompt especializado y sustenta una solución funcional en vivo.",
+      "instrument": "Rúbrica de valoración del Demo Day",
+      "checklist": [
+        "El asistente personalizado cuenta con instrucciones de sistema delimitadas y método socrático.",
+        "El proyecto integra dos o más pilares trabajados en la semana.",
+        "La sustentación en vivo de 5 minutos demuestra funcionamiento real y valor laboral."
+      ]
+    }
+  ]
+}
