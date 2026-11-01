@@ -70,9 +70,11 @@ test('descubre páginas mantenidas e ignora dependencias y carpetas generadas', 
     const vitePackage = path.join(root, '_projects', 'vite-app', 'package.json');
     const viteStyledPackage = path.join(root, '_projects', 'vite-styled-app', 'package.json');
     const viteRootStyledPackage = path.join(root, '_projects', 'vite-root-styled-app', 'package.json');
+    const malformedModuleEntry = path.join(root, '_projects', 'malformed-app', 'index.html');
+    const malformedPackage = path.join(root, '_projects', 'malformed-app', 'package.json');
     const hidden = path.join(root, '_projects', '.codex', 'index.html');
     const archived = path.join(root, '_projects', 'guide', 'archive', 'index.html');
-    for (const file of [allowed, uppercase, dependency, generated, targetOutput, serverTemplate, moduleEntry, nativeModuleEntry, styledModuleEntry, rootStyledModuleEntry, hidden, archived]) {
+    for (const file of [allowed, uppercase, dependency, generated, targetOutput, serverTemplate, moduleEntry, nativeModuleEntry, styledModuleEntry, rootStyledModuleEntry, malformedModuleEntry, hidden, archived]) {
       fs.mkdirSync(path.dirname(file), { recursive: true });
       fs.writeFileSync(file, file === serverTemplate
         ? "{% extends 'base.html' %}{% block content %}<main>Rendered by the application</main>{% endblock %}"
@@ -80,19 +82,20 @@ test('descubre páginas mantenidas e ignora dependencias y carpetas generadas', 
           ? '<!doctype html><html><head><link rel="stylesheet" href="src/styles.css"><script type="module" src="/src/main.js"></script></head><body><main>Vite source entry with linked styles</main></body></html>'
         : file === rootStyledModuleEntry
           ? '<!doctype html><html><head><link rel="stylesheet" href="/src/styles.css"><script type="module" src="/src/main.js"></script></head><body><main>Vite source entry with root styles</main></body></html>'
-        : [moduleEntry, nativeModuleEntry].includes(file)
+        : [moduleEntry, nativeModuleEntry, malformedModuleEntry].includes(file)
           ? '<!doctype html><html><head><script type="module" src="/src/main.js"></script></head><body><main>Module source entry</main></body></html>'
         : '<!doctype html><title>fixture</title>');
     }
     fs.writeFileSync(vitePackage, JSON.stringify({ devDependencies: { vite: '^6.0.0' } }));
     fs.writeFileSync(viteStyledPackage, JSON.stringify({ devDependencies: { vite: '^6.0.0' } }));
     fs.writeFileSync(viteRootStyledPackage, JSON.stringify({ devDependencies: { vite: '^6.0.0' } }));
+    fs.writeFileSync(malformedPackage, '{ invalid json');
     fs.mkdirSync(path.dirname(path.join(path.dirname(styledModuleEntry), 'src/styles.css')), { recursive: true });
     fs.writeFileSync(path.join(path.dirname(styledModuleEntry), 'src/styles.css'), 'main { inline-size: 100%; }');
     fs.mkdirSync(path.join(path.dirname(rootStyledModuleEntry), 'src'), { recursive: true });
     fs.writeFileSync(path.join(path.dirname(rootStyledModuleEntry), 'src/styles.css'), 'main { inline-size: 100%; }');
 
-    assert.deepEqual(discoverIndexPages(root), [allowed, nativeModuleEntry, styledModuleEntry, uppercase].sort((left, right) => left.localeCompare(right)));
+    assert.deepEqual(discoverIndexPages(root), [allowed, malformedModuleEntry, nativeModuleEntry, styledModuleEntry, uppercase].sort((left, right) => left.localeCompare(right)));
     assert.equal(discoverIndexPages(root).includes(moduleEntry), false, 'las entradas de Vite requieren el servidor para cargar sus recursos');
     assert.equal(discoverIndexPages(root).includes(rootStyledModuleEntry), false, 'los estilos root-relative de Vite no funcionan en file://');
   } finally {
@@ -136,6 +139,56 @@ test('resuelve recursos locales de prosa en plantillas Flask sin iniciar el serv
     assert.deepEqual(resolveTemplateAssets(ordinaryPage, root), { styles: [], scripts: [] });
     fs.writeFileSync(page, `<link data-devbrain-prose href="{{ url_for('static', filename='css/missing.css') }}">`);
     assert.deepEqual(resolveTemplateAssets(page, root), { styles: [], scripts: [] });
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('resuelve recursos locales de prosa en plantillas Django, Vite y rutas estáticas directas', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'text-layout-assets-matrix-'));
+  try {
+    const viteApp = path.join(root, '_projects', 'vite-app');
+    const publicCss = path.join(viteApp, 'public', 'assets', 'prose.css');
+    const publicJs = path.join(viteApp, 'public', 'assets', 'runtime.js');
+    const localCss = path.join(viteApp, 'local.css');
+    const rootRelativeJs = path.join(root, 'shared-runtime.js');
+    const packageJson = path.join(viteApp, 'package.json');
+    fs.mkdirSync(path.dirname(publicCss), { recursive: true });
+    fs.mkdirSync(path.dirname(publicJs), { recursive: true });
+    fs.writeFileSync(packageJson, JSON.stringify({ devDependencies: { vite: '^6.0.0' } }));
+    fs.writeFileSync(publicCss, '/* public css */');
+    fs.writeFileSync(publicJs, '/* public js */');
+    fs.writeFileSync(localCss, '/* local css */');
+    fs.writeFileSync(rootRelativeJs, '/* root runtime */');
+
+    const djangoPage = path.join(viteApp, 'django.html');
+    const staticCss = path.join(viteApp, 'static', 'django-prose.css');
+    fs.mkdirSync(path.dirname(staticCss), { recursive: true });
+    fs.writeFileSync(staticCss, '/* django prose */');
+    fs.writeFileSync(djangoPage, '<link rel="stylesheet" data-devbrain-prose href="{% static \'django-prose.css\' %}">');
+    const djangoAssets = resolveTemplateAssets(djangoPage, root);
+    assert.deepEqual(djangoAssets.styles.map(item => item.path), [staticCss]);
+
+    const vitePage = path.join(viteApp, 'index.html');
+    fs.writeFileSync(vitePage, '<!doctype html><link rel="stylesheet" data-devbrain-prose href="/assets/prose.css?v=1"><script data-devbrain-prose-runtime src="/assets/runtime.js#hash"></script>');
+    const viteAssets = resolveTemplateAssets(vitePage, root);
+    assert.deepEqual(viteAssets.styles.map(item => item.path), [publicCss]);
+    assert.deepEqual(viteAssets.scripts.map(item => item.path), [publicJs]);
+
+    const relativePage = path.join(viteApp, 'relative.html');
+    fs.writeFileSync(relativePage, '<link rel="stylesheet" data-devbrain-prose href="local.css"><script data-devbrain-prose-runtime src="assets/runtime.js"></script>');
+    const relativeAssets = resolveTemplateAssets(relativePage, root);
+    assert.deepEqual(relativeAssets.styles.map(item => item.path), [localCss]);
+    assert.deepEqual(relativeAssets.scripts.map(item => item.path), [publicJs]);
+
+    const rootFallbackPage = path.join(viteApp, 'root-fallback.html');
+    fs.writeFileSync(rootFallbackPage, '<script data-devbrain-prose-runtime src="/shared-runtime.js"></script><link data-devbrain-prose href="">');
+    const rootFallbackAssets = resolveTemplateAssets(rootFallbackPage, root);
+    assert.deepEqual(rootFallbackAssets.scripts.map(item => item.path), [rootRelativeJs]);
+
+    fs.writeFileSync(packageJson, '{ invalid json');
+    const malformedViteAssets = resolveTemplateAssets(vitePage, root);
+    assert.deepEqual(malformedViteAssets, { styles: [], scripts: [] });
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
