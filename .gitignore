@@ -106,3 +106,5 @@ memory-bank/
 vendor/
 .pytest_cache/
 # --- end DevBrain repo hygiene ---
+/tests/__pycache__
+/materiales/dia3_agentes_web/__pycache__
