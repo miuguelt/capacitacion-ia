@@ -105,6 +105,7 @@ memory-bank/
 # --- DevBrain repo hygiene (managed block) ---
 vendor/
 .pytest_cache/
+text-layout-*.json
 # --- end DevBrain repo hygiene ---
 /tests/__pycache__
 /materiales/dia3_agentes_web/__pycache__

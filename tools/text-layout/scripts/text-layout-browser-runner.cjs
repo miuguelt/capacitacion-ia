@@ -20,6 +20,8 @@ async function runBrowserAudit(root, options = {}) {
     `--remote-debugging-port=${port}`,
     '--headless=new',
     '--disable-gpu',
+    '--no-sandbox',
+    '--disable-dev-shm-usage',
     '--no-first-run',
     '--no-default-browser-check',
     `--user-data-dir=${userDataDir}`,
@@ -50,8 +52,9 @@ async function runBrowserAudit(root, options = {}) {
     for (let pageIndex = 0; pageIndex < pages.length; pageIndex += 1) {
       const page = pages[pageIndex];
       const relativePage = path.relative(absoluteRoot, page).replace(/\\/g, '/');
-      await cdp.send('Page.navigate', { url: pathToFileURL(page).href });
-      await waitForPage(cdp);
+      const targetUrl = pathToFileURL(page).href;
+      await cdp.send('Page.navigate', { url: targetUrl });
+      await waitForPage(cdp, options.pageLoadAttempts || 120, targetUrl);
       const templateAssets = resolveTemplateAssets(page, absoluteRoot);
       if (templateAssets.styles.length || templateAssets.scripts.length) {
         const styles = JSON.stringify(templateAssets.styles.map(item => item.content));
@@ -115,12 +118,15 @@ async function runBrowserAudit(root, options = {}) {
     };
   } finally {
     if (cdp) {
-      await cdp.send('Browser.close');
+      try {
+        await cdp.send('Browser.close');
+      } catch {
+        // Ignorar si el navegador ya se cerró
+      }
       cdp.close();
     }
     if (browser.exitCode === null) browser.kill();
     await wait(500);
-
   }
 }
 

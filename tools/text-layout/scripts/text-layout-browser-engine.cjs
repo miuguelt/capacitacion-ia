@@ -41,6 +41,18 @@ class CDPClient {
         this.callbacks.delete(message.id);
         callback(message);
       }
+      if (message.method === 'Runtime.executionContextsCleared') {
+        for (const [id, callback] of this.callbacks.entries()) {
+          this.callbacks.delete(id);
+          callback({ error: { message: 'El contexto de ejecución fue destruido.' } });
+        }
+      }
+    });
+    this.ws.addEventListener('close', () => {
+      for (const [id, callback] of this.callbacks.entries()) {
+        this.callbacks.delete(id);
+        callback({ error: { message: 'La conexión CDP se cerró.' } });
+      }
     });
   }
 
@@ -111,13 +123,36 @@ async function waitForTarget(port, attempts = 40) {
   throw new Error('Microsoft Edge no abrió el puerto de depuración remoto.');
 }
 
-async function waitForPage(cdp, attempts = 50) {
+function isSameUrl(currentHref, targetUrl) {
+  if (!targetUrl || !currentHref) return true;
+  if (currentHref === 'about:blank') return false;
+  try {
+    const current = new URL(currentHref).href.toLowerCase();
+    const target = new URL(targetUrl).href.toLowerCase();
+    return current === target || decodeURIComponent(current) === decodeURIComponent(target);
+  } catch {
+    return currentHref.toLowerCase() === targetUrl.toLowerCase();
+  }
+}
+
+async function waitForPage(cdp, attempts = 80, targetUrl = null) {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
-    const state = await cdp.evaluate('document.readyState');
-    if (state === 'complete' || state === 'interactive') return;
+    try {
+      const info = typeof cdp.evaluate === 'function'
+        ? await cdp.evaluate('({ readyState: document.readyState, href: window.location.href })')
+        : null;
+      if (typeof info === 'string') {
+        if (info === 'complete' || info === 'interactive') return;
+      } else if (info && typeof info === 'object') {
+        const ready = info.readyState === 'complete' || info.readyState === 'interactive';
+        if (ready && isSameUrl(info.href, targetUrl)) return;
+      }
+    } catch {
+      // Ignorar excepciones transitorias durante la transición de contexto
+    }
     await wait(100);
   }
   throw new Error('La página no terminó de cargar en el navegador.');
 }
 
-module.exports = { CDPClient, getJson, wait, resolveEdgePath, getFreePort, waitForTarget, waitForPage };
+module.exports = { CDPClient, getJson, isSameUrl, wait, resolveEdgePath, getFreePort, waitForTarget, waitForPage };

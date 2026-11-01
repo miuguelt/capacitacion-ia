@@ -1,6 +1,6 @@
 const { DEFAULT_VIEWPORTS, discoverIndexPages, resolveTemplateAssets } = require('./text-layout-browser-discovery.cjs');
 const { createAuditExpression, createStressExpression } = require('./text-layout-browser-probes.cjs');
-const { CDPClient, getJson, resolveEdgePath, waitForPage, waitForTarget } = require('./text-layout-browser-engine.cjs');
+const { CDPClient, getJson, isSameUrl, resolveEdgePath, waitForPage, waitForTarget } = require('./text-layout-browser-engine.cjs');
 const { runBrowserAudit } = require('./text-layout-browser-runner.cjs');
 
 async function main(args = process.argv.slice(2), auditOptions = {}) {
@@ -50,6 +50,7 @@ module.exports = {
   CDPClient,
   discoverIndexPages,
   getJson,
+  isSameUrl,
   main,
   reportCliError,
   resolveTemplateAssets,

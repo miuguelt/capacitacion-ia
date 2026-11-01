@@ -12,6 +12,7 @@ const {
   discoverIndexPages,
   resolveTemplateAssets,
   getJson,
+  isSameUrl,
   main,
   reportCliError,
   resolveEdgePath,
@@ -228,6 +229,27 @@ test('los lectores HTTP informan respuestas dañadas, agotamiento y puertos sin 
   }
   await assert.rejects(waitForTarget(0, 1), /Microsoft Edge no abrió/);
   await assert.rejects(waitForPage({ evaluate: async () => 'loading' }, 1), /La página no terminó de cargar/);
+  assert.equal(isSameUrl('file:///c:/app/index.html', 'file:///C:/app/index.html'), true);
+  assert.equal(isSameUrl('about:blank', 'file:///C:/app/index.html'), false);
+  assert.equal(isSameUrl('file:///app/other.html', 'file:///app/index.html'), false);
+  assert.equal(isSameUrl('file:///c:/app/index.html', null), true);
+  assert.equal(isSameUrl('not-a-valid-url', 'not-a-valid-url'), true);
+  assert.equal(isSameUrl('not-a-valid-url', 'other-url'), false);
+
+  await waitForPage({
+    evaluate: async () => ({ readyState: 'complete', href: 'file:///c:/app/index.html' })
+  }, 2, 'file:///C:/app/index.html');
+
+  await waitForPage({ evaluate: async () => 'complete' }, 1);
+
+  let transientAttempts = 0;
+  await waitForPage({
+    evaluate: async () => {
+      transientAttempts += 1;
+      if (transientAttempts === 1) throw new Error('Context destroyed');
+      return { readyState: 'interactive', href: 'file:///c:/app/index.html' };
+    }
+  }, 5, 'file:///c:/app/index.html');
 });
 
 test('CDP procesa respuestas reales y errores de protocolo y de tiempo límite', async () => {
@@ -266,6 +288,27 @@ test('CDP procesa respuestas reales y errores de protocolo y de tiempo límite',
     const timedOut = new CDPClient('ws://fixture', 10);
     await assert.rejects(timedOut.send('No.response'), /CDP no respondió/);
     timedOut.close();
+
+    behavior = 'silent';
+    const cleared = new CDPClient('ws://fixture', 50);
+    await cleared.isReady;
+    const pendingCleared = cleared.send('Runtime.evaluate');
+    queueMicrotask(() => {
+      cleared.ws.dispatchEvent(new MessageEvent('message', {
+        data: JSON.stringify({ method: 'Runtime.executionContextsCleared' })
+      }));
+    });
+    await assert.rejects(pendingCleared, /El contexto de ejecución fue destruido/);
+    cleared.close();
+
+    const closedClient = new CDPClient('ws://fixture', 50);
+    await closedClient.isReady;
+    const pendingClosed = closedClient.send('Runtime.evaluate');
+    queueMicrotask(() => {
+      closedClient.ws.dispatchEvent(new Event('close'));
+    });
+    await assert.rejects(pendingClosed, /La conexión CDP se cerró/);
+    closedClient.close();
   } finally {
     globalThis.WebSocket = originalWebSocket;
   }
