@@ -11,10 +11,18 @@ MATERIALES_DIR = BASE_DIR / "materiales"
 
 def test_materiales_directory_structure():
     assert MATERIALES_DIR.exists(), "La carpeta 'materiales' debe existir"
-    dias_esperados = ["dia1_prompting", "dia2_multimedia", "dia3_agentes_web", "dia4_agentes_integrador"]
+    dias_esperados = ["dia1_prompting", "dia2_multimedia", "dia3_agentes_web", "dia4_agentes_integrador", "gemini_canvas"]
     for d in dias_esperados:
         sub = MATERIALES_DIR / d
         assert sub.exists() and sub.is_dir(), f"El subdirectorio {d} debe existir"
+
+def test_gemini_canvas_files_exist():
+    gc = MATERIALES_DIR / "gemini_canvas"
+    guia = gc / "guia_gemini_canvas_todas_las_posibilidades.md"
+    dataset = gc / "banco_prompts_canvas.json"
+    assert guia.exists() and guia.stat().st_size > 100
+    assert dataset.exists() and dataset.stat().st_size > 100
+    assert "Gemini Canvas" in guia.read_text(encoding="utf-8")
 
 def test_dia1_files_exist():
     d1 = MATERIALES_DIR / "dia1_prompting"

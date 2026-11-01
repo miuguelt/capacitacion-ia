@@ -10,7 +10,7 @@
     "entrypoint": "./index.html",
     "language": "es-CO",
     "version": "1.0.0",
-    "summary": "Portal interactivo y guía metodológica completa de 4 días intensivos (7:00 a.m. a 5:00 p.m.) para la formación práctica en inteligencia artificial aplicada. Incluye modo instructor con recomendaciones pedagógicas, modo aprendiz con retos paso a paso, generadores interactivos, insumos de práctica y rúbricas de evaluación.",
+    "summary": "Portal interactivo y guía metodológica completa de 4 días intensivos (7:00 a.m. a 5:00 p.m.) para la formación práctica en inteligencia artificial aplicada. Incluye modo instructor con recomendaciones pedagógicas, modo aprendiz con retos paso a paso, laboratorio interactivo de Gemini Canvas con todas sus posibilidades y resultados observables, generadores interactivos, insumos de práctica y rúbricas de evaluación.",
     "schedule": {
       "dates": "4 jornadas intensivas de formación continua",
       "dailyHours": "7:00 a.m. a 5:00 p.m. (10 horas de reloj por jornada: 8.5 horas de formación directa y 1.5 horas de pausas y almuerzo)",

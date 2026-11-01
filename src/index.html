@@ -6,6 +6,8 @@
   <meta name="description" content="Portal interactivo y guía metodológica de capacitación intensiva en inteligencia artificial (4 días de 7:00 a.m. a 5:00 p.m.).">
   <title>Aula de Inteligencia Artificial · Capacitación Práctica 4 Días</title>
   <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="devbrain-prose.css" data-devbrain-prose>
+<script defer src="devbrain-prose.js" data-devbrain-prose-runtime></script>
 </head>
 <body>
   <div class="app-container">
@@ -45,6 +47,12 @@
             <a href="#dia-1" class="nav-link" data-target="dia-1">
               <span class="nav-badge">D1</span>
               <span class="nav-text">Modelos & Documentos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#gemini-canvas" class="nav-link" data-target="gemini-canvas">
+              <span class="nav-badge">🎨</span>
+              <span class="nav-text">Gemini Canvas Lab</span>
             </a>
           </li>
           <li class="nav-item">
@@ -91,6 +99,11 @@
           </div>
         </div>
         <div class="topbar-right">
+          <button type="button" class="btn-command-palette-trigger" id="btn-open-command-palette" title="Abrir paleta de comandos rápida (Ctrl + K)" aria-label="Abrir buscador rápido y comandos">
+            <span class="search-icon">🔍</span>
+            <span class="cmd-text">Buscar o comando...</span>
+            <kbd class="cmd-shortcut">Ctrl K</kbd>
+          </button>
           <div class="status-pill learning" id="status-pill">
             🎓 <span>Modo Participante</span>
           </div>
@@ -270,12 +283,12 @@
               <div class="session-header">
                 <span class="session-time">Mañana · 07:00 a.m. a 12:00 m.</span>
               </div>
-              <h3>Sesión 1: Ecosistema y Fórmula R-C-I-R-F</h3>
+              <h3>Sesión 1: Ecosistema y Método Canónico CRTT+L</h3>
               <p>Comparativa entre modelos en la nube (Gemini, Claude, ChatGPT) y modelos locales de escritorio (LM Studio / Ollama). Estructuración formal de instrucciones.</p>
               <ul class="topic-list">
                 <li>Diferencias entre buscador web y modelo probabilístico de lenguaje.</li>
                 <li>Privacidad y datos sensibles: cuándo usar nube y cuándo modelos locales.</li>
-                <li>Fórmula R-C-I-R-F: Rol, Contexto, Instrucción, Restricciones y Formato.</li>
+                <li>Método Canónico CRTT+L: Contexto, Rol, Tarea, Tono y Límites (R-C-I-R-F).</li>
                 <li>Few-Shot Prompting (enseñar mediante ejemplos de entrada y salida).</li>
               </ul>
             </div>
@@ -295,9 +308,9 @@
             </div>
           </div>
 
-          <!-- Constructor Interactivo R-C-I-R-F -->
+          <!-- Constructor Interactivo CRTT+L -->
           <div class="tool-container">
-            <h3>🛠️ Constructor Interactivo de Prompts R-C-I-R-F</h3>
+            <h3>🛠️ Constructor Interactivo de Prompts CRTT+L</h3>
             <p>Diligencia cada componente de la fórmula canónica para generar un prompt profesional listo para copiar.</p>
             <form id="prompt-builder-form" onsubmit="event.preventDefault();">
               <div class="form-group">
@@ -309,18 +322,37 @@
                 <textarea id="p-contexto" rows="2">Tengo las notas desordenadas de una reunión de centro de formación. Hay decisiones en firme, tareas con fechas y puntos que quedaron pendientes de discusión.</textarea>
               </div>
               <div class="form-group">
-                <label for="p-instruccion">3. Instrucción Directa (¿Qué acción exacta debe ejecutar?)</label>
+                <label for="p-instruccion">3. Tarea / Instrucción (¿Qué producto concreto debe entregar?)</label>
                 <textarea id="p-instruccion" rows="2">Extrae: 1) Resumen de 3 oraciones, 2) Tabla de compromisos con responsable y fecha, 3) Lista de temas aplazados.</textarea>
               </div>
               <div class="form-group">
-                <label for="p-restricciones">4. Restricciones Estrictas (¿Qué está prohibido para evitar alucinaciones?)</label>
+                <label for="p-restricciones">4. Límites / Restricciones (¿Qué está prohibido para evitar alucinaciones?)</label>
                 <input type="text" id="p-restricciones" value="No inventes datos. Si no hay fecha límite, escribe '[Pendiente]'. Excluye comentarios informales.">
               </div>
               <div class="form-group">
-                <label for="p-formato">5. Formato de Salida (¿Cómo debe presentar el resultado?)</label>
+                <label for="p-formato">5. Tono y Formato de Salida (¿Cómo debe presentar el resultado?)</label>
                 <input type="text" id="p-formato" value="Tabla Markdown de 4 columnas (ID, Tarea, Responsable, Fecha) y lista de viñetas para pendientes.">
               </div>
             </form>
+
+            <!-- Medidor Heurístico de Calidad CRTT+L -->
+            <div class="prompt-health-card" id="prompt-health-card">
+              <div class="health-header">
+                <span class="health-title">📊 Diagnóstico de Completitud CRTT+L:</span>
+                <strong class="health-score" id="prompt-health-score">100% Completo</strong>
+              </div>
+              <div class="health-progress-bar">
+                <div class="health-progress-fill" id="prompt-health-fill" style="width: 100%;"></div>
+              </div>
+              <div class="health-indicators-row" id="prompt-health-indicators">
+                <span class="pill-req active" id="req-r" title="Rol profesional asignado">✓ Rol</span>
+                <span class="pill-req active" id="req-c" title="Contexto y antecedentes definidos">✓ Contexto</span>
+                <span class="pill-req active" id="req-i" title="Tarea estructurada y producto concreto">✓ Tarea</span>
+                <span class="pill-req active" id="req-res" title="Límites contra alucinaciones">✓ Límites</span>
+                <span class="pill-req active" id="req-f" title="Tono y formato de salida">✓ Tono / Formato</span>
+              </div>
+              <p class="health-tip" id="prompt-health-tip">✓ Los cinco pilares del método CRTT+L están cubiertos. El modelo tendrá directrices inequívocas.</p>
+            </div>
 
             <div class="tool-output">
               <div class="prompt-box">
@@ -352,6 +384,717 @@ Notas tomadas por Julián:
 - Andrea comenta que las salas de cómputo 3 y 4 tienen los equipos muy lentos. Carlos revisará las fuentes el martes. Andrea necesita los equipos listos porque el 22 arranca desarrollo web.
 - Luisa de Bienestar: plazo de apoyo de sostenimiento vence el 28 de marzo. Carlos y Andrea envían listas filtradas el lunes a las 2:00 p.m.
 - Compras: se necesitan 15 tarjetas de desarrollo ($1.800.000 COP rubro SENNOVA). Carlos consigue 3 cotizaciones antes del miércoles 18.</div>
+            </div>
+          </div>
+
+          <!-- Visualizador de Resultados Esperados: Día 1 -->
+          <div class="expected-result-card open">
+            <div class="expected-result-header">
+              <h4><span>🔍</span> Resultado Esperado Observable: Acta Limpia con Fórmula R-C-I-R-F</h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="expected-result-body">
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                Comprueba tu ejecución en el chat contra este estándar de oro. Si tu prompt fue preciso, obtendrás una tabla limpia sin chismes de pasillo ni datos inventados:
+              </p>
+              <div class="comparison-grid">
+                <div class="comparison-col col-good">
+                  <div class="col-title">✓ Resultado Estándar de Oro (Prompt R-C-I-R-F)</div>
+                  <strong style="display:block; font-size:0.8rem; margin-bottom:0.25rem;">Resumen Ejecutivo:</strong>
+                  <p style="font-size:0.78rem; margin-bottom:0.5rem;">
+                    El comité acordó gestionar la puntualidad de rutas de la ficha 2871 con la empresa transportadora, programó la revisión de fuentes de poder en salas 3 y 4 antes del 22 de marzo, fijó entrega de listas para apoyo de sostenimiento para el 16 de marzo a las 2:00 p.m. e inició cotizaciones para 15 tarjetas de desarrollo SENNOVA.
+                  </p>
+                  <strong style="display:block; font-size:0.8rem; margin-bottom:0.25rem;">Tabla de Compromisos:</strong>
+                  <table class="schedule-table" style="font-size:0.75rem;">
+                    <thead>
+                      <tr><th>ID</th><th>Compromiso</th><th>Responsable</th><th>Límite</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>01</td><td>Insistir ante transporte</td><td>María Fernanda</td><td>Viernes</td></tr>
+                      <tr><td>02</td><td>Revisar fuentes salas 3 y 4</td><td>Carlos Gómez</td><td>Martes</td></tr>
+                      <tr><td>03</td><td>Listas apoyo sostenimiento</td><td>Carlos y Andrea</td><td>Lunes 2:00 p.m.</td></tr>
+                      <tr><td>04</td><td>3 Cotizaciones SENNOVA</td><td>Carlos Gómez</td><td>Miércoles 18</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="comparison-col col-bad">
+                  <div class="col-title">❌ Salida Deficiente (Prompt Genérico)</div>
+                  <p style="font-size:0.78rem; margin-bottom:0.5rem;">
+                    "En la reunión Carlos llegó tarde por problemas de audio. Hablaron de que los buses no pasan y la gente se queja. Hay que arreglar unos computadores que andan muy lentos y ver qué pasa con la plata de bienestar..."
+                  </p>
+                  <small style="display:block; opacity:0.85; font-size:0.75rem;">
+                    ⚠️ Fallas críticas: Mezcla anécdotas irrelevantes, omite responsables individuales, borra las horas límite y carece de estructura tabular para seguimiento.
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="expected-result-card">
+            <div class="expected-result-header">
+              <h4><span>📑</span> Resultado Esperado: Citas Exactas con NotebookLM</h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="expected-result-body">
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
+                Al cargar manuales o reglamentos institucionales en Google NotebookLM, la respuesta debe contener enlaces directos a las páginas exactas de la fuente:
+              </p>
+              <div style="background:var(--bg-subtle); padding:0.85rem; border-radius:6px; border-left:3px solid var(--color-primary); font-size:0.82rem;">
+                <p style="margin:0 0 0.4rem 0;"><strong>Respuesta con anclaje a fuentes verificadas:</strong></p>
+                <p style="margin:0 0 0.4rem 0;">1. Ante la inasistencia injustificada, el instructor debe emitir reporte formal dentro de los dos (2) días hábiles siguientes <em>[Manual de Convivencia, Cap. IV, Art. 12, Pág. 18]</em>.</p>
+                <p style="margin:0;">2. El aprendiz tiene derecho a radicar justificación médica en la coordinación académica <em>[Reglamento del Aprendiz, Cap. V, Pág. 24]</em>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA ESPECIAL: GEMINI CANVAS LAB
+             ========================================== -->
+        <section class="page-view" id="gemini-canvas">
+          <div class="hero-card" style="border-left: 4px solid var(--color-primary-light);">
+            <span class="hero-tag">Espacio de Trabajo Interactivo · Todas las Posibilidades</span>
+            <h2>🎨 Gemini Canvas Lab: Coescritura, Prototipado y Edición Quirúrgica</h2>
+            <p>Transforma el chat conversacional en un espacio de trabajo colaborativo en pantalla dividida (Split Screen). En Gemini Canvas, la IA coescribe documentos técnicos, ejecuta aplicaciones web interactivas en vivo, estructura matrices exportables a Google Sheets, refina algoritmos en Python y aplica edición quirúrgica sin reescribir todo el proyecto.</p>
+            <div class="hero-stats">
+              <div class="stat-box">
+                <span class="stat-value">10 Modos</span>
+                <span class="stat-desc">Posibilidades completas</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">Split View</span>
+                <span class="stat-desc">Chat + Lienzo interactivo</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">Gem Studio</span>
+                <span class="stat-desc">Asistentes a medida</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">Multimodal</span>
+                <span class="stat-desc">Boceto a Canvas en vivo</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nota para el Facilitador -->
+          <div class="instructor-guide-card">
+            <span class="card-badge">Guion del Facilitador</span>
+            <h4>Estrategia Pedagógica para la Sesión de Gemini Canvas</h4>
+            <ul>
+              <li><strong>El error del chat lineal:</strong> Muestra en el proyector cómo en un chat normal, al pedir corregir un error gramatical en la página 3, la IA vuelve a escribir las 3 páginas completas. Luego demuestra cómo en Canvas, al seleccionar solo ese párrafo con el cursor, la corrección ocurre en 3 segundos sin tocar el resto.</li>
+              <li><strong>Dinámica de aula de 15 minutos:</strong> Pide a los aprendices abrir <code>gemini.google.com</code>, pegar el prompt de la Posibilidad 2 (Prototipado Web) o de la Posibilidad 7 (Algoritmos en Python) y activar la previsualización en vivo para que experimenten el asombro de ver una solución ejecutándose en directo.</li>
+              <li><strong>Pregunta detonante:</strong> <em>"¿Qué diferencias de productividad encuentran entre trabajar con un documento en Google Docs tradicional versus iterarlo en Gemini Canvas con control reactivo de longitud y tono?"</em></li>
+            </ul>
+          </div>
+
+          <!-- Guía de Activación en 3 Pasos -->
+          <div class="tool-container">
+            <h3>🚀 ¿Cómo activar y utilizar Canvas en tu cuenta de Gemini?</h3>
+            <p>Sigue estos tres pasos para habilitar el espacio de trabajo en cualquier navegador:</p>
+            <div class="steps-grid">
+              <div class="step-card">
+                <span class="step-num">1</span>
+                <h4>Iniciar y Solicitar</h4>
+                <p>Ingresa a <code>gemini.google.com</code> con tu cuenta y activa <strong>Canvas</strong> en la barra del cuadro de texto (en algunas cuentas está dentro del menú <em>Herramientas</em>). Luego pega o escribe tu prompt. Si olvidas activarlo, Gemini también trabaja en Canvas cuando el prompt lo pide, por ejemplo: <em>«En Canvas, redacta…»</em>.</p>
+              </div>
+              <div class="step-card">
+                <span class="step-num">2</span>
+                <h4>Trabajo en Pantalla Dividida</h4>
+                <p>La interfaz se divide automáticamente: a la izquierda tienes el chat para conversar o dar nuevas indicaciones, y a la derecha el lienzo interactivo donde se despliega tu artefacto en tiempo real.</p>
+              </div>
+              <div class="step-card">
+                <span class="step-num">3</span>
+                <h4>Refinamiento y Exportación</h4>
+                <p>Usa la barra superior de Canvas para ajustar longitud, cambiar tono o exportar a Google Docs y Google Sheets con un solo clic. También puedes seleccionar cualquier frase con el cursor para editarla en caliente.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULADOR INTERACTIVO DE GEMINI CANVAS -->
+          <div class="tool-container" id="canvas-simulator-module">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div>
+                <h3 style="margin:0;">🖥️ Simulador Interactivo de Gemini Canvas</h3>
+                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.95rem;">Explora cada una de las 10 posibilidades con su prompt exacto, los controles propios de Canvas y la imagen de alta fidelidad del resultado esperado.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-canvas-fullscreen" title="Alternar modo inmersivo a pantalla completa">
+                  ⛶ Modo Inmersivo
+                </button>
+                <a href="materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md" target="_blank" class="material-link" style="padding:0.4rem 0.9rem; font-size:0.85rem;">
+                  📄 Descargar Guía Completa (.md)
+                </a>
+              </div>
+            </div>
+
+            <!-- Barra de Calibración Reactiva de Canvas -->
+            <div class="canvas-calibration-bar" id="canvas-calibration-toolbar">
+              <div class="calibration-group">
+                <span class="calibration-label">📏 Longitud del Artefacto:</span>
+                <div class="canvas-slider-wrapper">
+                  <input type="range" min="1" max="5" value="3" class="canvas-range-slider" id="canvas-length-slider" aria-label="Calibrar longitud de Canvas">
+                  <span class="slider-step-label" id="canvas-length-label">Estándar (3/5)</span>
+                </div>
+              </div>
+
+              <div class="calibration-group">
+                <span class="calibration-label">🎭 Tono:</span>
+                <div class="calibration-pill-group" id="canvas-tone-group">
+                  <button type="button" class="calibration-pill active" data-tone="formal">Formal</button>
+                  <button type="button" class="calibration-pill" data-tone="pedagogico">Asertivo</button>
+                  <button type="button" class="calibration-pill" data-tone="analitico">Analítico</button>
+                </div>
+              </div>
+
+              <div class="calibration-group">
+                <span class="calibration-label">🎯 Nivel de Audiencia:</span>
+                <div class="calibration-pill-group" id="canvas-audience-group">
+                  <button type="button" class="calibration-pill" data-audience="intro">Introductorio</button>
+                  <button type="button" class="calibration-pill active" data-audience="adso">Técnico ADSO</button>
+                  <button type="button" class="calibration-pill" data-audience="expert">Especialista</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Selector de las 10 Posibilidades -->
+            <div class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas">
+              <button type="button" class="canvas-tab active" data-possibility="doc-editorial">
+                <span>📄</span> 1. Redacción & Documentos
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="code-prototyping">
+                <span>💻</span> 2. Código & Web en Vivo
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="data-matrix">
+                <span>📊</span> 3. Matrices & Hojas de Cálculo
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="flowchart-diagram">
+                <span>🔀</span> 4. Diagramas de Proceso
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="visual-mockup">
+                <span>🎨</span> 5. Diseño Visual UI/UX
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="inline-prompting">
+                <span>✂️</span> 6. Edición por Selección (Inline)
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="algorithm-refactor">
+                <span>⚡</span> 7. Algoritmos & Python (O(n))
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="rubric-curriculum">
+                <span>📚</span> 8. Rúbricas & Didáctica
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="sql-pipeline">
+                <span>🗄️</span> 9. SQL & Pipelines
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="executive-report">
+                <span>⚖️</span> 10. Informes & Auditoría
+              </button>
+            </div>
+
+            <!-- Estructura Split-Screen del Simulador -->
+            <div class="canvas-split-container">
+              <!-- Columna Izquierda: Chat de Gemini -->
+              <div class="canvas-chat-pane">
+                <div class="canvas-chat-header">
+                  <div class="gemini-brand-indicator">
+                    <span class="sparkle-icon">✨</span>
+                    <div>
+                      <strong>Google Gemini</strong>
+                      <small class="status-online">● En línea (Modo Canvas activo)</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="canvas-chat-body">
+                  <div class="chat-bubble user-bubble">
+                    <div class="bubble-tag">PROMPT DEL APRENDIZ (LISTO PARA COPIAR)</div>
+                    <p class="bubble-text" id="sim-user-prompt">Cargando prompt maestro...</p>
+                    <div class="bubble-actions">
+                      <button type="button" class="copy-btn copy-prompt-btn" id="sim-copy-prompt-btn">
+                        📋 Copiar Prompt al Portapapeles
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id="sim-followups"></div>
+
+                  <div class="chat-bubble ai-bubble">
+                    <div class="bubble-tag">RESPUESTA DE GEMINI</div>
+                    <p class="bubble-text" id="sim-ai-response">
+                      ¡Entendido! He generado el documento solicitado en el panel interactivo de Canvas a la derecha. Puedes editarlo directamente, usar la barra de herramientas superior para ajustar longitud o tono, o pedirme modificaciones específicas.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="canvas-chat-footer">
+                  <span class="tip-label">💡 Variación Rápida para Experimentar:</span>
+                  <div class="prompt-variation-box" id="sim-prompt-variation">
+                    Haz clic en una variación para ver cómo cambia el resultado.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Columna Derecha: Lienzo Canvas -->
+              <div class="canvas-editor-pane">
+                <!-- Barra Superior de Canvas -->
+                <div class="canvas-editor-topbar">
+                  <div class="canvas-doc-title">
+                    <span class="doc-icon" id="sim-doc-icon">📄</span>
+                    <strong id="sim-doc-title">Documento Técnico sin Título</strong>
+                  </div>
+                  <div class="canvas-quick-actions" id="sim-quick-actions">
+                    <!-- Botones interactivos inyectados por JS según posibilidad -->
+                  </div>
+                </div>
+
+                <!-- Sub-pestañas del Lienzo: Imagen de Resultado Esperado vs. Resultado Interactivo vs. Claves -->
+                <div class="canvas-view-mode-tabs">
+                  <button type="button" class="view-mode-btn active" data-mode="image">
+                    🖼️ Imagen del Resultado Esperado en Gemini
+                  </button>
+                  <button type="button" class="view-mode-btn" data-mode="interactive">
+                    ⚡ Resultado Interactivo / Código en Vivo
+                  </button>
+                  <button type="button" class="view-mode-btn" data-mode="insights">
+                    ✅ Verifica tu resultado & claves
+                  </button>
+                </div>
+
+                <!-- Contenido de las Sub-pestañas -->
+                <div class="canvas-view-content">
+                  <!-- Vista 1: Imagen del Resultado Esperado -->
+                  <div class="view-panel active" id="panel-image-view">
+                    <div class="canvas-image-card">
+                      <div class="image-wrapper" id="sim-image-wrapper" role="button" tabindex="0" title="Haz clic para ampliar en alta definición (Lightbox)" aria-label="Ampliar captura en alta definición">
+                        <img src="assets/images/canvas/canvas_documento.jpg" alt="Resultado esperado en Gemini Canvas" id="sim-result-image" class="result-zoomable-img">
+                        <div class="image-zoom-overlay">
+                          <span class="zoom-pill">🔍 Clic para ampliar en detalle (Lightbox)</span>
+                        </div>
+                      </div>
+                      <div class="image-caption-bar">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1;">
+                          <span class="caption-icon">🔍</span>
+                          <span class="caption-text" id="sim-image-caption">Reconstrucción del resultado esperado, dibujada con los datos del prompt.</span>
+                        </div>
+                        <button type="button" class="btn-open-lightbox" id="btn-open-lightbox" aria-label="Abrir visor de imagen en pantalla completa">
+                          🔎 Ampliar Captura
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Vista 2: Resultado Interactivo en Vivo -->
+                  <div class="view-panel" id="panel-interactive-view">
+                    <div class="interactive-preview-box" id="sim-interactive-content">
+                      <!-- Contenido interactivo renderizado por JS -->
+                    </div>
+                  </div>
+
+                  <!-- Vista 3: Lista de verificación y claves de éxito -->
+                  <div class="view-panel" id="panel-insights-view">
+                    <div class="insights-box" id="sim-insights-content">
+                      <!-- Análisis pedagógico renderizado por JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               EJERCICIOS PRÁCTICOS POR MODO (2 por modo)
+               ========================================== -->
+          <div class="tool-container" id="canvas-exercises-module">
+            <div class="canvas-exercises-header">
+              <div>
+                <h3 style="margin:0;">🧪 Ejercicios prácticos del modo: <span id="canvas-exercises-mode-label">1. Redacción &amp; Documentos</span></h3>
+                <p class="canvas-exercises-intro">Cada modo trae dos ejercicios completos para resolver en Gemini Canvas. Copia el prompt (ya incluye los datos), sigue los pasos y marca los criterios a medida que tu resultado los cumpla. Cambia de modo con las pestañas del simulador.</p>
+              </div>
+              <div class="canvas-exercises-switch" id="canvas-exercises-switch" role="tablist" aria-label="Elegir ejercicio">
+                <button type="button" class="canvas-exercises-switch-btn active" role="tab" aria-selected="true" data-exercise-index="0">Ejercicio A</button>
+                <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" data-exercise-index="1">Ejercicio B</button>
+              </div>
+            </div>
+            <p class="canvas-exercises-notice">ℹ️ Las personas, cifras y documentos de estos ejercicios se prepararon para aprender y no contienen registros reales.</p>
+            <div id="canvas-exercises-content" aria-live="polite"></div>
+          </div>
+
+          <!-- ==========================================
+               SIMULADOR MULTIMODAL: BOCETO A CANVAS EN VIVO
+               ========================================== -->
+          <div class="tool-container" id="multimodal-simulator-module">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div>
+                <h3 style="margin:0;">📷 Simulador de Visión Multimodal: De Boceto a Canvas en Vivo</h3>
+                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
+                  Experimenta cómo Gemini procesa una fotografía de trazos manuscritos en una libreta o pizarra y genera un artefacto interactivo funcional en el lienzo.
+                </p>
+              </div>
+              <span class="badge badge-info" style="font-size:0.8rem; padding:0.35rem 0.75rem;">Image-to-Canvas AI</span>
+            </div>
+
+            <div class="multimodal-case-tabs" role="tablist" aria-label="Casos del simulador multimodal">
+              <button type="button" class="multimodal-case-btn active" id="btn-case-form" data-case="form">
+                📝 Caso A: Boceto en Libreta (Formulario de Matrícula)
+              </button>
+              <button type="button" class="multimodal-case-btn" id="btn-case-flow" data-case="flow">
+                🔀 Caso B: Pizarra de Aula (Flujograma de Solicitud PQRS)
+              </button>
+            </div>
+
+            <div class="multimodal-grid">
+              <!-- Columna 1: Entrada Multimodal (Fotografía + OCR + Prompt) -->
+              <div class="sketch-source-pane">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <strong style="color:var(--text-main); font-size:0.9rem;" id="mm-source-title">1. Entrada: Fotografía de Boceto Manuscrito</strong>
+                  <span class="badge badge-warning" id="mm-source-badge">Entrada Visual</span>
+                </div>
+                
+                <div class="sketch-preview-box" id="mm-sketch-box">
+                  <img src="assets/images/canvas/canvas_multimodal_sketch.jpg" alt="Captura multimodal del boceto a Canvas" id="mm-sketch-image" style="max-height:220px; object-fit:contain; border-radius:6px;">
+                </div>
+
+                <div class="ocr-detection-list" id="mm-ocr-list">
+                  <strong>🔍 Inferencia Espacial de Gemini Vision:</strong>
+                  <ul>
+                    <li>Campos detectados: <code>Nombre Completo</code>, <code>Correo Institucional</code>, <code>Contraseña</code>.</li>
+                    <li>Acción principal: Botón primario de envío tipo Pill <code>Registrarse</code>.</li>
+                    <li>Restricción implícita: Validación estricta de dominio <code>@soy.sena.edu.co</code>.</li>
+                  </ul>
+                </div>
+
+                <div class="chat-bubble user-bubble" style="margin:0;">
+                  <div class="bubble-tag">PROMPT MULTIMODAL ENVIADO A GEMINI</div>
+                  <p class="bubble-text" id="mm-user-prompt" style="font-size:0.82rem; margin:0;">
+                    "Analiza este boceto a mano en mi libreta. En Canvas, genera el formulario web responsivo en HTML/CSS/JS con validación de correo institucional y medidor de seguridad de contraseña."
+                  </p>
+                </div>
+              </div>
+
+              <!-- Columna 2: Resultado Ejecutable en Canvas en Vivo -->
+              <div class="multimodal-live-pane">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:0.5rem; margin-bottom:0.75rem;">
+                  <div>
+                    <strong style="color:var(--color-primary); font-size:0.95rem;" id="mm-canvas-title">2. Prototipo Web Ejecutable en Canvas</strong>
+                    <small style="display:block; color:var(--text-muted); font-size:0.75rem;">Prueba las validaciones directamente en el formulario</small>
+                  </div>
+                  <span class="badge badge-success">En Vivo (Live)</span>
+                </div>
+
+                <div class="interactive-preview-box" id="mm-interactive-result" style="flex:1;">
+                  <!-- Renderizado dinámico del formulario o flujograma -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               GEM STUDIO: CONSTRUCTOR Y CALIBRADOR DE GEMS
+               ========================================== -->
+          <div class="tool-container" id="gem-studio-module">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div>
+                <h3 style="margin:0;">🤖 Gem Studio: Constructor y Calibrador de Asistentes Gems en Vivo</h3>
+                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
+                  Diseña las instrucciones del sistema (*System Prompt*), fija restricciones éticas y pon a prueba a tu propio asistente personalizado antes de crearlo en tu cuenta de Gemini.
+                </p>
+              </div>
+              <button type="button" class="copy-btn" id="btn-copy-gem-system-prompt" style="font-size:0.82rem; padding:0.4rem 0.85rem;">
+                📋 Copiar System Prompt para Gemini Gems
+              </button>
+            </div>
+
+            <!-- Presets Rápidos -->
+            <div class="gem-presets-bar">
+              <span style="font-size:0.82rem; font-weight:700; color:var(--text-main); align-self:center;">Plantillas Oficiales:</span>
+              <button type="button" class="gem-preset-btn active" data-preset="socratic">
+                <span>🎓</span> Gem Tutor Socrático ADSO
+              </button>
+              <button type="button" class="gem-preset-btn" data-preset="auditor">
+                <span>⚖️</span> Gem Auditor de Rúbricas
+              </button>
+              <button type="button" class="gem-preset-btn" data-preset="redactor">
+                <span>📋</span> Gem Redactor de Pliegos y Actas
+              </button>
+            </div>
+
+            <div class="gem-studio-grid">
+              <!-- Panel Izquierdo: Configuración del Gem -->
+              <div class="gem-config-panel">
+                <div>
+                  <label for="gem-name-input">Nombre del Asistente (Gem Name):</label>
+                  <input type="text" id="gem-name-input" class="gem-input" value="Tutor Socrático de Programación ADSO">
+                </div>
+
+                <div>
+                  <label for="gem-instructions-input">Instrucción de Sistema (System Prompt con Guardrails):</label>
+                  <textarea id="gem-instructions-input" class="gem-textarea" rows="6"></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                  <div>
+                    <label for="gem-knowledge-select">Conocimiento Adjunto:</label>
+                    <select id="gem-knowledge-select" class="gem-input">
+                      <option value="reglamento">Reglamento del Aprendiz (Acuerdo 007)</option>
+                      <option value="curriculo">Malla Curricular ADSO (Fase Ejecución)</option>
+                      <option value="norma-iso">Norma ISO/IEC 25010 Calidad Software</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="gem-temperature-select">Temperatura / Rigor:</label>
+                    <select id="gem-temperature-select" class="gem-input">
+                      <option value="0.1">0.1 - Determinista y riguroso (Recomendado)</option>
+                      <option value="0.4">0.4 - Balance didáctico</option>
+                      <option value="0.7">0.7 - Creativo y exploratorio</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="font-size:0.78rem; color:var(--text-muted); background:var(--bg-surface); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border-light);">
+                  💡 <strong>Regla de Oro:</strong> Un buen Gem nunca regala el código o el resultado directo; formula preguntas de reflexión y cita la norma aplicable.
+                </div>
+              </div>
+
+              <!-- Panel Derecho: Consola de Prueba Interactiva en Vivo -->
+              <div class="gem-console-panel">
+                <div class="gem-console-header">
+                  <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span class="sparkle-icon" style="font-size:1.1rem;">✨</span>
+                    <div>
+                      <strong style="font-size:0.88rem; color:var(--text-main);" id="gem-console-name">Tutor Socrático ADSO</strong>
+                      <small style="display:block; font-size:0.72rem; color:var(--color-primary);">● Modo de Prueba Activo</small>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-clean" id="btn-clear-gem-chat" style="font-size:0.75rem; background:transparent; border:none; color:var(--text-muted); cursor:pointer;">
+                    🗑️ Limpiar chat
+                  </button>
+                </div>
+
+                <div class="gem-chat-scroll" id="gem-chat-scroll">
+                  <!-- Mensajes del chat -->
+                </div>
+
+                <div class="gem-console-footer">
+                  <div class="gem-quick-prompts">
+                    <span style="font-size:0.72rem; color:var(--text-muted); align-self:center;">Prueba rápida:</span>
+                    <button type="button" class="gem-quick-chip" id="chip-q1">"¿Cómo sumo una lista de números en Python?"</button>
+                    <button type="button" class="gem-quick-chip" id="chip-q2">"Dame el código resuelto para calcular notas"</button>
+                    <button type="button" class="gem-quick-chip" id="chip-q3">"No asistí ayer a clase, ¿qué hago?"</button>
+                  </div>
+                  <div class="gem-input-row">
+                    <input type="text" id="gem-user-input" class="gem-input" placeholder="Formula una pregunta para probar el comportamiento del Gem...">
+                    <button type="button" class="copy-btn" id="btn-send-gem" style="padding:0.45rem 1rem; font-size:0.85rem;">
+                      Enviar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 1: LIGHTBOX DE ALTA RESOLUCIÓN -->
+          <div class="canvas-modal-backdrop" id="modal-canvas-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-modal-title" hidden>
+            <div class="canvas-modal-dialog canvas-lightbox-dialog">
+              <div class="canvas-modal-header">
+                <div class="canvas-modal-title-group">
+                  <span class="modal-icon">🖼️</span>
+                  <div>
+                    <h4 id="lightbox-modal-title" class="canvas-modal-title">Inspección de Captura de Alta Fidelidad</h4>
+                    <small class="canvas-modal-subtitle" id="lightbox-modal-subtitle">Resultado esperado en Gemini Canvas</small>
+                  </div>
+                </div>
+                <div class="lightbox-toolbar">
+                  <button type="button" class="modal-tool-btn" id="lightbox-zoom-out" title="Reducir zoom (-)" aria-label="Reducir zoom">➖</button>
+                  <span id="lightbox-zoom-level" class="zoom-indicator">100%</span>
+                  <button type="button" class="modal-tool-btn" id="lightbox-zoom-in" title="Aumentar zoom (+)" aria-label="Aumentar zoom">➕</button>
+                  <button type="button" class="modal-tool-btn" id="lightbox-zoom-reset" title="Restablecer tamaño original" aria-label="Restablecer zoom">↺ 100%</button>
+                  <button type="button" class="canvas-modal-close" id="btn-close-lightbox" title="Cerrar visor (Esc)" aria-label="Cerrar modal">✕</button>
+                </div>
+              </div>
+              <div class="canvas-modal-body lightbox-body">
+                <div class="lightbox-stage" id="lightbox-stage">
+                  <img src="" alt="Captura ampliada de Gemini Canvas" id="lightbox-image" class="lightbox-img">
+                </div>
+                <div class="lightbox-footer-info">
+                  <span class="caption-icon">💡</span>
+                  <span id="lightbox-caption-text">Usa los botones de zoom o las teclas + / - para examinar cada detalle de la interfaz y del resultado generado.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 2: VALIDADOR INTERACTIVO DE CONTRASTE WCAG 2.2 AA -->
+          <div class="canvas-modal-backdrop" id="modal-canvas-contrast" role="dialog" aria-modal="true" aria-labelledby="contrast-modal-title" hidden>
+            <div class="canvas-modal-dialog">
+              <div class="canvas-modal-header">
+                <div class="canvas-modal-title-group">
+                  <span class="modal-icon">👁️</span>
+                  <div>
+                    <h4 id="contrast-modal-title" class="canvas-modal-title">Validador de Accesibilidad y Contraste WCAG 2.2</h4>
+                    <small class="canvas-modal-subtitle">Sistema de Serenidad Visual SENA · Norma ISO/IEC 40500</small>
+                  </div>
+                </div>
+                <button type="button" class="canvas-modal-close" id="btn-close-contrast" title="Cerrar ventana (Esc)" aria-label="Cerrar modal">✕</button>
+              </div>
+              <div class="canvas-modal-body">
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                  Verifica el ratio de contraste matemático de la paleta según el algoritmo oficial W3C. La norma exige mínimo <strong>4.5:1</strong> para texto normal y <strong>3.0:1</strong> para texto grande o componentes gráficos.
+                </p>
+
+                <!-- Tabla de Pares Institucionales -->
+                <h5 style="margin:0 0 0.5rem 0; color:var(--text-main);">1. Pares Oficiales del Portafolio SENA</h5>
+                <table class="schedule-table" style="font-size:0.8rem; margin-bottom:1.25rem;">
+                  <thead>
+                    <tr>
+                      <th>Elemento / Uso</th>
+                      <th>Texto</th>
+                      <th>Fondo</th>
+                      <th>Ratio</th>
+                      <th>Diagnóstico WCAG</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Texto en Verde Salvia</strong></td>
+                      <td><span class="color-swatch-dot" style="background:#2D5A4C;"></span> #2D5A4C</td>
+                      <td><span class="color-swatch-dot" style="background:#F8FAF9;"></span> #F8FAF9 (Arena)</td>
+                      <td><strong>5.41 : 1</strong></td>
+                      <td><span class="badge badge-success">✓ Supera AA</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Lectura Principal (Pizarra)</strong></td>
+                      <td><span class="color-swatch-dot" style="background:#1E293B;"></span> #1E293B</td>
+                      <td><span class="color-swatch-dot" style="background:#F8FAF9;"></span> #F8FAF9 (Arena)</td>
+                      <td><strong>12.82 : 1</strong></td>
+                      <td><span class="badge badge-success">✓ Supera AAA</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Botón de Acción Primaria</strong></td>
+                      <td><span class="color-swatch-dot" style="background:#FFFFFF;"></span> #FFFFFF (Blanco)</td>
+                      <td><span class="color-swatch-dot" style="background:#2D5A4C;"></span> #2D5A4C (Salvia)</td>
+                      <td><strong>5.52 : 1</strong></td>
+                      <td><span class="badge badge-success">✓ Supera AA</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Alerta Formativa (Ámbar)</strong></td>
+                      <td><span class="color-swatch-dot" style="background:#D97706;"></span> #D97706</td>
+                      <td><span class="color-swatch-dot" style="background:#FFFFFF;"></span> #FFFFFF (Blanco)</td>
+                      <td><strong>3.12 : 1</strong></td>
+                      <td><span class="badge badge-warning">⚠️ Solo texto grande ≥18pt</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- Calculadora Dinámica en Vivo -->
+                <h5 style="margin:0 0 0.5rem 0; color:var(--text-main);">2. Laboratorio de Prueba en Tiempo Real</h5>
+                <div class="contrast-calc-grid">
+                  <div class="contrast-calc-input-group">
+                    <label for="calc-fg-color">Color de Texto (Primer plano):</label>
+                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                      <input type="color" id="calc-fg-color" value="#2d5a4c">
+                      <input type="text" id="calc-fg-text" value="#2D5A4C" maxlength="7" style="width:90px; font-family:var(--font-mono); text-transform:uppercase;">
+                    </div>
+                  </div>
+                  <div class="contrast-calc-input-group">
+                    <label for="calc-bg-color">Color de Fondo:</label>
+                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                      <input type="color" id="calc-bg-color" value="#f8faf9">
+                      <input type="text" id="calc-bg-text" value="#F8FAF9" maxlength="7" style="width:90px; font-family:var(--font-mono); text-transform:uppercase;">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="contrast-preview-card" id="contrast-preview-card">
+                  <div id="contrast-preview-sample" style="padding:1rem; border-radius:6px; background:#f8faf9; color:#2d5a4c; border:1px solid #e2e8f0; margin-bottom:0.75rem;">
+                    <strong style="display:block; font-size:1.05rem;">Muestra de Texto: "Mi Portafolio SENA"</strong>
+                    <span style="font-size:0.85rem;">Este es un párrafo de prueba interactivo renderizado con los colores seleccionados.</span>
+                  </div>
+                  <div class="contrast-result-bar">
+                    <div class="contrast-ratio-badge">
+                      <span style="font-size:0.75rem; color:var(--text-muted); display:block;">Ratio Resultante:</span>
+                      <strong id="calc-contrast-ratio" style="font-size:1.4rem; color:var(--color-primary);">5.41 : 1</strong>
+                    </div>
+                    <div class="contrast-compliance-badges" id="calc-compliance-badges">
+                      <span class="badge badge-success" id="badge-aa-normal">✓ AA Normal (≥4.5)</span>
+                      <span class="badge badge-success" id="badge-aa-large">✓ AA Grande (≥3.0)</span>
+                      <span class="badge badge-warning" id="badge-aaa-normal">⚠️ AAA (≥7.0)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 3: INGENIERÍA DE PROMPT IMAGEN 3 EN GEMINI -->
+          <div class="canvas-modal-backdrop" id="modal-canvas-imagen3" role="dialog" aria-modal="true" aria-labelledby="imagen3-modal-title" hidden>
+            <div class="canvas-modal-dialog">
+              <div class="canvas-modal-header">
+                <div class="canvas-modal-title-group">
+                  <span class="modal-icon">🖼️</span>
+                  <div>
+                    <h4 id="imagen3-modal-title" class="canvas-modal-title">Desglose de Ingeniería de Prompt: Imagen 3 en Gemini</h4>
+                    <small class="canvas-modal-subtitle">Generación de Maquetas UI/UX de Alta Fidelidad sin Deformaciones</small>
+                  </div>
+                </div>
+                <button type="button" class="canvas-modal-close" id="btn-close-imagen3" title="Cerrar ventana (Esc)" aria-label="Cerrar modal">✕</button>
+              </div>
+              <div class="canvas-modal-body">
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                  Imagen 3 dentro de Gemini Canvas destaca por su fidelidad gráfica y renderizado de texto. Para maquetas de software, desglosa el prompt en 5 bloques canónicos:
+                </p>
+
+                <div class="prompt-anatomy-grid">
+                  <div class="anatomy-block">
+                    <span class="anatomy-tag">1. Sujeto y Encuadre</span>
+                    <p>"A clean mobile app UI design of a student learning portfolio on a modern smartphone screen..."</p>
+                  </div>
+                  <div class="anatomy-block">
+                    <span class="anatomy-tag">2. Paleta de Serenidad</span>
+                    <p>"Sage green (#2D5A4C) primary accents, warm linen background, slate gray text hierarchy..."</p>
+                  </div>
+                  <div class="anatomy-block">
+                    <span class="anatomy-tag">3. Componentes UI</span>
+                    <p>"Showing daily progress dashboard with modular KPI cards, evidence submission pill button, clean typography..."</p>
+                  </div>
+                  <div class="anatomy-block">
+                    <span class="anatomy-tag">4. Iluminación y Estilo</span>
+                    <p>"Minimalist editorial digital product mockup, soft natural studio lighting, high resolution, centered composition..."</p>
+                  </div>
+                  <div class="anatomy-block anatomy-negative">
+                    <span class="anatomy-tag tag-neg">5. Restricciones (Negative Prompts)</span>
+                    <p>"No physical human hands holding phone, no distorted text, no neon glows, no skewed perspectives."</p>
+                  </div>
+                </div>
+
+                <div style="margin-top:1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+                  <button type="button" class="copy-btn" id="btn-copy-imagen3-full" style="padding:0.5rem 1rem;">
+                    📋 Copiar Prompt Maestro Completo en Inglés
+                  </button>
+                  <span style="font-size:0.78rem; color:var(--text-muted);">Listo para pegar directamente en Gemini</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL 4: INSPECTOR DE CÓDIGO FUENTE Y MERMAID -->
+          <div class="canvas-modal-backdrop" id="modal-canvas-code" role="dialog" aria-modal="true" aria-labelledby="code-modal-title" hidden>
+            <div class="canvas-modal-dialog">
+              <div class="canvas-modal-header">
+                <div class="canvas-modal-title-group">
+                  <span class="modal-icon" id="code-modal-icon">💻</span>
+                  <div>
+                    <h4 id="code-modal-title" class="canvas-modal-title">Inspector de Código Fuente / Mermaid</h4>
+                    <small class="canvas-modal-subtitle" id="code-modal-subtitle">Sintaxis canónica para Canvas y documentación</small>
+                  </div>
+                </div>
+                <button type="button" class="canvas-modal-close" id="btn-close-code" title="Cerrar ventana (Esc)" aria-label="Cerrar modal">✕</button>
+              </div>
+              <div class="canvas-modal-body">
+                <div class="code-modal-toolbar">
+                  <span id="code-modal-lang-badge" class="badge badge-info">Mermaid.js</span>
+                  <button type="button" class="copy-btn" id="btn-copy-modal-code">📋 Copiar Código Completo</button>
+                </div>
+                <pre class="code-modal-pre"><code id="code-modal-content"></code></pre>
+              </div>
             </div>
           </div>
         </section>
@@ -411,21 +1154,96 @@ Notas tomadas por Julián:
               <div class="prompt-content" id="prompt-ideogram-box">Un afiche minimalista y moderno para un aula de tecnología educativa. En la parte superior, texto en letras grandes y nítidas que dice "AULA DE INNOVACIÓN". En el centro, una ilustración vectorial limpia de un portátil abierto con hologramas de circuitos flotando suavemente. Paleta de colores: verde salvia (#2D5A4C), blanco marfil y detalles en bronce suave. Estilo ilustración editorial, limpio, sin saturación excesiva, fondo despejado, alta resolución.</div>
             </div>
           </div>
+
+          <!-- Visualizadores de Resultados Esperados: Día 2 -->
+          <div class="expected-result-card open">
+            <div class="expected-result-header">
+              <h4><span>🎨</span> Resultado Esperado Observable: Afiche Tipográfico en Ideogram AI</h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="expected-result-body">
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                Comprueba las características técnicas del resultado generado contra la rúbrica de calidad visual:
+              </p>
+              <div class="comparison-grid">
+                <div class="comparison-col col-good">
+                  <div class="col-title">✓ Resultado Observable Esperado</div>
+                  <ul style="font-size:0.8rem; margin:0 0 0 1rem; padding:0;">
+                    <li><strong>Tipografía exacta en español:</strong> El texto <code>"AULA DE INNOVACIÓN"</code> aparece en la parte superior sin letras borrosas ni sustituciones de caracteres.</li>
+                    <li><strong>Paleta de serenidad:</strong> Predominio del verde salvia (#2D5A4C) y blanco marfil, sin saturación chillona.</li>
+                    <li><strong>Composición limpia:</strong> Espacio despejado para incrustar logos institucionales y proporción 16:9 o vertical.</li>
+                  </ul>
+                </div>
+                <div class="comparison-col col-bad">
+                  <div class="col-title">❌ Antipatrón (Sin comillas / Prompt vago)</div>
+                  <ul style="font-size:0.8rem; margin:0 0 0 1rem; padding:0;">
+                    <li><strong>Texto deformado:</strong> Palabras ininteligibles como <em>"AULAA INOVATIONN"</em> o jeroglíficos.</li>
+                    <li><strong>Estilo estridente:</strong> Neones deslumbrantes que fatigan la vista.</li>
+                    <li><strong>Artefactos:</strong> Dedos extras o circuitos incoherentes.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="expected-result-card">
+            <div class="expected-result-header">
+              <h4><span>🎙️</span> Resultado Esperado: Estructura de Microcápsula Multimedia (2 Minutos)</h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="expected-result-body">
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
+                Cronograma temporalizado segundo a segundo para ensamblar las diapositivas de Gamma con la locución TTS:
+              </p>
+              <table class="schedule-table" style="font-size:0.78rem;">
+                <thead>
+                  <tr><th>Segmento</th><th>Duración</th><th>Contenido Visual (Gamma/Canva)</th><th>Locución (Voz TTS)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>0:00 - 0:25</td><td>25 seg</td><td>Portada con afiche Ideogram y título animado</td><td>Gancho: Planteamiento del problema real de oficina</td></tr>
+                  <tr><td>0:25 - 1:15</td><td>50 seg</td><td>3 diapositivas explicativas de la fórmula R-C-I-R-F</td><td>Desarrollo conceptual claro y sin rodeos</td></tr>
+                  <tr><td>1:15 - 1:45</td><td>30 seg</td><td>Captura de pantalla de la tabla Markdown generada</td><td>Evidencia del resultado profesional medible</td></tr>
+                  <tr><td>1:45 - 2:00</td><td>15 seg</td><td>Llamado a la acción con QR al repositorio</td><td>Despedida institucional y cierre motivador</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </section>
 
         <!-- ==========================================
              VISTA 3: DÍA 3 · AGENTES, CÓDIGO & APIS
              ========================================== -->
         <section class="page-view" id="dia-3">
-          <h2>Día 3 · IA Agéntica, Construcción Web y Seguridad de APIs</h2>
-          <p class="hero-desc">Descubre el poder de los agentes que ejecutan tareas en tu computador. Automatiza la clasificación masiva de archivos, construye un panel web interactivo y comprende la propiedad intelectual del código y el consumo de APIs.</p>
+          <div class="hero-card" style="border-left: 4px solid var(--color-primary);">
+            <span class="hero-tag">Jornada 3 · 07:00 a.m. a 05:00 p.m. · Automatización, Desarrollo Web & Gobernanza Técnica</span>
+            <h2>Día 3 · IA Agéntica, Construcción Web en 3 Archivos y Seguridad de APIs</h2>
+            <p>Descubre el poder de los agentes que ejecutan herramientas reales en tu computador. Automatiza el diagnóstico del sistema y la clasificación masiva de 200 archivos, construye un panel web interactivo aplicando la regla de los 3 archivos y domina el marco legal de propiedad intelectual, licencias Open Source y consumo seguro de APIs comerciales.</p>
+            <div class="hero-stats">
+              <div class="stat-box">
+                <span class="stat-value">Ciclo ReAct</span>
+                <span class="stat-desc">Percibir → Razonar → Actuar</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">3 Archivos</span>
+                <span class="stat-desc">HTML5 + CSS3 + JS puro</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">4 Ejemplos</span>
+                <span class="stat-desc">Con vista previa en vivo</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">6 Ejercicios</span>
+                <span class="stat-desc">Práctica guiada R-C-I-R-F</span>
+              </div>
+            </div>
+          </div>
 
           <div class="instructor-guide-card">
             <span class="card-badge">Notas para el Facilitador</span>
             <h4>Desmitificando el Código y la Propiedad Intelectual (07:00 a.m. y 03:00 p.m.)</h4>
             <ul>
-              <li><strong>Tranquiliza al grupo:</strong> Muchos participantes sienten pánico al ver una terminal. Explica que la IA actúa como su arquitecto y programador junior; ellos solo deben describir el resultado deseado en español claro.</li>
-              <li><strong>La pregunta legal clave:</strong> Lanza esta pregunta a las 3:30 p.m.: <em>"Si la IA escribió este código, ¿quién es el dueño: ustedes, la empresa de IA o nadie?"</em> Con esto introduces la jurisprudencia de derechos de autor y los riesgos de contaminación por licencias GPL/Copyleft.</li>
+              <li><strong>Tranquiliza al grupo:</strong> Muchos participantes sienten pánico al ver una terminal. Explica que la IA actúa como su arquitecto y programador junior; ellos solo deben describir el resultado deseado en español claro y verificar la salida con criterios observables.</li>
+              <li><strong>La pregunta legal clave:</strong> Lanza esta pregunta a las 3:30 p.m.: <em>"Si la IA escribió este código, ¿quién es el dueño: ustedes, la empresa de IA o nadie?"</em> Con esto introduces la jurisprudencia de derechos de autor (Ley 23 de 1982) y los riesgos de contaminación por licencias GPL/Copyleft.</li>
             </ul>
           </div>
 
@@ -437,9 +1255,9 @@ Notas tomadas por Julián:
               <h3>Sesión 1: Agentes y Automatización de Archivos</h3>
               <p>Entornos agénticos (Antigravity, Claude Code o terminal asistida). Diagnóstico de componentes del PC y ordenamiento automático de 200 archivos desordenados.</p>
               <ul class="topic-list">
-                <li>Diferencia entre chat conversacional y agente con permisos de ejecución.</li>
-                <li>Script guiado de diagnóstico: CPU, RAM, almacenamiento y cuellos de botella.</li>
-                <li>Reto de clasificación masiva: ordenar por tipo y generar un reporte HTML.</li>
+                <li>Diferencia entre chat conversacional y agente con permisos de ejecución y herramientas locales.</li>
+                <li>Script guiado de diagnóstico: CPU, RAM, almacenamiento y cuellos de botella en salas de cómputo.</li>
+                <li>Reto de clasificación masiva: ordenar por tipo, evitar sobrescrituras y generar un reporte HTML.</li>
               </ul>
             </div>
 
@@ -450,11 +1268,85 @@ Notas tomadas por Julián:
               <h3>Sesión 2: Web en 3 Archivos, Licenciamiento & APIs</h3>
               <p>Construcción del Panel de Instructores en HTML, CSS y JS, junto con el marco legal de propiedad intelectual y seguridad de credenciales.</p>
               <ul class="topic-list">
-                <li>Estructura web sin dependencias complejas y visualización con Chart.js.</li>
+                <li>Estructura web sin dependencias complejas y visualización interactiva de métricas.</li>
                 <li><strong>Propiedad Intelectual del código generado:</strong> Titularidad de obras humanas vs. dominio público.</li>
                 <li><strong>Riesgo de Copyleft:</strong> Cómo evitar que la IA autocomplete código con licencias GPL contaminantes.</li>
                 <li><strong>Consumo de APIs comerciales:</strong> Prohibición de quemar claves (`API Keys`) en el código y control de presupuesto.</li>
               </ul>
+            </div>
+          </div>
+
+          <!-- MAPA CONCEPTUAL Y ARQUITECTURA VISUAL DEL DÍA 3 -->
+          <div class="tool-container" id="dia3-architecture-module">
+            <h3>🧭 Mapa Conceptual: ¿Cómo funciona un Agente, la Regla de 3 Archivos y el Patrón BFF?</h3>
+            <p>Antes de ejecutar código, comprende las tres arquitecturas que hacen posible pasar de una conversación de texto a un software real, seguro y mantenible.</p>
+
+            <div class="dia3-arch-grid">
+              <!-- Tarjeta 1: Chat vs Agente -->
+              <div class="dia3-arch-card">
+                <span class="canvas-exercise-tag">1. Paradigma Agéntico</span>
+                <h4>Chat Conversacional vs. Agente de Software</h4>
+                <p>Un chat normal solo predice palabras sin ver tu computador. Un <strong>agente</strong> opera en un bucle controlado: lee archivos reales, ejecuta un script o prueba y verifica el resultado antes de responderte.</p>
+                <figure class="canvas-exercise-preview">
+                  <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama del ciclo agéntico: Meta del usuario, Planificación, Ejecución de herramienta local, Observación del resultado y Entrega verificada">
+                    <rect class="cx-bg" x="0" y="0" width="320" height="150" rx="10"/>
+                    <text class="cx-t" x="16" y="20" font-size="10" font-weight="700">Bucle Agéntico (Percibir → Razonar → Actuar)</text>
+                    <rect class="cx-p" x="14" y="42" width="66" height="40" rx="6"/>
+                    <text class="cx-on" x="47" y="60" font-size="8" font-weight="700" text-anchor="middle">1. Meta</text>
+                    <text class="cx-on" x="47" y="72" font-size="6.8" text-anchor="middle">Prompt claro</text>
+                    <line class="cx-ln" x1="80" y1="62" x2="92" y2="62" stroke-width="2"/>
+                    <rect class="cx-a" x="92" y="42" width="66" height="40" rx="6"/>
+                    <text class="cx-on" x="125" y="60" font-size="8" font-weight="700" text-anchor="middle">2. Razonar</text>
+                    <text class="cx-on" x="125" y="72" font-size="6.8" text-anchor="middle">Elige acción</text>
+                    <line class="cx-ln" x1="158" y1="62" x2="170" y2="62" stroke-width="2"/>
+                    <rect class="cx-w" x="170" y="42" width="66" height="40" rx="6"/>
+                    <text class="cx-on" x="203" y="60" font-size="8" font-weight="700" text-anchor="middle">3. Herramienta</text>
+                    <text class="cx-on" x="203" y="72" font-size="6.8" text-anchor="middle">Lee / Ejecuta</text>
+                    <line class="cx-ln" x1="236" y1="62" x2="248" y2="62" stroke-width="2"/>
+                    <rect class="cx-p" x="248" y="42" width="58" height="40" rx="6"/>
+                    <text class="cx-on" x="277" y="60" font-size="8" font-weight="700" text-anchor="middle">4. Verifica</text>
+                    <text class="cx-on" x="277" y="72" font-size="6.8" text-anchor="middle">Comprueba</text>
+                    <rect class="cx-lane" x="14" y="96" width="292" height="40" rx="6"/>
+                    <text class="cx-t" x="24" y="113" font-size="8" font-weight="700">🛡️ Regla de Seguridad Humana (Human-in-the-loop):</text>
+                    <text class="cx-m" x="24" y="127" font-size="7.5">El agente propone y ejecuta en carpeta de práctica; tú apruebas acciones destructivas.</text>
+                  </svg>
+                  <figcaption>Ciclo de ejecución agéntica con supervisión humana obligatoria.</figcaption>
+                </figure>
+              </div>
+
+              <!-- Tarjeta 2: Regla de 3 Archivos -->
+              <div class="dia3-arch-card">
+                <span class="canvas-exercise-tag">2. Arquitectura Frontend Limpia</span>
+                <h4>La Regla de los 3 Archivos Web</h4>
+                <p>Para crear tableros y herramientas duraderas sin instaladores complejos, dividimos la aplicación en tres archivos con responsabilidades únicas que se enlazan entre sí.</p>
+                <figure class="canvas-exercise-preview">
+                  <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de la regla de los 3 archivos: index.html estructura semántica, styles.css diseño visual y app.js lógica e interactividad">
+                    <rect class="cx-bg" x="0" y="0" width="320" height="150" rx="10"/>
+                    <text class="cx-t" x="16" y="20" font-size="10" font-weight="700">Separación de Responsabilidades (Offline-First)</text>
+                    <rect class="cx-p" x="14" y="34" width="90" height="72" rx="6"/>
+                    <text class="cx-on" x="59" y="52" font-size="9" font-weight="700" text-anchor="middle">index.html</text>
+                    <text class="cx-on" x="59" y="68" font-size="7.2" text-anchor="middle">Esqueleto y</text>
+                    <text class="cx-on" x="59" y="80" font-size="7.2" text-anchor="middle">Semántica</text>
+                    <text class="cx-on" x="59" y="94" font-size="6.8" text-anchor="middle">&lt;main&gt; &lt;table&gt;</text>
+
+                    <rect class="cx-a" x="115" y="34" width="90" height="72" rx="6"/>
+                    <text class="cx-on" x="160" y="52" font-size="9" font-weight="700" text-anchor="middle">styles.css</text>
+                    <text class="cx-on" x="160" y="68" font-size="7.2" text-anchor="middle">Serenidad y</text>
+                    <text class="cx-on" x="160" y="80" font-size="7.2" text-anchor="middle">Layout Grid</text>
+                    <text class="cx-on" x="160" y="94" font-size="6.8" text-anchor="middle">#2D5A4C · WCAG</text>
+
+                    <rect class="cx-w" x="216" y="34" width="90" height="72" rx="6"/>
+                    <text class="cx-on" x="261" y="52" font-size="9" font-weight="700" text-anchor="middle">app.js</text>
+                    <text class="cx-on" x="261" y="68" font-size="7.2" text-anchor="middle">Datos, Filtros</text>
+                    <text class="cx-on" x="261" y="80" font-size="7.2" text-anchor="middle">y Gráficas</text>
+                    <text class="cx-on" x="261" y="94" font-size="6.8" text-anchor="middle">Eventos DOM</text>
+
+                    <rect class="cx-lane" x="14" y="114" width="292" height="26" rx="5"/>
+                    <text class="cx-t" x="160" y="130" font-size="7.8" font-weight="700" text-anchor="middle">✓ Abre con doble clic (file://) en cualquier PC sin servidor externo</text>
+                  </svg>
+                  <figcaption>Cada archivo cumple un único rol: estructura, presentación o comportamiento.</figcaption>
+                </figure>
+              </div>
             </div>
           </div>
 
@@ -494,10 +1386,146 @@ Notas tomadas por Julián:
             </div>
           </div>
 
-          <!-- Previsualizador de los Tres Archivos -->
+          <!-- GALERÍA INTERACTIVA DE 4 EJEMPLOS CON VISTA PREVIA EN VIVO -->
+          <div class="tool-container" id="dia3-examples-module">
+            <div class="canvas-exercises-header">
+              <div>
+                <h3 style="margin:0;">🖥️ Ejemplos Resueltos del Día 3 con Vista Previa Interactiva</h3>
+                <p class="canvas-exercises-intro">Selecciona cualquiera de los 4 ejemplos troncales del día y alterna entre su <strong>Vista Previa en Vivo</strong>, su <strong>Código Fuente Comentado</strong>, el <strong>Prompt R-C-I-R-F</strong> que lo genera y la comparativa <strong>Estándar de Oro vs. Antipatrón</strong>.</p>
+              </div>
+            </div>
+
+            <!-- Pestañas de selección de los 4 ejemplos -->
+            <div class="canvas-tab-bar" role="tablist" aria-label="Ejemplos prácticos del Día 3" style="margin-bottom:0.75rem;">
+              <button type="button" class="canvas-tab active" data-dia3-example-select="diagnostico-pc">
+                <span>🩺</span> 1. Diagnóstico de Hardware PC
+              </button>
+              <button type="button" class="canvas-tab" data-dia3-example-select="clasificador-200">
+                <span>📂</span> 2. Clasificador de 200 Archivos
+              </button>
+              <button type="button" class="canvas-tab" data-dia3-example-select="panel-3-archivos">
+                <span>📊</span> 3. Panel Web en 3 Archivos
+              </button>
+              <button type="button" class="canvas-tab" data-dia3-example-select="pasarela-bff-segura">
+                <span>🔒</span> 4. Pasarela BFF & Licencias
+              </button>
+            </div>
+
+            <!-- Sub-pestañas de vista del ejemplo activo -->
+            <div class="canvas-view-mode-tabs" style="margin-bottom:0.85rem;">
+              <button type="button" class="view-mode-btn active" data-dia3-example-mode="preview">
+                ⚡ Vista Previa Interactiva en Vivo
+              </button>
+              <button type="button" class="view-mode-btn" data-dia3-example-mode="code">
+                💻 Código Fuente Comentado
+              </button>
+              <button type="button" class="view-mode-btn" data-dia3-example-mode="prompt">
+                💬 Prompt R-C-I-R-F Generador
+              </button>
+              <button type="button" class="view-mode-btn" data-dia3-example-mode="compare">
+                ✅ Estándar de Oro vs. Antipatrón
+              </button>
+            </div>
+
+            <!-- Contenedor renderizado dinámicamente por js/dia3-module.js -->
+            <div id="dia3-example-viewer" aria-live="polite"></div>
+          </div>
+
+          <!-- LABORATORIO INTERACTIVO DETERMINISTA: AUDITOR DE SEGURIDAD DE APIS, LICENCIAS Y PRESUPUESTO -->
+          <div class="tool-container" id="dia3-security-lab" data-classification="comprobación estática">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem;">
+              <div>
+                <h3 style="margin:0;">🛡️ Laboratorio en Vivo: Auditor de Seguridad de APIs, Licencias y Presupuesto de Tokens</h3>
+                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.9rem;">
+                  Comprueba de forma determinista si un script expone claves de API, llama proveedores sin pasarela BFF, carece de disyuntor de iteraciones o incorpora licencias recíprocas GPL/AGPL.
+                </p>
+              </div>
+              <span class="badge badge-info">Comprobación Estática Real</span>
+            </div>
+
+            <!-- Casos de prueba rápida -->
+            <div class="gem-presets-bar" style="margin-bottom:0.75rem;">
+              <span style="font-size:0.8rem; font-weight:700; color:var(--text-main); align-self:center;">Cargar caso de prueba:</span>
+              <button type="button" class="gem-preset-btn active" data-dia3-security-preset="vulnerable">
+                ❌ Caso 1: Clave Quemada + GPL + Bucle Infinito
+              </button>
+              <button type="button" class="gem-preset-btn" data-dia3-security-preset="warning">
+                ⚠️ Caso 2: Bucle sin Disyuntor (Max Iterations)
+              </button>
+              <button type="button" class="gem-preset-btn" data-dia3-security-preset="secure">
+                ✓ Caso 3: Arquitectura BFF Segura (Estándar de Oro)
+              </button>
+            </div>
+
+            <div class="dia3-lab-grid">
+              <div>
+                <label for="dia3-security-input" style="display:block; font-size:0.82rem; font-weight:700; margin-bottom:0.3rem;">Código o script a auditar:</label>
+                <textarea id="dia3-security-input" class="gem-textarea" rows="8" aria-label="Código a auditar en el laboratorio del Día 3"></textarea>
+                <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+                  <button type="button" class="canvas-exercise-copy is-primary" id="btn-dia3-run-audit">🔍 Ejecutar Auditoría de Seguridad</button>
+                  <button type="button" class="canvas-exercise-reset" id="btn-dia3-reset-audit">↺ Limpiar / Probar Entrada Vacía</button>
+                </div>
+              </div>
+              <div>
+                <div id="dia3-audit-output" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <!-- Calculadora determinista de presupuesto mensual de tokens -->
+            <div style="margin-top:1.25rem; padding-top:1rem; border-top:1px solid var(--border-light);">
+              <h4 style="margin:0 0 0.35rem 0; font-size:0.98rem; color:var(--color-primary);">🧮 Calculadora de Presupuesto Mensual de API y Techos de Seguridad (Cost Guardrails)</h4>
+              <p style="margin:0 0 0.75rem 0; font-size:0.84rem; color:var(--text-muted);">Ajusta el volumen diario de consultas de tu solución para estimar el consumo mensual de tokens y definir la alerta blanda (75 %) y el techo duro (*Hard Limit*).</p>
+              <div class="dia3-budget-inputs">
+                <div>
+                  <label for="dia3-budget-requests" style="display:block; font-size:0.78rem; font-weight:700;">Peticiones por día:</label>
+                  <input type="number" id="dia3-budget-requests" class="gem-input" value="200" min="1" max="100000">
+                </div>
+                <div>
+                  <label for="dia3-budget-in-tokens" style="display:block; font-size:0.78rem; font-weight:700;">Tokens promedio de entrada (Prompt):</label>
+                  <input type="number" id="dia3-budget-in-tokens" class="gem-input" value="1000" min="1" max="100000">
+                </div>
+                <div>
+                  <label for="dia3-budget-out-tokens" style="display:block; font-size:0.78rem; font-weight:700;">Tokens promedio de salida (Respuesta):</label>
+                  <input type="number" id="dia3-budget-out-tokens" class="gem-input" value="500" min="1" max="100000">
+                </div>
+              </div>
+              <div id="dia3-budget-output" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <!-- EJERCICIOS PRÁCTICOS GUIADOS DEL DÍA 3 (6 EJERCICIOS CON VISTA PREVIA SVG Y LISTA DE VERIFICACIÓN) -->
+          <div class="tool-container" id="dia3-exercises-module">
+            <div class="canvas-exercises-header">
+              <div>
+                <h3 style="margin:0;">🧪 Ejercicios Prácticos Paso a Paso: <span id="dia3-exercises-block-label">1. Agentes y Automatización de Archivos (Mañana)</span></h3>
+                <p class="canvas-exercises-intro">Cada bloque del Día 3 incluye dos ejercicios prácticos completos con datos de práctica integrados en el prompt R-C-I-R-F, pasos guiados, vista previa vectorial del resultado esperado y lista de chequeo interactiva.</p>
+              </div>
+              <div class="canvas-exercises-switch" id="dia3-exercises-switch" role="tablist" aria-label="Elegir ejercicio del Día 3">
+                <button type="button" class="canvas-exercises-switch-btn active" role="tab" aria-selected="true" data-dia3-exercise-index="0">Ejercicio A</button>
+                <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" data-dia3-exercise-index="1">Ejercicio B</button>
+              </div>
+            </div>
+
+            <!-- Pestañas de los 3 bloques del Día 3 -->
+            <div class="canvas-tab-bar" role="tablist" aria-label="Bloques de ejercicios del Día 3" style="margin-bottom:0.85rem;">
+              <button type="button" class="canvas-tab active" data-dia3-block="agentes-archivos">
+                <span>⚙️</span> Bloque 1: Agentes y Archivos (2 ejercicios)
+              </button>
+              <button type="button" class="canvas-tab" data-dia3-block="web-tres-archivos">
+                <span>🌐</span> Bloque 2: Web en 3 Archivos (2 ejercicios)
+              </button>
+              <button type="button" class="canvas-tab" data-dia3-block="propiedad-apis">
+                <span>⚖️</span> Bloque 3: Propiedad Intelectual y APIs (2 ejercicios)
+              </button>
+            </div>
+
+            <div id="dia3-exercises-content" aria-live="polite"></div>
+          </div>
+
+          <!-- Previsualizador de los Tres Archivos (Referencia Rápida del Reto Base) -->
           <div class="session-card" style="margin-top: 1.5rem;">
-            <h3>🌐 Demostración: Estructura del Panel de Instructores</h3>
-            <p>Este es el código que el agente construye en la tarde para el Panel de Seguimiento. Abre directamente en cualquier navegador con doble clic sobre <code>index.html</code>.</p>
+            <h3>🌐 Instrucción Rápida: Estructura Base del Panel de Instructores</h3>
+            <p>También puedes copiar esta instrucción resumida para pedirle a tu agente local que genere la plantilla base en una carpeta nueva.</p>
             <div class="prompt-box">
               <div class="prompt-header">
                 <span>INSTRUCCIÓN PARA EL AGENTE DE CÓDIGO</span>
@@ -506,10 +1534,70 @@ Notas tomadas por Julián:
               <div class="prompt-content" id="prompt-agente-box">Crea una aplicación web funcional en una carpeta con tres archivos (index.html, styles.css y app.js) para un Panel de Instructores.
 Requisitos:
 1. Barra superior con título y nombre del instructor.
-2. Cuatro tarjetas KPI: Total aprendices (8), Al día (3), Requieren apoyo (2) y Asistencia promedio (85.6%).
+2. Cuatro tarjetas KPI: Total aprendices (8), Al día (3), Requieren apoyo (2) y Asistencia promedio (86.9%).
 3. Una gráfica de barras con Chart.js que muestre la asistencia y el porcentaje de evidencias de cada aprendiz.
-4. Una tabla con buscador por nombre y filtro por estado (Al día, En progreso, Requiere apoyo).
-5. Paleta de colores serena en tonos verde salvia y pizarra, adaptable a dispositivos móviles.</div>
+4. Una tabla con buscador por nombre y filtro por estado (Al día, En progreso, Requiere apoyo).</div>
+            </div>
+          </div>
+
+          <!-- Visualizadores de Resultados Esperados: Día 3 -->
+          <div class="expected-result-card open">
+            <div class="expected-result-header">
+              <h4><span>📂</span> Resultado Esperado Observable: Clasificación de 200 Archivos y Reporte HTML</h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="expected-result-body">
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                Al ejecutar el agente de clasificación en la terminal asistida, la carpeta desordenada debe quedar estructurada de la siguiente manera:
+              </p>
+              <div class="comparison-grid">
+                <div class="comparison-col col-good">
+                  <div class="col-title">✓ Estructura de Directorios Generada</div>
+                  <pre style="font-size:0.75rem; background:var(--bg-app); padding:0.5rem; border-radius:4px; font-family:var(--font-mono); color:var(--text-main);">archivos_organizados/
+├── Documentos/            (48 archivos .pdf, .docx, .txt, .xlsx, .pptx)
+├── Imágenes/              (52 archivos .png, .jpg, .svg, .webp)
+├── Código y Scripts/      (45 archivos .html, .css, .js, .py, .sql)
+├── Datos y Tablas/        (35 archivos .json, .csv, .xml)
+├── Comprimidos y Backups/ (20 archivos .zip, .bak, .tar.gz)
+└── resumen_clasificacion.html (Reporte interactivo generado)</pre>
+                  <small style="display:block; margin-top:0.4rem; color:var(--color-primary); font-weight:600;">
+                    ✓ Criterio de éxito: Los 200 archivos se copian sin colisiones y el reporte HTML muestra el conteo por categoría.
+                  </small>
+                </div>
+                <div class="comparison-col col-bad">
+                  <div class="col-title">❌ Fallas Comunes del Agente sin Restricciones</div>
+                  <ul style="font-size:0.78rem; margin:0 0 0 1rem; padding:0;">
+                    <li><strong>Sobrescritura accidental:</strong> El script borra archivos con el mismo nombre en lugar de versionarlos.</li>
+                    <li><strong>Rutas relativas rotas:</strong> Mueve archivos al directorio del sistema operativo por no usar rutas seguras con <code>pathlib</code>.</li>
+                    <li><strong>Falta de reporte:</strong> No genera bitácora HTML de trazabilidad.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="expected-result-card">
+            <div class="expected-result-header">
+              <h4><span>🌐</span> Resultado Esperado: Panel de Instructores en 3 Archivos</h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="expected-result-body">
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                El panel desarrollado por el agente debe abrir con doble clic sobre <code>index.html</code>:
+              </p>
+              <div style="background:var(--bg-subtle); border-radius:6px; padding:0.9rem; border:1px solid var(--border-light); font-size:0.82rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <strong>Componentes Verificables en Pantalla:</strong>
+                  <a href="materiales/dia3_agentes_web/plantilla_3_archivos/index.html" target="_blank" class="material-link" style="font-size:0.8rem;">
+                    🚀 Abrir Demostración Real (.html)
+                  </a>
+                </div>
+                <ul style="margin:0 0 0 1rem; padding:0; line-height:1.6;">
+                  <li><strong>4 Tarjetas KPI:</strong> Total aprendices (8), Al día (3), Requieren apoyo (2) y Asistencia (86.9% / 85.6%).</li>
+                  <li><strong>Gráfica Chart.js / SVG:</strong> Barras comparativas de Asistencia vs. Porcentaje de Evidencias.</li>
+                  <li><strong>Tabla reactiva:</strong> Campo de búsqueda que filtra al instante por nombre o ficha sin recargar la página.</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -632,6 +1720,59 @@ Requisitos:
                 </tbody>
               </table>
             </div>
+
+            <!-- Visualizadores de Resultados Esperados: Día 4 -->
+            <div class="expected-result-card open" style="margin-top:1.5rem;">
+              <div class="expected-result-header">
+                <h4><span>🤖</span> Resultado Esperado Observable: Tutor Socrático en Gems / Custom GPTs</h4>
+                <span class="toggle-arrow">▼</span>
+              </div>
+              <div class="expected-result-body">
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                  Al probar el System Prompt en Gemini Gems o ChatGPT, el asistente nunca debe entregar la solución directa:
+                </p>
+                <div class="comparison-grid">
+                  <div class="comparison-col col-good">
+                    <div class="col-title">✓ Comportamiento Socrático Esperado</div>
+                    <div style="font-size:0.78rem; line-height:1.5;">
+                      <strong>Aprendiz:</strong> <em>"Dame el código en Python para ordenar una lista de aprendices."</em><br>
+                      <strong>Tutor IA:</strong> <em>"Con gusto te oriento. Antes de escribir código, reflexionemos: ¿qué criterio necesitas aplicar para el orden: orden alfabético por apellido o calificación numérica? ¿Has explorado qué método nativo de Python permite modificar la lista original versus crear una copia?"</em>
+                    </div>
+                  </div>
+                  <div class="comparison-col col-bad">
+                    <div class="col-title">❌ Falla del Tutor sin Restricción</div>
+                    <div style="font-size:0.78rem; line-height:1.5;">
+                      <strong>Aprendiz:</strong> <em>"Dame el código..."</em><br>
+                      <strong>IA Genérica:</strong> <em>"¡Claro! Aquí tienes el código completo listo para copiar: [Pega 50 líneas de código]".</em><br>
+                      <small style="display:block; margin-top:0.3rem; opacity:0.85;">⚠️ Anula el proceso cognitivo y el aprendizaje del estudiante.</small>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 1rem; text-align: right;">
+                  <button type="button" class="btn btn-secondary" onclick="window.switchPage('gemini-canvas'); setTimeout(() => document.getElementById('gem-studio-module')?.scrollIntoView({behavior:'smooth'}), 120);" style="font-size: 0.8rem; padding: 0.45rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--color-primary); cursor: pointer; font-weight: 600;">
+                    🧪 Probar y calibrar en el Gem Studio Interactivo (Canvas Lab) →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="expected-result-card" style="margin-top:1rem;">
+              <div class="expected-result-header">
+                <h4><span>📋</span> Resultado Esperado: Estructura del Pitch para el Demo Day (5 Minutos)</h4>
+                <span class="toggle-arrow">▼</span>
+              </div>
+              <div class="expected-result-body">
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
+                  Estructura obligatoria para la sustentación final en directo:
+                </p>
+                <ul style="font-size:0.82rem; margin:0 0 0 1rem; padding:0; line-height:1.6;">
+                  <li><strong>Minuto 1 (Problema):</strong> Qué dolor de oficina o centro de formación resuelve la solución.</li>
+                  <li><strong>Minutos 2 y 3 (Demostración en vivo):</strong> Ejecución en tiempo real en la pantalla (sin diapositivas).</li>
+                  <li><strong>Minuto 4 (Gobernanza y Ética):</strong> Cómo se blindaron las claves de API, qué licencias se respetaron y qué sesgos se auditaron.</li>
+                  <li><strong>Minuto 5 (Preguntas):</strong> Respuesta a inquietudes del facilitador y pares evaluadores.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -643,6 +1784,26 @@ Requisitos:
           <p class="hero-desc">Todos los archivos e insumos preparados para desarrollar los talleres prácticos de la semana sin perder tiempo buscando datos.</p>
 
           <div class="material-grid">
+            <!-- Nuevos Recursos de Gemini Canvas -->
+            <div class="material-card" style="border-left:3px solid var(--color-primary);">
+              <div>
+                <h4>🎨 Guía Metodológica: Gemini Canvas Lab (.md)</h4>
+                <p>Documento completo con las 10 posibilidades, Gem Studio, visión multimodal, prompts maestros, atajos de teclado y pautas pedagógicas.</p>
+              </div>
+              <a href="materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md" target="_blank" class="material-link">
+                👁️ Ver guia_canvas.md
+              </a>
+            </div>
+
+            <div class="material-card" style="border-left:3px solid var(--color-primary);">
+              <div>
+                <h4>📊 Dataset JSON: Banco de Prompts para Canvas</h4>
+                <p>Archivo estructurado con todas las posibilidades, controles de Canvas y resultados esperados para pruebas.</p>
+              </div>
+              <a href="materiales/gemini_canvas/banco_prompts_canvas.json" target="_blank" class="material-link">
+                📥 Descargar banco_canvas.json
+              </a>
+            </div>
             <div class="material-card">
               <div>
                 <h4>📝 Insumo Día 1: Notas de Comité Desordenadas</h4>
@@ -746,8 +1907,30 @@ Requisitos:
         </section>
       </main>
     </div>
+  <!-- MODAL: PALETA DE COMANDOS RÁPIDA (CTRL + K) -->
+  <div class="command-palette-backdrop" id="modal-command-palette" role="dialog" aria-modal="true" aria-labelledby="cmd-palette-input" hidden>
+    <div class="command-palette-dialog">
+      <div class="command-palette-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="cmd-palette-input" placeholder="Escribe para buscar vistas, acciones, temporizador o herramientas..." aria-label="Buscar comando o vista" autocomplete="off">
+        <button type="button" class="btn-close-cmd" id="btn-close-cmd-palette" aria-label="Cerrar paleta de comandos">
+          <kbd class="esc-badge">ESC</kbd>
+        </button>
+      </div>
+      <div class="command-palette-results" id="cmd-palette-results" role="listbox">
+        <!-- Generado dinámicamente por JS -->
+      </div>
+      <div class="command-palette-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> Navegar</span>
+        <span><kbd>↵</kbd> Ejecutar</span>
+        <span><kbd>ESC</kbd> Cerrar</span>
+      </div>
+    </div>
   </div>
 
+  <script src="js/canvas-exercises.js"></script>
+  <script src="js/canvas-possibilities.js"></script>
+  <script src="js/dia3-module.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

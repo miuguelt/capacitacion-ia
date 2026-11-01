@@ -1,0 +1,32 @@
+name: Pruebas del portal
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar pytest
+        run: python -m pip install pytest
+      - name: Ejercicios de Canvas y Día 3 con cobertura total de funciones
+        run: >
+          node --test --experimental-test-coverage
+          --test-coverage-include="js/canvas-exercises.js"
+          --test-coverage-include="js/canvas-possibilities.js"
+          --test-coverage-include="js/dia3-module.js"
+          --test-coverage-functions=100 --test-coverage-lines=100 --test-coverage-branches=100
+          tests/canvas-exercises.test.cjs tests/canvas-possibilities.test.cjs tests/dia3-module.test.cjs
+      - name: Integridad del portal y materiales
+        run: python -m pytest -q tests
