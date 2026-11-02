@@ -22,6 +22,8 @@ MODES = [
     "rubric-curriculum",
     "sql-pipeline",
     "executive-report",
+    "multimodal-vision",
+    "gem-studio",
 ]
 
 
@@ -78,7 +80,7 @@ def test_exercises_css_present():
 
 def test_json_bank_matches_js_exercises():
     data = json.loads((BASE_DIR / "materiales" / "gemini_canvas" / "banco_prompts_canvas.json").read_text(encoding="utf-8"))
-    assert data["totalExercises"] == 20
+    assert data["totalExercises"] == 24
     js_ex = _js_exercises()
     by_id = {p["id"]: p for p in data["possibilities"]}
     for mode in MODES:

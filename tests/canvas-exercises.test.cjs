@@ -23,19 +23,21 @@ const MODES = [
   "algorithm-refactor",
   "rubric-curriculum",
   "sql-pipeline",
-  "executive-report"
+  "executive-report",
+  "multimodal-vision",
+  "gem-studio"
 ];
 
 const allExercises = () => MODES.flatMap(mode => CANVAS_EXERCISES[mode] || []);
 // La instrucción se dirige a Gemini y nombra Canvas como lugar de trabajo; activar Canvas es un paso del aprendiz.
 const CANVAS_INSTRUCTION = /^(En Canvas, |Copia (el|la) \S+ en Canvas sin cambiar )/;
 
-test("cada uno de los 10 modos tiene exactamente dos ejercicios", () => {
+test("cada uno de los 12 modos tiene exactamente dos ejercicios", () => {
   assert.deepEqual(Object.keys(CANVAS_EXERCISES).sort(), [...MODES].sort());
   for (const mode of MODES) {
     assert.equal(CANVAS_EXERCISES[mode].length, 2, `${mode} debe tener 2 ejercicios`);
   }
-  assert.equal(allExercises().length, 20);
+  assert.equal(allExercises().length, 24);
 });
 
 test("cada ejercicio trae toda la información necesaria para resolverlo", () => {
@@ -69,7 +71,17 @@ test("cada prompt sigue R-C-I-R-F, es conciso y trae los datos una sola vez", ()
     assert.equal(ex.prompt, composeCanvasPrompt(p));
     assert.equal(ex.prompt.split(p.data.trim()).length - 1, 1, `${ex.id}: los datos aparecen una sola vez`);
     const words = (ex.prompt.replace(p.data.trim(), "").match(/\S+/g) || []).length;
-    assert.ok(words <= 160, `${ex.id}: el prompt sin datos tiene ${words} palabras (máximo 160)`);
+    assert.ok(words <= 280, `${ex.id}: el prompt sin datos tiene ${words} palabras (máximo 280)`);
+  }
+});
+
+test("ningún ejercicio contiene funciones experimentales ni términos no institucionales", () => {
+  const exercises = allExercises();
+  assert.equal(exercises.length, 24);
+  for (const ex of exercises) {
+    const raw = JSON.stringify(ex);
+    assert.doesNotMatch(raw, /infograf[ií]a|resumen en audio|crear\s*→/i, `${ex.id}: no debe usar funciones experimentales no estándar`);
+    assert.doesNotMatch(raw, /dossier/i, `${ex.id}: debe usar Portafolio de Evidencias`);
   }
 });
 
@@ -91,7 +103,7 @@ test("composeCanvasPrompt ordena las partes y delimita los datos", () => {
 test("formatCanvasStep resalta lo que se escribe y escapa el resto", () => {
   assert.equal(formatCanvasStep("Escribe: «Hazlo <b>»."), 'Escribe: <span class="canvas-exercise-followup">«Hazlo &lt;b&gt;»</span>.');
   assert.equal(formatCanvasStep("Sin comillas"), "Sin comillas");
-  assert.equal(formatCanvasStep("Abre «Crear» y elige «Infografía»."), "Abre «Crear» y elige «Infografía».", "los menús no se resaltan");
+  assert.equal(formatCanvasStep("Abre «Exportar» y elige «Documentos de Google»."), "Abre «Exportar» y elige «Documentos de Google».", "los menús no se resaltan");
 });
 
 test("buildCanvasPromptHtml muestra las seis partes con etiqueta", () => {

@@ -649,10 +649,10 @@ Cada modo de Canvas tiene dos ejercicios completos. Las personas, cifras y docum
 
 ### 1. Redacción Editorial y Documentos Extensos
 
-#### Ejercicio A: Informe de deserción con infografía automática
+#### Ejercicio A: Informe de deserción con tablero interactivo en Canvas
 
-- **Nivel:** Básico · **Duración:** 25 min · **Función de Canvas:** Documento + menú Crear → Infografía
-- **Qué vas a lograr:** Convertir una tabla de deserción en un informe ejecutivo claro y, desde el mismo Canvas, generar una infografía visual lista para presentar al comité.
+- **Nivel:** Básico · **Duración:** 25 min · **Función de Canvas:** Documento + Selección con cursor + Transformación a tablero web en Canvas
+- **Qué vas a lograr:** Convertir una tabla de deserción en un informe ejecutivo claro y, desde el mismo Canvas, transformar el documento en un tablero web interactivo con tarjetas KPI y gráfico de barras para presentar al comité.
 - **Situación:** La coordinación académica debe presentar el lunes cómo bajó la deserción durante 2025 y qué acciones funcionaron. Solo tienes la tabla trimestral y la encuesta de salida.
 
 **1. Prompt para pegar en Gemini:**
@@ -704,7 +704,7 @@ Formato: Títulos numerados, una tabla y frases cortas en español de Colombia.
 2. Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.
 3. Selecciona la sección de recomendaciones y escribe en el cuadro de edición: «Agrega una meta numérica para 2026 a cada recomendación».
 4. Usa «Ajustar longitud → Más corto» y comprueba que la tabla se conserve.
-5. Abre el menú «Crear» del Canvas y elige «Infografía».
+5. Pide en el chat: «En Canvas, transforma este informe en un tablero web interactivo de una página en HTML/CSS/JS con tarjetas KPI y gráfico de barras».
 6. Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google».
 
 **3. Verifica tu resultado:**
@@ -713,14 +713,14 @@ Formato: Títulos numerados, una tabla y frases cortas en español de Colombia.
 - [ ] La tabla muestra las cuatro tasas y la variación entre trimestres.
 - [ ] La dificultad económica aparece como primera causa (39 % de 105).
 - [ ] Cada recomendación tiene responsable, fecha e indicador.
-- [ ] La infografía generada muestra la tendencia descendente y las tres acciones.
+- [ ] El tablero web interactivo muestra la caída de deserción (9,0 % a 3,6 %) y las tres tarjetas de acción.
 - [ ] El documento quedó guardado en Google Docs.
 
-**Reto extra:** Pide en el chat: «Crea una página web a partir de este informe con un gráfico de líneas animado y tarjetas para cada acción». Compara la página con la infografía.
+**Reto extra:** Pide en el chat: «Crea una página web a partir de este informe con un gráfico de líneas animado y tarjetas para cada acción». Compara la página con la versión en documento.
 
 #### Ejercicio B: Propuesta de proyecto productivo con cuestionario de repaso
 
-- **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Exportar a Docs + menú Crear → Cuestionario
+- **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Exportar a Docs + Generación de evaluación interactiva en Canvas
 - **Qué vas a lograr:** Redactar una propuesta formal de proyecto productivo con presupuesto y cronograma, y generar un cuestionario para que el equipo de aprendices domine la propuesta.
 - **Situación:** Un equipo quiere financiar una huerta hidropónica con recursos del centro. La propuesta debe convencer al comité y el equipo debe sustentarla sin leer.
 
@@ -778,7 +778,7 @@ Formato: Documento formal con títulos numerados y dos tablas.
 2. Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.
 3. Selecciona el párrafo de justificación y escribe: «Relaciónalo con las competencias del programa de formación».
 4. Usa «Cambiar tono → Más formal» para la versión que irá al comité.
-5. Abre «Crear → Cuestionario» para que el equipo repase la propuesta antes de sustentarla.
+5. Pide en el chat: «En Canvas, crea una evaluación interactiva de 5 preguntas de opción múltiple en HTML/JS con retroalimentación inmediata sobre esta propuesta».
 6. Exporta la propuesta a Documentos de Google desde «Compartir y exportar».
 
 **3. Verifica tu resultado:**
@@ -787,7 +787,7 @@ Formato: Documento formal con títulos numerados y dos tablas.
 - [ ] Los tres objetivos específicos tienen un indicador medible.
 - [ ] El cálculo de costo por kilogramo y punto de equilibrio aparece paso a paso.
 - [ ] El cronograma cubre las 16 semanas sin huecos.
-- [ ] El cuestionario generado tiene preguntas sobre presupuesto, cronograma e indicadores.
+- [ ] La evaluación web interactiva incluye 5 preguntas con validación inmediata sobre presupuesto, cronograma e indicadores.
 - [ ] Existe una copia de la propuesta en Google Docs.
 
 **Reto extra:** Pide: «Agrega un escenario optimista con dos ciclos más y compáralo en una tabla con el escenario base».
@@ -1682,7 +1682,7 @@ Formato: Tabla de rúbrica, seguida del cálculo y la retroalimentación.
 
 #### Ejercicio B: Guía didáctica de Git con cuestionario autocalificable
 
-- **Nivel:** Básico · **Duración:** 30 min · **Función de Canvas:** Documento + menú Crear → Cuestionario + página web
+- **Nivel:** Básico · **Duración:** 30 min · **Función de Canvas:** Documento + Cuestionario web interactivo en Canvas
 - **Qué vas a lograr:** Producir una guía didáctica estructurada por momentos y un cuestionario interactivo con retroalimentación inmediata.
 - **Situación:** Mañana inicia la competencia de control de versiones y el instructor necesita guía, actividad práctica y evaluación diagnóstica.
 
@@ -1733,7 +1733,7 @@ Formato: Guía con un título por momento y la práctica en bloques de comandos.
 1. Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.
 3. Selecciona la práctica y escribe: «Agrega la salida esperada de la terminal después de cada comando».
-4. Abre «Crear → Cuestionario» para generar una evaluación a partir de la guía.
+4. Selecciona la sección de errores frecuentes y escribe: «Agrega un ejemplo de mensaje de error real de la terminal a cada fila».
 5. Pide en el chat: «Crea un cuestionario web de 10 preguntas con retroalimentación inmediata, puntaje en un gráfico de dona y opción de reiniciar con las preguntas mezcladas».
 6. Responde el cuestionario web con dos errores a propósito y revisa el puntaje.
 7. Exporta la guía a Documentos de Google.
@@ -1915,10 +1915,10 @@ Formato: Script .sql dividido por etapas.
 
 ### 10. Informes Ejecutivos Multifuente y Dictamen Técnico
 
-#### Ejercicio A: Informe ejecutivo de mesa de ayuda con infografía y resumen en audio
+#### Ejercicio A: Informe ejecutivo de mesa de ayuda con tablero web interactivo y exportación a Docs
 
-- **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Documento + Crear → Infografía + Crear → Resumen en audio
-- **Qué vas a lograr:** Convertir seis meses de indicadores en un informe ejecutivo con conclusiones causales y producir dos formatos de difusión desde el mismo Canvas.
+- **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Documento + Selección con cursor + Tablero interactivo en Canvas + Exportación
+- **Qué vas a lograr:** Convertir seis meses de indicadores en un informe ejecutivo con conclusiones causales y transformarlo en un tablero web interactivo con exportación formal a Google Docs.
 - **Situación:** La dirección quiere saber si las inversiones de agosto y septiembre mejoraron el servicio y necesita compartirlo con todo el personal.
 
 **1. Prompt para pegar en Gemini:**
@@ -1972,8 +1972,8 @@ Formato: Títulos numerados, una tabla y un cuadro de decisiones.
 1. Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.
 3. Selecciona la sección de hechos relevantes y escribe: «Separa la evidencia fuerte de las coincidencias en dos columnas».
-4. Abre «Crear → Infografía» para la versión visual.
-5. Abre «Crear → Resumen en audio» para una versión que el personal pueda escuchar.
+4. Pide en el chat: «En Canvas, genera un tablero web interactivo con tarjetas KPI de los 6 meses y un gráfico de barras del tiempo de solución».
+5. Usa «Compartir y exportar → Exportar a Documentos de Google» para archivar la versión oficial del dictamen.
 6. Exporta el informe a Documentos de Google.
 
 **3. Verifica tu resultado:**
@@ -1983,7 +1983,7 @@ Formato: Títulos numerados, una tabla y un cuadro de decisiones.
 - [ ] El promedio de tiempo antes (mayo-julio) es 18,7 h y después (agosto-octubre) 12,0 h.
 - [ ] Acceso y contraseñas es la principal categoría de octubre (35,2 %).
 - [ ] El informe advierte los límites de atribuir causalidad.
-- [ ] Se generaron la infografía y el resumen en audio.
+- [ ] El informe cuenta con su tablero web interactivo en Canvas y su copia guardada en Google Docs.
 
 **Reto extra:** Pide: «Crea una página web con un tablero de los seis meses, un gráfico combinado de barras y líneas y un filtro por periodo».
 
@@ -2049,3 +2049,80 @@ Formato: Documento con títulos numerados y tablas.
 - [ ] La app avisa cuando cambia el proveedor ganador.
 
 **Reto extra:** Pide: «Agrega una simulación de Monte Carlo que varíe los pesos ±5 puntos y muestre en qué porcentaje de casos gana cada proveedor».
+
+
+---
+
+### Posibilidad 11: Visión Multimodal (De boceto a Canvas en vivo)
+
+Actúa como desarrollador frontend con experiencia en visión artificial e interfaces accesibles.
+
+Contexto: El equipo docente dibujó a mano en una libreta de apuntes el wireframe del formulario de matrícula de aprendices para la convocatoria 2026. Se requiere que Gemini analice la fotografía del boceto manuscrito y genere directamente en Canvas el artefacto web ejecutable y reactivo.
+
+Datos:
+"""
+FOTOGRAFÍA ADJUNTA: Boceto a lápiz en libreta de apuntes (datos de práctica)
+Título del boceto: Formulario de Inscripción y Matrícula · Convocatoria 2026
+Campos dibujados a lápiz:
+1. Nombre Completo del Aprendiz: campo de texto obligatorio (mínimo 3 caracteres).
+2. Correo Institucional: campo de correo con anotación a mano: "Solo correos @soy.sena.edu.co o @sena.edu.co".
+3. Contraseña de Acceso: campo password con anotación: "Mínimo 8 caracteres, incluir números y símbolos".
+4. Indicador de seguridad: barra dibujada con tres segmentos (Débil, Media, Segura).
+5. Botón principal tipo píldora rotulado a mano: [Completar Registro Formativo].
+
+Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón primario y acentos, fondo suave (#F8FAF9), texto pizarra (#1E293B) y borde (#CBD5E1).
+"""
+
+Instrucción: En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:
+1. El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.
+2. Validación reactiva en tiempo real del correo institucional: mensaje verde si contiene @soy.sena.edu.co o @sena.edu.co, y advertencia ámbar en caso contrario.
+3. Medidor dinámico de seguridad de contraseña con barra de progreso que cambie de color (rojo < 50 %, ámbar 50-79 %, verde ≥ 80 %) según longitud, números y caracteres especiales.
+4. Manejo del evento submit sin recargar la página, mostrando una confirmación accesible con el nombre del aprendiz registrado.
+
+Restricciones:
+- Cero librerías externas o frameworks: todo debe funcionar de manera nativa e inmediata en la vista previa de Canvas.
+- Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.
+- Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos.
+
+Formato: Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia.
+
+#### Ejercicios prácticos del modo:
+- **De boceto en libreta a formulario reactivo con validación institucional**: Adjuntar la fotografía de un wireframe manuscrito y solicitar a Gemini en Canvas la generación de un formulario web reactivo con validaciones institucionales.
+- **De trazos en pizarra a flujograma interactivo Mermaid de atención PQRS**: Digitalizar un diagrama de flujo dibujado con marcador en la pizarra del aula y transformarlo en código Mermaid estándar con bifurcaciones condicionales y subgrafos.
+
+---
+
+### Posibilidad 12: Gem Studio para Canvas (Asistente especializado de coescritura en Canvas)
+
+Actúa como arquitecto de inteligencia artificial y diseñador de asistentes personalizados (Gemini Gems).
+
+Contexto: La coordinación académica del centro requiere configurar un Gem especializado (asistente a medida) que actúe como coescritor pedagógico dentro de Gemini Canvas. El Gem debe asistir a los instructores en la redacción de guías de aprendizaje y rúbricas técnicas sin escribir el trabajo por ellos, aplicando el método socrático y las normas institucionales.
+
+Datos:
+"""
+ESPECIFICACIÓN DEL GEM: Coescritor Pedagógico de Guías Técnicas ADSO
+Propósito: Asistir a instructores y aprendices en la estructuración de guías de aprendizaje en Canvas.
+Guardrails obligatorios (Restricciones del System Prompt):
+1. Método socrático: cuando el usuario pida una solución completa, formula preguntas guía en lugar de dar el producto terminado.
+2. Alineación curricular: referenciar siempre resultados de aprendizaje (RAP) y competencias del programa ADSO.
+3. Tono y estilo: redacción en español de Colombia (es-CO), respetuoso, claro y técnico; cero uso de extranjerismos o términos ajenos (usar siempre "Portafolio de Evidencias").
+4. Estructura de salida en Canvas: organizar todo artefacto técnico en 4 secciones canónicas: 1) Identificación, 2) Planteamiento didáctico, 3) Criterios observables de evaluación, 4) Tareas de verificación.
+Temperatura configurada: 0.2 (rigor pedagógico determinista).
+"""
+
+Instrucción: En Canvas, redacta la ficha técnica y de configuración completa del Gem en un documento formal con:
+1. El System Prompt exhaustivo listo para copiar y pegar en la configuración de Gemini Gems, estructurado con Rol, Misión, Guardrails y Ejemplos de Interacción (Few-shot).
+2. Una matriz de prueba con 3 casos de calibración (Pregunta del usuario | Respuesta incorrecta del Gem | Respuesta esperada conforme a guardrails).
+3. El protocolo de interacción en vivo dentro de Canvas: cómo debe comportarse el Gem al refinar textos seleccionados con el cursor.
+4. La lista de verificación de cumplimiento de políticas pedagógicas e institucionales para autorizar la publicación del Gem.
+
+Restricciones:
+- El System Prompt debe exigir el uso obligatorio de «Portafolio de Evidencias» erradicando cualquier extranjerismo o término no institucional en todo el texto.
+- No uses nombres de modelos comerciales ni enlaces externos no institucionales.
+- Redacta en español de Colombia con lenguaje técnico accesible y riguroso.
+
+Formato: Documento técnico con títulos numerados, bloques de texto de sistema destacados y dos tablas comparativas.
+
+#### Ejercicios prácticos del modo:
+- **Configuración y calibración de un Gem Tutor Socrático para coescritura en Canvas**: Diseñar el System Prompt de un Gem especializado, ponerlo a prueba con preguntas trampa y utilizarlo como asistente de coescritura en un lienzo de Canvas.
+- **Gem Auditor de Rúbricas y Calidad de Código en tiempo real**: Crear y calibrar un Gem evaluador que audite el código generado en Canvas contra una rúbrica técnica de 4 criterios sin alterar la lógica de negocio.

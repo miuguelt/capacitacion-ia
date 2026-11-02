@@ -1204,7 +1204,190 @@ Plazo de subsanación: 10 días hábiles desde la notificación.`,
   variationTip: "En el chat escribe: «Redacta un correo de cinco líneas para el director con la decisión y el plazo, citando las tres fuentes»."
 };
 
-// --- Registro de los 10 modos en el orden del simulador ---
+// =====================================================================
+// 11. Visión Multimodal: de boceto a Canvas en vivo
+// =====================================================================
+const MULTIMODAL_VISION = {
+  name: "11. Visión Multimodal",
+  docIcon: "📷",
+  docTitle: "Prototipo_Matricula_Boceto_a_Web.html",
+  image: "assets/images/canvas/canvas_multimodal_sketch.jpg",
+  promptParts: {
+    role: "desarrollador frontend con experiencia en visión artificial e interfaces accesibles",
+    context: "El equipo docente dibujó a mano en una libreta de apuntes el wireframe del formulario de matrícula de aprendices para la convocatoria 2026. Se requiere que Gemini analice la fotografía del boceto manuscrito y genere directamente en Canvas el artefacto web ejecutable y reactivo.",
+    data: `FOTOGRAFÍA ADJUNTA: Boceto a lápiz en libreta de apuntes (datos de práctica)
+Título del boceto: Formulario de Inscripción y Matrícula · Convocatoria 2026
+Campos dibujados a lápiz:
+1. Nombre Completo del Aprendiz: campo de texto obligatorio (mínimo 3 caracteres).
+2. Correo Institucional: campo de correo con anotación a mano: "Solo correos @soy.sena.edu.co o @sena.edu.co".
+3. Contraseña de Acceso: campo password con anotación: "Mínimo 8 caracteres, incluir números y símbolos".
+4. Indicador de seguridad: barra dibujada con tres segmentos (Débil, Media, Segura).
+5. Botón principal tipo píldora rotulado a mano: [Completar Registro Formativo].
+
+Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón primario y acentos, fondo suave (#F8FAF9), texto pizarra (#1E293B) y borde (#CBD5E1).`,
+    instruction: "En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:",
+    task: [
+      "El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.",
+      "Validación reactiva en tiempo real del correo institucional: mensaje verde si contiene @soy.sena.edu.co o @sena.edu.co, y advertencia ámbar en caso contrario.",
+      "Medidor dinámico de seguridad de contraseña con barra de progreso que cambie de color (rojo < 50 %, ámbar 50-79 %, verde ≥ 80 %) según longitud, números y caracteres especiales.",
+      "Manejo del evento submit sin recargar la página, mostrando una confirmación accesible con el nombre del aprendiz registrado."
+    ],
+    constraints: [
+      "Cero librerías externas o frameworks: todo debe funcionar de manera nativa e inmediata en la vista previa de Canvas.",
+      "Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.",
+      "Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos."
+    ],
+    format: "Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia."
+  },
+  expected: [
+    { criterion: "El formulario tiene los 3 campos del boceto: Nombre Completo, Correo Institucional y Contraseña de Acceso.", how: "Abre la vista previa del Canvas y verifica los campos." },
+    { criterion: "El botón principal dice «Completar Registro Formativo» y usa el color Verde Salvia #2D5A4C.", how: "Inspecciona el botón en la vista previa o en el código CSS." },
+    { criterion: "Al escribir un correo con @soy.sena.edu.co aparece la validación positiva en verde; con otro dominio muestra la advertencia.", how: "Escribe un correo de prueba en el formulario interactivo." },
+    { criterion: "La barra de contraseña avanza y cambia de color al combinar letras, números y símbolos.", how: "Ingresa contraseñas de distinta longitud en la vista previa." },
+    { criterion: "Al enviar el formulario con datos válidos no se recarga la página y se muestra la confirmación de bienvenida.", how: "Haz clic en el botón de registro con los datos completos." },
+    { criterion: "El código no contiene etiquetas <script src=...> ni imports externos.", how: "Pasa a la vista de código del Canvas y busca enlaces a CDN." }
+  ],
+  aiResponse: "Analicé el boceto manuscrito de la libreta y generé en Canvas el formulario web ejecutable con validación reactiva de correo institucional, indicador dinámico de contraseña y la paleta Verde Salvia.",
+  quickActions: [
+    { id: "act-mm-preview", label: "▶ Vista previa en vivo", toast: "▶ Ejecutando prototipo web reactivo en la vista previa de Canvas." },
+    { id: "act-mm-ocr", label: "🔍 Ver inferencia OCR", modal: { title: "Detección de elementos manuscritos (OCR Espacial)", badge: "Visión", content: "1. Título manuscrito: «Formulario de Inscripción y Matrícula · Convocatoria 2026»\n2. Campos detectados: Nombre Completo, Correo Institucional y Contraseña\n3. Regla de correo: «Solo correos @soy.sena.edu.co o @sena.edu.co»\n4. Barra de seguridad: Segmentos Débil, Media, Segura\n5. Botón rotulado: [Completar Registro Formativo]\n6. Paleta detectada: Verde Salvia #2D5A4C, fondo #F8FAF9, texto #1E293B" } },
+    { id: "act-mm-code", label: "💻 Ver código HTML", toast: "💻 Código HTML5 nativo listo para exportar o desplegar." }
+  ],
+  interactiveHtml: `
+      <div class="multimodal-interactive-demo" style="font-family:var(--font-sans);">
+        <div style="border-bottom:2px solid var(--color-primary); padding-bottom:0.5rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <h4 style="margin:0; color:var(--color-primary);">📷 Formulario Generado desde Boceto en Libreta</h4>
+          <span class="badge badge-success">Vista previa en vivo</span>
+        </div>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin:0 0 0.75rem 0;">Wireframe traducido a HTML5 reactivo con validación institucional y medidor dinámico.</p>
+        <form id="demo-mm-form" onsubmit="event.preventDefault(); const res = document.getElementById('demo-mm-result'); const nom = document.getElementById('demo-mm-name').value; res.style.display='block'; res.innerHTML='✓ ¡Registro formativo exitoso para ' + (nom || 'Aprendiz') + '!'; return false;" style="background:var(--bg-subtle); padding:1rem; border-radius:8px; border:1px solid var(--border-light);">
+          <div style="margin-bottom:0.65rem;">
+            <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.25rem;">Nombre Completo del Aprendiz</label>
+            <input type="text" id="demo-mm-name" required minlength="3" placeholder="Ej. Carlos Andrés Gómez" style="width:100%; padding:0.45rem 0.65rem; font-size:0.85rem; border:1px solid var(--border-light); border-radius:4px; background:var(--bg-app); color:var(--text-main);">
+          </div>
+          <div style="margin-bottom:0.65rem;">
+            <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.25rem;">Correo Institucional (@soy.sena.edu.co o @sena.edu.co)</label>
+            <input type="email" id="demo-mm-email" placeholder="aprendiz@soy.sena.edu.co" oninput="const ok = /^[a-zA-Z0-9._%+-]+@(soy\\.)?sena\\.edu\\.co$/.test(this.value); const msg = document.getElementById('demo-mm-email-feedback'); if(!this.value){msg.textContent='';}else if(ok){msg.style.color='var(--color-primary, #2D5A4C)'; msg.textContent='✓ Dominio institucional válido';}else{msg.style.color='#b45309'; msg.textContent='⚠️ Solo correos @soy.sena.edu.co o @sena.edu.co';}" style="width:100%; padding:0.45rem 0.65rem; font-size:0.85rem; border:1px solid var(--border-light); border-radius:4px; background:var(--bg-app); color:var(--text-main);">
+            <small id="demo-mm-email-feedback" style="display:block; font-size:0.75rem; margin-top:0.2rem; font-weight:600;"></small>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.25rem;">Contraseña de Acceso</label>
+            <input type="password" id="demo-mm-pass" placeholder="Mínimo 8 caracteres" oninput="const v=this.value; let s=0; if(v.length>=8)s+=35; if(/[0-9]/.test(v))s+=35; if(/[^a-zA-Z0-9]/.test(v))s+=30; const b=document.getElementById('demo-mm-pass-bar'); const t=document.getElementById('demo-mm-pass-text'); b.style.width=s+'%'; if(s<50){b.style.background='#dc2626'; t.textContent='Débil ('+s+'%)'; t.style.color='#dc2626';}else if(s<80){b.style.background='#f59e0b'; t.textContent='Media ('+s+'%)'; t.style.color='#f59e0b';}else{b.style.background='var(--color-primary, #2D5A4C)'; t.textContent='Segura ('+s+'%)'; t.style.color='var(--color-primary, #2D5A4C)';}" style="width:100%; padding:0.45rem 0.65rem; font-size:0.85rem; border:1px solid var(--border-light); border-radius:4px; background:var(--bg-app); color:var(--text-main);">
+            <div style="height:6px; background:#e2e8f0; border-radius:3px; margin-top:0.35rem; overflow:hidden;">
+              <div id="demo-mm-pass-bar" style="height:100%; width:0%; transition:width 0.3s, background 0.3s;"></div>
+            </div>
+            <small id="demo-mm-pass-text" style="display:block; font-size:0.75rem; margin-top:0.2rem;"></small>
+          </div>
+          <button type="submit" style="background:#2D5A4C; color:#ffffff; border:none; padding:0.55rem 1.25rem; font-size:0.85rem; font-weight:600; border-radius:20px; cursor:pointer; width:100%;">Completar Registro Formativo</button>
+        </form>
+        <div id="demo-mm-result" style="display:none; margin-top:0.75rem; padding:0.65rem; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; font-size:0.83rem; border-radius:6px; font-weight:600;"></div>
+      </div>`,
+  imageSpec: {
+    blocks: [
+      { type: "heading", text: "Formulario de Inscripción y Matrícula · Convocatoria 2026" },
+      { type: "paragraph", text: "Prototipo web generado desde boceto manuscrito en libreta." },
+      { type: "callout", title: "Validación de Correo", text: "Dominios permitidos: @soy.sena.edu.co y @sena.edu.co" },
+      { type: "table", headers: ["Campo", "Tipo", "Regla de Validación", "Estado"], rows: [
+        ["Nombre Completo", "text", "Mínimo 3 caracteres", "Requerido"],
+        ["Correo Institucional", "email", "Dominios institucionales SENA", "En tiempo real"],
+        ["Contraseña de Acceso", "password", "Mínimo 8 caracteres con símbolos y números", "Medidor activo"]
+      ]},
+      { type: "callout", title: "Paleta Institucional", text: "Botón primario Verde Salvia (#2D5A4C) · Contraste WCAG 2.2 AA" }
+    ]
+  },
+  insightsHtml: canvasInsight("📷 De boceto a código interactivo", "Gemini Vision analiza la disposición espacial de los trazos a mano alzada, deduce campos y etiquetas, y genera la estructura HTML con validaciones reactivas en JavaScript sin librerías externas.") +
+    canvasInsight("🔒 Validación institucional en el cliente", "El código generado aplica expresiones regulares para admitir exclusivamente correos con dominio @soy.sena.edu.co o @sena.edu.co y calcula el nivel de contraseña en vivo."),
+  variationTip: "En el chat del Canvas escribe: «Agrega un campo selector para elegir la sede de formación y haz que el botón se deshabilite hasta que la contraseña sea Segura»."
+};
+
+// =====================================================================
+// 12. Gem Studio para Canvas: coescritor especializado
+// =====================================================================
+const GEM_STUDIO = {
+  name: "12. Gem Studio para Canvas",
+  docIcon: "🤖",
+  docTitle: "Asistente_Coescritura_Canvas.gem",
+  image: "assets/images/canvas/canvas_gem_studio.jpg",
+  promptParts: {
+    role: "arquitecto de inteligencia artificial y diseñador de asistentes personalizados (Gemini Gems)",
+    context: "La coordinación académica del centro requiere configurar un Gem especializado (asistente a medida) que actúe como coescritor pedagógico dentro de Gemini Canvas. El Gem debe asistir a los instructores en la redacción de guías de aprendizaje y rúbricas técnicas sin escribir el trabajo por ellos, aplicando el método socrático y las normas institucionales.",
+    data: `ESPECIFICACIÓN DEL GEM: Coescritor Pedagógico de Guías Técnicas ADSO
+Propósito: Asistir a instructores y aprendices en la estructuración de guías de aprendizaje en Canvas.
+Guardrails obligatorios (Restricciones del System Prompt):
+1. Método socrático: cuando el usuario pida una solución completa, formula preguntas guía en lugar de dar el producto terminado.
+2. Alineación curricular: referenciar siempre resultados de aprendizaje (RAP) y competencias del programa ADSO.
+3. Tono y estilo: redacción en español de Colombia (es-CO), respetuoso, claro y técnico; cero uso de extranjerismos o términos ajenos (usar siempre "Portafolio de Evidencias").
+4. Estructura de salida en Canvas: organizar todo artefacto técnico en 4 secciones canónicas: 1) Identificación, 2) Planteamiento didáctico, 3) Criterios observables de evaluación, 4) Tareas de verificación.
+Temperatura configurada: 0.2 (rigor pedagógico determinista).`,
+    instruction: "En Canvas, redacta la ficha técnica y de configuración completa del Gem en un documento formal con:",
+    task: [
+      "El System Prompt exhaustivo listo para copiar y pegar en la configuración de Gemini Gems, estructurado con Rol, Misión, Guardrails y Ejemplos de Interacción (Few-shot).",
+      "Una matriz de prueba con 3 casos de calibración (Pregunta del usuario | Respuesta incorrecta del Gem | Respuesta esperada conforme a guardrails).",
+      "El protocolo de interacción en vivo dentro de Canvas: cómo debe comportarse el Gem al refinar textos seleccionados con el cursor.",
+      "La lista de verificación de cumplimiento de políticas pedagógicas e institucionales para autorizar la publicación del Gem."
+    ],
+    constraints: [
+      "El System Prompt debe exigir el uso obligatorio de «Portafolio de Evidencias» erradicando cualquier extranjerismo o término no institucional en todo el texto.",
+      "No uses nombres de modelos comerciales ni enlaces externos no institucionales.",
+      "Redacta en español de Colombia con lenguaje técnico accesible y riguroso."
+    ],
+    format: "Documento técnico con títulos numerados, bloques de texto de sistema destacados y dos tablas comparativas."
+  },
+  expected: [
+    { criterion: "El documento contiene el System Prompt completo para configurar el Gem en la interfaz de Gemini Gems.", how: "Revisa la sección 1 del Canvas." },
+    { criterion: "El System Prompt exige el uso obligatorio de «Portafolio de Evidencias» como único término institucional válido.", how: "Busca «Portafolio de Evidencias» con Ctrl+F en el Canvas." },
+    { criterion: "La matriz de calibración incluye 3 casos de prueba con respuesta esperada socrática.", how: "Cuenta las filas de la tabla de calibración." },
+    { criterion: "Se define el comportamiento del Gem para la edición por selección con cursor dentro de Canvas.", how: "Lee la sección de protocolo de interacción en Canvas." },
+    { criterion: "La lista de verificación contiene al menos 4 puntos de auditoría pedagógica antes de publicar el Gem.", how: "Revisa la lista de chequeo al final del documento." }
+  ],
+  aiResponse: "Redacté en Canvas la especificación y el System Prompt del Gem Coescritor Pedagógico, con sus guardrails socráticos, la matriz de calibración de 3 casos y las directrices para refinar textos en el lienzo.",
+  quickActions: [
+    { id: "act-gem-prompt", label: "📋 Copiar System Prompt", toast: "📋 System Prompt del Gem copiado al portapapeles." },
+    { id: "act-gem-test", label: "💬 Probar en Consola", toast: "💬 Abriendo entorno de prueba del Gem en la consola interactiva." },
+    { id: "act-gem-export", label: "📄 Exportar a Google Docs", class: "btn-docs", toast: "📄 Creando ficha técnica del Gem en Google Drive para revisión institucional." }
+  ],
+  interactiveHtml: `
+      <div class="gem-studio-interactive-demo" style="font-family:var(--font-sans);">
+        <div style="border-bottom:2px solid var(--color-primary); padding-bottom:0.5rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+          <h4 style="margin:0; color:var(--color-primary);">🤖 Consola de Calibración de Gem Studio</h4>
+          <span class="badge badge-success">Temperatura: 0.2</span>
+        </div>
+        <div style="margin-bottom:0.75rem;">
+          <small style="color:var(--text-muted); display:block; margin-bottom:0.25rem;">Cargar preajuste de calibración:</small>
+          <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('demo-gem-input').value='Escríbeme el código completo del taller de POO';">1. Solicitud directa</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('demo-gem-input').value='Califica esta función de cálculo sin dar retroalimentación';">2. Rúbrica</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('demo-gem-input').value='¿Dónde subo el archivo final de evidencias?';">3. Portafolio</button>
+          </div>
+        </div>
+        <div style="background:var(--bg-subtle); padding:0.75rem; border-radius:6px; border:1px solid var(--border-light); margin-bottom:0.75rem;">
+          <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:0.25rem;">Prueba en vivo contra los Guardrails del Gem:</label>
+          <div style="display:flex; gap:0.5rem;">
+            <input type="text" id="demo-gem-input" placeholder="Escribe o selecciona un caso de prueba..." style="flex:1; padding:0.45rem 0.65rem; font-size:0.85rem; border:1px solid var(--border-light); border-radius:4px; background:var(--bg-app); color:var(--text-main);">
+            <button type="button" class="btn btn-primary btn-sm" onclick="const v=document.getElementById('demo-gem-input').value; const r=document.getElementById('demo-gem-response'); r.style.display='block'; if(/archivo final|carpeta personal/i.test(v)){r.innerHTML='<strong>Guardrail Institucional Activado:</strong><br>En la institución utilizamos exclusivamente el término canónico <em>«Portafolio de Evidencias»</em>. ¿Deseas que revisemos los 4 entregables que deben conformarlo?';}else if(/código completo|taller/i.test(v)){r.innerHTML='<strong>Método Socrático Activado:</strong><br>En lugar de darte el código completo, razonemos juntos: ¿cuáles son los atributos principales que identificaste en el diagrama de clases y qué responsabilidad tiene cada método?';}else{r.innerHTML='<strong>Respuesta Socrática del Gem:</strong><br>Para orientarte con rigor en Canvas: ¿cuál es el resultado de aprendizaje (RAP) al que apunta esta actividad y qué criterio observable evaluaremos?';}">Evaluar</button>
+          </div>
+        </div>
+        <div id="demo-gem-response" style="display:none; padding:0.75rem; background:#f0fdf4; border-left:3px solid var(--color-primary); color:var(--text-main); font-size:0.83rem; border-radius:4px;"></div>
+      </div>`,
+  imageSpec: {
+    blocks: [
+      { type: "heading", text: "FICHA TÉCNICA · GEM COESCRITOR PEDAGÓGICO ADSO" },
+      { type: "paragraph", text: "Configuración de asistente a medida (Gem) para coescritura socrática en Gemini Canvas." },
+      { type: "callout", title: "Guardrails del System Prompt", text: "Método socrático activo · Rigor curricular ADSO · Portafolio de Evidencias obligatorio · Temperatura: 0.2" },
+      { type: "table", headers: ["Caso de Calibración", "Entrada del Usuario", "Respuesta Bloqueada", "Respuesta Socrática Esperada"], rows: [
+        ["1. Solicitud directa", "Escríbeme el código completo del taller", "Entrega de solución copiable", "Formula 2 preguntas orientadoras sobre el diagrama de clases"],
+        ["2. Rúbrica evaluativa", "Califica este ejercicio sin justificar", "Nota numérica sin detalle", "Desglosa puntaje por criterio observable y sugiere mejoras"],
+        ["3. Portafolio formativo", "Adjunta el archivo al registro personal", "Uso de término no institucional", "Corrige a Portafolio de Evidencias y valida estructura"]
+      ]},
+      { type: "callout", title: "Protocolo Canvas", text: "Al seleccionar texto en el lienzo, sugiere mejoras de redacción conservando la voz del instructor." }
+    ]
+  },
+  insightsHtml: canvasInsight("🤖 Coescritura asistida con Gems", "Configurar un Gem personalizado permite que Gemini actúe con un rol especializado dentro de Canvas, aplicando reglas de pedagogía activa como el método socrático y garantizando la terminología institucional.") +
+    canvasInsight("🛡️ Blindaje de guardrails e integridad", "El System Prompt delimita estrictamente lo que el asistente puede y no puede hacer, forzando la evaluación formativa y garantizando el uso canónico de «Portafolio de Evidencias»."),
+  variationTip: "En el chat del Canvas escribe: «Añade una regla al System Prompt para que cuando el usuario pida ayuda con bases de datos relacionales, exija siempre diagramas entidad-relación en Mermaid»."
+};
+
+// --- Registro de los 12 modos en el orden del simulador ---
 const CANVAS_POSSIBILITIES = {
   "doc-editorial": DOC_EDITORIAL,
   "code-prototyping": CODE_PROTOTYPING,
@@ -1215,7 +1398,9 @@ const CANVAS_POSSIBILITIES = {
   "algorithm-refactor": ALGORITHM_REFACTOR,
   "rubric-curriculum": RUBRIC_CURRICULUM,
   "sql-pipeline": SQL_PIPELINE,
-  "executive-report": EXECUTIVE_REPORT
+  "executive-report": EXECUTIVE_REPORT,
+  "multimodal-vision": MULTIMODAL_VISION,
+  "gem-studio": GEM_STUDIO
 };
 
 Object.values(CANVAS_POSSIBILITIES).forEach(p => {
@@ -1228,23 +1413,66 @@ Object.values(CANVAS_POSSIBILITIES).forEach(p => {
 
 // Actualiza la sección «possibilities» del banco JSON sin perder los campos que solo viven allí.
 function exportCanvasPossibilities(bank) {
-  const previous = new Map(bank.possibilities.map(p => [p.id, p]));
+  const previous = new Map((bank.possibilities || []).map(p => [p.id, p]));
+  const defaultMeta = {
+    "multimodal-vision": {
+      name: "Visión Multimodal (De boceto a Canvas en vivo)",
+      badge: "Visión",
+      objective: "Digitalizar bocetos manuscritos y trazos en pizarra directamente en artefactos web y flujogramas ejecutables en Canvas.",
+      variationPrompts: [
+        "En el chat del Canvas escribe: «Agrega un selector de sede y valida que el botón se deshabilite hasta que la contraseña sea Segura»."
+      ]
+    },
+    "gem-studio": {
+      name: "Gem Studio para Canvas (Asistente especializado de coescritura en Canvas)",
+      badge: "Gems",
+      objective: "Configurar y calibrar asistentes personalizados (Gems) con directrices socráticas y guardrails institucionales para coescribir en Canvas.",
+      variationPrompts: [
+        "En el chat del Canvas escribe: «Añade una regla al System Prompt para que ante dudas de bases de datos exija diagramas relacionales en Mermaid»."
+      ]
+    }
+  };
+  const entries = Object.entries(CANVAS_POSSIBILITIES);
   return {
     ...bank,
-    possibilities: Object.entries(CANVAS_POSSIBILITIES).map(([id, p], i) => ({
-      ...(previous.get(id) || {}),
-      id,
-      number: String(i + 1),
-      icon: p.docIcon,
-      image: p.image,
-      imageCaption: p.imageCaption,
-      canvasControls: p.quickActions.map(a => a.label),
-      masterPrompt: p.userPrompt,
-      expectedResultSummary: p.expected.map(x => x.criterion).join(" "),
-      expected: p.expected,
-      followUps: p.followUps || [],
-      imageSpec: p.imageSpec
-    }))
+    totalPossibilities: entries.length,
+    totalExercises: entries.reduce((acc, [id]) => {
+      const prev = previous.get(id);
+      const exCount = (prev && prev.exercises && prev.exercises.length) || (canvasKit.CANVAS_EXERCISES && canvasKit.CANVAS_EXERCISES[id] && canvasKit.CANVAS_EXERCISES[id].length) || 0;
+      return acc + exCount;
+    }, 0),
+    possibilities: entries.map(([id, p], i) => {
+      const prev = previous.get(id) || defaultMeta[id] || {};
+      const exercises = prev.exercises || (canvasKit.CANVAS_EXERCISES && canvasKit.CANVAS_EXERCISES[id] ? canvasKit.CANVAS_EXERCISES[id].map(ex => ({
+        id: ex.id,
+        title: ex.title,
+        level: ex.level,
+        duration: ex.duration,
+        canvasFeature: ex.canvasFeature,
+        goal: ex.goal,
+        scenario: ex.scenario,
+        promptParts: ex.promptParts,
+        steps: ex.steps,
+        expected: ex.expected,
+        stretch: ex.stretch,
+        prompt: ex.prompt
+      })) : []);
+      return {
+        ...prev,
+        id,
+        number: String(i + 1),
+        icon: p.docIcon,
+        image: p.image,
+        imageCaption: p.imageCaption,
+        canvasControls: p.quickActions.map(a => a.label),
+        masterPrompt: p.userPrompt,
+        expectedResultSummary: p.expected.map(x => x.criterion).join(" "),
+        expected: p.expected,
+        followUps: p.followUps || [],
+        imageSpec: p.imageSpec,
+        exercises
+      };
+    })
   };
 }
 

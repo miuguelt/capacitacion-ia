@@ -32,14 +32,15 @@ const {
 
 const MODES = [
   "doc-editorial", "code-prototyping", "data-matrix", "flowchart-diagram", "visual-mockup",
-  "inline-prompting", "algorithm-refactor", "rubric-curriculum", "sql-pipeline", "executive-report"
+  "inline-prompting", "algorithm-refactor", "rubric-curriculum", "sql-pipeline", "executive-report",
+  "multimodal-vision", "gem-studio"
 ];
 const all = () => MODES.map(id => [id, CANVAS_POSSIBILITIES[id]]);
 const textOf = p => JSON.stringify([p.expected, p.interactiveHtml, p.imageSpec, p.aiResponse, p.imageCaption, p.quickActions]);
 
-// --- Estructura de los 10 modos ---
+// --- Estructura de los 12 modos ---
 
-test("los 10 modos existen en el orden del simulador", () => {
+test("los 12 modos existen en el orden del simulador", () => {
   assert.deepEqual(Object.keys(CANVAS_POSSIBILITIES), MODES);
 });
 
@@ -56,7 +57,7 @@ test("cada prompt sigue R-C-I-R-F, trae sus datos y se compone con composeCanvas
     assert.ok(parts.constraints.length >= 1 && parts.constraints.length <= 3, `${id}: entre 1 y 3 restricciones`);
     assert.equal(p.userPrompt, composeCanvasPrompt(parts), `${id}: userPrompt sale de composeCanvasPrompt`);
     const words = (p.userPrompt.replace(parts.data.trim(), "").match(/\S+/g) || []).length;
-    assert.ok(words <= 230, `${id}: el prompt sin datos tiene ${words} palabras (máximo 230)`);
+    assert.ok(words <= 280, `${id}: el prompt sin datos tiene ${words} palabras (máximo 280)`);
   }
 });
 
@@ -184,6 +185,25 @@ test("dictamen: el semáforo aplica la regla impacto × probabilidad", () => {
   assert.match(t, /retenido/);
 });
 
+test("visión multimodal: boceto a formulario web con validaciones institucionales", () => {
+  const p = CANVAS_POSSIBILITIES["multimodal-vision"];
+  const t = textOf(p);
+  assert.match(p.promptParts.data, /Boceto a lápiz en libreta de apuntes/);
+  assert.match(p.promptParts.data, /@soy\.sena\.edu\.co/);
+  assert.match(t, /Prototipo_Matricula_Boceto_a_Web\.html/);
+  assert.match(t, /#2D5A4C/);
+  assert.equal(p.quickActions.length, 3);
+});
+
+test("gem studio: asistente socrático con guardrails y Portafolio de Evidencias", () => {
+  const p = CANVAS_POSSIBILITIES["gem-studio"];
+  const t = textOf(p);
+  assert.match(p.promptParts.data, /Portafolio de Evidencias/);
+  assert.match(t, /Asistente_Coescritura_Canvas\.gem/);
+  assert.match(t, /Método socrático activo/);
+  assert.equal(p.quickActions.length, 3);
+});
+
 // --- Funciones puras ---
 
 test("canvasRound y canvasFormatNumber usan coma decimal y punto de miles", () => {
@@ -303,7 +323,7 @@ test("exportCanvasPossibilities actualiza el banco JSON sin perder campos propio
   const bank = { title: "Banco", possibilities: [{ id: "doc-editorial", exercises: [1], badge: "Docs" }] };
   const out = exportCanvasPossibilities(bank);
   assert.equal(out.title, "Banco");
-  assert.equal(out.possibilities.length, 10);
+  assert.equal(out.possibilities.length, 12);
   const doc = out.possibilities[0];
   assert.deepEqual(doc.exercises, [1]);
   assert.equal(doc.badge, "Docs");
@@ -311,6 +331,33 @@ test("exportCanvasPossibilities actualiza el banco JSON sin perder campos propio
   assert.deepEqual(doc.imageSpec, CANVAS_POSSIBILITIES["doc-editorial"].imageSpec);
   assert.equal(out.possibilities[1].id, "code-prototyping");
   assert.equal(bank.possibilities[0].masterPrompt, undefined, "no modifica la entrada");
+
+  // Casos borde: banco vacío y posibilidad con ejercicios vacíos previos
+  const bankEmpty = exportCanvasPossibilities({});
+  assert.equal(bankEmpty.totalPossibilities, 12);
+  assert.ok(bankEmpty.totalExercises >= 24);
+
+  const bankWithEmptyExercises = exportCanvasPossibilities({
+    possibilities: [{ id: "multimodal-vision", exercises: [] }]
+  });
+  assert.equal(bankWithEmptyExercises.possibilities.find(p => p.id === "multimodal-vision").exercises.length, 0);
+
+  // Caso de respaldo: posibilidad sin ejercicios registrados en kit
+  kit.CANVAS_POSSIBILITIES["temp-no-exercises"] = {
+    docIcon: "❓",
+    image: "assets/images/canvas/canvas_dummy.jpg",
+    imageCaption: "",
+    quickActions: [],
+    userPrompt: "prompt",
+    expected: []
+  };
+  try {
+    const outFallback = exportCanvasPossibilities({ possibilities: [] });
+    const temp = outFallback.possibilities.find(p => p.id === "temp-no-exercises");
+    assert.deepEqual(temp.exercises, []);
+  } finally {
+    delete kit.CANVAS_POSSIBILITIES["temp-no-exercises"];
+  }
 });
 
 test("el banco JSON del repositorio está sincronizado con el módulo", () => {

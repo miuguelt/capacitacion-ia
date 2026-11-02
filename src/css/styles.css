@@ -872,7 +872,180 @@ body.instructor-mode .instructor-guide-card {
   line-height: 1.5;
 }
 
-/* Tab bar para las 6 posibilidades */
+/* --- Componente de Navegación Rápida Interna (Quick-Nav) --- */
+.canvas-quick-nav {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  margin: 1.25rem 0 1.5rem 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+  inline-size: 100%;
+  box-sizing: border-box;
+}
+
+.canvas-quick-nav .quick-nav-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.canvas-quick-nav .quick-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.quick-nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.quick-nav-pill:hover,
+.quick-nav-pill.active {
+  color: var(--color-primary-dark);
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary-light);
+}
+
+.canvas-section-anchor {
+  scroll-margin-top: 5rem;
+}
+
+/* Guion del facilitador colapsable */
+.canvas-instructor-collapsible {
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.canvas-instructor-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  list-style: none;
+  user-select: none;
+}
+
+.canvas-instructor-summary::-webkit-details-marker {
+  display: none;
+}
+
+.canvas-instructor-summary .summary-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Barra de Filtros por Categoría Funcional */
+.canvas-category-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.canvas-category-filter-bar .filter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.filter-pills-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.category-pill:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary-light);
+}
+
+.category-pill.active {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Banner de Laboratorios Avanzados */
+.canvas-advanced-labs-banner {
+  margin: 2.25rem 0 1rem 0;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, var(--color-primary-subtle) 0%, var(--bg-surface) 100%);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
+  border-top: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.canvas-advanced-labs-banner .labs-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary-dark);
+  margin-bottom: 0.35rem;
+}
+
+.canvas-advanced-labs-banner h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.25rem;
+  color: var(--text-main);
+}
+
+.canvas-advanced-labs-banner p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Tab bar para las 12 posibilidades */
 .canvas-tab-bar {
   display: flex;
   flex-wrap: wrap;
@@ -880,6 +1053,8 @@ body.instructor-mode .instructor-guide-card {
   margin: 1.25rem 0;
   border-bottom: 2px solid var(--border-light);
   padding-bottom: 0.75rem;
+  inline-size: 100%;
+  box-sizing: border-box;
 }
 
 .canvas-tab {
@@ -910,22 +1085,76 @@ body.instructor-mode .instructor-guide-card {
   box-shadow: var(--shadow-sm);
 }
 
-/* Split screen del simulador */
+/* Split screen del simulador (Modo Split de 2 Salidas) */
 .canvas-split-container {
   display: grid;
-  grid-template-columns: 1fr 1.35fr;
-  gap: 1.25rem;
+  grid-template-columns: minmax(320px, 1fr) minmax(380px, 1.35fr);
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
   align-items: stretch;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  box-sizing: border-box;
   margin-top: 1rem;
 }
 
 @media (max-width: 1024px) {
   .canvas-split-container {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
 
-/* Columna Izquierda: Chat de Gemini */
+/* Distintivos semánticos del Modo Split de 2 Salidas */
+.canvas-output-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--border-light);
+  user-select: none;
+  inline-size: 100%;
+  box-sizing: border-box;
+}
+
+.canvas-output-badge .badge-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* Salida 1: Lienzo Principal (Artefacto) - Verde Salvia Institucional SENA */
+.canvas-output-badge.output-primary {
+  background: linear-gradient(135deg, var(--color-primary-subtle) 0%, var(--bg-subtle) 100%);
+  color: var(--color-primary-dark);
+  border-left: 4px solid var(--color-primary);
+  border-bottom-color: var(--border-light);
+}
+
+[data-theme="dark"] .canvas-output-badge.output-primary {
+  background: linear-gradient(135deg, var(--color-primary-subtle) 0%, var(--bg-surface) 100%);
+  color: var(--color-primary-light);
+  border-left: 4px solid var(--color-primary-light);
+  border-bottom-color: var(--border-light);
+}
+
+/* Salida 2: Interacción y Refinamiento - Calm Slate / Accent complementario */
+.canvas-output-badge.output-refinement {
+  background: linear-gradient(135deg, #f0fdf4 0%, var(--bg-subtle) 100%);
+  color: #166534;
+  border-left: 4px solid #16a34a;
+  border-bottom-color: var(--border-light);
+}
+
+[data-theme="dark"] .canvas-output-badge.output-refinement {
+  background: linear-gradient(135deg, #14532d 0%, var(--bg-surface) 100%);
+  color: #86efac;
+  border-left: 4px solid #22c55e;
+  border-bottom-color: var(--border-light);
+}
+
+/* Columna Izquierda: Chat de Gemini & Interacción */
 .canvas-chat-pane {
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
@@ -934,6 +1163,9 @@ body.instructor-mode .instructor-guide-card {
   flex-direction: column;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
 }
 
 .canvas-chat-header {
@@ -1034,7 +1266,7 @@ body.instructor-mode .instructor-guide-card {
   line-height: 1.45;
 }
 
-/* Columna Derecha: Lienzo Canvas */
+/* Columna Derecha / Salida 1: Lienzo Canvas (Artefacto) */
 .canvas-editor-pane {
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
@@ -1043,6 +1275,9 @@ body.instructor-mode .instructor-guide-card {
   flex-direction: column;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
 }
 
 .canvas-editor-topbar {
@@ -1123,7 +1358,6 @@ body.instructor-mode .instructor-guide-card {
   color: var(--text-muted);
   cursor: pointer;
   transition: var(--transition);
-  white-space: nowrap;
 }
 
 .view-mode-btn:hover {
@@ -2414,7 +2648,6 @@ body.instructor-mode .instructor-guide-card {
   font-size: 0.72rem;
   color: var(--text-muted);
   cursor: pointer;
-  white-space: nowrap;
 }
 
 .gem-quick-chip:hover {

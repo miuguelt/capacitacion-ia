@@ -50,7 +50,9 @@ def test_all_ten_possibilities_tabs_exist():
         "algorithm-refactor",
         "rubric-curriculum",
         "sql-pipeline",
-        "executive-report"
+        "executive-report",
+        "multimodal-vision",
+        "gem-studio"
     ]
     for p in expected_possibilities:
         assert f'data-possibility="{p}"' in html, f"La pestaña de posibilidad {p} debe existir"
@@ -72,7 +74,9 @@ def test_all_ten_possibilities_in_app_js():
         "algorithm-refactor",
         "rubric-curriculum",
         "sql-pipeline",
-        "executive-report"
+        "executive-report",
+        "multimodal-vision",
+        "gem-studio"
     ]
     for p in expected_possibilities:
         assert f'"{p}"' in js_code, f"La clave de posibilidad {p} debe estar registrada en CANVAS_POSSIBILITIES"
@@ -92,7 +96,8 @@ def test_canvas_images_exist_and_non_empty():
         "canvas_rubrica.jpg",
         "canvas_sql.jpg",
         "canvas_informe.jpg",
-        "canvas_multimodal_sketch.jpg"
+        "canvas_multimodal_sketch.jpg",
+        "canvas_gem_studio.jpg"
     ]
     for img_name in expected_images:
         img_path = images_dir / img_name
@@ -121,9 +126,9 @@ def test_canvas_json_dataset_validity():
     data = json.loads(json_file.read_text(encoding="utf-8"))
     
     total = data.get("totalPossibilities")
-    assert total == 10, f"totalPossibilities debe ser 10, obtenido {total}"
+    assert total == 12, f"totalPossibilities debe ser 12, obtenido {total}"
     possibilities = data.get("possibilities", [])
-    assert len(possibilities) == 10, f"Debe contener exactamente 10 posibilidades, obtenido {len(possibilities)}"
+    assert len(possibilities) == 12, f"Debe contener exactamente 12 posibilidades, obtenido {len(possibilities)}"
     
     for p in possibilities:
         assert "id" in p
@@ -158,10 +163,27 @@ def test_simulator_scripts_load_in_order_and_are_mirrored():
     mirror = (BASE_DIR / "src" / "shared" / "canvas-possibilities.js").read_text(encoding="utf-8")
     assert root == mirror, "src/shared/canvas-possibilities.js debe ser una réplica exacta"
     for name in ("canvas_documento", "canvas_codigo", "canvas_matriz", "canvas_diagrama", "canvas_ui_ux",
-                 "canvas_inline", "canvas_algoritmo", "canvas_rubrica", "canvas_sql", "canvas_informe"):
+                 "canvas_inline", "canvas_algoritmo", "canvas_rubrica", "canvas_sql", "canvas_informe",
+                 "canvas_multimodal_sketch", "canvas_gem_studio"):
         a = BASE_DIR / "assets" / "images" / "canvas" / f"{name}.jpg"
         b = BASE_DIR / "src" / "assets" / "images" / "canvas" / f"{name}.jpg"
         assert a.read_bytes() == b.read_bytes(), f"{name}.jpg debe ser igual en assets/ y src/assets/"
+
+
+def test_canvas_split_mode_outputs():
+    """Comprueba la visualización de 2 salidas en Modo Split en index.html y src/index.html."""
+    for file_path in (BASE_DIR / "index.html", BASE_DIR / "src" / "index.html"):
+        html = file_path.read_text(encoding="utf-8")
+        assert 'id="canvas-output-primary"' in html, f"{file_path.name}: falta #canvas-output-primary"
+        assert 'id="canvas-output-refinement"' in html, f"{file_path.name}: falta #canvas-output-refinement"
+
+        # Validar role="region" en los contenedores de salida
+        assert 'id="canvas-output-primary" role="region"' in html, f"{file_path.name}: #canvas-output-primary debe tener role='region'"
+        assert 'id="canvas-output-refinement" role="region"' in html, f"{file_path.name}: #canvas-output-refinement debe tener role='region'"
+
+        # Validar badges de Salida 1: Lienzo Principal y Salida 2: Interacción y Refinamiento
+        assert "Salida 1: Lienzo Principal" in html, f"{file_path.name}: falta badge Salida 1: Lienzo Principal"
+        assert "Salida 2: Interacción y Refinamiento" in html, f"{file_path.name}: falta badge Salida 2: Interacción y Refinamiento"
 
 
 def test_all_expected_results_cards_exist():

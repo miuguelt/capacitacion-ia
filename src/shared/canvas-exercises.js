@@ -183,11 +183,11 @@ Indicadores: kg cosechados, costo por kg, % de plántulas perdidas, ingresos por
 CANVAS_EXERCISES["doc-editorial"] = [
   {
     id: "doc-a-informe-desercion",
-    title: "Informe de deserción con infografía automática",
+    title: "Informe de deserción con tablero interactivo en Canvas",
     level: "Básico",
     duration: "25 min",
-    canvasFeature: "Documento + menú Crear → Infografía",
-    goal: "Convertir una tabla de deserción en un informe ejecutivo claro y, desde el mismo Canvas, generar una infografía visual lista para presentar al comité.",
+    canvasFeature: "Documento + Selección con cursor + Transformación a tablero web en Canvas",
+    goal: "Convertir una tabla de deserción en un informe ejecutivo claro y, desde el mismo Canvas, transformar el documento en un tablero web interactivo con tarjetas KPI y gráfico de barras para presentar al comité.",
     scenario: "La coordinación académica debe presentar el lunes cómo bajó la deserción durante 2025 y qué acciones funcionaron. Solo tienes la tabla trimestral y la encuesta de salida.",
     promptParts: {
       role: "analista de calidad educativa que prepara informes para comités directivos",
@@ -203,7 +203,7 @@ CANVAS_EXERCISES["doc-editorial"] = [
       "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona la sección de recomendaciones y escribe en el cuadro de edición: «Agrega una meta numérica para 2026 a cada recomendación».",
       "Usa «Ajustar longitud → Más corto» y comprueba que la tabla se conserve.",
-      "Abre el menú «Crear» del Canvas y elige «Infografía».",
+      "Pide en el chat: «En Canvas, transforma este informe en un tablero web interactivo de una página en HTML/CSS/JS con tarjetas KPI y gráfico de barras».",
       "Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google»."
     ],
     expected: [
@@ -211,10 +211,10 @@ CANVAS_EXERCISES["doc-editorial"] = [
       "La tabla muestra las cuatro tasas y la variación entre trimestres.",
       "La dificultad económica aparece como primera causa (39 % de 105).",
       "Cada recomendación tiene responsable, fecha e indicador.",
-      "La infografía generada muestra la tendencia descendente y las tres acciones.",
+      "El tablero web interactivo muestra la caída de deserción (9,0 % a 3,6 %) y las tres tarjetas de acción.",
       "El documento quedó guardado en Google Docs."
     ],
-    stretch: "Pide en el chat: «Crea una página web a partir de este informe con un gráfico de líneas animado y tarjetas para cada acción». Compara la página con la infografía.",
+    stretch: "Pide en el chat: «Crea una página web a partir de este informe con un gráfico de líneas animado y tarjetas para cada acción». Compara la página con la versión en documento.",
     previewSvg: canvasSvgBars("Gráfico de barras con la tasa de deserción por trimestre de 2025: 9,0; 7,8; 5,5 y 3,6 por ciento", "Tasa de deserción 2025 (%)", ["T1", "T2", "T3", "T4"], [9.0, 7.8, 5.5, 3.6], 3)
   },
   {
@@ -222,7 +222,7 @@ CANVAS_EXERCISES["doc-editorial"] = [
     title: "Propuesta de proyecto productivo con cuestionario de repaso",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Exportar a Docs + menú Crear → Cuestionario",
+    canvasFeature: "Exportar a Docs + Generación de evaluación interactiva en Canvas",
     goal: "Redactar una propuesta formal de proyecto productivo con presupuesto y cronograma, y generar un cuestionario para que el equipo de aprendices domine la propuesta.",
     scenario: "Un equipo quiere financiar una huerta hidropónica con recursos del centro. La propuesta debe convencer al comité y el equipo debe sustentarla sin leer.",
     promptParts: {
@@ -239,7 +239,7 @@ CANVAS_EXERCISES["doc-editorial"] = [
       "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona el párrafo de justificación y escribe: «Relaciónalo con las competencias del programa de formación».",
       "Usa «Cambiar tono → Más formal» para la versión que irá al comité.",
-      "Abre «Crear → Cuestionario» para que el equipo repase la propuesta antes de sustentarla.",
+      "Pide en el chat: «En Canvas, crea una evaluación interactiva de 5 preguntas de opción múltiple en HTML/JS con retroalimentación inmediata sobre esta propuesta».",
       "Exporta la propuesta a Documentos de Google desde «Compartir y exportar»."
     ],
     expected: [
@@ -247,7 +247,7 @@ CANVAS_EXERCISES["doc-editorial"] = [
       "Los tres objetivos específicos tienen un indicador medible.",
       "El cálculo de costo por kilogramo y punto de equilibrio aparece paso a paso.",
       "El cronograma cubre las 16 semanas sin huecos.",
-      "El cuestionario generado tiene preguntas sobre presupuesto, cronograma e indicadores.",
+      "La evaluación web interactiva incluye 5 preguntas con validación inmediata sobre presupuesto, cronograma e indicadores.",
       "Existe una copia de la propuesta en Google Docs."
     ],
     stretch: "Pide: «Agrega un escenario optimista con dos ciclos más y compáralo en una tabla con el escenario base».",
@@ -1050,7 +1050,7 @@ CANVAS_EXERCISES["rubric-curriculum"] = [
     title: "Guía didáctica de Git con cuestionario autocalificable",
     level: "Básico",
     duration: "30 min",
-    canvasFeature: "Documento + menú Crear → Cuestionario + página web",
+    canvasFeature: "Documento + Cuestionario web interactivo en Canvas",
     goal: "Producir una guía didáctica estructurada por momentos y un cuestionario interactivo con retroalimentación inmediata.",
     scenario: "Mañana inicia la competencia de control de versiones y el instructor necesita guía, actividad práctica y evaluación diagnóstica.",
     promptParts: {
@@ -1066,7 +1066,7 @@ CANVAS_EXERCISES["rubric-curriculum"] = [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona la práctica y escribe: «Agrega la salida esperada de la terminal después de cada comando».",
-      "Abre «Crear → Cuestionario» para generar una evaluación a partir de la guía.",
+      "Selecciona la sección de errores frecuentes y escribe: «Agrega un ejemplo de mensaje de error real de la terminal a cada fila».",
       "Pide en el chat: «Crea un cuestionario web de 10 preguntas con retroalimentación inmediata, puntaje en un gráfico de dona y opción de reiniciar con las preguntas mezcladas».",
       "Responde el cuestionario web con dos errores a propósito y revisa el puntaje.",
       "Exporta la guía a Documentos de Google."
@@ -1270,11 +1270,11 @@ Requisito no negociable: los datos personales deben cumplir la Ley 1581 de 2012 
 CANVAS_EXERCISES["executive-report"] = [
   {
     id: "report-a-mesa-ayuda",
-    title: "Informe ejecutivo de mesa de ayuda con infografía y resumen en audio",
+    title: "Informe ejecutivo de mesa de ayuda con tablero web interactivo y exportación a Docs",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Documento + Crear → Infografía + Crear → Resumen en audio",
-    goal: "Convertir seis meses de indicadores en un informe ejecutivo con conclusiones causales y producir dos formatos de difusión desde el mismo Canvas.",
+    canvasFeature: "Documento + Selección con cursor + Tablero interactivo en Canvas + Exportación",
+    goal: "Convertir seis meses de indicadores en un informe ejecutivo con conclusiones causales y transformarlo en un tablero web interactivo con exportación formal a Google Docs.",
     scenario: "La dirección quiere saber si las inversiones de agosto y septiembre mejoraron el servicio y necesita compartirlo con todo el personal.",
     promptParts: {
       role: "auditor de servicios TI que informa a la alta dirección",
@@ -1289,8 +1289,8 @@ CANVAS_EXERCISES["executive-report"] = [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona la sección de hechos relevantes y escribe: «Separa la evidencia fuerte de las coincidencias en dos columnas».",
-      "Abre «Crear → Infografía» para la versión visual.",
-      "Abre «Crear → Resumen en audio» para una versión que el personal pueda escuchar.",
+      "Pide en el chat: «En Canvas, genera un tablero web interactivo con tarjetas KPI de los 6 meses y un gráfico de barras del tiempo de solución».",
+      "Usa «Compartir y exportar → Exportar a Documentos de Google» para archivar la versión oficial del dictamen.",
       "Exporta el informe a Documentos de Google."
     ],
     expected: [
@@ -1299,7 +1299,7 @@ CANVAS_EXERCISES["executive-report"] = [
       "El promedio de tiempo antes (mayo-julio) es 18,7 h y después (agosto-octubre) 12,0 h.",
       "Acceso y contraseñas es la principal categoría de octubre (35,2 %).",
       "El informe advierte los límites de atribuir causalidad.",
-      "Se generaron la infografía y el resumen en audio."
+      "El informe cuenta con su tablero web interactivo en Canvas y su copia guardada en Google Docs."
     ],
     stretch: "Pide: «Crea una página web con un tablero de los seis meses, un gráfico combinado de barras y líneas y un filtro por periodo».",
     previewSvg: canvasSvgLine("Gráfico de líneas del tiempo promedio de solución en horas de mayo a octubre: 18, 16, 22, 14, 12 y 10", "Tiempo promedio de solución (h)", ["May", "Jun", "Jul", "Ago", "Sep", "Oct"], [
@@ -1345,6 +1345,233 @@ CANVAS_EXERCISES["executive-report"] = [
       { name: "B · 4,05", values: [5, 4, 3, 4, 4], cls: "cx-p" },
       { name: "C · 3,85", values: [3, 5, 4, 3, 5], cls: "cx-w" }
     ], 5)
+  }
+];
+
+// 11. Visión Multimodal
+const IN_BOCETO_WIRE = `FOTOGRAFÍA ADJUNTA: Boceto a lápiz en libreta de apuntes (datos de práctica)
+Título del boceto: Formulario de Inscripción y Matrícula · Convocatoria 2026
+Campos dibujados a lápiz:
+1. Nombre Completo del Aprendiz: campo de texto obligatorio (mínimo 3 caracteres).
+2. Correo Institucional: campo de correo con anotación a mano: "Solo correos @soy.sena.edu.co o @sena.edu.co".
+3. Contraseña de Acceso: campo password con anotación: "Mínimo 8 caracteres, incluir números y símbolos".
+4. Indicador de seguridad: barra dibujada con tres segmentos (Débil, Media, Segura).
+5. Botón principal tipo píldora rotulado a mano: [Completar Registro Formativo].
+
+Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón primario y acentos, fondo suave (#F8FAF9), texto pizarra (#1E293B) y borde (#CBD5E1).`;
+
+const IN_PIZARRA_PQRS = `FOTOGRAFÍA ADJUNTA: Diagrama de flujo dibujado con marcador en pizarra acrílica (datos de práctica)
+Título en pizarra: Proceso de Recepción, Análisis y Resolución de PQRS Formativas
+Elementos dibujados en el flujograma:
+- Inicio: [Radicación en Portal SENA] (nodo redondeado)
+- Decisión 1: ¿Es queja formativa o administrativa?
+  * Si es formativa -> derivar a [Comité de Evaluación y Seguimiento]
+  * Si es administrativa -> derivar a [Coordinación Misional]
+- Nodo intermedio formativa: [Notificación a Aprendiz e Instructor] (plazo: 3 días hábiles)
+- Decisión 2: ¿Requiere plan de mejoramiento académico?
+  * Sí -> [Firma de Acta de Compromiso en Portafolio de Evidencias]
+  * No -> [Archivo y Cierre de Actuación]
+- Fin: [Notificación de Cierre al Usuario] (nodo redondeado)
+Subgrafos anotados con llave: «Fase 1: Radicación», «Fase 2: Gestión y Decisión», «Fase 3: Cierre».`;
+
+CANVAS_EXERCISES["multimodal-vision"] = [
+  {
+    id: "mm-a-boceto-formulario",
+    title: "De boceto en libreta a formulario reactivo con validación institucional",
+    level: "Intermedio",
+    duration: "30 min",
+    canvasFeature: "Visión Multimodal + Canvas de código HTML/JS + Vista previa",
+    goal: "Adjuntar la fotografía de un wireframe manuscrito y solicitar a Gemini en Canvas la generación de un formulario web reactivo con validaciones institucionales.",
+    scenario: "En una sesión de diseño colaborativo, los aprendices dibujaron la pantalla de registro en una libreta. El equipo debe convertir el dibujo en un prototipo funcional antes del comité de sprint.",
+    promptParts: {
+      role: "desarrollador frontend con experiencia en visión artificial e interfaces accesibles",
+      context: "El equipo docente dibujó a mano en una libreta de apuntes el wireframe del formulario de matrícula de aprendices para la convocatoria 2026. Se requiere que Gemini analice la fotografía del boceto manuscrito y genere directamente en Canvas el artefacto web ejecutable y reactivo.",
+      data: IN_BOCETO_WIRE,
+      instruction: "En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:",
+      task: [
+        "El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.",
+        "Validación reactiva en tiempo real del correo institucional: mensaje verde si contiene @soy.sena.edu.co o @sena.edu.co, y advertencia ámbar en caso contrario.",
+        "Medidor dinámico de seguridad de contraseña con barra de progreso que cambie de color (rojo < 50 %, ámbar 50-79 %, verde ≥ 80 %) según longitud, números y caracteres especiales.",
+        "Manejo del evento submit sin recargar la página, mostrando una confirmación accesible con el nombre del aprendiz registrado."
+      ],
+      constraints: [
+        "Cero librerías externas o frameworks: todo debe funcionar de manera nativa e inmediata en la vista previa de Canvas.",
+        "Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.",
+        "Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos."
+      ],
+      format: "Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia."
+    },
+    steps: [
+      "Activa Canvas en la barra de chat de Gemini, adjunta la fotografía del boceto a lápiz y pega el prompt de inicialización.",
+      "Revisa el formulario generado en la «Vista previa» y comprueba que contenga los tres campos anotados en la libreta.",
+      "Escribe un correo con dominio externo (ej. usuario@gmail.com) y comprueba que aparezca la advertencia en ámbar; luego cámbialo a @soy.sena.edu.co y verifica el mensaje verde.",
+      "Ingresa contraseñas cortas y largas en el campo de clave y observa cómo la barra de seguridad cambia de color y nivel en tiempo real.",
+      "Haz clic en el botón [Completar Registro Formativo] con datos válidos y verifica la confirmación de registro sin recarga de página."
+    ],
+    expected: [
+      "El formulario tiene los 3 campos del boceto: Nombre Completo, Correo Institucional y Contraseña de Acceso.",
+      "El botón principal dice «Completar Registro Formativo» y usa el color Verde Salvia #2D5A4C.",
+      "Al escribir un correo con @soy.sena.edu.co aparece la validación positiva en verde; con otro dominio muestra la advertencia.",
+      "La barra de contraseña avanza y cambia de color al combinar letras, números y símbolos.",
+      "Al enviar el formulario con datos válidos no se recarga la página y se muestra la confirmación de bienvenida."
+    ],
+    stretch: "Pide en el chat: «Agrega un selector de tipo de documento (CC, TI, CE) y exporta los datos registrados a un objeto JSON descargable al hacer clic en un botón secundario».",
+    previewSvg: canvasSvgMock("Maqueta de formulario web generado desde boceto con campos validados", "Formulario desde boceto", "landing")
+  },
+  {
+    id: "mm-b-pizarra-flujograma",
+    title: "De trazos en pizarra a flujograma interactivo Mermaid de atención PQRS",
+    level: "Intermedio",
+    duration: "25 min",
+    canvasFeature: "Visión Multimodal + Diagrama Mermaid en Canvas + Vista previa",
+    goal: "Digitalizar un diagrama de flujo dibujado con marcador en la pizarra del aula y transformarlo en código Mermaid estándar con bifurcaciones condicionales y subgrafos.",
+    scenario: "El instructor explicó el proceso de atención de PQRS en la pizarra. El equipo requiere formalizar el flujograma en el repositorio institucional sin redibujarlo manualmente.",
+    promptParts: {
+      role: "analista de procesos y arquitecto de software institucional",
+      context: "Durante una sesión presencial en el ambiente de formación, el instructor diagramó a mano alzada en la pizarra acrílica el flujo de atención de peticiones, quejas y reclamos (PQRS). El equipo de desarrollo debe formalizar este proceso en código Mermaid renderizable para incluirlo en la documentación oficial del sistema.",
+      data: IN_PIZARRA_PQRS,
+      instruction: "En Canvas, genera un diagrama de flujo estructurado en código Mermaid que digitalice con exactitud los trazos de la pizarra con:",
+      task: [
+        "Sintaxis Mermaid flowchart TD limpia y válida, dividida en los 3 subgrafos anotados en la pizarra: Radicación, Gestión y Decisión, y Cierre.",
+        "Rombos de decisión para las dos bifurcaciones condicionales con etiquetas claras en las ramas («Sí», «No», «Formativa», «Administrativa»).",
+        "Nodos rectangulares para actividades y redondeados para los eventos de inicio y fin.",
+        "Estilos visuales con paleta institucional mediante directivas classDef o style (color primario #2D5A4C)."
+      ],
+      constraints: [
+        "Usa únicamente sintaxis Mermaid estándar compatible con la vista previa nativa de Canvas.",
+        "Conserva textualmente las etiquetas, plazos y nombres de subgrafos dibujados en la pizarra.",
+        "No inventes pasos intermedios ni omitas los plazos de notificación especificados."
+      ],
+      format: "Bloque de código Mermaid puro con comentarios descriptivos en español de Colombia para cada subgrafo."
+    },
+    steps: [
+      "Activa Canvas en la barra de chat de Gemini, adjunta la foto de la pizarra y pega el prompt de digitalización.",
+      "Revisa la vista previa del diagrama Mermaid y comprueba que se visualicen los 3 subgrafos con sus conexiones.",
+      "Selecciona el nodo del Comité de Evaluación y escribe: «Agrega una nota indicando que sesiona ordinariamente cada 15 días».",
+      "Pasa a la vista de código Mermaid y verifica que la sintaxis no tenga errores de renderizado.",
+      "Pide en el chat: «En Canvas, transforma este diagrama en una página HTML interactiva con SVG descargable»."
+    ],
+    expected: [
+      "El código Mermaid tiene exactamente los 3 subgrafos: Radicación, Gestión y Decisión, y Cierre.",
+      "Contiene las dos decisiones condicionales con ramas identificadas para trámite formativo y administrativo.",
+      "El plazo de 3 días hábiles aparece explícitamente en el nodo de notificación.",
+      "El diagrama compila y se renderiza limpiamente en la vista previa sin errores de sintaxis."
+    ],
+    stretch: "Pide en el chat: «Convierte el diagrama a un sequenceDiagram de Mermaid que muestre el intercambio cronológico de mensajes entre el Aprendiz, el Comité y la Coordinación».",
+    previewSvg: canvasSvgFlow("Flujograma de atención PQRS con bifurcación y subgrafos generado desde pizarra", "Flujograma PQRS desde pizarra", [{ name: "Radicación", steps: ["Registro", "¿Formativa?"] }, { name: "Resolución", steps: ["Comité", "Soporte N1"] }])
+  }
+];
+
+// 12. Gem Studio para Canvas
+const IN_GEM_SOCRATICO = `ESPECIFICACIÓN DE CALIBRACIÓN DEL GEM TUTOR SOCRÁTICO
+Nombre del Gem: Tutor Socrático ADSO · Canvas Co-Writer
+Objetivo pedagógico: Acompañar al aprendiz en la resolución de problemas de programación orientada a objetos en Canvas mediante preguntas reflexivas, impidiendo que la IA genere el código de forma automática.
+Guardrails obligatorios de calibración:
+- Ante preguntas como "¿Cuál es el código completo?": Responder con preguntas sobre el modelo del dominio y la responsabilidad de cada clase.
+- Requisito léxico institucional: Utilizar siempre y de forma exclusiva el término institucional "Portafolio de Evidencias".
+- Estructura obligatoria de guía: Organizar las respuestas en Canvas con: 1) Pregunta socrática orientadora, 2) Pista técnica contextualizada, 3) Ejercicio de autocomprobación.
+Casos de prueba para validación:
+1. "Escríbeme la clase Aprendiz en Python con todos sus atributos y métodos" -> Debe devolver diagrama conceptual y dos preguntas de diseño.
+2. "Corrige este error de sintaxis sin explicarme nada" -> Debe señalar la línea exacta y preguntar por qué se produce el fallo.
+3. "¿Cómo subo mi tarea al archivo final?" -> Debe corregir la terminología a "Portafolio de Evidencias" e indicar la estructura requerida.`;
+
+const IN_GEM_RUBRICAS = `ESPECIFICACIÓN DEL GEM AUDITOR DE RÚBRICAS TÉCNICAS
+Nombre del Gem: Auditor Técnico de Calidad de Código ADSO
+Propósito: Evaluar artefactos de software construidos en Canvas contra una rúbrica formal de cuatro criterios.
+Criterios de evaluación y ponderación:
+1. Arquitectura y Modularidad (30 %): Separación de responsabilidades, archivos menores a 250 líneas y funciones atómicas menores a 40 líneas.
+2. Calidad de Pruebas Automatizadas (30 %): 100 % de funciones probadas con aserciones observables y cobertura de casos límite (entradas vacías o inválidas).
+3. Accesibilidad y Usabilidad (20 %): Contraste de color WCAG 2.2 nivel AA, etiquetas semánticas y navegación accesible.
+4. Seguridad y Buenas Prácticas (20 %): Cero secretos o llaves API expuestas, validación de entradas y manejo robusto de excepciones.
+Guardrails obligatorios:
+- El Gem nunca debe modificar la lógica de negocio ni inventar dependencias externas.
+- El dictamen debe emitirse con puntajes numéricos del 1 al 5 y un semáforo visual (Verde >= 4.0, Ámbar 3.0-3.9, Rojo < 3.0).
+- Registrar la evaluación en el Portafolio de Evidencias del aprendiz.`;
+
+CANVAS_EXERCISES["gem-studio"] = [
+  {
+    id: "gem-a-tutor-socratico",
+    title: "Configuración y calibración de un Gem Tutor Socrático para coescritura en Canvas",
+    level: "Avanzado",
+    duration: "35 min",
+    canvasFeature: "Gem Studio + System Prompt con guardrails + Coescritura en Canvas",
+    goal: "Diseñar el System Prompt de un Gem especializado, ponerlo a prueba con preguntas trampa y utilizarlo como asistente de coescritura en un lienzo de Canvas.",
+    scenario: "Los aprendices tienden a pedirle a la IA que resuelva los talleres de código por completo. El instructor necesita calibrar un Gem que actúe como tutor socrático en Canvas, guiando con preguntas reflexivas sin regalar la solución.",
+    promptParts: {
+      role: "arquitecto pedagógico y especialista en personalización de modelos LLM (Gemini Gems)",
+      context: "En el centro de formación se implementará un Gem institucional para que los aprendices de la ficha ADSO cuenten con un tutor permanente en Canvas. La coordinación académica exige que el Gem fomente el pensamiento crítico y respete estrictamente los lineamientos institucionales.",
+      data: IN_GEM_SOCRATICO,
+      instruction: "En Canvas, redacta la documentación de configuración completa del Gem y su System Prompt listo para despliegue con:",
+      task: [
+        "El System Prompt definitivo estructurado en Rol, Directrices Pedagógicas Socráticas, Guardrails Negativos y Ejemplos de Respuesta (Few-shot).",
+        "La matriz de evaluación de los 3 casos de calibración, detallando la respuesta no permitida frente a la respuesta socrática correcta.",
+        "El manual de uso en Canvas: cómo debe actuar el Gem cuando el aprendiz selecciona un bloque de código y pide ayuda.",
+        "Una lista de verificación con 5 criterios que el comité pedagógico debe comprobar antes de autorizar el Gem."
+      ],
+      constraints: [
+        "Exige el uso obligatorio y exclusivo del término institucional «Portafolio de Evidencias» en todo el texto.",
+        "El System Prompt no debe contener código de solución para los ejercicios, sino preguntas guía.",
+        "Redacta en español de Colombia con tono profesional y pedagógico."
+      ],
+      format: "Documento técnico estructurado con secciones numeradas, bloques de código para el System Prompt y una tabla de calibración."
+    },
+    steps: [
+      "Activa Canvas en Gemini, pega el prompt de especificación y genera el documento técnico del Gem.",
+      "Revisa en el lienzo que el System Prompt incluya la regla estricta sobre el uso de «Portafolio de Evidencias».",
+      "Selecciona la sección de Ejemplos Few-shot y escribe: «Agrega un cuarto ejemplo enfocado en manejo de excepciones en Python».",
+      "Copia el System Prompt generado, abre la interfaz de Gem Studio y pégalo en las instrucciones del nuevo Gem.",
+      "Pon a prueba el Gem con la pregunta trampa: «Escríbeme la clase Aprendiz en Python» y comprueba que responda con preguntas socráticas."
+    ],
+    expected: [
+      "El System Prompt contiene las secciones de Rol, Directrices Socráticas, Guardrails y Ejemplos Few-shot.",
+      "Se prescribe el uso obligatorio y canónico de «Portafolio de Evidencias» en todo el texto.",
+      "La tabla de calibración desglosa los 3 casos de prueba con entrada, respuesta bloqueada y respuesta esperada.",
+      "La lista de verificación institucional contiene al menos 5 criterios de control pedagógico."
+    ],
+    stretch: "Pide en el chat: «Genera una batería de 5 preguntas adversariales complejas para evaluar si el Gem rompe sus guardrails socráticos ante técnicas de jailbreak simuladas».",
+    previewSvg: canvasSvgMock("Consola de prueba del Gem Tutor Socrático con guardrails activos", "Gem Tutor Socrático", "doc")
+  },
+  {
+    id: "gem-b-auditor-rubricas",
+    title: "Gem Auditor de Rúbricas y Calidad de Código en tiempo real",
+    level: "Avanzado",
+    duration: "30 min",
+    canvasFeature: "Gem Studio + Documento de rúbricas + Auditoría de código en Canvas",
+    goal: "Crear y calibrar un Gem evaluador que audite el código generado en Canvas contra una rúbrica técnica de 4 criterios sin alterar la lógica de negocio.",
+    scenario: "Al evaluar entregas de software, se requiere un asistente que revise que el código cumpla con separación de capas, pruebas con aserciones y contraste accesible, generando un dictamen estructurado.",
+    promptParts: {
+      role: "líder técnico de calidad de software y evaluador de competencias laborales",
+      context: "La coordinación técnica necesita automatizar la auditoría preliminar de los proyectos formativos de desarrollo de software. Se diseñará un Gem que analice los archivos de código creados en Canvas y emita un informe técnico fundamentado.",
+      data: IN_GEM_RUBRICAS,
+      instruction: "En Canvas, elabora el pliego de especificación y el System Prompt del Gem Auditor Técnico con:",
+      task: [
+        "El System Prompt del Gem con su matriz de evaluación de 4 criterios ponderados y escala del 1 al 5.",
+        "La plantilla estructurada del dictamen de auditoría en formato Markdown que el Gem debe completar al evaluar código.",
+        "El protocolo para auditar fragmentos seleccionados dentro de un Canvas de código sin alterar su funcionamiento.",
+        "Un ejemplo completo de auditoría simulada para una función de cálculo de promedios, mostrando fortalezas, debilidades y calificación final."
+      ],
+      constraints: [
+        "Los 4 criterios deben sumar exactamente 100 % en su ponderación.",
+        "Prohíbe que el Gem aplique refactorizaciones no solicitadas que rompan la compatibilidad del código auditado.",
+        "Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias»."
+      ],
+      format: "Documento técnico con tablas de ponderación, bloques de código para el System Prompt y plantilla de dictamen."
+    },
+    steps: [
+      "Activa Canvas en Gemini, pega el prompt y genera el pliego de especificación del Gem Auditor.",
+      "Verifica en la tabla de criterios que la suma de ponderaciones sea exactamente 100 %.",
+      "Selecciona la plantilla de dictamen y escribe: «Incluye un campo para registrar el hash SHA-256 del commit evaluado».",
+      "Pide en el chat: «En Canvas, simula la auditoría de un componente de autenticación y genera su radar de calidad en SVG».",
+      "Exporta el pliego técnico a Google Docs para su formalización ante el comité curricular."
+    ],
+    expected: [
+      "La tabla de ponderaciones suma exactamente 100 % (30 % + 30 % + 20 % + 20 %).",
+      "El System Prompt incluye la directriz de no modificar la lógica de negocio del código analizado.",
+      "La plantilla de dictamen cuenta con secciones de identificación, desglose por criterio y semáforo global.",
+      "El ejemplo simulado contiene calificaciones numéricas justificadas y recomendaciones observables."
+    ],
+    stretch: "Pide en el chat: «Añade al System Prompt una regla para detectar código duplicado y calcular el índice de mantenibilidad según la complejidad ciclomática».",
+    previewSvg: canvasSvgRadar("Perfil de evaluación del Gem Auditor en cuatro criterios de calidad", "Auditoría de calidad Gem", ["Arquitectura", "Pruebas", "Accesibilidad", "Seguridad"], [{ name: "Mínimo", values: [4, 4, 3, 4], cls: "cx-m" }, { name: "Entrega", values: [4, 5, 4, 4], cls: "cx-p" }], 5)
   }
 ];
 

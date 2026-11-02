@@ -345,10 +345,10 @@ function initClassroomTimer() {
 }
 
 // 7. Módulo Especial: Simulador de Gemini Canvas Lab (Todas las Posibilidades)
-// Los 10 modos (prompts, datos y criterios) viven en js/canvas-possibilities.js.
+// Los 12 modos (prompts, datos y criterios) viven en js/canvas-possibilities.js.
 
 function initCanvasLab() {
-  const tabs = document.querySelectorAll(".canvas-tab");
+  const tabs = document.querySelectorAll(".canvas-tab[data-possibility]");
   const userPromptEl = document.getElementById("sim-user-prompt");
   const aiResponseEl = document.getElementById("sim-ai-response");
   const docIconEl = document.getElementById("sim-doc-icon");
@@ -776,6 +776,21 @@ function initCanvasLab() {
     const data = CANVAS_POSSIBILITIES[possibilityId];
     if (act.modal) {
       openCodeModal(act.modal);
+    } else if (act.id === "act-mm-preview" || act.id === "act-gem-test") {
+      const interactiveBtn = document.querySelector('.view-mode-btn[data-mode="interactive"]');
+      if (interactiveBtn) {
+        interactiveBtn.click();
+      }
+      showCanvasToast(act.toast);
+    } else if (act.id === "act-gem-prompt") {
+      const gemPrompt = (CANVAS_POSSIBILITIES["gem-studio"] && CANVAS_POSSIBILITIES["gem-studio"].userPrompt) || "";
+      if (gemPrompt && navigator.clipboard) {
+        navigator.clipboard.writeText(gemPrompt).then(() => {
+          showCanvasToast("📋 System Prompt del Gem copiado al portapapeles.");
+        });
+      } else {
+        showCanvasToast(act.toast);
+      }
     } else if (act.action === "toggle-doc-length") {
       const summary = document.getElementById("doc-executive-summary");
       if (summary) {
@@ -827,13 +842,34 @@ function initCanvasLab() {
     }, 2500);
   }
 
+  // --- Filtrado por Categoría Funcional de Posibilidades ---
+  const categoryFilterBtns = document.querySelectorAll('.category-pill[data-category]');
+  categoryFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      categoryFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const selectedCat = btn.getAttribute('data-category');
+      
+      tabs.forEach(tab => {
+        const tabCat = tab.getAttribute('data-category');
+        if (selectedCat === 'all' || tabCat === selectedCat) {
+          tab.style.display = 'inline-flex';
+        } else {
+          tab.style.display = 'none';
+        }
+      });
+    });
+  });
+
   // Event listeners para pestañas de posibilidad
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
       tabs.forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
       const pId = tab.getAttribute("data-possibility");
-      loadPossibility(pId);
+      if (pId) {
+        loadPossibility(pId);
+      }
     });
   });
 

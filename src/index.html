@@ -458,7 +458,7 @@ Notas tomadas por Julián:
             <p>Transforma el chat conversacional en un espacio de trabajo colaborativo en pantalla dividida (Split Screen). En Gemini Canvas, la IA coescribe documentos técnicos, ejecuta aplicaciones web interactivas en vivo, estructura matrices exportables a Google Sheets, refina algoritmos en Python y aplica edición quirúrgica sin reescribir todo el proyecto.</p>
             <div class="hero-stats">
               <div class="stat-box">
-                <span class="stat-value">10 Modos</span>
+                <span class="stat-value">12 Modos</span>
                 <span class="stat-desc">Posibilidades completas</span>
               </div>
               <div class="stat-box">
@@ -476,16 +476,45 @@ Notas tomadas por Julián:
             </div>
           </div>
 
-          <!-- Nota para el Facilitador -->
-          <div class="instructor-guide-card">
-            <span class="card-badge">Guion del Facilitador</span>
-            <h4>Estrategia Pedagógica para la Sesión de Gemini Canvas</h4>
-            <ul>
-              <li><strong>El error del chat lineal:</strong> Muestra en el proyector cómo en un chat normal, al pedir corregir un error gramatical en la página 3, la IA vuelve a escribir las 3 páginas completas. Luego demuestra cómo en Canvas, al seleccionar solo ese párrafo con el cursor, la corrección ocurre en 3 segundos sin tocar el resto.</li>
-              <li><strong>Dinámica de aula de 15 minutos:</strong> Pide a los aprendices abrir <code>gemini.google.com</code>, pegar el prompt de la Posibilidad 2 (Prototipado Web) o de la Posibilidad 7 (Algoritmos en Python) y activar la previsualización en vivo para que experimenten el asombro de ver una solución ejecutándose en directo.</li>
-              <li><strong>Pregunta detonante:</strong> <em>"¿Qué diferencias de productividad encuentran entre trabajar con un documento en Google Docs tradicional versus iterarlo en Gemini Canvas con control reactivo de longitud y tono?"</em></li>
-            </ul>
-          </div>
+          <!-- Barra de Navegación Rápida Interna del Módulo -->
+          <nav class="canvas-quick-nav" aria-label="Navegación interna de Gemini Canvas Lab">
+            <span class="quick-nav-title">Navegación rápida del módulo:</span>
+            <div class="quick-nav-links">
+              <a href="#canvas-fundamentals-anchor" class="quick-nav-pill">
+                <span>📘</span> 1. Fundamentos &amp; Activación
+              </a>
+              <a href="#canvas-simulator-module" class="quick-nav-pill">
+                <span>🖥️</span> 2. Simulador de 12 Modos
+              </a>
+              <a href="#canvas-exercises-module" class="quick-nav-pill">
+                <span>🧪</span> 3. Taller Práctico de Aula
+              </a>
+              <a href="#canvas-advanced-labs-anchor" class="quick-nav-pill">
+                <span>🔬</span> 4. Laboratorios Avanzados
+              </a>
+            </div>
+          </nav>
+
+          <!-- Zona de Fundamentos y Activación -->
+          <div id="canvas-fundamentals-anchor" class="canvas-section-anchor"></div>
+
+          <!-- Nota para el Facilitador (Desplegable amigable) -->
+          <details class="instructor-guide-card canvas-instructor-collapsible" open>
+            <summary class="canvas-instructor-summary">
+              <div style="display:inline-flex; align-items:center; gap:0.5rem;">
+                <span class="card-badge">Guion del Facilitador</span>
+                <h4 style="display:inline; margin:0; font-size:1rem;">Estrategia Pedagógica para la Sesión de Gemini Canvas</h4>
+              </div>
+              <span class="summary-hint">(Clic para contraer o desplegar)</span>
+            </summary>
+            <div class="canvas-instructor-body" style="margin-top:0.75rem;">
+              <ul>
+                <li><strong>El error del chat lineal:</strong> Muestra en el proyector cómo en un chat normal, al pedir corregir un error gramatical en la página 3, la IA vuelve a escribir las 3 páginas completas. Luego demuestra cómo en Canvas, al seleccionar solo ese párrafo con el cursor, la corrección ocurre en 3 segundos sin tocar el resto.</li>
+                <li><strong>Dinámica de aula de 15 minutos:</strong> Pide a los aprendices abrir <code>gemini.google.com</code>, pegar el prompt de la Posibilidad 2 (Prototipado Web) o de la Posibilidad 7 (Algoritmos en Python) y activar la previsualización en vivo para que experimenten el asombro de ver una solución ejecutándose en directo.</li>
+                <li><strong>Pregunta detonante:</strong> <em>"¿Qué diferencias de productividad encuentran entre trabajar con un documento en Google Docs tradicional versus iterarlo en Gemini Canvas con control reactivo de longitud y tono?"</em></li>
+              </ul>
+            </div>
+          </details>
 
           <!-- Guía de Activación en 3 Pasos -->
           <div class="tool-container">
@@ -515,7 +544,7 @@ Notas tomadas por Julián:
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
               <div>
                 <h3 style="margin:0;">🖥️ Simulador Interactivo de Gemini Canvas</h3>
-                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.95rem;">Explora cada una de las 10 posibilidades con su prompt exacto, los controles propios de Canvas y la imagen de alta fidelidad del resultado esperado.</p>
+                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.95rem;">Explora cada una de las 12 posibilidades con su prompt exacto, los controles propios de Canvas y la imagen de alta fidelidad del resultado esperado.</p>
               </div>
               <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
                 <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-canvas-fullscreen" title="Alternar modo inmersivo a pantalla completa">
@@ -556,44 +585,75 @@ Notas tomadas por Julián:
               </div>
             </div>
 
-            <!-- Selector de las 10 Posibilidades -->
+            <!-- Barra de Filtros por Categoría Funcional -->
+            <div class="canvas-category-filter-bar" role="toolbar" aria-label="Filtrar posibilidades por categoría">
+              <span class="filter-label">Filtrar por área:</span>
+              <div class="filter-pills-group" id="canvas-category-filters">
+                <button type="button" class="category-pill active" data-category="all">
+                  <span>✨</span> Todas (12)
+                </button>
+                <button type="button" class="category-pill" data-category="editorial">
+                  <span>📄</span> Redacción &amp; Gestión (4)
+                </button>
+                <button type="button" class="category-pill" data-category="dev">
+                  <span>💻</span> Código &amp; Datos (3)
+                </button>
+                <button type="button" class="category-pill" data-category="design">
+                  <span>🎨</span> Diseño &amp; Procesos (2)
+                </button>
+                <button type="button" class="category-pill" data-category="advanced">
+                  <span>🤖</span> Especializados (3)
+                </button>
+              </div>
+            </div>
+
+            <!-- Selector de las 12 Posibilidades -->
             <div class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas">
-              <button type="button" class="canvas-tab active" data-possibility="doc-editorial">
+              <button type="button" class="canvas-tab active" data-possibility="doc-editorial" data-category="editorial">
                 <span>📄</span> 1. Redacción & Documentos
               </button>
-              <button type="button" class="canvas-tab" data-possibility="code-prototyping">
+              <button type="button" class="canvas-tab" data-possibility="code-prototyping" data-category="dev">
                 <span>💻</span> 2. Código & Web en Vivo
               </button>
-              <button type="button" class="canvas-tab" data-possibility="data-matrix">
+              <button type="button" class="canvas-tab" data-possibility="data-matrix" data-category="editorial">
                 <span>📊</span> 3. Matrices & Hojas de Cálculo
               </button>
-              <button type="button" class="canvas-tab" data-possibility="flowchart-diagram">
+              <button type="button" class="canvas-tab" data-possibility="flowchart-diagram" data-category="design">
                 <span>🔀</span> 4. Diagramas de Proceso
               </button>
-              <button type="button" class="canvas-tab" data-possibility="visual-mockup">
+              <button type="button" class="canvas-tab" data-possibility="visual-mockup" data-category="design">
                 <span>🎨</span> 5. Diseño Visual UI/UX
               </button>
-              <button type="button" class="canvas-tab" data-possibility="inline-prompting">
+              <button type="button" class="canvas-tab" data-possibility="inline-prompting" data-category="editorial">
                 <span>✂️</span> 6. Edición por Selección (Inline)
               </button>
-              <button type="button" class="canvas-tab" data-possibility="algorithm-refactor">
+              <button type="button" class="canvas-tab" data-possibility="algorithm-refactor" data-category="dev">
                 <span>⚡</span> 7. Algoritmos & Python (O(n))
               </button>
-              <button type="button" class="canvas-tab" data-possibility="rubric-curriculum">
+              <button type="button" class="canvas-tab" data-possibility="rubric-curriculum" data-category="advanced">
                 <span>📚</span> 8. Rúbricas & Didáctica
               </button>
-              <button type="button" class="canvas-tab" data-possibility="sql-pipeline">
+              <button type="button" class="canvas-tab" data-possibility="sql-pipeline" data-category="dev">
                 <span>🗄️</span> 9. SQL & Pipelines
               </button>
-              <button type="button" class="canvas-tab" data-possibility="executive-report">
+              <button type="button" class="canvas-tab" data-possibility="executive-report" data-category="editorial">
                 <span>⚖️</span> 10. Informes & Auditoría
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="multimodal-vision" data-category="advanced">
+                <span>📷</span> 11. Visión Multimodal
+              </button>
+              <button type="button" class="canvas-tab" data-possibility="gem-studio" data-category="advanced">
+                <span>🤖</span> 12. Gem Studio para Canvas
               </button>
             </div>
 
-            <!-- Estructura Split-Screen del Simulador -->
+            <!-- Estructura Split-Screen del Simulador (Modo Split de 2 Salidas) -->
             <div class="canvas-split-container">
-              <!-- Columna Izquierda: Chat de Gemini -->
-              <div class="canvas-chat-pane">
+              <!-- Columna Izquierda / Salida 2: Interacción y Refinamiento -->
+              <div class="canvas-chat-pane" id="canvas-output-refinement" role="region" aria-label="Salida 2: Interacción y Refinamiento">
+                <div class="canvas-output-badge output-refinement" id="canvas-output-refinement-badge">
+                  <span class="badge-icon">💬</span> Salida 2: Interacción y Refinamiento
+                </div>
                 <div class="canvas-chat-header">
                   <div class="gemini-brand-indicator">
                     <span class="sparkle-icon">✨</span>
@@ -633,8 +693,11 @@ Notas tomadas por Julián:
                 </div>
               </div>
 
-              <!-- Columna Derecha: Lienzo Canvas -->
-              <div class="canvas-editor-pane">
+              <!-- Columna Derecha / Salida 1: Lienzo Principal (Artefacto generado) -->
+              <div class="canvas-editor-pane" id="canvas-output-primary" role="region" aria-label="Salida 1: Lienzo Principal (Artefacto generado)">
+                <div class="canvas-output-badge output-primary" id="canvas-output-primary-badge">
+                  <span class="badge-icon">🎨</span> Salida 1: Lienzo Principal (Artefacto generado)
+                </div>
                 <!-- Barra Superior de Canvas -->
                 <div class="canvas-editor-topbar">
                   <div class="canvas-doc-title">
@@ -716,6 +779,16 @@ Notas tomadas por Julián:
             </div>
             <p class="canvas-exercises-notice">ℹ️ Las personas, cifras y documentos de estos ejercicios se prepararon para aprender y no contienen registros reales.</p>
             <div id="canvas-exercises-content" aria-live="polite"></div>
+          </div>
+
+          <!-- ==========================================
+               ZONA DE LABORATORIOS ESPECIALIZADOS DE PROFUNDIZACIÓN
+               ========================================== -->
+          <div id="canvas-advanced-labs-anchor" class="canvas-section-anchor"></div>
+          <div class="canvas-advanced-labs-banner">
+            <span class="labs-tag">🔬 Nivel 4 · Prácticas de Profundización</span>
+            <h3>Laboratorios Especializados de Gemini Canvas</h3>
+            <p>Estos entornos dedicados permiten experimentar en profundidad las capacidades avanzadas de Gemini Canvas: conversión directa de bocetos físicos a software web y creación de asistentes personalizados (Gems) con instrucciones de sistema rigurosas.</p>
           </div>
 
           <!-- ==========================================
@@ -1788,7 +1861,7 @@ Requisitos:
             <div class="material-card" style="border-left:3px solid var(--color-primary);">
               <div>
                 <h4>🎨 Guía Metodológica: Gemini Canvas Lab (.md)</h4>
-                <p>Documento completo con las 10 posibilidades, Gem Studio, visión multimodal, prompts maestros, atajos de teclado y pautas pedagógicas.</p>
+                <p>Documento completo con las 12 posibilidades, Gem Studio, visión multimodal, prompts maestros, atajos de teclado y pautas pedagógicas.</p>
               </div>
               <a href="materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md" target="_blank" class="material-link">
                 👁️ Ver guia_canvas.md
