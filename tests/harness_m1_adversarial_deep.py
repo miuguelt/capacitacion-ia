@@ -74,9 +74,9 @@ test("2. Zero fictitious timers (setTimeout / setInterval) in interactiveHtml", 
 def test_exhaustive_lexical_prohibitions():
     prohibited_patterns = [
         (r"\bdossier\b", "dossier"),
-        (r"infograf[íi]a", "infografía"),
-        (r"resumen en audio", "resumen en audio"),
-        (r"Crear →", "Crear →")
+        # «Crear → Infografía, Cuestionario y Resumen en audio» son funciones reales de Canvas.
+        (r"Exportar a Hojas de c[aá]lculo", "exportación a Sheets, que Canvas no ofrece"),
+        (r"mermaid\.live", "visor externo de Mermaid"),
     ]
     files_to_scan = [
         os.path.join(BASE_DIR, "js", "canvas-possibilities.js"),
@@ -95,7 +95,7 @@ def test_exhaustive_lexical_prohibitions():
             matches = list(re.finditer(pattern, content, re.IGNORECASE))
             assert len(matches) == 0, f"Found {len(matches)} match(es) of '{label}' in {rel}: {[m.group(0) for m in matches[:3]]}"
 
-test("3. Exhaustive lexical scanner (cero dossier, cero infografía, cero resumen en audio, cero Crear →)", test_exhaustive_lexical_prohibitions)
+test("3. Exhaustive lexical scanner (cero dossier, cero exportación a Sheets, cero mermaid.live)", test_exhaustive_lexical_prohibitions)
 
 # 4. Math Fuzzing via Node.js
 def test_math_fuzzing():

@@ -10,7 +10,9 @@ const {
   formatCanvasStep,
   buildCanvasPromptHtml,
   buildCanvasExerciseHtml,
-  countCanvasChecklist
+  countCanvasChecklist,
+  CANVAS_CAPABILITIES,
+  canvasCapabilityNames
 } = require(path.join(__dirname, "..", "js", "canvas-exercises.js"));
 
 const MODES = [
@@ -75,14 +77,55 @@ test("cada prompt sigue R-C-I-R-F, es conciso y trae los datos una sola vez", ()
   }
 });
 
-test("ningún ejercicio contiene funciones experimentales ni términos no institucionales", () => {
-  const exercises = allExercises();
-  assert.equal(exercises.length, 24);
-  for (const ex of exercises) {
-    const raw = JSON.stringify(ex);
-    assert.doesNotMatch(raw, /infograf[ií]a|resumen en audio|crear\s*→/i, `${ex.id}: no debe usar funciones experimentales no estándar`);
-    assert.doesNotMatch(raw, /dossier/i, `${ex.id}: debe usar Portafolio de Evidencias`);
+test("ningún ejercicio usa términos no institucionales", () => {
+  for (const ex of allExercises()) {
+    assert.doesNotMatch(JSON.stringify(ex), /dossier/i, `${ex.id}: debe usar Portafolio de Evidencias`);
   }
+});
+
+// Herramientas externas o funciones que Canvas no ofrece: un ejercicio debe resolverse dentro de Gemini Canvas.
+const OUTSIDE_CANVAS = /Hojas de c[aá]lculo|Google Sheets|\bSheets\b|\bExcel\b|mermaid\.live|sql\.js|Gem Studio|pytest|tu equipo local/i;
+
+test("el catálogo de capacidades describe funciones reales de Canvas", () => {
+  const ids = Object.keys(CANVAS_CAPABILITIES);
+  assert.ok(ids.length >= 14);
+  for (const id of ids) {
+    const cap = CANVAS_CAPABILITIES[id];
+    assert.equal(typeof cap.name, "string", `${id}.name`);
+    assert.ok(cap.how.trim().length > 10, `${id}.how explica cómo se usa`);
+    assert.ok(cap.pattern instanceof RegExp, `${id}.pattern`);
+  }
+});
+
+test("cada ejercicio declara capacidades de Canvas que de verdad usa en sus pasos", () => {
+  for (const ex of allExercises()) {
+    assert.ok(Array.isArray(ex.capabilities) && ex.capabilities.length >= 2, `${ex.id}: al menos 2 capacidades`);
+    const stepsText = ex.steps.join("\n");
+    for (const cap of ex.capabilities) {
+      assert.ok(CANVAS_CAPABILITIES[cap], `${ex.id}: capacidad desconocida ${cap}`);
+      assert.match(stepsText, CANVAS_CAPABILITIES[cap].pattern, `${ex.id}: declara ${cap} pero ningún paso la usa`);
+    }
+    assert.equal(typeof ex.whyCanvas, "string");
+    assert.ok(ex.whyCanvas.trim().length >= 40, `${ex.id}: whyCanvas explica qué aporta Canvas frente al chat`);
+    assert.match(ex.steps[0], /Activa Canvas|adjunta/i, `${ex.id}: el primer paso activa Canvas`);
+  }
+});
+
+test("los 24 ejercicios cubren todas las capacidades del catálogo", () => {
+  const used = new Set(allExercises().flatMap(ex => ex.capabilities));
+  assert.deepEqual([...used].sort(), Object.keys(CANVAS_CAPABILITIES).sort());
+});
+
+test("ningún ejercicio exige herramientas fuera de Gemini Canvas", () => {
+  for (const ex of allExercises()) {
+    const raw = JSON.stringify([ex.title, ex.canvasFeature, ex.goal, ex.promptParts, ex.steps, ex.expected, ex.stretch, ex.whyCanvas]);
+    assert.doesNotMatch(raw, OUTSIDE_CANVAS, `${ex.id}: debe resolverse dentro de Gemini Canvas`);
+  }
+});
+
+test("canvasCapabilityNames traduce ids y descarta los desconocidos", () => {
+  assert.deepEqual(canvasCapabilityNames(["code-preview", "nada"]), [CANVAS_CAPABILITIES["code-preview"].name]);
+  assert.deepEqual(canvasCapabilityNames(undefined), []);
 });
 
 test("composeCanvasPrompt ordena las partes y delimita los datos", () => {
@@ -136,7 +179,20 @@ test("buildCanvasExerciseHtml arma una tarjeta completa y segura", () => {
   assert.equal(countCanvasChecklist(html), ex.expected.length);
   assert.equal((html.match(/class="canvas-exercise-step"/g) || []).length, ex.steps.length);
   assert.ok(html.includes("Ejercicio A"));
+  assert.ok(html.includes("¿Por qué en Canvas?"), "la tarjeta explica qué aporta Canvas");
+  assert.ok(html.includes(escapeCanvasHtml(ex.whyCanvas)));
+  assert.equal((html.match(/class="canvas-capability-chip"/g) || []).length, ex.capabilities.length);
+  assert.ok(html.includes(`id="ejercicio-${ex.id}"`), "la tarjeta tiene ancla para enlaces directos");
   assert.ok(buildCanvasExerciseHtml(CANVAS_EXERCISES["sql-pipeline"][1], 1).includes("Ejercicio B"));
+});
+
+test("buildCanvasExerciseHtml omite la explicación de Canvas cuando el ejercicio no la trae", () => {
+  const base = CANVAS_EXERCISES["code-prototyping"][0];
+  const html = buildCanvasExerciseHtml({ ...base, whyCanvas: undefined, capabilities: undefined }, 0);
+  assert.ok(!html.includes("¿Por qué en Canvas?"));
+  assert.ok(!html.includes("canvas-capability-chip"));
+  const unknown = buildCanvasExerciseHtml({ ...base, capabilities: ["code-preview", "inexistente"] }, 0);
+  assert.equal((unknown.match(/class="canvas-capability-chip"/g) || []).length, 1, "las capacidades desconocidas se descartan");
 });
 
 test("buildCanvasExerciseHtml devuelve cadena vacía sin ejercicio", () => {

@@ -2,7 +2,7 @@
 
 ## Test Runner
 - **Node.js Suite (Coverage 100 % Obligatorio)**:
-  `node --test --experimental-test-coverage --test-coverage-include="js/canvas-exercises.js" --test-coverage-include="js/canvas-possibilities.js" --test-coverage-include="js/dia3-module.js" --test-coverage-functions=100 --test-coverage-lines=100 --test-coverage-branches=100 tests/canvas-exercises.test.cjs tests/canvas-possibilities.test.cjs tests/dia3-module.test.cjs`
+  `node --test --experimental-test-coverage --test-coverage-include="js/canvas-exercises.js" --test-coverage-include="js/canvas-possibilities.js" --test-coverage-include="js/dia3-module.js" --test-coverage-include="js/canvas-nav.js" --test-coverage-functions=100 --test-coverage-lines=100 --test-coverage-branches=100 tests/canvas-exercises.test.cjs tests/canvas-possibilities.test.cjs tests/dia3-module.test.cjs tests/canvas-nav.test.cjs`
 - **Pytest Suite (Integridad Web, Canvas y Módulos)**:
   `pytest tests/test_canvas_exercises.py tests/test_canvas_module.py tests/test_web_integrity.py`
 - **Suite Pytest Completa**:

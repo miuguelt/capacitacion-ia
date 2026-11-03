@@ -455,7 +455,7 @@ Notas tomadas por Julián:
           <div class="hero-card" style="border-left: 4px solid var(--color-primary-light);">
             <span class="hero-tag">Espacio de Trabajo Interactivo · Todas las Posibilidades</span>
             <h2>🎨 Gemini Canvas Lab: Coescritura, Prototipado y Edición Quirúrgica</h2>
-            <p>Transforma el chat conversacional en un espacio de trabajo colaborativo en pantalla dividida (Split Screen). En Gemini Canvas, la IA coescribe documentos técnicos, ejecuta aplicaciones web interactivas en vivo, estructura matrices exportables a Google Sheets, refina algoritmos en Python y aplica edición quirúrgica sin reescribir todo el proyecto.</p>
+            <p>Transforma el chat conversacional en un espacio de trabajo colaborativo en pantalla dividida (Split Screen). En Gemini Canvas, la IA coescribe documentos técnicos, ejecuta aplicaciones web interactivas en vivo, convierte un documento en página web, infografía, cuestionario, presentación o resumen en audio, refina algoritmos en Python y aplica edición quirúrgica sin reescribir todo el proyecto.</p>
             <div class="hero-stats">
               <div class="stat-box">
                 <span class="stat-value">12 Modos</span>
@@ -466,7 +466,7 @@ Notas tomadas por Julián:
                 <span class="stat-desc">Chat + Lienzo interactivo</span>
               </div>
               <div class="stat-box">
-                <span class="stat-value">Gem Studio</span>
+                <span class="stat-value">Gems</span>
                 <span class="stat-desc">Asistentes a medida</span>
               </div>
               <div class="stat-box">
@@ -480,16 +480,16 @@ Notas tomadas por Julián:
           <nav class="canvas-quick-nav" aria-label="Navegación interna de Gemini Canvas Lab">
             <span class="quick-nav-title">Navegación rápida del módulo:</span>
             <div class="quick-nav-links">
-              <a href="#canvas-fundamentals-anchor" class="quick-nav-pill">
+              <a href="#canvas-fundamentals-anchor" class="quick-nav-pill" data-canvas-section="canvas-fundamentals-anchor">
                 <span>📘</span> 1. Fundamentos &amp; Activación
               </a>
-              <a href="#canvas-simulator-module" class="quick-nav-pill">
+              <a href="#canvas-simulator-module" class="quick-nav-pill" data-canvas-section="canvas-simulator-module">
                 <span>🖥️</span> 2. Simulador de 12 Modos
               </a>
-              <a href="#canvas-exercises-module" class="quick-nav-pill">
-                <span>🧪</span> 3. Taller Práctico de Aula
+              <a href="#canvas-exercises-module" class="quick-nav-pill" data-canvas-section="canvas-exercises-module">
+                <span>🧪</span> 3. Ejercicios (24)
               </a>
-              <a href="#canvas-advanced-labs-anchor" class="quick-nav-pill">
+              <a href="#canvas-advanced-labs-anchor" class="quick-nav-pill" data-canvas-section="canvas-advanced-labs-anchor">
                 <span>🔬</span> 4. Laboratorios Avanzados
               </a>
             </div>
@@ -534,7 +534,7 @@ Notas tomadas por Julián:
               <div class="step-card">
                 <span class="step-num">3</span>
                 <h4>Refinamiento y Exportación</h4>
-                <p>Usa la barra superior de Canvas para ajustar longitud, cambiar tono o exportar a Google Docs y Google Sheets con un solo clic. También puedes seleccionar cualquier frase con el cursor para editarla en caliente.</p>
+                <p>Usa los controles del documento para ajustar longitud o cambiar tono, el botón «Crear» para transformarlo en página web, infografía, cuestionario o resumen en audio, y «Compartir y exportar» para enviarlo a Documentos de Google, Presentaciones de Google o Colab. También puedes seleccionar cualquier frase con el cursor para editarla en caliente.</p>
               </div>
             </div>
           </div>
@@ -616,7 +616,7 @@ Notas tomadas por Julián:
                 <span>💻</span> 2. Código & Web en Vivo
               </button>
               <button type="button" class="canvas-tab" data-possibility="data-matrix" data-category="editorial">
-                <span>📊</span> 3. Matrices & Hojas de Cálculo
+                <span>📊</span> 3. Matrices & Tablas de Decisión
               </button>
               <button type="button" class="canvas-tab" data-possibility="flowchart-diagram" data-category="design">
                 <span>🔀</span> 4. Diagramas de Proceso
@@ -643,7 +643,7 @@ Notas tomadas por Julián:
                 <span>📷</span> 11. Visión Multimodal
               </button>
               <button type="button" class="canvas-tab" data-possibility="gem-studio" data-category="advanced">
-                <span>🤖</span> 12. Gem Studio para Canvas
+                <span>🤖</span> 12. Gems para Canvas
               </button>
             </div>
 
@@ -778,7 +778,16 @@ Notas tomadas por Julián:
               </div>
             </div>
             <p class="canvas-exercises-notice">ℹ️ Las personas, cifras y documentos de estos ejercicios se prepararon para aprender y no contienen registros reales.</p>
+            <details class="canvas-exercise-index" id="canvas-exercise-index">
+              <summary>🗂️ Índice de los 24 ejercicios <span class="canvas-exercise-index-count" id="canvas-exercise-index-count"></span></summary>
+              <p class="canvas-exercise-hint">Cada enlace abre el ejercicio y se puede compartir. La marca ✓ indica los ejercicios que completaste en este navegador.</p>
+              <ol class="canvas-exercise-index-list" id="canvas-exercise-index-list"></ol>
+            </details>
             <div id="canvas-exercises-content" aria-live="polite"></div>
+            <nav class="canvas-mode-pager" aria-label="Cambiar de modo">
+              <button type="button" class="canvas-mode-pager-btn" id="canvas-mode-prev" data-direction="-1">← <span>Modo anterior</span></button>
+              <button type="button" class="canvas-mode-pager-btn" id="canvas-mode-next" data-direction="1"><span>Modo siguiente</span> →</button>
+            </nav>
           </div>
 
           <!-- ==========================================
@@ -861,12 +870,12 @@ Notas tomadas por Julián:
           </div>
 
           <!-- ==========================================
-               GEM STUDIO: CONSTRUCTOR Y CALIBRADOR DE GEMS
+               GEMS: CONSTRUCTOR Y CALIBRADOR
                ========================================== -->
           <div class="tool-container" id="gem-studio-module">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
               <div>
-                <h3 style="margin:0;">🤖 Gem Studio: Constructor y Calibrador de Asistentes Gems en Vivo</h3>
+                <h3 style="margin:0;">🤖 Gems: constructor y calibrador de asistentes en vivo</h3>
                 <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
                   Diseña las instrucciones del sistema (*System Prompt*), fija restricciones éticas y pon a prueba a tu propio asistente personalizado antes de crearlo en tu cuenta de Gemini.
                 </p>
@@ -1823,7 +1832,7 @@ Requisitos:
                 </div>
                 <div style="margin-top: 1rem; text-align: right;">
                   <button type="button" class="btn btn-secondary" onclick="window.switchPage('gemini-canvas'); setTimeout(() => document.getElementById('gem-studio-module')?.scrollIntoView({behavior:'smooth'}), 120);" style="font-size: 0.8rem; padding: 0.45rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--color-primary); cursor: pointer; font-weight: 600;">
-                    🧪 Probar y calibrar en el Gem Studio Interactivo (Canvas Lab) →
+                    🧪 Probar y calibrar Gems en el laboratorio interactivo (Canvas Lab) →
                   </button>
                 </div>
               </div>
@@ -1861,7 +1870,7 @@ Requisitos:
             <div class="material-card" style="border-left:3px solid var(--color-primary);">
               <div>
                 <h4>🎨 Guía Metodológica: Gemini Canvas Lab (.md)</h4>
-                <p>Documento completo con las 12 posibilidades, Gem Studio, visión multimodal, prompts maestros, atajos de teclado y pautas pedagógicas.</p>
+                <p>Documento completo con las 12 posibilidades, Gems, visión multimodal, prompts maestros, atajos de teclado y pautas pedagógicas.</p>
               </div>
               <a href="materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md" target="_blank" class="material-link">
                 👁️ Ver guia_canvas.md
@@ -2001,6 +2010,7 @@ Requisitos:
     </div>
   </div>
 
+  <script src="js/canvas-nav.js"></script>
   <script src="js/canvas-exercises.js"></script>
   <script src="js/canvas-possibilities.js"></script>
   <script src="js/dia3-module.js"></script>

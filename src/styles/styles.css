@@ -257,7 +257,9 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  /* clip no crea contenedor de desplazamiento: así la barra superior y la navegación del módulo quedan fijas */
+  overflow-x: clip;
+  min-width: 0;
 }
 
 /* Topbar */
@@ -875,7 +877,7 @@ body.instructor-mode .instructor-guide-card {
 /* --- Componente de Navegación Rápida Interna (Quick-Nav) --- */
 .canvas-quick-nav {
   position: sticky;
-  top: 0.75rem;
+  top: 4.75rem;
   z-index: 40;
   display: flex;
   align-items: center;
@@ -928,7 +930,7 @@ body.instructor-mode .instructor-guide-card {
 }
 
 .canvas-section-anchor {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 9rem;
 }
 
 /* Guion del facilitador colapsable */
@@ -2855,6 +2857,145 @@ body.instructor-mode .instructor-guide-card {
 .canvas-exercise-hint {
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+/* Capacidades de Canvas que practica cada ejercicio */
+.canvas-capability-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.canvas-capability-chip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-subtle);
+  border: 1px solid var(--color-primary-light);
+}
+
+/* Índice de los 24 ejercicios con enlaces directos */
+.canvas-exercise-index {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+
+.canvas-exercise-index summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.canvas-exercise-index-count {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.canvas-exercise-index-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 0.75rem 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.canvas-exercise-index-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+}
+
+.canvas-index-mode {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.canvas-exercise-index-list a {
+  display: block;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.canvas-exercise-index-list a:hover,
+.canvas-exercise-index-list a:focus-visible {
+  background: var(--color-primary-subtle);
+  text-decoration: underline;
+}
+
+.canvas-exercise-index-list a[aria-current="true"] {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-subtle);
+}
+
+.canvas-index-done {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Anterior y siguiente entre modos */
+.canvas-mode-pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.canvas-mode-pager-btn {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  background: var(--bg-surface);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.canvas-mode-pager-btn:hover:not(:disabled) {
+  background: var(--color-primary-subtle);
+}
+
+.canvas-mode-pager-btn:disabled {
+  color: var(--text-muted);
+  border-color: var(--border-light);
+  cursor: default;
+}
+
+#canvas-simulator-module,
+#canvas-exercises-module,
+.canvas-exercise-card {
+  scroll-margin-top: 9rem;
+}
+
+/* En pantallas angostas la navegación del módulo ocupa varias líneas: deja de ser fija para no tapar el contenido */
+@media (max-width: 767px) {
+  .topbar,
+  .canvas-quick-nav {
+    position: static;
+  }
+
+  #canvas-simulator-module,
+  #canvas-exercises-module,
+  .canvas-exercise-card,
+  .canvas-section-anchor {
+    scroll-margin-top: 5rem;
+  }
 }
 
 /* Prompt por partes R-C-I-R-F: un solo bloque, etiqueta a la izquierda */

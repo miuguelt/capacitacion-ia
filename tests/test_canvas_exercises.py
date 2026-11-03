@@ -108,3 +108,27 @@ def test_src_mirrors_are_exact():
     ]
     for root, mirror in pairs:
         assert (BASE_DIR / root).read_text(encoding="utf-8") == (BASE_DIR / mirror).read_text(encoding="utf-8"), f"{mirror} debe replicar {root}"
+
+
+def test_canvas_navigation_markup():
+    html = _html()
+    assert html.index('src="js/canvas-nav.js"') < html.index('src="js/app.js"'), "las rutas cargan antes de app.js"
+    assert 'id="canvas-exercise-index-list"' in html, "índice de los 24 ejercicios"
+    assert 'id="canvas-mode-prev"' in html and 'id="canvas-mode-next"' in html, "paginador entre modos"
+    for section in ["canvas-fundamentals-anchor", "canvas-simulator-module", "canvas-exercises-module", "canvas-advanced-labs-anchor"]:
+        assert f'data-canvas-section="{section}"' in html
+        assert f'id="{section}"' in html
+
+
+def test_app_supports_deep_links_and_history():
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    assert 'addEventListener("hashchange", applyHashRoute)' in app
+    assert 'addEventListener("popstate", applyHashRoute)' in app
+    assert "window.openCanvasRoute = openCanvasRoute" in app
+    assert "buildCanvasRoute(mode, i)" in app, "índice y paleta usan enlaces directos"
+
+
+def test_page_never_promises_tools_outside_canvas():
+    html = _html()
+    for banned in ["Google Sheets", "Hojas de Cálculo", "mermaid.live", "Gem Studio"]:
+        assert banned not in html, f"index.html no debe mencionar «{banned}»"

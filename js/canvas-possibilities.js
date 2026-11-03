@@ -451,9 +451,9 @@ const [PA, PB, PC] = MATRIX.providers;
 const fmtScore = s => canvasFormatNumber(s, s % 1 ? 1 : 0);
 
 const DATA_MATRIX = {
-  name: "3. Matrices & Hojas de Cálculo",
+  name: "3. Matrices & Tablas de Decisión",
   docIcon: "📊",
-  docTitle: "Matriz_Ponderada_Conectividad_Campus.gsheet",
+  docTitle: "Matriz_Ponderada_Conectividad_Campus.gdoc",
   image: "assets/images/canvas/canvas_matriz.jpg",
   promptParts: {
     role: "analista de compras públicas que prepara matrices de decisión para comités evaluadores",
@@ -475,7 +475,7 @@ Estados: Recomendado si el puntaje es 85 o más; Admisible con observaciones ent
     ],
     constraints: [
       "Usa solo las calificaciones y los pesos de los datos, y muestra la fórmula que aplicaste.",
-      "Si exportas a Hojas de cálculo, los totales deben ser fórmulas, no valores escritos a mano."
+      "Debajo de la tabla, escribe la operación que produce cada total para que se pueda recalcular."
     ],
     format: "Tabla con encabezados claros, estados en verde, ámbar y rojo, y cifras con coma decimal."
   },
@@ -485,12 +485,12 @@ Estados: Recomendado si el puntaje es 85 o más; Admisible con observaciones ent
     { criterion: `Puntaje final: Proveedor A = ${PA.totalText}; Proveedor B = ${PB.totalText}; Proveedor C = ${PC.totalText}.`, how: "Recalcula al menos uno con tu calculadora." },
     { criterion: `Estados: A ${PA.status} (verde), B ${PB.status} (ámbar) y C ${PC.status} (rojo).`, how: "Compara cada puntaje con los umbrales de los datos." },
     { criterion: `La conclusión recomienda al Proveedor A y menciona la diferencia de ${canvasFormatNumber(PA.total - PB.total, 1)} puntos con el Proveedor B.`, how: "Lee el texto debajo de la tabla." },
-    { criterion: "Al exportar a Hojas de cálculo, la celda del total contiene una fórmula (por ejemplo, =SUMAPRODUCTO).", how: "Haz clic en la celda del total en Google Sheets y mira la barra de fórmulas." }
+    { criterion: "Debajo de la tabla aparece la operación completa de cada total.", how: "Rehaz una operación con tu calculadora y compárala con el total del Canvas." }
   ],
-  aiResponse: "Construí la matriz en el Canvas con los aportes de cada criterio, el puntaje sobre 100 y el estado de cada proveedor. Puedes exportarla a Hojas de cálculo con las fórmulas incluidas.",
+  aiResponse: "Construí la matriz en el Canvas con los aportes de cada criterio, el puntaje sobre 100 y el estado de cada proveedor. Selecciona una celda para ajustarla o pide «Crear → Página web» para convertirla en un tablero con pesos editables.",
   quickActions: [
     { id: "act-sheet-formula", label: "🧮 Ver fórmula", modal: { title: "Cálculo del puntaje sobre 100", badge: "Fórmula", content: MATRIX.providers.map(p => `${p.short}: (${p.scores.map((s, i) => `${fmtScore(s)}×${MATRIX.weights[i]}`).join(" + ")}) ÷ 10 = ${p.totalText} → ${p.status}`).join("\n") } },
-    { id: "act-sheet-export", label: "📊 Exportar a Google Sheets", class: "btn-sheets", toast: "📊 En Gemini, este botón crea la hoja en tu Google Drive. Revisa que el total sea una fórmula." }
+    { id: "act-sheet-export", label: "📄 Exportar a Documentos de Google", toast: "📄 En Gemini, «Compartir y exportar → Exportar a Documentos de Google» crea una copia editable de la matriz en tu Drive." }
   ],
   interactiveHtml: `
       <div class="matrix-preview-container">
@@ -518,7 +518,7 @@ Estados: Recomendado si el puntaje es 85 o más; Admisible con observaciones ent
     ]
   },
   insightsHtml: canvasInsight("📊 Sin datos no hay matriz verificable", "Si el prompt no trae las calificaciones, Gemini las inventa y cada aprendiz obtiene un ganador distinto. Con los datos y la fórmula, todos deben llegar a 88,0, 82,0 y 59,5.") +
-    canvasInsight("📈 Fórmulas, no valores", "Pedir que el total sea una fórmula al exportar permite cambiar una calificación en Sheets y ver el nuevo resultado sin volver a Gemini."),
+    canvasInsight("📈 Operaciones a la vista", "Pedir la operación de cada total permite que cualquier integrante del comité recalcule el resultado sin salir del Canvas."),
   variationTip: "En el chat escribe: «El Proveedor B mejora su soporte en sitio a 9. Recalcula su puntaje y dime si cambia la recomendación»."
 };
 
@@ -550,7 +550,7 @@ ${FLOW.lanes.flatMap(l => l.nodes.map(n => ({ order: FLOW_ORDER.indexOf(n.id), l
 
 Conexiones:
 ${FLOW.edges.map(([a, b, label]) => `${a} → ${b}${label ? ` (respuesta «${label}»)` : ""}`).join("\n")}`,
-    instruction: "En Canvas, genera el diagrama en Mermaid con:",
+    instruction: "En Canvas, crea una página web que dibuje con Mermaid, cargado desde CDN, el diagrama con:",
     task: [
       "Sintaxis flowchart TD.",
       "Un subgrafo por responsable, con el nombre exacto de los datos.",
@@ -559,22 +559,22 @@ ${FLOW.edges.map(([a, b, label]) => `${a} → ${b}${label ? ` (respuesta «${lab
     ],
     constraints: [
       "No agregues pasos, responsables ni conexiones que no estén en los datos.",
-      "El código debe dibujarse sin errores en cualquier visor de Mermaid, por ejemplo mermaid.live."
+      "El diagrama debe dibujarse sin errores en la vista previa de Canvas."
     ],
-    format: "Solo el bloque de código Mermaid, seguido de una línea que explique cómo leer el diagrama."
+    format: "Un solo archivo HTML ejecutable con el código Mermaid y una línea que explique cómo leer el diagrama."
   },
   expected: [
-    { criterion: "El código se dibuja sin mensajes de error de sintaxis.", how: "Copia el código del Canvas y pégalo en mermaid.live; Canvas puede mostrarlo como texto sin dibujarlo." },
+    { criterion: "El código se dibuja sin mensajes de error de sintaxis.", how: "Abre la «Vista previa»; si aparece un error, pide a Gemini que lo corrija desde la consola." },
     { criterion: "Hay 3 carriles (subgrafos): Usuario solicitante, Mesa de ayuda Nivel 1 y Soporte especializado Nivel 2.", how: "Cuenta los recuadros con título en el diagrama." },
     { criterion: "Aparecen los 9 pasos (P1 a P8 y D1), cada uno en el carril de su responsable.", how: "Compara cada nodo con la tabla de datos." },
     { criterion: "D1 es un rombo con dos salidas: «Sí» hacia P3 y «No» hacia P4.", how: "Sigue las flechas que salen del rombo." },
     { criterion: "Hay 9 flechas en total y los dos caminos llegan a P7 y luego a P8.", how: "Cuenta las líneas «-->» en el código." },
     { criterion: "El código empieza con «flowchart TD».", how: "Pasa a la vista de código." }
   ],
-  aiResponse: "Generé el diagrama en Mermaid dentro del Canvas: tres carriles por responsable, nueve pasos y la decisión D1 con sus salidas «Sí» y «No». Pega el código en mermaid.live para comprobar que se dibuja sin errores.",
+  aiResponse: "Generé el diagrama en Mermaid dentro del Canvas: tres carriles por responsable, nueve pasos y la decisión D1 con sus salidas «Sí» y «No». Ábrelo en la «Vista previa» para comprobar que se dibuja sin errores.",
   quickActions: [
     { id: "act-flow-mermaid", label: "📝 Ver código Mermaid", modal: { title: "Código Mermaid de referencia", badge: "Mermaid", content: FLOW_MERMAID } },
-    { id: "act-flow-svg", label: "📥 Descargar SVG", toast: "📥 Pega el código en mermaid.live: desde allí puedes descargar el diagrama en SVG o PNG." }
+    { id: "act-flow-svg", label: "📥 Descargar SVG", toast: "📥 Pide en el chat: «Agrega un botón para descargar el diagrama en SVG» y pruébalo en la vista previa." }
   ],
   interactiveHtml: `
       <div class="flowchart-rendered-box">
@@ -1301,10 +1301,10 @@ Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón pr
 };
 
 // =====================================================================
-// 12. Gem Studio para Canvas: coescritor especializado
+// 12. Gems para Canvas: coescritor especializado
 // =====================================================================
 const GEM_STUDIO = {
-  name: "12. Gem Studio para Canvas",
+  name: "12. Gems para Canvas",
   docIcon: "🤖",
   docTitle: "Asistente_Coescritura_Canvas.gem",
   image: "assets/images/canvas/canvas_gem_studio.jpg",
@@ -1349,7 +1349,7 @@ Temperatura configurada: 0.2 (rigor pedagógico determinista).`,
   interactiveHtml: `
       <div class="gem-studio-interactive-demo" style="font-family:var(--font-sans);">
         <div style="border-bottom:2px solid var(--color-primary); padding-bottom:0.5rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
-          <h4 style="margin:0; color:var(--color-primary);">🤖 Consola de Calibración de Gem Studio</h4>
+          <h4 style="margin:0; color:var(--color-primary);">🤖 Consola de calibración del Gem</h4>
           <span class="badge badge-success">Temperatura: 0.2</span>
         </div>
         <div style="margin-bottom:0.75rem;">
@@ -1424,7 +1424,7 @@ function exportCanvasPossibilities(bank) {
       ]
     },
     "gem-studio": {
-      name: "Gem Studio para Canvas (Asistente especializado de coescritura en Canvas)",
+      name: "Gems para Canvas (Asistente especializado de coescritura en Canvas)",
       badge: "Gems",
       objective: "Configurar y calibrar asistentes personalizados (Gems) con directrices socráticas y guardrails institucionales para coescribir en Canvas.",
       variationPrompts: [

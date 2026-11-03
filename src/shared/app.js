@@ -77,13 +77,22 @@ function initNavigation() {
     });
   }
 
-  // Leer hash inicial si existe
-  if (window.location.hash) {
-    const hashTarget = window.location.hash.substring(1);
-    if (document.getElementById(hashTarget)) {
-      switchPage(hashTarget);
+  // Rutas: #<sección> o #gemini-canvas/<modo>/<a|b>. Atrás y adelante vuelven a aplicarlas.
+  function applyHashRoute() {
+    const modes = typeof CANVAS_POSSIBILITIES !== "undefined" ? Object.keys(CANVAS_POSSIBILITIES) : [];
+    const route = parseCanvasRoute(window.location.hash, modes);
+    if (!route.page) return;
+    const page = document.getElementById(route.page);
+    if (!page || !page.classList.contains("page-view")) return;
+    if (!page.classList.contains("active")) switchPage(route.page);
+    if (route.mode && typeof window.openCanvasRoute === "function") {
+      window.openCanvasRoute(route.mode, route.exercise);
     }
   }
+  window.applyHashRoute = applyHashRoute;
+  window.addEventListener("hashchange", applyHashRoute);
+  window.addEventListener("popstate", applyHashRoute);
+  applyHashRoute();
 }
 
 // 2. Conmutador de Rol (Aprendiz vs Instructor)
@@ -450,7 +459,51 @@ function initCanvasLab() {
       progressEl.textContent = done === checks.length ? `${done}/${checks.length} · ¡Resultado completo!` : `${done}/${checks.length}`;
     }
     if (barEl) barEl.style.width = `${checks.length ? (done / checks.length) * 100 : 0}%`;
-    card.classList.toggle("is-complete", checks.length > 0 && done === checks.length);
+    const complete = checks.length > 0 && done === checks.length;
+    card.classList.toggle("is-complete", complete);
+    const exId = card.getAttribute("data-exercise-id");
+    if (exId) {
+      const saved = readCanvasCompleted();
+      const had = saved.includes(exId);
+      if (complete && !had) writeCanvasCompleted(saved.concat(exId));
+      if (!complete && had) writeCanvasCompleted(saved.filter(x => x !== exId));
+      renderCanvasExerciseIndex();
+    }
+  }
+
+  // Preferencias por navegador: modo visitado y ejercicios completados. Sin almacenamiento, todo sigue funcionando.
+  function readCanvasStore(key, fallback) {
+    try {
+      const raw = window.localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (err) {
+      return fallback;
+    }
+  }
+  function writeCanvasStore(key, value) {
+    try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* sin almacenamiento */ }
+  }
+  function readCanvasCompleted() {
+    const list = readCanvasStore("canvasCompletedExercises", []);
+    return Array.isArray(list) ? list : [];
+  }
+  function writeCanvasCompleted(list) { writeCanvasStore("canvasCompletedExercises", list); }
+
+  const exerciseIndexListEl = document.getElementById("canvas-exercise-index-list");
+  const exerciseIndexCountEl = document.getElementById("canvas-exercise-index-count");
+  function renderCanvasExerciseIndex() {
+    if (!exerciseIndexListEl || typeof CANVAS_EXERCISES === "undefined") return;
+    const done = readCanvasCompleted();
+    const total = Object.values(CANVAS_EXERCISES).reduce((n, list) => n + list.length, 0);
+    if (exerciseIndexCountEl) exerciseIndexCountEl.textContent = `(${done.length}/${total} completados)`;
+    exerciseIndexListEl.innerHTML = Object.keys(CANVAS_POSSIBILITIES).map(mode => {
+      const items = (CANVAS_EXERCISES[mode] || []).map((ex, i) => {
+        const current = mode === currentExerciseMode && i === currentExerciseIndex;
+        const mark = done.includes(ex.id) ? '<span class="canvas-index-done" aria-label="completado">✓</span> ' : "";
+        return `<li><a href="${buildCanvasRoute(mode, i)}"${current ? ' aria-current="true"' : ""}>${mark}${i === 0 ? "A" : "B"}. ${escapeCanvasHtml(ex.title)}</a></li>`;
+      }).join("");
+      return `<li><span class="canvas-index-mode">${escapeCanvasHtml(CANVAS_POSSIBILITIES[mode].name)}</span><ul>${items}</ul></li>`;
+    }).join("");
   }
 
   function renderCanvasExercises(id) {
@@ -492,13 +545,36 @@ function initCanvasLab() {
         updateExerciseProgress(card);
       });
     }
+    if (readCanvasCompleted().includes(exercise.id)) {
+      card.querySelectorAll(".canvas-exercise-check").forEach(c => { c.checked = true; });
+    }
     updateExerciseProgress(card);
+    updateModePager();
   }
 
   exerciseSwitchBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       currentExerciseIndex = Number(btn.getAttribute("data-exercise-index"));
       renderCanvasExercises(currentExerciseMode);
+      history.replaceState(null, "", buildCanvasRoute(currentExerciseMode, currentExerciseIndex));
+    });
+  });
+
+  // --- Anterior y siguiente entre modos ---
+  const modeIds = Object.keys(CANVAS_POSSIBILITIES);
+  const pagerBtns = document.querySelectorAll(".canvas-mode-pager-btn");
+  function updateModePager() {
+    pagerBtns.forEach(btn => {
+      const target = neighborCanvasMode(modeIds, currentExerciseMode, Number(btn.getAttribute("data-direction")));
+      btn.disabled = !target;
+      const label = btn.querySelector("span");
+      if (label) label.textContent = target ? CANVAS_POSSIBILITIES[target].name : (btn.id === "canvas-mode-prev" ? "Inicio de los modos" : "Último modo");
+      btn.dataset.target = target || "";
+    });
+  }
+  pagerBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.target) openCanvasRoute(btn.dataset.target, 0);
     });
   });
 
@@ -862,16 +938,70 @@ function initCanvasLab() {
   });
 
   // Event listeners para pestañas de posibilidad
+  function selectMode(pId) {
+    tabs.forEach(t => {
+      const active = t.getAttribute("data-possibility") === pId;
+      t.classList.toggle("active", active);
+      t.setAttribute("aria-selected", String(active));
+      if (active) t.style.display = "inline-flex";
+    });
+    loadPossibility(pId);
+    writeCanvasStore("canvasLastMode", pId);
+  }
+
+  // Abre un modo y, si se indica, un ejercicio; lo usan las rutas profundas, el índice y el paginador.
+  function openCanvasRoute(mode, exercise) {
+    if (!CANVAS_POSSIBILITIES[mode]) return;
+    if (mode !== currentExerciseMode || !document.querySelector(`.canvas-tab.active[data-possibility="${mode}"]`)) selectMode(mode);
+    const hasExercise = exercise === 0 || exercise === 1;
+    if (hasExercise && exercise !== currentExerciseIndex) {
+      currentExerciseIndex = exercise;
+      renderCanvasExercises(mode);
+    }
+    const target = document.getElementById(hasExercise ? "canvas-exercises-module" : "canvas-simulator-module");
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "smooth", block: "start" }));
+    const route = buildCanvasRoute(mode, hasExercise ? exercise : undefined);
+    if (window.location.hash !== route) history.replaceState(null, "", route);
+  }
+  window.openCanvasRoute = openCanvasRoute;
+
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
-      tabs.forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
       const pId = tab.getAttribute("data-possibility");
       if (pId) {
-        loadPossibility(pId);
+        selectMode(pId);
+        history.replaceState(null, "", buildCanvasRoute(pId));
       }
     });
   });
+
+  // --- Resaltar en la navegación rápida la parte visible del módulo ---
+  const quickNavPills = document.querySelectorAll(".quick-nav-pill[data-canvas-section]");
+  if (quickNavPills.length && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        quickNavPills.forEach(pill => {
+          const on = pill.getAttribute("data-canvas-section") === entry.target.id;
+          pill.classList.toggle("active", on);
+          if (on) pill.setAttribute("aria-current", "location"); else pill.removeAttribute("aria-current");
+        });
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    quickNavPills.forEach(pill => {
+      const section = document.getElementById(pill.getAttribute("data-canvas-section"));
+      if (section) observer.observe(section);
+    });
+    // Los enlaces internos desplazan sin cambiar la ruta de la página.
+    quickNavPills.forEach(pill => {
+      pill.addEventListener("click", e => {
+        const section = document.getElementById(pill.getAttribute("data-canvas-section"));
+        if (!section) return;
+        e.preventDefault();
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
 
   // Event listeners para pestañas de modo de vista
   viewModeBtns.forEach(btn => {
@@ -892,8 +1022,11 @@ function initCanvasLab() {
     });
   });
 
-  // Cargar primera posibilidad por defecto
-  loadPossibility("doc-editorial");
+  // Cargar la posibilidad de la ruta, la última visitada o la primera
+  const lastMode = readCanvasStore("canvasLastMode", null);
+  selectMode(CANVAS_POSSIBILITIES[lastMode] ? lastMode : "doc-editorial");
+  renderCanvasExerciseIndex();
+  if (typeof window.applyHashRoute === "function") window.applyHashRoute();
 
   // Exponer a window para la Paleta de Comandos y pruebas
   window.openCanvasModal = openModal;
@@ -1175,6 +1308,31 @@ function initCommandPalette() {
       }
     }
   ];
+
+  // Cada modo y cada ejercicio de Gemini Canvas tiene su propia entrada con enlace directo.
+  if (typeof CANVAS_POSSIBILITIES !== "undefined" && typeof CANVAS_EXERCISES !== "undefined") {
+    Object.keys(CANVAS_POSSIBILITIES).forEach(mode => {
+      const name = CANVAS_POSSIBILITIES[mode].name;
+      commands.push({
+        category: "Modos de Gemini Canvas",
+        icon: CANVAS_POSSIBILITIES[mode].docIcon,
+        title: `Modo ${name}`,
+        desc: "Abre este modo en el simulador.",
+        keywords: ["modo", "canvas", mode, name.toLowerCase()],
+        action: () => { window.location.hash = buildCanvasRoute(mode); }
+      });
+      (CANVAS_EXERCISES[mode] || []).forEach((ex, i) => {
+        commands.push({
+          category: "Ejercicios de Gemini Canvas",
+          icon: "🧪",
+          title: `${i === 0 ? "A" : "B"}. ${ex.title}`,
+          desc: name,
+          keywords: ["ejercicio", "canvas", ex.id, ex.canvasFeature.toLowerCase()],
+          action: () => { window.location.hash = buildCanvasRoute(mode, i); }
+        });
+      });
+    });
+  }
 
   function openPalette() {
     lastActiveElement = document.activeElement;
