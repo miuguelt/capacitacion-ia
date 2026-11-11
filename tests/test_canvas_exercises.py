@@ -104,20 +104,80 @@ def test_guide_lists_all_exercises():
 def test_src_mirrors_are_exact():
     pairs = [
         ("index.html", "src/index.html"),
+        ("css/styles.css", "src/css/styles.css"),
+        ("css/styles.css", "src/styles/styles.css"),
+        ("devbrain-prose.css", "src/devbrain-prose.css"),
+        ("devbrain-prose.js", "src/devbrain-prose.js"),
+        ("js/app.js", "src/js/app.js"),
+        ("js/app.js", "src/shared/app.js"),
+        ("js/projects-hub.js", "src/js/projects-hub.js"),
+        ("js/projects-hub.js", "src/shared/projects-hub.js"),
+        ("js/canvas-exercises.js", "src/js/canvas-exercises.js"),
         ("js/canvas-exercises.js", "src/shared/canvas-exercises.js"),
+        ("js/canvas-possibilities.js", "src/js/canvas-possibilities.js"),
+        ("js/canvas-possibilities.js", "src/shared/canvas-possibilities.js"),
+        ("js/canvas-nav.js", "src/js/canvas-nav.js"),
+        ("js/canvas-nav.js", "src/shared/canvas-nav.js"),
+        ("js/canvas-coverage.js", "src/js/canvas-coverage.js"),
+        ("js/canvas-coverage.js", "src/shared/canvas-coverage.js"),
+        ("js/canvas-subnav.js", "src/js/canvas-subnav.js"),
+        ("js/canvas-subnav.js", "src/shared/canvas-subnav.js"),
+        ("js/canvas-column-dnd.js", "src/js/canvas-column-dnd.js"),
+        ("js/canvas-column-dnd.js", "src/shared/canvas-column-dnd.js"),
+        ("js/dia3-module.js", "src/js/dia3-module.js"),
+        ("js/dia3-module.js", "src/shared/dia3-module.js"),
     ]
+    assert len(pairs) == 23, "Deben existir exactamente 23 pares espejo"
     for root, mirror in pairs:
         assert (BASE_DIR / root).read_text(encoding="utf-8") == (BASE_DIR / mirror).read_text(encoding="utf-8"), f"{mirror} debe replicar {root}"
+
+
+def test_canvas_module_follows_crttl_prompt_canon():
+    canvas_files = [
+        "js/canvas-exercises.js",
+        "js/canvas-possibilities.js",
+        "js/canvas-coverage.js",
+        "js/canvas-subnav.js",
+        "js/canvas-column-dnd.js",
+        "materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md",
+        "materiales/gemini_canvas/banco_prompts_canvas.json",
+    ]
+    banned_frameworks = [
+        "R-C-I-R-F",
+        "".join(["G", "C", "S", "E"]),
+        "".join(["R", "C", "T", "F"]),
+        "R-C-T-R",
+        "".join(["C", "O", "-", "S", "T", "A", "R"]),
+    ]
+    for rel_path in canvas_files:
+        content = (BASE_DIR / rel_path).read_text(encoding="utf-8")
+        for banned in banned_frameworks:
+            assert banned not in content, f"{rel_path} no debe mencionar el marco no canónico «{banned}»"
+        assert "dossier" not in content.lower(), f"{rel_path} no debe usar el extranjerismo prohibido «dossier»"
 
 
 def test_canvas_navigation_markup():
     html = _html()
     assert html.index('src="js/canvas-nav.js"') < html.index('src="js/app.js"'), "las rutas cargan antes de app.js"
+    assert html.index('src="js/canvas-coverage.js"') < html.index('src="js/canvas-exercises.js"'), "cobertura carga antes de ejercicios"
+    assert html.index('src="js/canvas-subnav.js"') < html.index('src="js/app.js"'), "subnavegación carga antes de app.js"
+    assert html.index('src="js/canvas-column-dnd.js"') < html.index('src="js/app.js"'), "column-dnd carga antes de app.js"
     assert 'id="canvas-exercise-index-list"' in html, "índice de los 24 ejercicios"
-    assert 'id="canvas-mode-prev"' in html and 'id="canvas-mode-next"' in html, "paginador entre modos"
-    for section in ["canvas-fundamentals-anchor", "canvas-simulator-module", "canvas-exercises-module", "canvas-advanced-labs-anchor"]:
+    assert 'id="canvas-exercise-prev"' in html and 'id="canvas-exercise-next"' in html, "paginador entre ejercicios"
+    assert 'canvas-mode-prev' not in html, "el paginador ya no salta modos completos"
+    assert 'id="canvas-exercise-position"' in html, "posición «Ejercicio N de 24»"
+    assert 'id="canvas-continue-btn"' in html, "botón para retomar el primer ejercicio pendiente"
+    assert 'id="canvas-exercise-done-next"' in html, "aviso de ejercicio completado con salto al siguiente"
+    for section in ["canvas-fundamentals-anchor", "canvas-simulator-module", "canvas-exercises-module", "canvas-coverage-module", "canvas-advanced-labs-anchor"]:
         assert f'data-canvas-section="{section}"' in html
         assert f'id="{section}"' in html
+
+
+def test_app_uses_linear_exercise_sequence():
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    for fn in ["listExerciseSequence(", "neighborExercise(", "firstPendingExercise(", "exercisePosition(", "serializeChecks(", "parseChecks("]:
+        assert fn in app, f"app.js debe usar {fn}"
+    assert "canvasPartialChecks" in app, "las casillas a medias se guardan"
 
 
 def test_app_supports_deep_links_and_history():
@@ -132,3 +192,28 @@ def test_page_never_promises_tools_outside_canvas():
     html = _html()
     for banned in ["Google Sheets", "Hojas de Cálculo", "mermaid.live", "Gem Studio"]:
         assert banned not in html, f"index.html no debe mencionar «{banned}»"
+
+
+def test_projects_hub_markup_and_integration():
+    html = _html()
+    assert 'id="proyectos"' in html, "Sección #proyectos debe existir"
+    assert '<section class="page-view" id="proyectos">' in html, "Etiqueta section de proyectos debe existir"
+    assert 'href="#proyectos"' in html and 'data-target="proyectos"' in html, "Enlace en sidebar debe existir"
+    assert '<a href="#proyectos" class="quick-nav-pill">' in html, "Pill en subnavegación de Canvas Lab debe existir"
+    assert '<script src="js/projects-hub.js"></script>' in html, "Script projects-hub.js referenciado"
+    assert html.index('src="js/projects-hub.js"') < html.index('src="js/app.js"'), "projects-hub.js debe cargar antes de app.js"
+    for element_id in [
+        "projects-hub-view-container",
+        "hub-search-input",
+        "hub-filter-area",
+        "hub-filter-level",
+        "hub-filter-duration",
+        "hub-results-count",
+    ]:
+        assert f'id="{element_id}"' in html, f"Falta #{element_id} en index.html"
+    assert 'data-hub-view="kanban"' in html
+    assert 'data-hub-view="bento"' in html
+    assert 'data-hub-view="list"' in html
+    assert 'data-hub-reset-order' in html
+
+

@@ -1,5 +1,5 @@
-// Simulador de Gemini Canvas Lab: los 10 modos con prompts autosuficientes.
-// Cada modo lleva sus datos dentro del prompt (fórmula R-C-I-R-F), la lista de criterios que el aprendiz
+// Simulador de Gemini Canvas Lab: los 12 modos con prompts autosuficientes.
+// Cada modo lleva sus datos dentro del prompt (método CRTT+L), la lista de criterios que el aprendiz
 // comprueba en su propio Canvas y la especificación de la imagen de referencia. Las cifras se calculan
 // con las funciones de este archivo para que prompt, imagen, vista interactiva y lista de chequeo coincidan.
 
@@ -264,7 +264,8 @@ Garantía mínima: 36 meses en sitio, con atención de fallas críticas en máxi
       "No menciones marcas ni modelos comerciales.",
       "Escribe los valores en pesos colombianos con punto de miles, por ejemplo COP 1.000.000."
     ],
-    format: "Documento formal en español de Colombia, con títulos numerados del 1 al 4 y dos tablas."
+    format: "Documento formal en español de Colombia, con títulos numerados del 1 al 4 y dos tablas.",
+    tone: "Formal e imparcial, propio de un proceso de compra pública."
   },
   expected: [
     { criterion: "El documento tiene exactamente 4 secciones numeradas: resumen ejecutivo, especificaciones técnicas, presupuesto y cronograma, y aceptación y garantía.", how: "Revisa los títulos del Canvas de arriba abajo." },
@@ -365,7 +366,8 @@ Regla de estado:
       "Guarda los datos en un arreglo de JavaScript; no escribas los resultados a mano.",
       "Usa el color #2D5A4C para los elementos principales y conserva un contraste AA."
     ],
-    format: "Un único archivo HTML con comentarios breves en español."
+    format: "Un único archivo HTML con comentarios breves en español.",
+    tone: "Sencillo y amable: lo usarán instructores sin formación técnica."
   },
   expected: [
     { criterion: `La tarjeta de asistencia muestra ${LEARNERS_ATT} y la de evidencias ${LEARNERS_EVI} (también vale con punto decimal).`, how: "Abre la vista previa del Canvas." },
@@ -477,7 +479,8 @@ Estados: Recomendado si el puntaje es 85 o más; Admisible con observaciones ent
       "Usa solo las calificaciones y los pesos de los datos, y muestra la fórmula que aplicaste.",
       "Debajo de la tabla, escribe la operación que produce cada total para que se pueda recalcular."
     ],
-    format: "Tabla con encabezados claros, estados en verde, ámbar y rojo, y cifras con coma decimal."
+    format: "Tabla con encabezados claros, estados en verde, ámbar y rojo, y cifras con coma decimal.",
+    tone: "Objetivo y neutral, sin favorecer a ningún proveedor."
   },
   expected: [
     { criterion: "Los pesos suman 100 % (25 + 20 + 15 + 25 + 15).", how: "Suma la columna Peso." },
@@ -561,7 +564,8 @@ ${FLOW.edges.map(([a, b, label]) => `${a} → ${b}${label ? ` (respuesta «${lab
       "No agregues pasos, responsables ni conexiones que no estén en los datos.",
       "El diagrama debe dibujarse sin errores en la vista previa de Canvas."
     ],
-    format: "Un solo archivo HTML ejecutable con el código Mermaid y una línea que explique cómo leer el diagrama."
+    format: "Un solo archivo HTML ejecutable con el código Mermaid y una línea que explique cómo leer el diagrama.",
+    tone: "Claro y neutral, con etiquetas cortas en los nodos."
   },
   expected: [
     { criterion: "El código se dibuja sin mensajes de error de sintaxis.", how: "Abre la «Vista previa»; si aparece un error, pide a Gemini que lo corrija desde la consola." },
@@ -646,7 +650,8 @@ ${CONTRAST_PAIRS.map((p, i) => `${i + 1}. ${p.fg} sobre ${p.bg}`).join("\n")}`,
       "Calcula los contrastes en el código; no los escribas a mano.",
       "Usa solo los colores de la paleta y no uses librerías externas."
     ],
-    format: "Un único archivo HTML; la tabla de contraste con las columnas Par, Razón y Nivel."
+    format: "Un único archivo HTML; la tabla de contraste con las columnas Par, Razón y Nivel.",
+    tone: "Cercano y claro en los textos de la interfaz."
   },
   expected: [
     { criterion: `La tabla de contraste muestra ${CONTRAST_PAIRS.slice(0, 3).map(p => `${p.fg} sobre ${p.bg} = ${p.ratioText} (${p.level})`).join("; ")}.`, how: "Compáralo con «Validar contraste» de este simulador (también vale con punto decimal)." },
@@ -723,7 +728,8 @@ const INLINE_PROMPTING = {
       "Al final, confirma en el chat cuántos puntos tiene el acta."
     ],
     constraints: ["Conserva sin cambios las fechas, la hora y los números de ficha y de ambiente."],
-    format: "Documento con el título en negrita y los puntos numerados del 1 al 4."
+    format: "Documento con el título en negrita y los puntos numerados del 1 al 4.",
+    tone: "Formal y respetuoso, propio de un acta institucional."
   },
   followUps: [
     {
@@ -871,7 +877,8 @@ ${DELIVERIES.map(d => `    {"documento": "${d.documento}", "nombre": "${d.nombre
       "Conserva el comportamiento: si un documento se repite, cuenta su primer registro.",
       "Usa solo la biblioteca estándar de Python."
     ],
-    format: "La explicación primero y después dos bloques de código: la función y las pruebas."
+    format: "La explicación primero y después dos bloques de código: la función y las pruebas.",
+    tone: "Didáctico y preciso, con ejemplos numéricos."
   },
   expected: [
     { criterion: "La explicación señala la línea «if e[\"documento\"] in vistos»: buscar en una lista recorre sus elementos, y eso ocurre dentro del ciclo.", how: "Lee la explicación antes del código." },
@@ -972,7 +979,8 @@ Caso para calibrar: un aprendiz obtiene ${RUBRIC.sample.map((g, i) => `${canvasF
       "Cada descriptor debe nombrar algo observable en el repositorio o en el informe (archivos, pruebas, códigos HTTP), no adjetivos como «bueno» o «adecuado».",
       "Los pesos deben sumar 100 %."
     ],
-    format: "Documento con títulos numerados y la rúbrica en una sola tabla."
+    format: "Documento con títulos numerados y la rúbrica en una sola tabla.",
+    tone: "Formativo y respetuoso con el aprendiz evaluado."
   },
   expected: [
     { criterion: "La rúbrica tiene 3 criterios × 4 niveles = 12 descriptores.", how: "Cuenta las celdas de la tabla." },
@@ -1082,7 +1090,8 @@ ${[1, 2, 3, 4].map(id => SQL_DATA.attendance.filter(r => r.aprendiz_id === id).m
       "No uses subconsultas correlacionadas.",
       "Usa ROUND(…, 1) para el promedio y el porcentaje, y ordena por ficha y puesto."
     ],
-    format: "Un bloque SQL comentado y, debajo, la tabla de resultado esperada."
+    format: "Un bloque SQL comentado y, debajo, la tabla de resultado esperada.",
+    tone: "Didáctico, con comentarios breves en cada consulta."
   },
   expected: [
     { criterion: "La consulta usa WITH con dos CTE y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC).", how: "Lee el bloque SQL." },
@@ -1160,7 +1169,8 @@ Plazo de subsanación: 10 días hábiles desde la notificación.`,
       "Calcula la matriz antes de redactar la síntesis: los colores que mencione la síntesis deben coincidir con la matriz.",
       "Escribe los porcentajes como texto normal (94 %), sin notación matemática, y no pases de una página (unas 450 palabras)."
     ],
-    format: "Documento formal en español de Colombia, con la matriz en una tabla."
+    format: "Documento formal en español de Colombia, con la matriz en una tabla.",
+    tone: "Ejecutivo y objetivo, con cifras antes que opiniones."
   },
   expected: [
     { criterion: "El encabezado dice CT-2026-014, 30 de octubre de 2026, avance del 94 % y pagos: 80 % desembolsado y 20 % pendiente, con el signo % visible.", how: "Lee el encabezado; si ves «94» sin «%», Gemini usó notación matemática y debes pedirle que la quite." },
@@ -1213,18 +1223,15 @@ const MULTIMODAL_VISION = {
   docTitle: "Prototipo_Matricula_Boceto_a_Web.html",
   image: "assets/images/canvas/canvas_multimodal_sketch.jpg",
   promptParts: {
-    role: "desarrollador frontend con experiencia en visión artificial e interfaces accesibles",
-    context: "El equipo docente dibujó a mano en una libreta de apuntes el wireframe del formulario de matrícula de aprendices para la convocatoria 2026. Se requiere que Gemini analice la fotografía del boceto manuscrito y genere directamente en Canvas el artefacto web ejecutable y reactivo.",
-    data: `FOTOGRAFÍA ADJUNTA: Boceto a lápiz en libreta de apuntes (datos de práctica)
-Título del boceto: Formulario de Inscripción y Matrícula · Convocatoria 2026
-Campos dibujados a lápiz:
-1. Nombre Completo del Aprendiz: campo de texto obligatorio (mínimo 3 caracteres).
-2. Correo Institucional: campo de correo con anotación a mano: "Solo correos @soy.sena.edu.co o @sena.edu.co".
-3. Contraseña de Acceso: campo password con anotación: "Mínimo 8 caracteres, incluir números y símbolos".
-4. Indicador de seguridad: barra dibujada con tres segmentos (Débil, Media, Segura).
-5. Botón principal tipo píldora rotulado a mano: [Completar Registro Formativo].
-
-Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón primario y acentos, fondo suave (#F8FAF9), texto pizarra (#1E293B) y borde (#CBD5E1).`,
+    role: "desarrollador frontend de interfaces accesibles",
+    context: "El equipo dibujó a mano el formulario de matrícula de la convocatoria 2026. Adjunto la imagen del boceto para convertirlo en un prototipo que funcione.",
+    data: `IMAGEN ADJUNTA: boceto_formulario_matricula.png (boceto a lápiz en libreta de apuntes, material de práctica)
+Lee en la imagen:
+- El título y los tres campos con su asterisco de obligatorio.
+- Las anotaciones en azul debajo de cada campo: son las reglas de validación (el correo admite @soy.sena.edu.co o @sena.edu.co).
+- El indicador de seguridad de tres segmentos y el texto del botón.
+- Los colores anotados al margen.
+Si un trazo no se entiende, dímelo antes de suponer su contenido.`,
     instruction: "En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:",
     task: [
       "El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.",
@@ -1237,7 +1244,8 @@ Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón pr
       "Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.",
       "Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos."
     ],
-    format: "Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia."
+    format: "Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia.",
+    tone: "Cercano y claro en los textos del formulario."
   },
   expected: [
     { criterion: "El formulario tiene los 3 campos del boceto: Nombre Completo, Correo Institucional y Contraseña de Acceso.", how: "Abre la vista previa del Canvas y verifica los campos." },
@@ -1331,7 +1339,8 @@ Temperatura configurada: 0.2 (rigor pedagógico determinista).`,
       "No uses nombres de modelos comerciales ni enlaces externos no institucionales.",
       "Redacta en español de Colombia con lenguaje técnico accesible y riguroso."
     ],
-    format: "Documento técnico con títulos numerados, bloques de texto de sistema destacados y dos tablas comparativas."
+    format: "Documento técnico con títulos numerados, bloques de texto de sistema destacados y dos tablas comparativas.",
+    tone: "Técnico y claro, sin jerga innecesaria."
   },
   expected: [
     { criterion: "El documento contiene el System Prompt completo para configurar el Gem en la interfaz de Gemini Gems.", how: "Revisa la sección 1 del Canvas." },
@@ -1438,17 +1447,26 @@ function exportCanvasPossibilities(bank) {
     totalPossibilities: entries.length,
     totalExercises: entries.reduce((acc, [id]) => {
       const prev = previous.get(id);
-      const exCount = (prev && prev.exercises && prev.exercises.length) || (canvasKit.CANVAS_EXERCISES && canvasKit.CANVAS_EXERCISES[id] && canvasKit.CANVAS_EXERCISES[id].length) || 0;
+      const liveList = canvasKit.CANVAS_EXERCISES && canvasKit.CANVAS_EXERCISES[id];
+      const hasCustom = prev && Array.isArray(prev.exercises) && (prev.exercises.length === 0 || typeof prev.exercises[0] !== "object");
+      const exCount = hasCustom ? prev.exercises.length : ((liveList && liveList.length) || 0);
       return acc + exCount;
     }, 0),
     possibilities: entries.map(([id, p], i) => {
       const prev = previous.get(id) || defaultMeta[id] || {};
-      const exercises = prev.exercises || (canvasKit.CANVAS_EXERCISES && canvasKit.CANVAS_EXERCISES[id] ? canvasKit.CANVAS_EXERCISES[id].map(ex => ({
+      const liveList = canvasKit.CANVAS_EXERCISES && canvasKit.CANVAS_EXERCISES[id];
+      const hasCustom = Array.isArray(prev.exercises) && (prev.exercises.length === 0 || typeof prev.exercises[0] !== "object");
+      const exercises = hasCustom ? prev.exercises : (liveList ? liveList.map(ex => ({
         id: ex.id,
+        code: ex.code,
         title: ex.title,
         level: ex.level,
         duration: ex.duration,
         canvasFeature: ex.canvasFeature,
+        capabilities: ex.capabilities,
+        whyCanvas: ex.whyCanvas,
+        outsideCanvas: ex.outsideCanvas,
+        places: ex.places,
         goal: ex.goal,
         scenario: ex.scenario,
         promptParts: ex.promptParts,

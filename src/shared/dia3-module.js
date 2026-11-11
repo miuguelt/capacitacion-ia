@@ -556,7 +556,8 @@ const DIA3_EXERCISES = {
           "Usa únicamente los datos suministrados; no inventes modelos ni precios que no estén en la tabla.",
           "Muestra los porcentajes con un decimal en formato colombiano."
         ],
-        format: "Script funcional en Python con salida de reporte HTML autocontenido y resumen ejecutivo."
+        format: "Script funcional en Python con salida de reporte HTML autocontenido y resumen ejecutivo.",
+        tone: "Técnico y práctico, con recomendaciones accionables."
       },
       steps: [
         "Copia el prompt completo con el botón superior y ejecútalo en tu agente de código o en Gemini Canvas.",
@@ -602,7 +603,8 @@ const DIA3_EXERCISES = {
           "Prohibido sobrescribir o eliminar archivos originales.",
           "Usa únicamente los 8 archivos y tamaños de los datos."
         ],
-        format: "Código Python comentado y vista previa HTML con tabla de trazabilidad."
+        format: "Código Python comentado y vista previa HTML con tabla de trazabilidad.",
+        tone: "Técnico y claro, con comentarios breves en cada función."
       },
       steps: [
         "Pega el prompt en tu entorno agéntico o en Gemini Canvas y revisa la lógica de detección de colisiones.",
@@ -655,7 +657,8 @@ const DIA3_EXERCISES = {
           "Cero dependencias externas ni CDNs que fallen sin internet.",
           "Paleta Verde Salvia (#2D5A4C) sobre fondo claro (#F8FAF9) con contraste accesible."
         ],
-        format: "Aplicación web interactiva lista para ejecutar en la vista previa y separar en 3 archivos."
+        format: "Aplicación web interactiva lista para ejecutar en la vista previa y separar en 3 archivos.",
+        tone: "Didáctico y cercano en los textos de la interfaz."
       },
       steps: [
         "Copia el prompt y ejecútalo en Gemini Canvas o pídele a tu agente local que cree la carpeta con los 3 archivos.",
@@ -699,7 +702,8 @@ const DIA3_EXERCISES = {
           "Usa únicamente los 8 aprendices de los datos de práctica.",
           "Los cálculos deben hacerse dinámicamente en JavaScript a partir del arreglo de datos."
         ],
-        format: "Aplicación web interactiva con gráfica de barras comparativa, filtros y descarga CSV."
+        format: "Aplicación web interactiva con gráfica de barras comparativa, filtros y descarga CSV.",
+        tone: "Claro y objetivo, pensado para instructores."
       },
       steps: [
         "Abre también la demostración local en `materiales/dia3_agentes_web/plantilla_3_archivos/index.html` para conocer la línea base de los 3 archivos.",
@@ -749,7 +753,8 @@ const DIA3_EXERCISES = {
           "Nunca incluyas claves reales ni fallbacks con secretos en el código.",
           "Muestra las cifras exactas de tokens mensuales."
         ],
-        format: "Informe de auditoría con comparativa Antes vs. Después en bloques de código y tabla de presupuesto."
+        format: "Informe de auditoría con comparativa Antes vs. Después en bloques de código y tabla de presupuesto.",
+        tone: "Técnico y preventivo, sin alarmismo."
       },
       steps: [
         "Prueba primero el código defectuoso en el «Laboratorio Auditor de Seguridad de APIs» de esta misma página para observar el diagnóstico automático.",
@@ -797,7 +802,8 @@ const DIA3_EXERCISES = {
           "Fundamenta el análisis en la doctrina de autoría humana (DNDA / Ley 23 de 1982) y en las condiciones de las licencias MIT, Apache 2.0 y AGPL-3.0.",
           "No utilices el extranjerismo prohibido; usa siempre 'Portafolio de Evidencias'."
         ],
-        format: "Dictamen estructurado con matriz de cumplimiento, plan de remediación y plantilla de bitácora."
+        format: "Dictamen estructurado con matriz de cumplimiento, plan de remediación y plantilla de bitácora.",
+        tone: "Formal y objetivo, con cada hallazgo justificado."
       },
       steps: [
         "Consulta la guía rápida en `materiales/dia3_agentes_web/guia_propiedad_intelectual_y_apis.md` o el módulo estratégico de esta vista.",

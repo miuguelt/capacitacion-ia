@@ -10,6 +10,7 @@ const {
   formatCanvasStep,
   buildCanvasPromptHtml,
   buildCanvasExerciseHtml,
+  buildCanvasMaterialsHtml,
   countCanvasChecklist,
   CANVAS_CAPABILITIES,
   canvasCapabilityNames
@@ -59,12 +60,14 @@ test("cada ejercicio trae toda la información necesaria para resolverlo", () =>
   }
 });
 
-test("cada prompt sigue R-C-I-R-F, es conciso y trae los datos una sola vez", () => {
+test("cada prompt sigue CRTT+L, es conciso y trae los datos una sola vez", () => {
   for (const ex of allExercises()) {
     const p = ex.promptParts;
-    for (const field of ["role", "context", "data", "instruction", "format"]) {
+    for (const field of ["role", "context", "data", "instruction", "format", "tone"]) {
       assert.ok(typeof p[field] === "string" && p[field].trim(), `${ex.id}.promptParts.${field}`);
     }
+    assert.notEqual(p.tone, p.format, `${ex.id}: el tono no repite el formato de entrega`);
+    assert.ok(p.role.split(/\s+/).length <= 12, `${ex.id}: rol breve`);
     assert.ok(p.data.trim().length >= 150, `${ex.id}: los datos deben ser suficientes para resolverlo`);
     assert.match(p.instruction, CANVAS_INSTRUCTION, `${ex.id}: la instrucción pide el trabajo a Gemini dentro de Canvas`);
     assert.doesNotMatch(ex.prompt, /Abre un Canvas/, `${ex.id}: el prompt no da órdenes de interfaz que parezcan pasos del aprendiz`);
@@ -131,15 +134,15 @@ test("canvasCapabilityNames traduce ids y descarta los desconocidos", () => {
 test("composeCanvasPrompt ordena las partes y delimita los datos", () => {
   const text = composeCanvasPrompt({
     role: "analista", context: "Contexto breve.", data: "  a,b\n1,2  ",
-    instruction: "En Canvas, haz:", task: ["Uno", "Dos"], constraints: ["Sin inventar"], format: "Tabla."
+    instruction: "En Canvas, haz:", task: ["Uno", "Dos"], constraints: ["Sin inventar"], format: "Tabla.", tone: "Claro y directo."
   });
   assert.equal(text, [
-    "Actúa como analista.",
     "Contexto: Contexto breve.",
+    "Rol: Actúa como analista.",
     'Datos:\n"""\na,b\n1,2\n"""',
-    "Instrucción: En Canvas, haz:\n1. Uno\n2. Dos",
-    "Restricciones:\n- Sin inventar",
-    "Formato: Tabla."
+    "Tarea: En Canvas, haz:\n1. Uno\n2. Dos\nEntrega: Tabla.",
+    "Tono: Claro y directo.",
+    "Límites:\n- Sin inventar"
   ].join("\n\n"));
 });
 
@@ -149,12 +152,16 @@ test("formatCanvasStep resalta lo que se escribe y escapa el resto", () => {
   assert.equal(formatCanvasStep("Abre «Exportar» y elige «Documentos de Google»."), "Abre «Exportar» y elige «Documentos de Google».", "los menús no se resaltan");
 });
 
-test("buildCanvasPromptHtml muestra las seis partes con etiqueta", () => {
+test("buildCanvasPromptHtml muestra las seis partes con etiqueta CRTT+L", () => {
   const html = buildCanvasPromptHtml(CANVAS_EXERCISES["doc-editorial"][0].promptParts);
-  for (const label of ["Rol", "Contexto", "Datos", "Instrucción", "Restricciones", "Formato"]) {
+  for (const label of ["Contexto", "Rol", "Datos", "Tarea", "Tono", "Límites"]) {
     assert.ok(html.includes(`<span class="canvas-prompt-label">${label}</span>`), label);
   }
   assert.equal((html.match(/<pre/g) || []).length, 1, "solo los datos van en bloque preformateado");
+  const parts = CANVAS_EXERCISES["doc-editorial"][0].promptParts;
+  assert.ok(html.includes(escapeCanvasHtml(parts.tone)), "la fila Tono muestra el tono real");
+  const order = ["Contexto", "Rol", "Datos", "Tarea", "Tono", "Límites"].map(l => html.indexOf(`>${l}</span>`));
+  assert.deepEqual(order, [...order].sort((a, b) => a - b), "mismo orden que el prompt copiado");
 });
 
 test("escapeCanvasHtml neutraliza caracteres especiales", () => {
@@ -174,23 +181,26 @@ test("buildCanvasExerciseHtml arma una tarjeta completa y segura", () => {
   assert.ok(html.includes('data-copy="prompt"'));
   assert.ok(html.includes("data-exercise-reset"));
   assert.ok(html.includes("Las órdenes del prompt van dirigidas a Gemini"), "la tarjeta aclara a quién se dirige el prompt");
+  assert.ok(html.includes("CRTT+L (Contexto, Rol, Tarea, Tono y Límites)"), "la tarjeta nombra el canon CRTT+L");
   assert.ok(html.includes(ex.previewSvg), "la vista previa SVG se inserta tal cual");
   assert.ok(html.includes('class="canvas-exercise-followup"'), "los pasos resaltan lo que se escribe");
   assert.equal(countCanvasChecklist(html), ex.expected.length);
   assert.equal((html.match(/class="canvas-exercise-step"/g) || []).length, ex.steps.length);
-  assert.ok(html.includes("Ejercicio A"));
+  assert.ok(html.includes("Parte A"));
   assert.ok(html.includes("¿Por qué en Canvas?"), "la tarjeta explica qué aporta Canvas");
   assert.ok(html.includes(escapeCanvasHtml(ex.whyCanvas)));
   assert.equal((html.match(/class="canvas-capability-chip"/g) || []).length, ex.capabilities.length);
   assert.ok(html.includes(`id="ejercicio-${ex.id}"`), "la tarjeta tiene ancla para enlaces directos");
-  assert.ok(buildCanvasExerciseHtml(CANVAS_EXERCISES["sql-pipeline"][1], 1).includes("Ejercicio B"));
+  assert.ok(buildCanvasExerciseHtml(CANVAS_EXERCISES["sql-pipeline"][1], 1).includes("Parte B"));
 });
 
 test("buildCanvasExerciseHtml omite la explicación de Canvas cuando el ejercicio no la trae", () => {
   const base = CANVAS_EXERCISES["code-prototyping"][0];
-  const html = buildCanvasExerciseHtml({ ...base, whyCanvas: undefined, capabilities: undefined }, 0);
+  const html = buildCanvasExerciseHtml({ ...base, whyCanvas: undefined, capabilities: undefined, places: undefined }, 0);
   assert.ok(!html.includes("¿Por qué en Canvas?"));
   assert.ok(!html.includes("canvas-capability-chip"));
+  const noOutside = buildCanvasExerciseHtml({ ...base, outsideCanvas: undefined }, 0);
+  assert.ok(!noOutside.includes("canvas-outside-callout"));
   const unknown = buildCanvasExerciseHtml({ ...base, capabilities: ["code-preview", "inexistente"] }, 0);
   assert.equal((unknown.match(/class="canvas-capability-chip"/g) || []).length, 1, "las capacidades desconocidas se descartan");
 });
@@ -203,4 +213,129 @@ test("buildCanvasExerciseHtml devuelve cadena vacía sin ejercicio", () => {
 test("countCanvasChecklist cuenta solo casillas de verificación", () => {
   assert.equal(countCanvasChecklist(""), 0);
   assert.equal(countCanvasChecklist('<input type="checkbox" class="canvas-exercise-check"><input type="text">'), 1);
+});
+
+test("buildCanvasMaterialsHtml enlaza archivos descargables y se omite sin material", () => {
+  assert.equal(buildCanvasMaterialsHtml(undefined), "");
+  assert.equal(buildCanvasMaterialsHtml([]), "");
+  const html = buildCanvasMaterialsHtml([{ href: "materiales/x/a<b>.png", label: "Foto" }]);
+  assert.match(html, /download="a&lt;b&gt;\.png"/);
+  assert.match(html, /📥 Foto/);
+});
+
+test("los ejercicios con archivo adjunto traen material real y lo muestran en la tarjeta", () => {
+  const fs = require("node:fs");
+  const withFiles = allExercises().filter(ex => ex.materials);
+  assert.deepEqual(withFiles.map(ex => ex.code).sort(), ["10A", "11A", "11B"]);
+  for (const ex of withFiles) {
+    for (const m of ex.materials) {
+      assert.ok(fs.existsSync(path.join(__dirname, "..", m.href)), `${ex.id}: falta ${m.href}`);
+      assert.ok(ex.steps.some(s => s.includes(m.href)), `${ex.id}: un paso indica adjuntar ${m.href}`);
+    }
+    assert.match(buildCanvasExerciseHtml(ex, 0), /canvas-exercise-materials/);
+  }
+  for (const code of ["11A", "11B"]) {
+    const ex = withFiles.find(x => x.code === code);
+    assert.doesNotMatch(ex.promptParts.data, /FOTOGRAFÍA ADJUNTA/, `${code}: los datos no fingen una foto que el aprendiz no tiene`);
+  }
+});
+
+test("los días de la semana del correo 6A coinciden con el calendario", () => {
+  const ex = allExercises().find(x => x.code === "6A");
+  const text = JSON.stringify(ex);
+  const days = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  const months = { noviembre: 10 };
+  const found = [...text.matchAll(/(lunes|martes|miércoles|jueves|viernes|sábado|domingo) (\d{1,2}) de (noviembre)/g)];
+  assert.ok(found.length >= 2);
+  for (const [, day, num, month] of found) {
+    assert.equal(days[new Date(2026, months[month], Number(num)).getDay()], day, `${num} de ${month} de 2026`);
+  }
+});
+
+test("cada ejercicio con Gem verifica la prueba del Gem en sus criterios", () => {
+  for (const ex of allExercises().filter(x => x.capabilities.includes("gems"))) {
+    assert.ok(ex.expected.some(c => /el Gem/.test(c)), `${ex.id}: un criterio comprueba el comportamiento del Gem`);
+  }
+});
+
+// --- Trabajo completo dentro de Gemini Canvas ---
+const { canvasCopyText, buildCanvasReferenceHtml, GEMINI_APP_URL } = require(path.join(__dirname, "..", "js", "canvas-exercises.js"));
+
+test("cada tarjeta enlaza a Gemini en una pestaña nueva junto al botón de copiar", () => {
+  assert.equal(GEMINI_APP_URL, "https://gemini.google.com/app");
+  for (const ex of allExercises()) {
+    const html = buildCanvasExerciseHtml(ex, 0);
+    assert.match(html, /<a class="canvas-exercise-open" href="https:\/\/gemini\.google\.com\/app" target="_blank" rel="noopener noreferrer">/, `${ex.id}: enlace a Gemini`);
+    assert.ok(html.indexOf('data-copy="prompt"') < html.indexOf("canvas-exercise-open"), `${ex.id}: el botón de copiar va primero`);
+    assert.match(html, /Herramientas → Canvas/, `${ex.id}: indica cómo activar Canvas`);
+  }
+});
+
+test("canvasCopyText entrega el prompt, el código de referencia o vacío", () => {
+  const ex = CANVAS_EXERCISES["flowchart-diagram"][0];
+  assert.equal(canvasCopyText(ex, "prompt"), ex.prompt);
+  assert.equal(canvasCopyText(ex, "reference"), ex.reference.code);
+  assert.equal(canvasCopyText(CANVAS_EXERCISES["doc-editorial"][0], "reference"), "");
+  assert.equal(canvasCopyText(ex, "otro"), "");
+  assert.equal(canvasCopyText(null, "prompt"), "");
+  assert.equal(canvasCopyText({}, "prompt"), "", "sin prompt devuelve vacío");
+  assert.equal(canvasCopyText({ reference: {} }, "reference"), "", "referencia sin código");
+});
+
+test("buildCanvasReferenceHtml muestra el código para pegar en Canvas o nada si falta", () => {
+  assert.equal(buildCanvasReferenceHtml(undefined), "");
+  assert.equal(buildCanvasReferenceHtml({ label: "x", intro: "y", code: "" }), "");
+  const html = buildCanvasReferenceHtml({ label: "Diagrama", intro: "Pega <esto>", code: "flowchart LR\n A-->B" });
+  assert.match(html, /data-copy="reference"/);
+  assert.match(html, /Pega &lt;esto&gt;/);
+  assert.match(html, /A--&gt;B/);
+});
+
+test("4A y 4B se resuelven por completo en Canvas y traen código Mermaid de referencia", () => {
+  const [a, b] = CANVAS_EXERCISES["flowchart-diagram"];
+  for (const ex of [a, b]) {
+    assert.ok(ex.places.every(p => p === "canvas" || p === "portal"), `${ex.id}: sin pasos fuera de Canvas`);
+    assert.ok(ex.reference && ex.reference.code.length > 100, `${ex.id}: referencia`);
+    const html = buildCanvasExerciseHtml(ex, 0);
+    assert.equal((html.match(/data-copy=/g) || []).length, 2, `${ex.id}: copiar prompt y referencia`);
+    assert.doesNotMatch(ex.steps.join(" "), /descargar el diagrama en SVG|tamaño carta/);
+  }
+  assert.match(a.prompt, /flowchart LR/);
+  assert.match(a.prompt, /subgraph/);
+  assert.match(a.reference.code, /^flowchart LR/);
+  assert.equal((a.reference.code.match(/^\s*subgraph /gm) || []).length, 4, "un carril por actor");
+  assert.equal((a.reference.code.match(/\{[^}]+\}/g) || []).length, 4, "cuatro decisiones");
+  assert.match(a.reference.code, /Aprendiz matriculado/);
+  assert.match(a.expected.join(" "), /cuatro decisiones/);
+  const tiempos = IN_TIEMPOS(a.promptParts.data);
+  assert.equal(tiempos, 8);
+  assert.ok(a.expected.some(c => c.includes(`${tiempos} días`)));
+  assert.match(b.reference.code, /sequenceDiagram/);
+  assert.match(b.reference.code, /gantt/);
+  assert.match(b.reference.code, /milestone, \w+, 2026-11-27/);
+  assert.match(b.prompt, /alt/);
+});
+
+function IN_TIEMPOS(data) {
+  const line = data.split("\n").find(l => l.startsWith("Tiempos promedio"));
+  return [...line.matchAll(/(\d+) días?/g)].reduce((acc, m) => acc + Number(m[1]), 0);
+}
+
+test("7A y 9A ejecutan su código dentro de la vista previa de Canvas", () => {
+  const a7 = allExercises().find(x => x.code === "7A");
+  const a9 = allExercises().find(x => x.code === "9A");
+  assert.ok(!a7.places.includes("external"), "7A sin Colab obligatorio");
+  assert.match(a7.steps.join(" "), /Pyodide/);
+  assert.match(a9.steps.join(" "), /prueba en JavaScript/);
+  assert.ok(!a9.expected.some(c => /Colab/.test(c)), "9A se verifica sin Colab");
+  assert.match(a9.steps.find(s => /Colab/.test(s)), /^\(Opcional\)/);
+});
+
+test("las exportaciones a Documentos de Google son opcionales y no bloquean la verificación", () => {
+  for (const ex of allExercises()) {
+    ex.steps.forEach((s, i) => {
+      if (ex.places[i] === "external") assert.match(s, /^\(Opcional\)/, `${ex.id} paso ${i + 1}`);
+    });
+    assert.ok(!ex.expected.some(c => /quedó (guardad[oa] )?en Documentos de Google|Existe una copia .* Documentos de Google/.test(c)), `${ex.id}: criterio verificable en Canvas`);
+  }
 });

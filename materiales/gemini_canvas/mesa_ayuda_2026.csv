@@ -1,0 +1,13 @@
+# Datos de práctica preparados para aprender (no contienen registros reales)
+Seccion,Mes_o_Categoria,Abiertos_o_Casos,Resueltos,Tiempo_promedio_horas,Satisfaccion_1a5,Detalle
+Mensual,May,120,110,18,4.1,Operación base
+Mensual,Jun,135,128,16,4.2,Operación base
+Mensual,Jul,160,140,22,3.8,Inicio de trimestre con 300 aprendices nuevos y caída del servidor de autenticación (2 días)
+Mensual,Ago,150,149,14,4.4,Se publicó un portal de autoservicio para restablecer contraseñas
+Mensual,Sep,142,140,12,4.5,Se contrató un segundo técnico de soporte
+Mensual,Oct,128,127,10,4.6,Cierre del período evaluado
+Categoria_Octubre,Acceso y contraseñas,45,,,,Principal motivo en octubre (35.2%)
+Categoria_Octubre,Red y wifi,30,,,,Segundo motivo en octubre
+Categoria_Octubre,Equipos,25,,,,Tercer motivo en octubre
+Categoria_Octubre,Software,20,,,,Cuarto motivo en octubre
+Categoria_Octubre,Otros,8,,,,Casos menores

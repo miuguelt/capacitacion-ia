@@ -13,6 +13,11 @@ for (const p of bank.possibilities) {
   if (CANVAS_EXERCISES[p.id]) {
     p.exercises = CANVAS_EXERCISES[p.id].map(ex => ({
       id: ex.id,
+      code: ex.code,
+      capabilities: ex.capabilities,
+      whyCanvas: ex.whyCanvas,
+      outsideCanvas: ex.outsideCanvas,
+      places: ex.places,
       title: ex.title,
       level: ex.level,
       duration: ex.duration,

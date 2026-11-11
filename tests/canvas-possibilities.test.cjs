@@ -44,7 +44,7 @@ test("los 12 modos existen en el orden del simulador", () => {
   assert.deepEqual(Object.keys(CANVAS_POSSIBILITIES), MODES);
 });
 
-test("cada prompt sigue R-C-I-R-F, trae sus datos y se compone con composeCanvasPrompt", () => {
+test("cada prompt sigue CRTT+L, trae sus datos y se compone con composeCanvasPrompt", () => {
   for (const [id, p] of all()) {
     const parts = p.promptParts;
     for (const field of ["role", "context", "data", "instruction", "format"]) {
@@ -188,7 +188,9 @@ test("dictamen: el semáforo aplica la regla impacto × probabilidad", () => {
 test("visión multimodal: boceto a formulario web con validaciones institucionales", () => {
   const p = CANVAS_POSSIBILITIES["multimodal-vision"];
   const t = textOf(p);
-  assert.match(p.promptParts.data, /Boceto a lápiz en libreta de apuntes/);
+  assert.match(p.promptParts.data, /boceto a lápiz en libreta de apuntes/);
+  assert.match(p.promptParts.data, /boceto_formulario_matricula\.png/);
+  assert.doesNotMatch(p.promptParts.data, /FOTOGRAFÍA ADJUNTA/);
   assert.match(p.promptParts.data, /@soy\.sena\.edu\.co/);
   assert.match(t, /Prototipo_Matricula_Boceto_a_Web\.html/);
   assert.match(t, /#2D5A4C/);

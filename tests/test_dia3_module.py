@@ -121,9 +121,9 @@ def test_dia3_examples_and_exercises_structure():
         for ex in exercises[block]:
             assert "Actúa como" in ex["prompt"]
             assert "Contexto:" in ex["prompt"]
-            assert "Instrucción:" in ex["prompt"]
-            assert "Restricciones:" in ex["prompt"]
-            assert "Formato:" in ex["prompt"]
+            assert "Tarea:" in ex["prompt"] and "Tono:" in ex["prompt"] and "Tono: undefined" not in ex["prompt"]
+            assert "Límites:" in ex["prompt"]
+            assert "Entrega:" in ex["prompt"]
             assert '"""' in ex["prompt"]
             assert "<svg" in ex["previewSvg"]
             assert len(ex["expected"]) >= 4

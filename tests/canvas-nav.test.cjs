@@ -3,7 +3,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const path = require("node:path");
 
-const { parseCanvasRoute, buildCanvasRoute, neighborCanvasMode } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
+const { parseCanvasRoute, buildCanvasRoute, neighborCanvasMode, listExerciseSequence, neighborExercise, firstPendingExercise, exercisePosition, serializeChecks, parseChecks } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
 
 const MODES = ["doc-editorial", "code-prototyping", "data-matrix"];
 
@@ -42,4 +42,48 @@ test("neighborCanvasMode da el anterior y el siguiente sin salirse de la lista",
   assert.equal(neighborCanvasMode(MODES, "doc-editorial", -1), null);
   assert.equal(neighborCanvasMode(MODES, "data-matrix", 1), null);
   assert.equal(neighborCanvasMode(MODES, "desconocido", 1), null);
+});
+
+const BANK = {
+  "doc-editorial": [{ id: "d-a" }, { id: "d-b" }],
+  "code-prototyping": [{ id: "c-a" }, { id: "c-b" }],
+  "data-matrix": [{ id: "m-a" }]
+};
+
+test("listExerciseSequence ordena los ejercicios por modo y variante", () => {
+  const seq = listExerciseSequence(MODES, BANK);
+  assert.equal(seq.length, 5);
+  assert.deepEqual(seq[0], { mode: "doc-editorial", exercise: 0, id: "d-a" });
+  assert.deepEqual(seq[2], { mode: "code-prototyping", exercise: 0, id: "c-a" });
+  assert.deepEqual(listExerciseSequence(["sin-datos"], BANK), [], "modos sin ejercicios no aportan pasos");
+});
+
+test("neighborExercise cruza de la variante B al siguiente modo y se detiene en los extremos", () => {
+  const seq = listExerciseSequence(MODES, BANK);
+  assert.deepEqual(neighborExercise(seq, "doc-editorial", 1, 1), seq[2]);
+  assert.deepEqual(neighborExercise(seq, "code-prototyping", 0, -1), seq[1]);
+  assert.equal(neighborExercise(seq, "doc-editorial", 0, -1), null);
+  assert.equal(neighborExercise(seq, "data-matrix", 0, 1), null);
+  assert.equal(neighborExercise(seq, "otro", 0, 1), null);
+});
+
+test("firstPendingExercise devuelve el primero sin completar o null si todo está hecho", () => {
+  const seq = listExerciseSequence(MODES, BANK);
+  assert.deepEqual(firstPendingExercise(seq, []), seq[0]);
+  assert.deepEqual(firstPendingExercise(seq, ["d-a", "d-b"]), seq[2]);
+  assert.equal(firstPendingExercise(seq, ["d-a", "d-b", "c-a", "c-b", "m-a"]), null);
+  assert.deepEqual(firstPendingExercise(seq, undefined), seq[0], "sin lista guardada empieza por el primero");
+});
+
+test("exercisePosition indica número y total, o null si no existe", () => {
+  const seq = listExerciseSequence(MODES, BANK);
+  assert.deepEqual(exercisePosition(seq, "code-prototyping", 1), { number: 4, total: 5 });
+  assert.equal(exercisePosition(seq, "otro", 0), null);
+});
+
+test("serializeChecks y parseChecks conservan casillas marcadas a medias", () => {
+  assert.deepEqual(serializeChecks([true, false, true]), [0, 2]);
+  assert.deepEqual(parseChecks([0, 2], 4), [true, false, true, false]);
+  assert.deepEqual(parseChecks([9, -1, "x"], 2), [false, false], "ignora índices inválidos");
+  assert.deepEqual(parseChecks(null, 2), [false, false]);
 });

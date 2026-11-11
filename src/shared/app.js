@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initGemStudio();
   initDia3Module();
   initExpectedResultsToggles();
+  const proyectosEl = document.getElementById("proyectos");
+  if (proyectosEl && typeof initProjectsHub === "function") {
+    window.projectsHubInstance = initProjectsHub(proyectosEl);
+  }
   initCommandPalette();
 });
 
@@ -76,6 +80,16 @@ function initNavigation() {
       sidebar.classList.toggle("open");
     });
   }
+
+  // Soporte de navegación directa para enlaces internos al Hub de Proyectos
+  document.addEventListener("click", e => {
+    const hubLink = e.target.closest('a[href="#proyectos"]');
+    if (hubLink && !hubLink.classList.contains("nav-link")) {
+      e.preventDefault();
+      switchPage("proyectos");
+      window.location.hash = "proyectos";
+    }
+  });
 
   // Rutas: #<sección> o #gemini-canvas/<modo>/<a|b>. Atrás y adelante vuelven a aplicarlas.
   function applyHashRoute() {
@@ -463,12 +477,18 @@ function initCanvasLab() {
     card.classList.toggle("is-complete", complete);
     const exId = card.getAttribute("data-exercise-id");
     if (exId) {
+      const partial = readCanvasStore("canvasPartialChecks", {});
+      const store = partial && typeof partial === "object" ? partial : {};
+      store[exId] = serializeChecks(Array.from(checks).map(c => c.checked));
+      writeCanvasStore("canvasPartialChecks", store);
       const saved = readCanvasCompleted();
       const had = saved.includes(exId);
       if (complete && !had) writeCanvasCompleted(saved.concat(exId));
       if (!complete && had) writeCanvasCompleted(saved.filter(x => x !== exId));
       renderCanvasExerciseIndex();
+      updateExercisePosition();
     }
+    if (exerciseDoneEl) exerciseDoneEl.hidden = !complete || !exerciseNextStep();
   }
 
   // Preferencias por navegador: modo visitado y ejercicios completados. Sin almacenamiento, todo sigue funcionando.
@@ -487,13 +507,23 @@ function initCanvasLab() {
     const list = readCanvasStore("canvasCompletedExercises", []);
     return Array.isArray(list) ? list : [];
   }
-  function writeCanvasCompleted(list) { writeCanvasStore("canvasCompletedExercises", list); }
+  function writeCanvasCompleted(list) {
+    writeCanvasStore("canvasCompletedExercises", list);
+    writeCanvasStore("canvas_exercises_completed_v1", list);
+    if (typeof window.refreshCanvasSubnavProgress === "function") {
+      window.refreshCanvasSubnavProgress();
+    }
+  }
 
   const exerciseIndexListEl = document.getElementById("canvas-exercise-index-list");
   const exerciseIndexCountEl = document.getElementById("canvas-exercise-index-count");
   function renderCanvasExerciseIndex() {
     if (!exerciseIndexListEl || typeof CANVAS_EXERCISES === "undefined") return;
     const done = readCanvasCompleted();
+    writeCanvasStore("canvas_exercises_completed_v1", done);
+    if (typeof window.refreshCanvasSubnavProgress === "function") {
+      window.refreshCanvasSubnavProgress();
+    }
     const total = Object.values(CANVAS_EXERCISES).reduce((n, list) => n + list.length, 0);
     if (exerciseIndexCountEl) exerciseIndexCountEl.textContent = `(${done.length}/${total} completados)`;
     exerciseIndexListEl.innerHTML = Object.keys(CANVAS_POSSIBILITIES).map(mode => {
@@ -527,14 +557,16 @@ function initCanvasLab() {
 
     const card = exercisesContentEl.querySelector(".canvas-exercise-card");
     if (!card) return;
-    const copyBtn = card.querySelector(".canvas-exercise-copy");
-    if (copyBtn) {
-      copyBtn.addEventListener("click", () => {
-        navigator.clipboard.writeText(exercise.prompt).then(() => {
-          showCanvasToast("📋 Prompt copiado: pégalo en Gemini con Canvas activo.");
+    card.querySelectorAll("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const kind = btn.getAttribute("data-copy");
+        navigator.clipboard.writeText(canvasCopyText(exercise, kind)).then(() => {
+          showCanvasToast(kind === "reference"
+            ? "📋 Código copiado: pégalo en el chat del lienzo para verlo en la vista previa."
+            : "📋 Prompt copiado: pégalo en Gemini con Canvas activo.");
         });
       });
-    }
+    });
     card.querySelectorAll(".canvas-exercise-check").forEach(check => {
       check.addEventListener("change", () => updateExerciseProgress(card));
     });
@@ -545,11 +577,14 @@ function initCanvasLab() {
         updateExerciseProgress(card);
       });
     }
-    if (readCanvasCompleted().includes(exercise.id)) {
-      card.querySelectorAll(".canvas-exercise-check").forEach(c => { c.checked = true; });
-    }
+    const cardChecks = Array.from(card.querySelectorAll(".canvas-exercise-check"));
+    const partialStore = readCanvasStore("canvasPartialChecks", {}) || {};
+    const restored = readCanvasCompleted().includes(exercise.id)
+      ? cardChecks.map(() => true)
+      : parseChecks(partialStore[exercise.id], cardChecks.length);
+    cardChecks.forEach((c, i) => { c.checked = restored[i]; });
     updateExerciseProgress(card);
-    updateModePager();
+    updateExercisePager();
   }
 
   exerciseSwitchBtns.forEach(btn => {
@@ -560,23 +595,59 @@ function initCanvasLab() {
     });
   });
 
-  // --- Anterior y siguiente entre modos ---
-  const modeIds = Object.keys(CANVAS_POSSIBILITIES);
-  const pagerBtns = document.querySelectorAll(".canvas-mode-pager-btn");
-  function updateModePager() {
+  // --- Recorrido lineal de los 24 ejercicios: anterior, siguiente, posición y retomar ---
+  const exerciseSequence = listExerciseSequence(Object.keys(CANVAS_POSSIBILITIES), CANVAS_EXERCISES);
+  const pagerBtns = document.querySelectorAll("#canvas-exercise-prev, #canvas-exercise-next");
+  const exerciseDoneEl = document.getElementById("canvas-exercise-done");
+  const exerciseDoneNextBtn = document.getElementById("canvas-exercise-done-next");
+  const positionEl = document.getElementById("canvas-exercise-position");
+  const continueBtn = document.getElementById("canvas-continue-btn");
+
+  function stepLabel(step) {
+    const pos = exercisePosition(exerciseSequence, step.mode, step.exercise);
+    return `${pos.number}. ${CANVAS_EXERCISES[step.mode][step.exercise].title}`;
+  }
+  function exerciseNextStep() {
+    return neighborExercise(exerciseSequence, currentExerciseMode, currentExerciseIndex, 1);
+  }
+  function updateExercisePosition() {
+    if (!positionEl) return;
+    const pos = exercisePosition(exerciseSequence, currentExerciseMode, currentExerciseIndex);
+    if (!pos) return;
+    const done = readCanvasCompleted().length;
+    positionEl.querySelector("[data-position-label]").textContent = `Ejercicio ${pos.number} de ${pos.total} · ${CANVAS_POSSIBILITIES[currentExerciseMode].name} · Parte ${currentExerciseIndex === 0 ? "A" : "B"}`;
+    positionEl.querySelector("[data-position-bar]").style.width = `${(done / pos.total) * 100}%`;
+    positionEl.querySelector("[data-position-done]").textContent = `${done} de ${pos.total} completados`;
+    if (continueBtn) {
+      const pending = firstPendingExercise(exerciseSequence, readCanvasCompleted());
+      continueBtn.hidden = !pending;
+      continueBtn.title = pending ? `Abre: ${stepLabel(pending)}` : "";
+    }
+  }
+  function updateExercisePager() {
     pagerBtns.forEach(btn => {
-      const target = neighborCanvasMode(modeIds, currentExerciseMode, Number(btn.getAttribute("data-direction")));
+      const target = neighborExercise(exerciseSequence, currentExerciseMode, currentExerciseIndex, Number(btn.getAttribute("data-direction")));
       btn.disabled = !target;
       const label = btn.querySelector("span");
-      if (label) label.textContent = target ? CANVAS_POSSIBILITIES[target].name : (btn.id === "canvas-mode-prev" ? "Inicio de los modos" : "Último modo");
-      btn.dataset.target = target || "";
+      if (label) label.textContent = target ? stepLabel(target) : (btn.id === "canvas-exercise-prev" ? "Es el primer ejercicio" : "Es el último ejercicio");
+      btn.dataset.target = target ? `${target.mode}|${target.exercise}` : "";
     });
+    updateExercisePosition();
+  }
+  function goToStep(step) {
+    if (step) openCanvasRoute(step.mode, step.exercise);
   }
   pagerBtns.forEach(btn => {
     btn.addEventListener("click", () => {
-      if (btn.dataset.target) openCanvasRoute(btn.dataset.target, 0);
+      if (!btn.dataset.target) return;
+      const [mode, exercise] = btn.dataset.target.split("|");
+      goToStep({ mode, exercise: Number(exercise) });
     });
   });
+  if (exerciseDoneNextBtn) exerciseDoneNextBtn.addEventListener("click", () => goToStep(exerciseNextStep()));
+  if (continueBtn) {
+    continueBtn.addEventListener("click", () => goToStep(firstPendingExercise(exerciseSequence, readCanvasCompleted())));
+  }
 
   // --- Control de Modales Accesibles (WAI-ARIA Dialog) ---
   const modalBackdrops = document.querySelectorAll(".canvas-modal-backdrop");
@@ -975,32 +1046,54 @@ function initCanvasLab() {
     });
   });
 
-  // --- Resaltar en la navegación rápida la parte visible del módulo ---
-  const quickNavPills = document.querySelectorAll(".quick-nav-pill[data-canvas-section]");
-  if (quickNavPills.length && "IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        quickNavPills.forEach(pill => {
-          const on = pill.getAttribute("data-canvas-section") === entry.target.id;
-          pill.classList.toggle("active", on);
-          if (on) pill.setAttribute("aria-current", "location"); else pill.removeAttribute("aria-current");
-        });
-      });
-    }, { rootMargin: "-30% 0px -60% 0px" });
-    quickNavPills.forEach(pill => {
-      const section = document.getElementById(pill.getAttribute("data-canvas-section"));
-      if (section) observer.observe(section);
+  // --- Matriz de Cobertura 100 % y Subnavegación Accesible ---
+  const coverageContentEl = document.getElementById("canvas-coverage-content");
+  if (coverageContentEl && typeof buildCoverageTableHtml === "function") {
+    coverageContentEl.innerHTML = buildCoverageTableHtml(
+      CANVAS_EXERCISES,
+      CANVAS_CAPABILITIES,
+      typeof CANVAS_EXTRA_CAPABILITIES !== "undefined" ? CANVAS_EXTRA_CAPABILITIES : []
+    );
+  }
+  if (typeof initCanvasSubnav === "function") {
+    initCanvasSubnav(document, window);
+  }
+
+  // Reorganización de columnas arrastrando (Drag & Drop) y selector de disposición
+  const splitContainerEl = document.querySelector(".canvas-split-container");
+  if (splitContainerEl && typeof initColumnDnD === "function") {
+    const splitDndApi = initColumnDnD(splitContainerEl, {
+      storage: window.localStorage,
+      storageKey: "canvas_split_columns_order",
+      columns: Array.from(splitContainerEl.children)
     });
-    // Los enlaces internos desplazan sin cambiar la ruta de la página.
-    quickNavPills.forEach(pill => {
-      pill.addEventListener("click", e => {
-        const section = document.getElementById(pill.getAttribute("data-canvas-section"));
-        if (!section) return;
-        e.preventDefault();
-        section.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const moveBtns = document.querySelectorAll(".btn-col-move");
+    moveBtns.forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.stopPropagation();
+        const targetId = btn.getAttribute("data-col-target");
+        const dir = btn.getAttribute("data-col-move");
+        if (splitDndApi && targetId && dir) splitDndApi.moveColumn(targetId, dir);
       });
     });
+
+    const layoutSideBtn = document.getElementById("btn-split-layout-side");
+    const layoutStackedBtn = document.getElementById("btn-split-layout-stacked");
+    const storedLayout = readCanvasStore("canvasSplitLayout") || "side";
+
+    function applyLayout(mode) {
+      const isStacked = mode === "stacked";
+      splitContainerEl.classList.toggle("is-stacked", isStacked);
+      if (layoutSideBtn) layoutSideBtn.classList.toggle("active", !isStacked);
+      if (layoutStackedBtn) layoutStackedBtn.classList.toggle("active", isStacked);
+      writeCanvasStore("canvasSplitLayout", mode);
+    }
+
+    applyLayout(storedLayout);
+
+    if (layoutSideBtn) layoutSideBtn.addEventListener("click", () => applyLayout("side"));
+    if (layoutStackedBtn) layoutStackedBtn.addEventListener("click", () => applyLayout("stacked"));
   }
 
   // Event listeners para pestañas de modo de vista
@@ -1104,6 +1197,68 @@ function initCommandPalette() {
       desc: "Lienzo de trabajo dinámico con 6 posibilidades prácticas y modo inmersivo.",
       keywords: ["canvas", "laboratorio", "simulador", "interactivo", "codigo", "diseño"],
       action: () => window.switchPage && window.switchPage("gemini-canvas")
+    },
+    {
+      category: "Navegación",
+      icon: "🗂️",
+      title: "Ir a Hub de Proyectos & Entregables",
+      desc: "Catálogo unificado de los 28 proyectos formativos con vistas Kanban, Bento y Lista.",
+      keywords: ["proyectos", "entregables", "hub", "kanban", "bento", "lista", "catalogo", "dnd", "tareas"],
+      action: () => {
+        if (window.switchPage) window.switchPage("proyectos");
+        window.location.hash = "proyectos";
+      }
+    },
+    {
+      category: "Hub de Proyectos",
+      icon: "📋",
+      title: "Ver Proyectos en Tablero Kanban",
+      desc: "Organizar los 28 proyectos por estado (Por Iniciar, En Desarrollo, Completado) con arrastrar y soltar.",
+      keywords: ["kanban", "tablero", "estados", "proyectos", "arrastrar", "columnas"],
+      action: () => {
+        if (window.switchPage) window.switchPage("proyectos");
+        window.location.hash = "proyectos";
+        if (window.projectsHubInstance && typeof window.projectsHubInstance.setViewMode === "function") {
+          window.projectsHubInstance.setViewMode("kanban");
+        } else {
+          const btn = document.querySelector('[data-hub-view="kanban"]');
+          if (btn) btn.click();
+        }
+      }
+    },
+    {
+      category: "Hub de Proyectos",
+      icon: "🍱",
+      title: "Ver Proyectos en Galería Bento",
+      desc: "Explorar los 28 proyectos con vistas previas interactivas y tarjetas adaptables.",
+      keywords: ["bento", "galeria", "cuadricula", "proyectos", "tarjetas", "visual"],
+      action: () => {
+        if (window.switchPage) window.switchPage("proyectos");
+        window.location.hash = "proyectos";
+        if (window.projectsHubInstance && typeof window.projectsHubInstance.setViewMode === "function") {
+          window.projectsHubInstance.setViewMode("bento");
+        } else {
+          const btn = document.querySelector('[data-hub-view="bento"]');
+          if (btn) btn.click();
+        }
+      }
+    },
+    {
+      category: "Hub de Proyectos",
+      icon: "📑",
+      title: "Ver Proyectos en Lista Compacta",
+      desc: "Visualización tabular accesible con controles de teclado y ordenación rápida.",
+      keywords: ["lista", "tabla", "compacta", "proyectos", "teclado", "filas"],
+      action: () => {
+        if (window.switchPage) window.switchPage("proyectos");
+        window.location.hash = "proyectos";
+        if (window.projectsHubInstance && typeof window.projectsHubInstance.setViewMode === "function") {
+          window.projectsHubInstance.setViewMode("list");
+        } else {
+          const btn = document.querySelector('[data-hub-view="list"]');
+          if (btn) btn.click();
+        }
+      }
     },
     {
       category: "Navegación",
@@ -2093,15 +2248,14 @@ function initDia3Module() {
     exContainer.innerHTML = buildCanvasExerciseHtml(exercise, currentExIndex);
     const card = exContainer.querySelector(".canvas-exercise-card");
     if (!card) return;
-    const copyBtn = card.querySelector(".canvas-exercise-copy");
-    if (copyBtn) {
-      copyBtn.addEventListener("click", () => {
+    card.querySelectorAll("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
         if (navigator.clipboard) {
-          navigator.clipboard.writeText(exercise.prompt);
+          navigator.clipboard.writeText(canvasCopyText(exercise, btn.getAttribute("data-copy")));
         }
-        copyBtn.textContent = "✓ Prompt copiado al portapapeles";
+        btn.textContent = "✓ Copiado al portapapeles";
       });
-    }
+    });
     card.querySelectorAll(".canvas-exercise-check").forEach(check => {
       check.addEventListener("change", () => updateDia3ExerciseProgress(card));
     });

@@ -116,7 +116,7 @@ def test_canvas_materials_exist():
     
     guide_text = guide_file.read_text(encoding="utf-8")
     assert "Gemini Canvas" in guide_text
-    assert "R-C-I-R-F" in guide_text
+    assert "CRTT+L" in guide_text
     assert "Inline" in guide_text
     assert "Gemini Gems" in guide_text
     assert "Multimodal" in guide_text

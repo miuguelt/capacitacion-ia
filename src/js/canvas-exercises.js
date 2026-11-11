@@ -1,10 +1,15 @@
 // Ejercicios prácticos de Gemini Canvas Lab: dos por cada modo del simulador.
-// Cada ejercicio define su prompt por partes (fórmula R-C-I-R-F + datos), pasos dentro de Canvas,
+// Cada ejercicio define su prompt por partes (método CRTT+L + datos), pasos clasificados por lugar,
 // criterios verificables y una vista previa SVG generada con los mismos datos.
+
+let coverageKit = globalThis;
+if (typeof module !== "undefined" && module.exports) {
+  coverageKit = require("./canvas-coverage.js");
+}
 
 // --- Catálogo de capacidades reales de Gemini Canvas ---
 // Cada ejercicio declara las que usa; las pruebas exigen que algún paso las ponga en práctica
-// (pattern) y que entre los 24 ejercicios se cubra el catálogo completo.
+// (pattern) y que entre los 24 ejercicios se cubra el catálogo completo (21 capacidades).
 const CANVAS_CAPABILITIES = {
   "doc-create": { name: "Documento en Canvas", how: "Activa Canvas en Herramientas, pega el prompt y Gemini escribe el documento en el panel derecho.", pattern: /Activa Canvas/ },
   "inline-edit": { name: "Edición por selección", how: "Selecciona un fragmento del documento o del código y escribe el cambio en el cuadro que aparece.", pattern: /[Ss]elecciona/ },
@@ -21,7 +26,12 @@ const CANVAS_CAPABILITIES = {
   "export-docs": { name: "Exportar a Documentos de Google", how: "Abre «Compartir y exportar» y elige «Exportar a Documentos de Google»; se crea una copia editable en tu Drive.", pattern: /Documentos de Google/ },
   "export-colab": { name: "Exportar a Colab", how: "Con código Python en Canvas, abre «Compartir y exportar» y elige «Exportar a Colab» para ejecutarlo en un cuaderno.", pattern: /Exportar a Colab/ },
   "share": { name: "Compartir el Canvas", how: "Usa «Compartir» para enviar un enlace público con la app o el documento funcionando.", pattern: /«Compartir»/ },
-  "gems": { name: "Gems con Canvas", how: "En «Explorar Gems → Nuevo Gem» pega las instrucciones; luego usa el Gem con Canvas activo.", pattern: /Nuevo Gem/ }
+  "gems": { name: "Gems con Canvas", how: "En «Explorar Gems → Nuevo Gem» pega las instrucciones; luego usa el Gem con Canvas activo.", pattern: /Nuevo Gem/ },
+  "select-ask": { name: "Seleccionar y preguntar en la vista previa", how: "En la vista previa web, activa «Seleccionar y preguntar», haz clic en un elemento visual y pide el cambio.", pattern: /Seleccionar y preguntar/ },
+  "versions": { name: "Historial de versiones y cambios", how: "Usa «Versión anterior» o «Mostrar cambios recientes» en la barra superior de Canvas para comparar o restaurar.", pattern: /Versión anterior|Mostrar cambios recientes/ },
+  "manual-edit": { name: "Edición directa y formato en el lienzo", how: "Haz clic directamente en el documento de Canvas para editar palabras o aplicar formato desde la barra inferior.", pattern: /directamente en el documento|barra de formato/ },
+  "file-input": { name: "Archivo adjunto o de Drive como fuente", how: "Adjunta un archivo CSV, PDF o documento desde el botón «+» del chat para que Canvas construya el artefacto con esos datos.", pattern: /mesa_ayuda_2026\.csv|archivo adjunto/i },
+  "deep-research": { name: "De Deep Research a Canvas", how: "Genera una investigación con Deep Research y ábrela en Canvas desde «Crear» para convertirla en informe, infografía o página web.", pattern: /Deep Research/ }
 };
 
 function canvasCapabilityNames(ids) {
@@ -209,8 +219,10 @@ Indicadores: kg cosechados, costo por kg, % de plántulas perdidas, ingresos por
 CANVAS_EXERCISES["doc-editorial"] = [
   {
     id: "doc-a-informe-desercion",
+    code: "1A",
     capabilities: ["doc-create", "inline-edit", "length-tone", "create-webpage", "export-docs"],
     whyCanvas: "El informe queda en un documento editable junto al chat: corriges una sección sin regenerar todo y, con «Crear → Página web», lo conviertes en un tablero sin copiar datos.",
+    outsideCanvas: "El texto base podría redactarse en el chat normal, pero la edición por párrafo sin regenerar la tabla y la conversión directa con «Crear → Página web» ocurren en Canvas; el paso final abre Documentos de Google fuera de Gemini.",
     title: "Informe de deserción con tablero interactivo en Canvas",
     level: "Básico",
     duration: "25 min",
@@ -224,35 +236,39 @@ CANVAS_EXERCISES["doc-editorial"] = [
       instruction: "En Canvas, redacta un informe ejecutivo con:",
       task: ["Un resumen de máximo cinco líneas con la conclusión principal.", "Una tabla con la tasa de cada trimestre y su variación en puntos frente al trimestre anterior.", "Las causas de deserción ordenadas de mayor a menor, con su porcentaje.", "Tres recomendaciones para 2026, cada una con un responsable sugerido y un indicador."],
       constraints: ["Usa solo estos datos; si una acción no se puede relacionar con certeza con un resultado, dilo.", "No inventes cifras ni nombres de personas."],
-      format: "Títulos numerados, una tabla y frases cortas en español de Colombia."
+      format: "Títulos numerados, una tabla y frases cortas en español de Colombia.",
+      tone: "Formal y directo, pensado para un comité directivo."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "external", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona la sección de recomendaciones y escribe en el cuadro de edición: «Agrega una meta numérica para 2026 a cada recomendación».",
       "Usa «Ajustar longitud → Más corto» y comprueba que la tabla se conserve.",
       "Abre «Crear → Página web» sobre el informe y, en la «Vista previa», comprueba las tarjetas KPI y el gráfico de la caída de deserción.",
-      "Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google»."
+      "(Opcional) Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google» si necesitas una copia editable fuera de Gemini.",
+      "Revisa tu entregable con la lista «Verifica tu resultado» de esta guía y marca cada criterio cumplido."
     ],
     expected: [
       "El resumen menciona la caída de 9,0 % a 3,6 % (5,4 puntos).",
       "La tabla muestra las cuatro tasas y la variación entre trimestres.",
       "La dificultad económica aparece como primera causa (39 % de 105).",
-      "Cada recomendación tiene responsable, fecha e indicador.",
-      "El tablero web interactivo muestra la caída de deserción (9,0 % a 3,6 %) y las tres tarjetas de acción.",
-      "El documento quedó guardado en Google Docs."
+      "Cada recomendación tiene responsable, indicador y la meta numérica para 2026 que pediste por selección.",
+      "La página web muestra tarjetas KPI y un gráfico con la caída de 9,0 % a 3,6 %.",
+      "Después de «Ajustar longitud → Más corto», el informe en Canvas conserva la tabla completa."
     ],
-    stretch: "Pide en el chat: «Crea una página web a partir de este informe con un gráfico de líneas animado y tarjetas para cada acción». Compara la página con la versión en documento.",
+    stretch: "Selecciona la tabla del informe y pide: «Agrega una columna que diga si el trimestre cumplió la meta de bajar al menos un punto». Así practicas editar una tabla sin regenerar el resto.",
     previewSvg: canvasSvgBars("Gráfico de barras con la tasa de deserción por trimestre de 2025: 9,0; 7,8; 5,5 y 3,6 por ciento", "Tasa de deserción 2025 (%)", ["T1", "T2", "T3", "T4"], [9.0, 7.8, 5.5, 3.6], 3)
   },
   {
     id: "doc-b-propuesta-huerta",
-    capabilities: ["doc-create", "inline-edit", "length-tone", "create-quiz", "export-docs"],
-    whyCanvas: "Canvas mantiene la propuesta como documento vivo: ajustas el tono para el comité y, con «Crear → Cuestionario», generas el repaso a partir del mismo texto.",
+    code: "1B",
+    capabilities: ["doc-create", "inline-edit", "length-tone", "manual-edit", "versions", "create-quiz", "export-docs"],
+    whyCanvas: "Canvas mantiene la propuesta como documento vivo: editas directamente palabras, comparas versiones, ajustas el tono y, con «Crear → Cuestionario», generas el repaso desde el mismo texto.",
+    outsideCanvas: "La redacción inicial podría pedirse en el chat, pero la edición directa con barra de formato, el historial de versiones y «Crear → Cuestionario» son exclusivos de Canvas; la exportación abre Documentos de Google.",
     title: "Propuesta de proyecto productivo con cuestionario de repaso",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Exportar a Docs + Generación de evaluación interactiva en Canvas",
+    canvasFeature: "Edición directa + Historial de versiones + Cuestionario + Exportar a Docs",
     goal: "Redactar una propuesta formal de proyecto productivo con presupuesto y cronograma, y generar un cuestionario para que el equipo de aprendices domine la propuesta.",
     scenario: "Un equipo quiere financiar una huerta hidropónica con recursos del centro. La propuesta debe convencer al comité y el equipo debe sustentarla sin leer.",
     promptParts: {
@@ -262,15 +278,18 @@ CANVAS_EXERCISES["doc-editorial"] = [
       instruction: "En Canvas, redacta la propuesta con:",
       task: ["El problema, la justificación pedagógica y el objetivo general.", "Tres objetivos específicos medibles, cada uno ligado a un indicador de los datos.", "El presupuesto con el porcentaje de cada rubro y el cronograma por fases.", "El costo por kilogramo si toda la inversión se carga al primer ciclo y los kilos que hay que vender a 9.000 COP para recuperarla.", "Tres riesgos con su medida de mitigación."],
       constraints: ["Muestra los cálculos paso a paso.", "Montos en pesos colombianos con punto de miles."],
-      format: "Documento formal con títulos numerados y dos tablas."
+      format: "Documento formal con títulos numerados y dos tablas.",
+      tone: "Formal y persuasivo, propio de una convocatoria institucional."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "external", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
+      "Haz clic directamente en el documento de Canvas para escribir el nombre de tu ficha y aplica formato de encabezado desde la barra de formato inferior.",
       "Selecciona el párrafo de justificación y escribe: «Relaciónalo con las competencias del programa de formación».",
-      "Usa «Cambiar tono → Más formal» para la versión que irá al comité.",
+      "Usa «Cambiar tono → Más formal» y luego abre «Mostrar cambios recientes» o «Versión anterior» en la barra superior de Canvas para comparar el ajuste.",
       "Abre «Crear → Cuestionario» sobre la propuesta, respóndelo y revisa la retroalimentación de cada pregunta.",
-      "Exporta la propuesta a Documentos de Google desde «Compartir y exportar»."
+      "(Opcional) Exporta la propuesta a Documentos de Google desde «Compartir y exportar» si el comité la pide en Drive.",
+      "Revisa tu entregable con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "La tabla de presupuesto suma 8.000.000 COP y la estructura NFT pesa 40 %.",
@@ -278,7 +297,7 @@ CANVAS_EXERCISES["doc-editorial"] = [
       "El cálculo de costo por kilogramo y punto de equilibrio aparece paso a paso.",
       "El cronograma cubre las 16 semanas sin huecos.",
       "El cuestionario de «Crear → Cuestionario» pregunta por presupuesto, cronograma e indicadores y explica cada respuesta.",
-      "Existe una copia de la propuesta en Documentos de Google."
+      "«Mostrar cambios recientes» o «Versión anterior» deja ver la diferencia del cambio de tono."
     ],
     stretch: "Pide: «Agrega un escenario optimista con dos ciclos más y compáralo en una tabla con el escenario base».",
     previewSvg: canvasSvgDonut("Gráfico de dona con la distribución del presupuesto de 8 millones de pesos por rubro", "Presupuesto huerta (8 M COP)", [
@@ -327,8 +346,10 @@ Puntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,2
 CANVAS_EXERCISES["code-prototyping"] = [
   {
     id: "code-a-simulador-presupuesto",
+    code: "2A",
     capabilities: ["code-preview", "console-fix"],
     whyCanvas: "En el chat solo verías código; Canvas lo ejecuta en la vista previa, así pruebas los controles y corriges errores desde la consola sin salir de Gemini.",
+    outsideCanvas: "Todos los pasos en Gemini se ejecutan dentro de Canvas (código, vista previa en vivo y consola de errores); no necesitas salir a un editor externo.",
     title: "Simulador de presupuesto con sliders y gráfico de dona en vivo",
     level: "Intermedio",
     duration: "30 min",
@@ -342,15 +363,18 @@ CANVAS_EXERCISES["code-prototyping"] = [
       instruction: "En Canvas, crea una aplicación web de una sola página que permita:",
       task: ["Ajustar el porcentaje de cada categoría con un control deslizante y ver su valor en pesos.", "Mantener la suma en 100 % repartiendo la diferencia entre las demás categorías.", "Ver la distribución en un gráfico de dona que se actualice en vivo (Chart.js desde CDN).", "Recibir las alertas de las reglas de negocio.", "Restablecer los valores iniciales."],
       constraints: ["Formato de moneda colombiano.", "Diseño responsivo y accesible: contraste AA y controles con etiqueta."],
-      format: "Un solo archivo HTML con CSS y JavaScript."
+      format: "Un solo archivo HTML con CSS y JavaScript.",
+      tone: "Sencillo y amable: lo usará gente sin formación técnica."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
       "Sube «Logística» a 50 % y observa cómo se redistribuyen las demás categorías.",
       "Baja «Imprevistos» a 6 % y comprueba que aparezca la advertencia.",
-      "Si la vista previa muestra un error, escribe en el chat: «Corrige el error que aparece en la consola».",
-      "Pide en el chat: «Agrega un botón para descargar la distribución en CSV y un interruptor de modo oscuro»."
+      "Si la vista previa muestra un error, abre la consola o usa «Corregir error» en Canvas para repararlo.",
+      "Pide en el chat del lienzo: «Agrega un botón para descargar la distribución en CSV y un interruptor de modo oscuro».",
+      "Comprueba todos los puntos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "La app abre en la vista previa sin errores.",
@@ -371,12 +395,14 @@ CANVAS_EXERCISES["code-prototyping"] = [
   },
   {
     id: "code-b-kanban-burndown",
-    capabilities: ["code-preview", "inline-edit"],
-    whyCanvas: "La app corre en la vista previa y puedes seleccionar solo la función del gráfico para cambiarla, sin que Gemini reescriba el tablero completo.",
+    code: "2B",
+    capabilities: ["code-preview", "inline-edit", "select-ask", "versions"],
+    whyCanvas: "La app corre en la vista previa y puedes señalar un elemento con «Seleccionar y preguntar», editar solo una función en el código o volver a una versión anterior.",
+    outsideCanvas: "Todo el flujo técnico transcurre 100 % dentro de Canvas (pestañas «Vista previa», «Código», «Seleccionar y preguntar» e historial de versiones). Nota: como la vista previa se ejecuta en un contenedor aislado (sandbox), algunas sesiones no conservan localStorage al recargar; por eso incluimos exportación/importación JSON como respaldo.",
     title: "Tablero Kanban arrastrable con gráfico de avance del sprint",
     level: "Avanzado",
     duration: "35 min",
-    canvasFeature: "Canvas de código + Vista previa + iteración por selección",
+    canvasFeature: "Vista previa + Seleccionar y preguntar + Historial de versiones",
     goal: "Crear un tablero Kanban funcional con arrastrar y soltar, contadores por columna y un gráfico burndown que compara el avance ideal y el real.",
     scenario: "El equipo del sprint 3 quiere ver en una sola pantalla qué tareas faltan y si va atrasado frente a la línea ideal.",
     promptParts: {
@@ -386,15 +412,18 @@ CANVAS_EXERCISES["code-prototyping"] = [
       instruction: "En Canvas, crea un tablero Kanban web que:",
       task: ["Muestre las tareas en las columnas Por hacer, En curso y Hecho.", "Permita mover las tarjetas arrastrándolas y también con el teclado.", "Sume los puntos de cada columna y muestre el avance del sprint.", "Incluya un gráfico burndown con la línea ideal y la real (Chart.js desde CDN).", "Filtre las tarjetas por responsable."],
       constraints: ["Sin frameworks: solo HTML, CSS y JavaScript.", "Cada tarjeta debe poder enfocarse y tener una etiqueta para lectores de pantalla."],
-      format: "Un solo archivo HTML ejecutable."
+      format: "Un solo archivo HTML ejecutable.",
+      tone: "Técnico y conciso en los comentarios del código."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
-      "Arrastra la tarea T3 a «Hecho» y observa los contadores y la barra de avance.",
-      "Filtra por «Ana» y comprueba qué tarjetas quedan.",
-      "En el código, selecciona la función del gráfico y escribe: «Marca los días en que la línea real supera a la ideal».",
-      "Pide en el chat: «Guarda el estado del tablero en localStorage» y recarga la vista previa."
+      "Cuando termine, abre la «Vista previa» del Canvas, arrastra la tarea T3 a «Hecho» y filtra por «Ana».",
+      "En la «Vista previa», activa «Seleccionar y preguntar», haz clic sobre el encabezado de una columna y pide: «Muestra el porcentaje de puntos de esta columna frente al total».",
+      "Pasa a «Código», selecciona la función del gráfico y escribe: «Marca los días en que la línea real supera a la ideal».",
+      "Usa «Versión anterior» y «Mostrar cambios» en la barra superior de Canvas para comparar la diferencia del código y regresa a la versión más reciente.",
+      "Pide en el chat del lienzo: «Guarda el estado del tablero en localStorage y agrega dos botones (Exportar e Importar JSON) por si el contenedor aislado de la vista previa reinicia la sesión».",
+      "Revisa todos los criterios en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "Al inicio, Hecho suma 11 puntos (T1, T2, T8) y el progreso es 27,5 %.",
@@ -402,7 +431,7 @@ CANVAS_EXERCISES["code-prototyping"] = [
       "El burndown muestra la línea ideal y la real; la real queda por encima desde el día 2 y cierra con 29 puntos pendientes.",
       "El filtro por responsable funciona sin recargar.",
       "Los contadores se actualizan al soltar una tarjeta.",
-      "El estado persiste al recargar la vista previa."
+      "El estado se conserva con localStorage o mediante los botones de exportar e importar JSON."
     ],
     stretch: "Pide: «Agrega una columna Bloqueado con límite WIP de 2 tarjetas y una alerta visual cuando se supere».",
     previewSvg: canvasSvgLine("Gráfico de líneas burndown del sprint: la línea ideal baja de 40 a 0 y la real termina en 29 puntos pendientes", "Burndown sprint 3 (puntos)", ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"], [
@@ -448,8 +477,10 @@ R10,Corte de energía en el centro,2,2`;
 CANVAS_EXERCISES["data-matrix"] = [
   {
     id: "data-a-ventas-tienda",
+    code: "3A",
     capabilities: ["code-preview", "inline-edit", "share"],
     whyCanvas: "Una tabla sola la daría el chat; en Canvas los datos se vuelven un tablero que se ejecuta, se ajusta por selección y se comparte con un enlace.",
+    outsideCanvas: "La tabla y el gráfico interactivo corren dentro de Canvas; si tu cuenta institucional restringe enlaces públicos en «Compartir», usa «Copiar contenido» para guardar el HTML.",
     title: "Tablero de ventas anuales con gráfico y recomendaciones en vivo",
     level: "Intermedio",
     duration: "30 min",
@@ -463,15 +494,18 @@ CANVAS_EXERCISES["data-matrix"] = [
       instruction: "En Canvas, crea un tablero web de una sola página con:",
       task: ["Una tabla con el total de cada mes y su variación porcentual frente al mes anterior.", "Los totales anuales y la participación de cada producto.", "El mes pico, el mes más bajo y el producto que más creció de enero a diciembre.", "Un gráfico de barras apiladas por mes, dibujado con SVG, y tres recomendaciones de inventario y promoción basadas en esas cifras."],
       constraints: ["Cifras en miles de COP con separador de miles y porcentajes con un decimal.", "Calcula todo en JavaScript a partir de los datos, sin librerías externas."],
-      format: "Un solo archivo HTML con CSS y JavaScript."
+      format: "Un solo archivo HTML con CSS y JavaScript.",
+      tone: "Claro y práctico, para el dueño de un negocio pequeño."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Abre la «Vista previa» y compara las cifras con la lista «Verifica tu resultado».",
-      "Pide en el chat: «Colorea cada total mensual con una escala de color de menor a mayor».",
-      "En el código, selecciona las tarjetas de totales y escribe: «Agrega la participación anual de cada producto».",
-      "Pide en el chat: «Agrega un botón que copie la tabla en formato CSV» y pruébalo en la vista previa.",
-      "Usa «Compartir» para enviar el tablero al encargado de la tienda."
+      "Abre la «Vista previa» y revisa los totales anuales y el gráfico de barras apiladas.",
+      "Pide en el chat del lienzo: «Colorea cada total mensual con una escala de color de menor a mayor».",
+      "En el código, selecciona la función que calcula la variación mensual y escribe: «Muestra la variación con signo y un decimal, en rojo si es negativa».",
+      "Pide en el chat del lienzo: «Agrega un botón que copie la tabla en formato CSV» y pruébalo en la vista previa.",
+      "Usa «Compartir» en «Compartir y exportar» para generar el enlace del tablero (ruta alternativa en cuenta institucional `@soy.sena.edu.co`: si el administrador deshabilitó enlaces públicos, usa «Copiar contenido» y guarda el archivo `.html`).",
+      "Comprueba las cifras con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El total anual es 120.250 (café 62.700, panela 31.100, queso 26.450).",
@@ -486,8 +520,10 @@ CANVAS_EXERCISES["data-matrix"] = [
   },
   {
     id: "data-b-matriz-riesgos",
+    code: "3B",
     capabilities: ["code-preview", "inline-edit", "share"],
     whyCanvas: "El mapa de calor 5 × 5 funciona en la vista previa: haces clic en cada celda, ajustas una parte por selección y compartes la app con el comité.",
+    outsideCanvas: "El cálculo de niveles podría hacerse en chat, pero el mapa de calor interactivo 5 × 5 y la edición por selección de celdas requieren Canvas.",
     title: "Matriz de riesgos con mapa de calor interactivo",
     level: "Intermedio",
     duration: "25 min",
@@ -501,15 +537,17 @@ CANVAS_EXERCISES["data-matrix"] = [
       instruction: "En Canvas, construye la matriz de riesgos:",
       task: ["Calcula el nivel de cada riesgo y clasifícalo con los umbrales de los datos.", "Ordena los riesgos de mayor a menor nivel.", "Asigna a cada riesgo una respuesta (evitar, mitigar, transferir o aceptar) y una acción concreta."],
       constraints: ["Usa exactamente los umbrales entregados.", "Propón acciones realistas para un equipo de cinco personas."],
-      format: "Tabla con las columnas id, riesgo, probabilidad, impacto, nivel, clasificación, respuesta y acción."
+      format: "Tabla con las columnas id, riesgo, probabilidad, impacto, nivel, clasificación, respuesta y acción.",
+      tone: "Técnico y objetivo, sin dramatizar los riesgos."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
-      "Selecciona la columna de acciones y escribe: «Agrega un responsable y una fecha límite a cada acción».",
-      "Usa «Compartir» para enviar la matriz al comité de seguimiento.",
-      "Pide en el chat: «Crea una aplicación web con un mapa de calor 5 x 5 de estos riesgos; al hacer clic en una celda, muestra sus riesgos y acciones».",
-      "En la vista previa, haz clic en la celda de probabilidad 2 e impacto 5."
+      "Selecciona la columna de acciones en el lienzo y escribe: «Agrega un responsable y una fecha límite a cada acción».",
+      "Pide en el chat del lienzo: «Crea una aplicación web con un mapa de calor 5 x 5 de estos riesgos; al hacer clic en una celda, muestra sus riesgos y acciones».",
+      "En la «Vista previa», haz clic en la celda de probabilidad 2 e impacto 5 y comprueba los dos riesgos.",
+      "Usa «Compartir» para generar el enlace al comité de seguimiento (ruta alternativa en `@soy.sena.edu.co`: usa «Copiar contenido» o «Exportar a Documentos de Google» si los enlaces públicos están restringidos).",
+      "Revisa tu entregable con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "Hay 4 riesgos críticos: R9 (20), R2 (16), R7 (15) y R8 (15).",
@@ -517,7 +555,7 @@ CANVAS_EXERCISES["data-matrix"] = [
       "R10 (4) es el único riesgo medio y ninguno queda en Bajo.",
       "El mapa muestra 2 riesgos en la celda probabilidad 2 / impacto 5.",
       "Al hacer clic en una celda aparece la lista con acciones.",
-      "El enlace de «Compartir» abre la matriz funcionando."
+      "El enlace de «Compartir» (o la copia exportada) abre la matriz funcionando."
     ],
     stretch: "Pide: «Calcula el riesgo residual suponiendo que cada acción baja un punto la probabilidad y muestra ambos mapas lado a lado».",
     previewSvg: canvasSvgHeatmap("Mapa de calor de 5 por 5 con la ubicación de los 10 riesgos del proyecto según probabilidad e impacto", "Mapa de calor de riesgos", { "2-5": 2, "4-4": 1, "3-3": 1, "4-3": 1, "3-4": 1, "3-5": 1, "5-3": 1, "4-5": 1, "2-2": 1 })
@@ -557,52 +595,147 @@ Flujo:
 7. API de citas valida la firma y la expiración; responde 200 con las citas.
 8. Si el access token expiró: responde 401, la App llama POST /auth/refresh y repite la petición.
 
-Plan del proyecto (año 2026):
+Plan del proyecto (año 2026; duraciones en días calendario):
 Tarea,Inicio,Duración
 Diseño del flujo,2026-11-02,5 días
 Endpoint de login,2026-11-09,4 días
 Middleware de validación,2026-11-13,3 días
 Refresh token,2026-11-18,3 días
 Pruebas de seguridad,2026-11-23,4 días
-Despliegue,2026-11-27,1 día`;
+Despliegue (hito),2026-11-27,0 días`;
+
+const REF_MATRICULA = `flowchart LR
+  subgraph ASP[Aspirante]
+    INI([Inicio])
+    REG[Se registra y elige programa]
+    PRU[Presenta prueba de conocimientos]
+    CAR[Carga documentos faltantes]
+  end
+  subgraph PLA[Plataforma de inscripción]
+    D1{¿Matrícula activa?}
+    NOT([Notifica y termina])
+    BIE[Envía correo de bienvenida]
+    FIN([Aprendiz matriculado])
+  end
+  subgraph BIEN[Bienestar]
+    ENT[Entrevista y verifica documentos]
+    D3{¿Documentos completos?}
+    D4{¿Cargó en 3 días?}
+    LIB([Cupo liberado])
+  end
+  subgraph COO[Coordinación académica]
+    REV[Revisa el puntaje]
+    D2{¿Puntaje ≥ 60?}
+    ESP([Lista de espera y correo])
+    ASI[Asigna ficha y horario]
+  end
+  INI --> REG --> D1
+  D1 -- Sí --> NOT
+  D1 -- No --> PRU --> REV --> D2
+  D2 -- No --> ESP
+  D2 -- Sí --> ENT --> D3
+  D3 -- No --> CAR --> D4
+  D4 -- No --> LIB
+  D4 -- Sí --> ASI
+  D3 -- Sí --> ASI --> BIE --> FIN
+  classDef feliz fill:#d9f2e3,stroke:#2d5a4c,stroke-width:3px
+  class INI,REG,D1,PRU,REV,D2,ENT,D3,ASI,BIE,FIN feliz`;
+
+const REF_JWT = `sequenceDiagram
+  actor U as Usuario
+  participant W as App web
+  participant A as API de autenticación
+  participant B as Base de datos
+  participant C as API de citas
+  U->>W: Escribe correo y contraseña
+  W->>A: POST /auth/login
+  A->>B: Consulta usuario
+  B-->>A: Hash de la contraseña
+  alt Credenciales inválidas
+    A-->>W: 401
+    W-->>U: Credenciales incorrectas
+  else Credenciales válidas
+    Note over A: Access token 15 min y refresh token 7 días
+    A-->>W: 200 con los dos tokens
+    W->>C: GET /citas con Bearer token
+    alt Access token vigente
+      C-->>W: 200 con las citas
+    else Access token expirado
+      C-->>W: 401
+      W->>A: POST /auth/refresh
+      A-->>W: 200 con access token nuevo
+      W->>C: Repite GET /citas
+      C-->>W: 200 con las citas
+    end
+  end
+
+gantt
+  title Plan del inicio de sesión con JWT (2026)
+  dateFormat YYYY-MM-DD
+  axisFormat %d/%m
+  section Desarrollo
+  Diseño del flujo         :t1, 2026-11-02, 5d
+  Endpoint de login        :t2, 2026-11-09, 4d
+  Middleware de validación :t3, 2026-11-13, 3d
+  Refresh token            :t4, 2026-11-18, 3d
+  section Calidad
+  Pruebas de seguridad     :crit, t5, 2026-11-23, 4d
+  section Entrega
+  Despliegue               :milestone, t6, 2026-11-27, 0d`;
 
 CANVAS_EXERCISES["flowchart-diagram"] = [
   {
     id: "flow-a-matricula-swimlanes",
+    code: "4A",
     capabilities: ["code-preview", "console-fix", "inline-edit"],
-    whyCanvas: "Canvas dibuja el diagrama en la vista previa; si Mermaid falla, la consola muestra el error y Gemini lo corrige en el mismo panel.",
+    whyCanvas: "Canvas dibuja el diagrama en la vista previa; si Mermaid falla, la consola muestra el error y Gemini lo corrige en el mismo panel, sin instalar nada.",
+    outsideCanvas: "Todo ocurre dentro de Canvas: el código Mermaid se escribe en «Código», el diagrama se ve en «Vista previa» y el código de referencia de esta guía se pega en el mismo chat del lienzo para compararlo. No necesitas Mermaid Live ni otro editor.",
     title: "Flujograma de matrícula por carriles con Mermaid",
     level: "Intermedio",
     duration: "25 min",
     canvasFeature: "Código Mermaid renderizado en vista previa",
-    goal: "Convertir un procedimiento escrito en un diagrama de flujo por carriles, con decisiones y tiempos, que se pueda exportar como imagen.",
-    scenario: "Bienestar y coordinación tienen versiones distintas del proceso de matrícula. Un diagrama único evita confusiones.",
+    goal: "Convertir un procedimiento escrito en un diagrama de flujo por carriles, con decisiones, camino feliz resaltado y tabla de tiempos, que puedas revisar y ajustar sin salir de Canvas.",
+    scenario: "Bienestar y coordinación tienen versiones distintas del proceso de matrícula. Un diagrama único evita confusiones en la reunión de alineación.",
     promptParts: {
       role: "analista de procesos que documenta con diagramas Mermaid",
       context: "Bienestar y coordinación académica tienen versiones distintas del proceso de matrícula. Se necesita un diagrama único para proyectarlo en la reunión de alineación.",
       data: IN_MATRICULA,
       instruction: "En Canvas, crea una página web que muestre el proceso como diagrama de flujo con:",
-      task: ["Un carril por actor.", "Rombos para las decisiones y nodos de inicio y fin diferenciados.", "El camino feliz resaltado.", "Una tabla con la duración de cada etapa y el tiempo total del camino feliz."],
-      constraints: ["Usa Mermaid cargado desde CDN.", "Máximo seis palabras por nodo para que se lea en el proyector."],
-      format: "Un solo archivo HTML ejecutable."
+      task: [
+        "Un diagrama «flowchart LR» con un bloque «subgraph» por actor (Aspirante, Plataforma de inscripción, Bienestar y Coordinación académica); cada subgraph es un carril.",
+        "Nodos de inicio y fin con forma redondeada y rombos {} para las cuatro decisiones: matrícula activa, puntaje >= 60, documentos completos y carga en 3 días.",
+        "El camino feliz resaltado con un «classDef» y terminado en el nodo «Aprendiz matriculado»; usa el identificador ENT para el nodo de la entrevista.",
+        "Debajo del diagrama, una tabla con la duración de cada etapa y el tiempo total del camino feliz.",
+        "Un botón «Copiar código Mermaid» y un conmutador «Vista vertical» que vuelva a dibujar el diagrama con «flowchart TB»."
+      ],
+      constraints: ["Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js y usa solo sintaxis válida de flowchart.", "Máximo seis palabras por nodo para que se lea en el proyector.", "No uses descargas de archivos: la vista previa de Canvas puede bloquearlas."],
+      format: "Un solo archivo HTML ejecutable.",
+      tone: "Claro y neutral, con etiquetas cortas en los nodos."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
-      "Si la vista previa muestra un error en la consola, escribe en el chat: «Corrige este error de Mermaid» y pega el mensaje.",
-      "En el código, selecciona el nodo de la entrevista y escribe: «Agrega una nota con su duración».",
-      "Pide en el chat: «Agrega un botón para descargar el diagrama en SVG» y prueba la descarga.",
-      "Pide: «Genera una versión vertical para imprimir en tamaño carta»."
+      "Cuando termine, abre la «Vista previa» del Canvas y cuenta los cuatro carriles y las cuatro decisiones.",
+      "Si en lugar del diagrama ves texto o un aviso de error, usa «Corregir error» o pide en el chat del lienzo: «Corrige la sintaxis de Mermaid sin cambiar el contenido del diagrama».",
+      "En «Código», selecciona la línea que empieza por ENT y escribe: «Agrega al texto del nodo su duración de 3 días».",
+      "En la «Vista previa», activa el conmutador «Vista vertical» y comprueba que el diagrama se dibuje de arriba hacia abajo sin cortarse.",
+      "Copia el código de referencia de esta guía, pégalo en el chat del lienzo con la frase: «Muestra este diagrama debajo del tuyo para compararlos» y anota qué le falta a tu versión.",
+      "Comprueba todos los criterios en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
-      "Hay cuatro carriles con nombre visible.",
-      "Aparecen tres decisiones: matrícula activa, puntaje ≥ 60 y documentos completos.",
+      "La vista previa muestra cuatro carriles con el nombre de cada actor.",
+      "Aparecen cuatro decisiones en rombo: matrícula activa, puntaje ≥ 60, documentos completos y carga en 3 días.",
       "El camino feliz está resaltado y termina en «Aprendiz matriculado».",
-      "La tabla muestra un tiempo total de 8 días en el camino feliz.",
-      "El botón descarga un archivo SVG válido.",
-      "La versión vertical cabe en una hoja tamaño carta."
+      "La tabla muestra un tiempo total de 8 días en el camino feliz (1 + 2 + 1 + 3 + 1).",
+      "El nodo de la entrevista muestra su duración de 3 días.",
+      "El conmutador «Vista vertical» redibuja el diagrama de arriba hacia abajo sin desbordarse."
     ],
-    stretch: "Pide: «Agrega indicadores de cuello de botella: colorea en ámbar la etapa más lenta».",
+    reference: {
+      label: "Código Mermaid de referencia para comparar",
+      intro: "Cópialo y pégalo en el chat del lienzo de Canvas con la frase «Muestra este diagrama debajo del tuyo para compararlos». Gemini lo dibuja en la misma vista previa, sin salir de la herramienta.",
+      code: REF_MATRICULA
+    },
+    stretch: "Pide: «Agrega indicadores de cuello de botella: colorea en ámbar la etapa más lenta y explica en una nota por qué lo es».",
     previewSvg: canvasSvgFlow("Diagrama de flujo por carriles del proceso de matrícula con cuatro actores", "Matrícula por carriles", [
       { name: "Aspirante", steps: ["Registro", "Prueba", "Carga docs"] },
       { name: "Plataforma", steps: ["¿Activa?", "Bienvenida"] },
@@ -612,39 +745,53 @@ CANVAS_EXERCISES["flowchart-diagram"] = [
   },
   {
     id: "flow-b-secuencia-jwt-gantt",
+    code: "4B",
     capabilities: ["code-preview", "inline-edit", "share"],
-    whyCanvas: "Los dos diagramas quedan en una página que se ejecuta y se comparte; seleccionas solo el bloque gantt para cambiarlo.",
+    whyCanvas: "Los dos diagramas quedan en una página que se ejecuta en la vista previa; seleccionas solo el bloque gantt para cambiarlo y compartes el resultado con un enlace.",
+    outsideCanvas: "Todo ocurre dentro de Canvas: pestañas, diagramas y glosario se prueban en «Vista previa», y el código de referencia se pega en el mismo chat del lienzo. «Compartir» es opcional; si tu cuenta lo restringe, el resultado queda en tu chat de Gemini.",
     title: "Diagrama de secuencia JWT y cronograma Gantt en una sola página",
     level: "Avanzado",
     duration: "30 min",
     canvasFeature: "Mermaid (sequenceDiagram + gantt) en vista previa",
-    goal: "Documentar el flujo de autenticación con tokens y el plan de implementación en dos diagramas conectados.",
+    goal: "Documentar el flujo de autenticación con tokens y el plan de implementación en dos diagramas conectados que se revisan en la vista previa de Canvas.",
     scenario: "El equipo de desarrollo debe explicar en la revisión técnica cómo funciona el login y cuándo estará listo.",
     promptParts: {
       role: "arquitecto de software que documenta flujos de autenticación",
       context: "El equipo explicará en la revisión técnica cómo funciona el inicio de sesión y cuándo estará listo.",
       data: IN_JWT,
       instruction: "En Canvas, crea una página web con dos diagramas Mermaid en pestañas:",
-      task: ["Secuencia: el inicio de sesión con sus dos caminos de error (credenciales inválidas y token vencido) y la vigencia de cada token.", "Cronograma: un diagrama de Gantt con las tareas, sus fechas y el despliegue como hito."],
-      constraints: ["Los códigos HTTP y las fechas deben coincidir con los datos.", "Las pestañas deben funcionar con teclado."],
-      format: "Un solo archivo HTML con Mermaid cargado desde CDN."
+      task: [
+        "Secuencia: un «sequenceDiagram» con los cinco participantes en el orden de los datos, bloques «alt/else» para los dos caminos de error (credenciales inválidas y token vencido) y una «Note» con la vigencia de cada token.",
+        "Cronograma: un «gantt» con «dateFormat YYYY-MM-DD», las seis tareas con sus fechas y el despliegue marcado como «milestone»."
+      ],
+      constraints: ["Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js.", "Los códigos HTTP y las fechas deben coincidir con los datos.", "Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse."],
+      format: "Un solo archivo HTML ejecutable.",
+      tone: "Técnico y preciso, con términos estándar de autenticación."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
-      "Revisa la pestaña de secuencia y ubica los dos caminos de error.",
-      "En el código, selecciona el bloque gantt y escribe: «Marca como crítica la tarea de pruebas de seguridad».",
-      "Pide en el chat: «Agrega una pestaña de glosario con JWT, access token, refresh token, firma y código 401, cada uno en una frase».",
-      "Usa «Compartir» para enviar el enlace al equipo."
+      "Cuando termine, abre la «Vista previa» del Canvas y recorre las dos pestañas con la tecla Tab y las flechas.",
+      "En la pestaña de secuencia, ubica los dos bloques de error 401; si un diagrama no se dibuja, usa «Corregir error».",
+      "En «Código», selecciona el bloque gantt y escribe: «Marca como crítica la tarea de pruebas de seguridad».",
+      "Pide en el chat del lienzo: «Agrega una pestaña de glosario con JWT, access token, refresh token, firma y código 401, cada uno en una frase».",
+      "Copia el código de referencia de esta guía y pégalo en el chat del lienzo con la frase: «Compara estos diagramas con los tuyos y dime qué diferencias hay»; corrige lo que falte.",
+      "(Opcional) Usa «Compartir» para enviar el enlace al equipo; si tu cuenta `@soy.sena.edu.co` restringe enlaces públicos, el resultado queda guardado en tu chat de Gemini.",
+      "Verifica tu entregable con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El diagrama de secuencia muestra los cinco participantes en orden.",
       "Existen las ramas 401 por credenciales y 401 por token expirado con refresh.",
-      "Las notas indican 15 minutos y 7 días.",
-      "El Gantt muestra seis tareas sin solapamiento y termina el 27/11/2026.",
-      "Las pestañas funcionan con teclado.",
+      "La nota indica 15 minutos para el access token y 7 días para el refresh token.",
+      "El Gantt muestra seis tareas sin solapamiento, pruebas de seguridad marcada como crítica y el hito el 27/11/2026.",
+      "Las pestañas funcionan con teclado y cada diagrama se dibuja al abrirla.",
       "El glosario explica los cinco términos en una frase cada uno."
     ],
+    reference: {
+      label: "Código Mermaid de referencia para comparar",
+      intro: "Contiene los dos diagramas separados por una línea en blanco. Cópialo y pégalo en el chat del lienzo para que Gemini lo compare con tu página o lo dibuje en la vista previa.",
+      code: REF_JWT
+    },
     stretch: "Pide: «Agrega un diagrama de estados del token: emitido, vigente, expirado, renovado y revocado».",
     previewSvg: canvasSvgFlow("Diagrama de secuencia simplificado del inicio de sesión con JWT y su renovación", "Secuencia login JWT", [
       { name: "App web", steps: ["POST login", "GET /citas", "Refresh"] },
@@ -698,12 +845,14 @@ INC-06,Eléctrico,Auditorio,Media,Recibido,`;
 CANVAS_EXERCISES["visual-mockup"] = [
   {
     id: "ui-a-landing-biblioturnos",
-    capabilities: ["code-preview", "inline-edit"],
-    whyCanvas: "Ves la landing funcionando, pruebas el formulario y el modo oscuro, y seleccionas una sección para rediseñarla sin tocar el resto.",
+    code: "5A",
+    capabilities: ["code-preview", "inline-edit", "select-ask"],
+    whyCanvas: "Ves la landing funcionando, pruebas el formulario y el modo oscuro, y señalas un componente con «Seleccionar y preguntar» para ajustarlo sin tocar el resto.",
+    outsideCanvas: "Todo el diseño, prueba del formulario, modo oscuro y ajuste visual con «Seleccionar y preguntar» ocurre 100 % dentro de Canvas (como la vista previa de Canvas no incluye un selector nativo de ancho móvil, simulamos el marco de 390 px con un conmutador propio dentro de la página).",
     title: "Landing de reservas con modo oscuro y ocupación en vivo",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Canvas de código + Vista previa responsiva",
+    canvasFeature: "Vista previa responsiva + Seleccionar y preguntar",
     goal: "Diseñar y construir una página de aterrizaje completa, accesible y con modo oscuro, que muestre la ocupación por franja con un gráfico.",
     scenario: "La biblioteca quiere lanzar las reservas en línea la próxima semana y necesita una página atractiva y clara para los aprendices.",
     promptParts: {
@@ -713,15 +862,18 @@ CANVAS_EXERCISES["visual-mockup"] = [
       instruction: "En Canvas, construye la landing con el contenido de los datos, incluyendo:",
       task: ["Un gráfico de ocupación por franja: verde por debajo de 75 %, ámbar entre 75 % y 89 % y rojo desde 90 %.", "Un contador de cubículos libres calculado con esos datos.", "Un formulario con validación en vivo y mensajes que expliquen cómo corregir.", "Un interruptor de modo oscuro."],
       constraints: ["Contraste WCAG AA, foco visible y uso completo con teclado.", "Responsiva desde 360 px y sin librerías externas."],
-      format: "Un solo archivo HTML con colores definidos en variables CSS."
+      format: "Un solo archivo HTML con colores definidos en variables CSS.",
+      tone: "Cercano y claro en los textos de la interfaz."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
-      "Escribe un documento con letras en el formulario y lee el mensaje de error.",
-      "Activa el modo oscuro y revisa que el gráfico siga legible.",
-      "En el código, selecciona la sección principal (héroe) y escribe: «Agrega una ilustración SVG sencilla de un escritorio con libros».",
-      "Pide en el chat: «Muestra cómo se ve a 390 px y corrige lo que no quepa»."
+      "Cuando termine, abre la «Vista previa» del Canvas, prueba el formulario con letras y activa el modo oscuro.",
+      "En la «Vista previa», activa «Seleccionar y preguntar», haz clic en el bloque héroe y pide: «Agrega una ilustración SVG sencilla de un escritorio con libros».",
+      "En el código, selecciona la sección de horarios y escribe: «Destaca con un borde la franja con más cubículos libres».",
+      "Pide en el chat del lienzo: «Agrega en el encabezado un conmutador Vista móvil (390 px) / Vista escritorio que ajuste el contenedor principal a 390 px centrados y apile las columnas sin desbordamiento».",
+      "Vuelve a la «Vista previa», activa la vista de 390 px y comprueba que el acordeón funcione con teclado.",
+      "Verifica tu resultado con la lista de comprobación de esta guía."
     ],
     expected: [
       "La franja 16:00-18:00 aparece en rojo (95 %) y 10:00-12:00 en ámbar (85 %).",
@@ -736,8 +888,10 @@ CANVAS_EXERCISES["visual-mockup"] = [
   },
   {
     id: "ui-b-app-reporta-ya",
+    code: "5B",
     capabilities: ["code-preview", "inline-edit"],
     whyCanvas: "El prototipo multipantalla se navega en la vista previa como si fuera un teléfono, y cada pantalla se ajusta por selección.",
+    outsideCanvas: "Toda la navegación entre las 4 pantallas móviles, la creación de reportes en memoria y la edición por selección se ejecutan dentro de Canvas.",
     title: "Prototipo móvil navegable de reporte de incidencias",
     level: "Avanzado",
     duration: "35 min",
@@ -751,15 +905,18 @@ CANVAS_EXERCISES["visual-mockup"] = [
       instruction: "En Canvas, crea un prototipo web con apariencia de teléfono que:",
       task: ["Implemente las cuatro pantallas con una barra de navegación inferior.", "Cargue los reportes de ejemplo con un indicador de estado legible.", "Permita crear un reporte nuevo que aparezca de inmediato en Inicio.", "Calcule en Estadísticas la distribución por tipo y el tiempo promedio de solución."],
       constraints: ["Botones de al menos 44 px de alto y texto de al menos 16 px.", "El estado se comunica con texto, no solo con color."],
-      format: "Un solo archivo HTML ejecutable, sin frameworks."
+      format: "Un solo archivo HTML ejecutable, sin frameworks.",
+      tone: "Cercano y directo en los textos de cada pantalla."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
       "Navega por las cuatro pantallas con la barra inferior.",
       "Crea un reporte de tipo Agua en «Bloque D-110» con prioridad Alta y búscalo en Inicio.",
       "En el código, selecciona la línea de tiempo del detalle y escribe: «Agrega la fecha y hora de cada cambio de estado».",
-      "Pide en el chat: «Agrega un filtro por prioridad en Inicio»."
+      "Pide en el chat del lienzo: «Agrega un filtro por prioridad en Inicio».",
+      "Comprueba todos los puntos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "Las cuatro pantallas navegan sin recargar.",
@@ -769,7 +926,7 @@ CANVAS_EXERCISES["visual-mockup"] = [
       "El promedio de solución es (6 + 4 + 9) / 3 = 6,3 horas.",
       "Los botones cumplen el tamaño mínimo táctil."
     ],
-    stretch: "Pide: «Agrega un filtro por prioridad y una insignia con el número de reportes de prioridad Alta abiertos».",
+    stretch: "Selecciona la pantalla Estadísticas en el código y pide: «Agrega una insignia con el número de reportes de prioridad Alta abiertos».",
     previewSvg: canvasSvgMock("Maqueta de cuatro pantallas móviles: inicio, reportar, detalle y estadísticas", "Prototipo Reporta Ya", "phone")
   }
 ];
@@ -781,7 +938,7 @@ Señores acudientes:
 
 Les informamos que el rendimiento del grupo es muy malo y que varios aprendices no están cumpliendo con nada. Si no asisten a la reunión, no nos hacemos responsables de lo que pase con la matrícula.
 
-La reunión será el jueves 6 de noviembre de 2026 a las 6:00 p. m. en el auditorio principal. También se puede asistir por videollamada con el enlace que se enviará el miércoles.
+La reunión será el viernes 6 de noviembre de 2026 a las 6:00 p. m. en el auditorio principal. También se puede asistir por videollamada con el enlace que se enviará el miércoles.
 
 Los temas son: resultados del trimestre, inasistencias, plan de mejoramiento, uso del celular en clase, salida pedagógica de diciembre.
 
@@ -835,12 +992,14 @@ Casos de prueba esperados:
 CANVAS_EXERCISES["inline-prompting"] = [
   {
     id: "inline-a-correo-acudientes",
-    capabilities: ["doc-create", "inline-edit", "length-tone"],
+    code: "6A",
+    capabilities: ["doc-create", "inline-edit", "manual-edit", "versions"],
     whyCanvas: "El correo queda en un documento y corriges párrafo por párrafo; en el chat Gemini reescribiría todo y podría cambiar fechas o lugares.",
+    outsideCanvas: "Este ejercicio es imposible en el chat estándar sin riesgo de alterar datos fijos: la selección por párrafo, la barra de formato y «Mostrar cambios recientes» son exclusivos de Canvas.",
     title: "Correo a acudientes: corregir tono párrafo por párrafo",
     level: "Básico",
     duration: "20 min",
-    canvasFeature: "Selección de texto + ventanita de edición + Cambiar tono",
+    canvasFeature: "Selección de texto + Edición directa + Historial de versiones",
     goal: "Practicar la edición quirúrgica: corregir solo los fragmentos problemáticos de un correo sin que Canvas reescriba el resto.",
     scenario: "La coordinación redactó un correo con tono amenazante. Debe salir hoy, pero los datos de fecha, hora y lugar no pueden cambiar.",
     promptParts: {
@@ -850,22 +1009,25 @@ CANVAS_EXERCISES["inline-prompting"] = [
       instruction: "Copia el correo en Canvas sin cambiar ninguna palabra. Luego, en el chat:",
       task: ["Señala los tres fragmentos con más problemas de tono y explica cada uno en una línea, sin reescribirlos."],
       constraints: ["No cambies ninguna palabra del documento en este paso."],
-      format: "Documento en Canvas y una lista breve en el chat."
+      format: "Documento en Canvas y una lista breve en el chat.",
+      tone: "Respetuoso y neutral en las observaciones del chat."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Selecciona solo el párrafo que empieza «Les informamos…» y escribe: «Reescríbelo con tono empático y propositivo, sin culpar a nadie».",
       "Selecciona la lista de temas y escribe: «Conviértela en viñetas ordenadas por prioridad».",
-      "Selecciona la línea «Es obligatorio confirmar…» y escribe: «Pide la confirmación con amabilidad y fija como plazo el miércoles 5 de noviembre».",
-      "Usa «Ajustar longitud → Más corto» y observa qué cambia.",
-      "Compara con el original: la fecha, la hora y el lugar deben seguir iguales."
+      "Selecciona la línea «Es obligatorio confirmar…» y escribe: «Pide la confirmación con amabilidad y fija como plazo el jueves 5 de noviembre».",
+      "Haz clic directamente en el documento y pon en negrita la fecha con la barra de formato.",
+      "Abre «Mostrar cambios recientes» en la barra superior de Canvas para verificar que la fecha, la hora y el lugar siguen intactos.",
+      "Comprueba todos los criterios en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "Solo cambiaron los fragmentos seleccionados.",
       "El párrafo inicial ya no contiene juicios como «muy malo» ni amenazas.",
       "Los temas aparecen como lista con viñetas.",
-      "La solicitud de confirmación es amable e incluye el miércoles 5 de noviembre.",
-      "Fecha (jueves 6 de noviembre de 2026), hora (6:00 p. m.) y lugar quedaron intactos.",
+      "La solicitud de confirmación es amable e incluye el jueves 5 de noviembre.",
+      "Fecha (viernes 6 de noviembre de 2026), hora (6:00 p. m.) y lugar quedaron intactos.",
       "El correo final se lee en menos de un minuto."
     ],
     stretch: "Selecciona el correo completo y pide: «Crea una versión corta para WhatsApp de máximo 400 caracteres».",
@@ -873,8 +1035,10 @@ CANVAS_EXERCISES["inline-prompting"] = [
   },
   {
     id: "inline-b-depurar-funcion",
+    code: "6B",
     capabilities: ["code-preview", "inline-edit"],
     whyCanvas: "Seleccionas solo la función con error y la vista previa confirma la corrección: es una depuración precisa que el chat no permite.",
+    outsideCanvas: "Todos los pasos ocurren dentro de Canvas: seleccionas cada función en la pestaña «Código» y verificas el cálculo en «Vista previa».",
     title: "Depurar una app seleccionando solo la función con error",
     level: "Intermedio",
     duration: "25 min",
@@ -888,15 +1052,18 @@ CANVAS_EXERCISES["inline-prompting"] = [
       instruction: "Copia el código en Canvas sin cambiar ninguna línea. Luego, en el chat:",
       task: ["Describe en tres viñetas los síntomas que veré en la vista previa, sin revelar la solución."],
       constraints: ["No modifiques el código en este paso."],
-      format: "Código HTML ejecutable en Canvas y viñetas en el chat."
+      format: "Código HTML ejecutable en Canvas y viñetas en el chat.",
+      tone: "Didáctico: explica cada error sin dar la solución por adelantado."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Abre la «Vista previa», presiona «Calcular» y observa el resultado.",
       "Selecciona solo la función calcularPromedio y escribe: «Corrige el error del ciclo sin tocar nada más».",
       "Selecciona solo leerNotas y escribe: «Convierte cada nota a número y descarta los valores vacíos».",
       "Selecciona solo estado y escribe: «Un promedio de 3.5 debe quedar Aprobado».",
-      "Prueba en la vista previa los tres casos de prueba de los datos."
+      "Prueba en la «Vista previa» los tres casos de prueba de los datos.",
+      "Marca los puntos cumplidos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El ciclo usa i < notas.length.",
@@ -904,7 +1071,7 @@ CANVAS_EXERCISES["inline-prompting"] = [
       "estado usa promedio >= 3.5.",
       "Los tres casos dan ≈ 4.1, 3.5 y 3.0 con el estado correcto (si ves 4.1000000000000005, resuélvelo con el reto extra).",
       "Las líneas que no seleccionaste quedaron iguales.",
-      "El gráfico muestra cada nota y la línea de aprobación."
+      "La «Vista previa» muestra el promedio y el estado sin errores en la consola."
     ],
     stretch: "Pide: «Muestra el promedio con un decimal usando toFixed y agrega validación para notas fuera de 1.0 a 5.0».",
     previewSvg: canvasSvgMock("Maqueta de editor de código con una función resaltada y la consola con pruebas aprobadas", "Depuración por selección", "code")
@@ -942,12 +1109,14 @@ Colores sugeridos:
 CANVAS_EXERCISES["algorithm-refactor"] = [
   {
     id: "algo-a-duplicados-on",
-    capabilities: ["code-preview", "inline-edit", "export-colab"],
-    whyCanvas: "El Python se edita en Canvas y se ejecuta con «Exportar a Colab»; la comparación de curvas corre en la vista previa.",
+    code: "7A",
+    capabilities: ["code-preview", "inline-edit"],
+    whyCanvas: "El Python se edita en Canvas y se ejecuta en la misma vista previa con Pyodide (Python dentro del navegador); la comparación de curvas también corre allí.",
+    outsideCanvas: "Todo ocurre dentro de Canvas: la vista previa no ejecuta un archivo `.py` por sí sola, así que se pide una página web que cargue Pyodide desde CDN y corra las pruebas. Exportar a Colab queda como alternativa opcional, no como requisito.",
     title: "De O(n²) a O(n): refactorizar y visualizar la diferencia",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Canvas de código Python + página HTML con gráfico",
+    canvasFeature: "Canvas de código Python + Pyodide en vista previa + página HTML con gráfico",
     goal: "Refactorizar una búsqueda de duplicados cuadrática a lineal, explicarla y demostrar la mejora con un gráfico interactivo.",
     scenario: "El script que detecta documentos duplicados en la base de aprendices tarda demasiado. Hay que justificar el cambio ante el equipo.",
     promptParts: {
@@ -957,16 +1126,17 @@ CANVAS_EXERCISES["algorithm-refactor"] = [
       instruction: "En Canvas, entrega:",
       task: ["Una versión en Python con complejidad O(n) que conserve el orden de primera aparición.", "Tres pruebas con assert: la muestra, una lista vacía y una lista sin duplicados.", "Una explicación breve de por qué la versión original es O(n²) y la nueva O(n)."],
       constraints: ["Solo biblioteca estándar de Python.", "Explica para un aprendiz de primer trimestre, sin fórmulas innecesarias."],
-      format: "Código Python con docstring, anotaciones de tipo y comentarios breves."
+      format: "Código Python con docstring, anotaciones de tipo y comentarios breves.",
+      tone: "Didáctico y preciso, con ejemplos numéricos."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
-      "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
-      "Selecciona el bloque de pruebas y escribe: «Agrega una medición de tiempo con 10.000 elementos usando time.perf_counter».",
-      "Pide en el chat: «Crea una página web con un gráfico de operaciones contra n para ambas versiones, con escala logarítmica y un control para elegir n».",
-      "Abre la «Vista previa», mueve el control hasta 10.000 y activa la escala logarítmica.",
-      "Vuelve al código Python y usa «Compartir y exportar → Exportar a Colab» para ejecutar las pruebas en el cuaderno.",
-      "Explica con tus palabras por qué las curvas se separan tanto."
+      "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo para generar el código Python.",
+      "Selecciona el bloque de pruebas en el lienzo Python y escribe: «Agrega una medición de tiempo con 10.000 elementos usando time.perf_counter».",
+      "Pide en el chat del lienzo: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js, ejecute este código Python con sus pruebas y muestre ✓ o ✗ por prueba y el tiempo medido»; abre la «Vista previa» y revisa el resultado (si Pyodide no carga, pide la misma función y pruebas en JavaScript).",
+      "De regreso en Gemini Canvas, pide en el chat: «Crea una página web con un gráfico de operaciones contra n para ambas versiones, con escala logarítmica y un control para elegir n».",
+      "Abre la «Vista previa» del nuevo lienzo HTML, mueve el control hasta 10.000 y activa la escala logarítmica.",
+      "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "La función refactorizada devuelve ['1001', '1002'] con la muestra.",
@@ -984,8 +1154,10 @@ CANVAS_EXERCISES["algorithm-refactor"] = [
   },
   {
     id: "algo-b-visualizador-ordenamiento",
+    code: "7B",
     capabilities: ["code-preview", "inline-edit"],
     whyCanvas: "La animación corre en la vista previa: comparas los algoritmos paso a paso y cambias solo la función de burbuja por selección.",
+    outsideCanvas: "Toda la simulación animada en JavaScript y la edición por selección de la función de ordenamiento ocurren 100 % dentro de Canvas.",
     title: "Visualizador animado: burbuja contra merge sort",
     level: "Avanzado",
     duration: "35 min",
@@ -999,15 +1171,18 @@ CANVAS_EXERCISES["algorithm-refactor"] = [
       instruction: "En Canvas, crea un visualizador web que:",
       task: ["Muestre los dos algoritmos lado a lado, con barras proporcionales a los valores.", "Permita iniciar, pausar, avanzar paso a paso y reiniciar, con control de velocidad.", "Cuente las comparaciones de cada algoritmo en vivo.", "Use los colores sugeridos para el estado de cada barra.", "Al terminar, indique cuántas veces más comparaciones hizo burbuja."],
       constraints: ["Implementa los algoritmos como generadores de JavaScript.", "Anuncia los contadores con aria-live y no uses librerías externas."],
-      format: "Un solo archivo HTML ejecutable."
+      format: "Un solo archivo HTML ejecutable.",
+      tone: "Didáctico y visual, con rótulos breves."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
       "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
       "Presiona «Iniciar» con velocidad media y espera a que ambos terminen.",
-      "Reinicia y usa «Paso a paso» en merge sort; explica en voz alta qué mezcla en cada paso.",
+      "Reinicia y usa «Paso a paso» en merge sort; observa qué subarreglos mezcla en cada paso.",
       "En el código, selecciona la función de burbuja y escribe: «Agrega parada temprana y muestra cuántas comparaciones ahorra».",
-      "Pide en el chat: «Agrega un botón que genere un arreglo aleatorio de 16 valores»."
+      "Pide en el chat del lienzo: «Agrega un botón que genere un arreglo aleatorio de 16 valores».",
+      "Verifica todos los resultados con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "Ambos paneles terminan con el arreglo ordenado esperado.",
@@ -1063,8 +1238,10 @@ Producto esperado: repositorio con 5 commits, una rama "feature/login" integrada
 CANVAS_EXERCISES["rubric-curriculum"] = [
   {
     id: "rubric-a-calculadora-radar",
+    code: "8A",
     capabilities: ["doc-create", "inline-edit", "code-preview", "gemini-in-app", "export-docs"],
     whyCanvas: "La rúbrica se pule celda por celda en el documento, se vuelve una calculadora ejecutable y, con funciones de Gemini, la app redacta la retroalimentación.",
+    outsideCanvas: "El documento y la calculadora web viven en Canvas; la exportación final abre Documentos de Google fuera de Gemini.",
     title: "Rúbrica analítica con calculadora de nota y gráfico radar",
     level: "Intermedio",
     duration: "30 min",
@@ -1078,16 +1255,18 @@ CANVAS_EXERCISES["rubric-curriculum"] = [
       instruction: "En Canvas, construye:",
       task: ["La rúbrica de 4 criterios por 4 niveles, con un descriptor observable en cada celda.", "El cálculo paso a paso de la nota del aprendiz 1 y su resultado según la regla.", "Una retroalimentación de tres líneas para el aprendiz 1, centrada en su criterio más bajo."],
       constraints: ["Cada descriptor nombra una evidencia verificable en el código o la entrega; evita adjetivos como «bueno» o «adecuado».", "Tono respetuoso y orientado a la mejora."],
-      format: "Tabla de rúbrica, seguida del cálculo y la retroalimentación."
+      format: "Tabla de rúbrica, seguida del cálculo y la retroalimentación.",
+      tone: "Formativo y respetuoso con el aprendiz evaluado."
     },
+    places: ["canvas", "canvas", "external", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona una celda que te parezca ambigua y escribe: «Hazla verificable con una evidencia concreta».",
-      "Exporta la rúbrica con «Compartir y exportar → Exportar a Documentos de Google».",
-      "Pide en el chat: «Crea una calculadora web: elijo el nivel de cada criterio, veo la nota en vivo y un radar del perfil frente al nivel esperado de 4».",
-      "En la vista previa, carga los valores del aprendiz 1 y luego sube Pruebas a 4.",
-      "Usa «Agregar funciones de Gemini» y pide: «Redacta la retroalimentación del aprendiz según su criterio más bajo»."
+      "(Opcional) Exporta la rúbrica con «Compartir y exportar → Exportar a Documentos de Google» para compartirla con otros instructores.",
+      "Pide en el chat del lienzo: «Crea una calculadora web: elijo el puntaje de 1 a 5 de cada criterio (se admiten valores intermedios), veo la nota en vivo y un radar del perfil frente al nivel esperado de 4».",
+      "En la «Vista previa», carga los valores del aprendiz 1 y luego sube Pruebas a 4.",
+      "Usa «Agregar funciones de Gemini» y pide: «Redacta la retroalimentación del aprendiz según su criterio más bajo» (ruta alternativa si tu cuenta `@soy.sena.edu.co` no muestra el botón: pide un generador determinista de retroalimentación en JavaScript por criterio y nivel).",
+      "Verifica tu entregable con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "La rúbrica tiene 16 descriptores observables.",
@@ -1095,7 +1274,7 @@ CANVAS_EXERCISES["rubric-curriculum"] = [
       "Con Pruebas en 4, la nota sube a 3,95 y el resultado pasa a «Aprobado».",
       "El radar muestra el perfil del aprendiz y la serie esperada.",
       "La retroalimentación del aprendiz 1 se enfoca en Pruebas, su criterio más bajo.",
-      "La rúbrica quedó en Documentos de Google y la calculadora redacta la retroalimentación con IA."
+      "La calculadora genera la retroalimentación en la vista previa de Canvas."
     ],
     stretch: "Pide: «Permite registrar 5 aprendices y muestra un radar promedio del grupo con el criterio más débil resaltado».",
     previewSvg: canvasSvgRadar("Gráfico radar con el perfil del aprendiz 1 frente al nivel esperado en cuatro criterios", "Perfil del aprendiz 1", ["Diseño", "Validación", "Documentación", "Pruebas"], [
@@ -1105,8 +1284,10 @@ CANVAS_EXERCISES["rubric-curriculum"] = [
   },
   {
     id: "rubric-b-guia-quiz-git",
+    code: "8B",
     capabilities: ["doc-create", "inline-edit", "create-quiz", "export-docs"],
     whyCanvas: "La guía se ajusta por secciones y «Crear → Cuestionario» genera la evaluación desde el mismo contenido, sin escribir preguntas aparte.",
+    outsideCanvas: "La edición modular de la guía y «Crear → Cuestionario» ocurren en Canvas; si tu cuenta incluye «Crear → Tarjetas de estudio», también puedes repasar los comandos de Git allí antes de exportar a Documentos de Google.",
     title: "Guía didáctica de Git con cuestionario autocalificable",
     level: "Básico",
     duration: "30 min",
@@ -1120,16 +1301,18 @@ CANVAS_EXERCISES["rubric-curriculum"] = [
       instruction: "En Canvas, redacta la guía didáctica con:",
       task: ["Los cinco momentos de la sesión con su duración: reflexión inicial, contextualización, apropiación, transferencia y evaluación.", "Una práctica paso a paso que lleve al producto esperado, incluido un conflicto y su resolución.", "Una tabla de errores frecuentes con su causa y su solución.", "Una lista de chequeo de la evidencia."],
       constraints: ["Usa comandos reales y vigentes de Git (git switch en lugar de git checkout).", "Explica cada término técnico la primera vez que aparezca."],
-      format: "Guía con un título por momento y la práctica en bloques de comandos."
+      format: "Guía con un título por momento y la práctica en bloques de comandos.",
+      tone: "Cercano y motivador, dirigido a aprendices."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "external", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
       "Selecciona la práctica y escribe: «Agrega la salida esperada de la terminal después de cada comando».",
       "Selecciona la sección de errores frecuentes y escribe: «Agrega un ejemplo de mensaje de error real de la terminal a cada fila».",
       "Abre «Crear → Cuestionario» sobre la guía para generar la evaluación con retroalimentación inmediata.",
       "Responde el cuestionario con dos errores a propósito y revisa la explicación de cada respuesta.",
-      "Exporta la guía a Documentos de Google."
+      "(Opcional) Exporta la guía a Documentos de Google desde «Compartir y exportar».",
+      "Comprueba tu entregable con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "Los cinco momentos suman 240 minutos.",
@@ -1182,7 +1365,7 @@ INSERT INTO prestamos VALUES
 (11,5,2,'2026-10-14','2026-10-28',NULL),
 (12,1,6,'2026-10-16','2026-10-30','2026-10-24');`;
 
-const IN_ASISTENCIA = `ARCHIVO asistencia_cruda.csv (14 filas, datos de práctica con errores a propósito)
+const IN_ASISTENCIA = `CONTENIDO DE asistencia_cruda (14 filas pegadas aquí, datos de práctica con errores a propósito)
 documento,nombre,fecha,estado
 1001, ana torres ,2026-10-01,P
 1001,Ana Torres,01/10/2026,presente
@@ -1212,8 +1395,10 @@ REGLAS DE LIMPIEZA:
 CANVAS_EXERCISES["sql-pipeline"] = [
   {
     id: "sql-a-biblioteca-dashboard",
+    code: "9A",
     capabilities: ["code-preview", "inline-edit", "export-colab"],
-    whyCanvas: "Las consultas se ven ejecutadas en una página con vista previa y, al exportar el script Python a Colab, las corres contra una base SQLite real.",
+    whyCanvas: "Las consultas se editan en Canvas y su resultado se calcula y se prueba en la vista previa, que alimenta un tablero visual en la misma página.",
+    outsideCanvas: "Canvas no tiene motor PostgreSQL integrado: el script `.sql` se edita en Canvas y sus resultados se comprueban en la vista previa con el tablero en JavaScript y una prueba por consulta. Exportar a Colab para ejecutar SQLite real queda como paso opcional fuera de Gemini.",
     title: "Consultas SQL de biblioteca con tablero en vista previa y ejecución en Colab",
     level: "Avanzado",
     duration: "35 min",
@@ -1227,15 +1412,18 @@ CANVAS_EXERCISES["sql-pipeline"] = [
       instruction: "En Canvas, escribe consultas PostgreSQL que respondan:",
       task: ["¿Qué libros se prestan más? Usa RANK().", "¿Qué préstamos están vencidos y con cuántos días de atraso?", "¿Cuántos préstamos tiene cada programa?", "¿Cuál es el promedio de días de préstamo de los libros devueltos, en general y por programa?", "¿Qué préstamos se devolvieron después de la fecha límite?"],
       constraints: ["Antes de cada consulta, escribe un comentario con la pregunta de negocio.", "Usa JOIN explícitos y alias legibles."],
-      format: "Un script .sql comentado."
+      format: "Un script .sql comentado.",
+      tone: "Didáctico, con comentarios breves en cada consulta."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "external", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
-      "Selecciona la consulta de vencidos y escribe: «Agrega el nombre del usuario y ordena por días de atraso».",
-      "Pide en el chat: «Crea una página web que cargue estos datos en arreglos de JavaScript, muestre cada consulta junto a su resultado calculado, tarjetas y un gráfico por programa».",
-      "Abre la «Vista previa» y compara los resultados con la lista «Verifica tu resultado».",
-      "Pide en el chat: «Escribe un script Python con sqlite3 que cree estas tablas, inserte los datos y ejecute las consultas adaptadas a SQLite»; luego usa «Compartir y exportar → Exportar a Colab» y ejecuta el cuaderno."
+      "Selecciona la consulta de vencidos en el script SQL y escribe: «Agrega el nombre del usuario y ordena por días de atraso».",
+      "Pide en el chat del lienzo: «Crea una página web que cargue estos datos en arreglos de JavaScript, muestre cada consulta junto a su resultado calculado, tarjetas y un gráfico por programa».",
+      "Abre la «Vista previa» del tablero web y revisa los indicadores por programa.",
+      "Pide en el chat del lienzo: «Junto a cada consulta SQL, muestra una prueba en JavaScript que compare el resultado calculado con el valor esperado y marque ✓ o ✗»; revisa en la «Vista previa» que todas queden en ✓.",
+      "(Opcional) Si quieres un cuaderno aparte, pide un script Python con sqlite3 y usa «Compartir y exportar → Exportar a Colab»; este paso ocurre fuera de Gemini.",
+      "Comprueba todos los resultados con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El ranking pone «Código limpio» en 1 (4 préstamos) y los otros cuatro libros empatan en 2 (2 préstamos).",
@@ -1243,15 +1431,17 @@ CANVAS_EXERCISES["sql-pipeline"] = [
       "Por programa: ADSO 6, Multimedia 4 y Contabilidad 2.",
       "El promedio general de días de los devueltos es 11,0.",
       "Solo el préstamo 6 se devolvió con retraso (14 días).",
-      "El cuaderno de Colab ejecuta el script sqlite3 sin errores y da los mismos resultados que el tablero."
+      "Las pruebas en JavaScript de la vista previa marcan ✓ en las cinco consultas, sin errores en la consola."
     ],
     stretch: "Pide: «Agrega una vista materializada de indicadores mensuales y un gráfico de líneas de préstamos por semana».",
     previewSvg: canvasSvgBars("Gráfico de barras de préstamos por programa: ADSO 6, Contabilidad 2 y Multimedia 4", "Préstamos por programa", ["ADSO", "Contabilidad", "Multimedia"], [6, 2, 4], 0)
   },
   {
     id: "sql-b-limpieza-asistencia",
+    code: "9B",
     capabilities: ["code-preview", "inline-edit"],
     whyCanvas: "El pipeline se revisa por etapas con selección y el tablero de calidad muestra en la vista previa cuántas filas pasa cada regla.",
+    outsideCanvas: "El script SQL y su función almacenada se redactan y revisan por etapas dentro de Canvas, mientras que las pruebas de formato y reglas de limpieza se ejecutan en JavaScript dentro de la «Vista previa» (para correr el SQL en un motor real usarías PostgreSQL local o Colab).",
     title: "Pipeline de limpieza de asistencia con diagrama entidad-relación",
     level: "Avanzado",
     duration: "35 min",
@@ -1265,15 +1455,17 @@ CANVAS_EXERCISES["sql-pipeline"] = [
       instruction: "En Canvas, escribe en PostgreSQL un pipeline de limpieza por etapas:",
       task: ["Carga del archivo crudo en una tabla de staging con todas las columnas como texto.", "Limpieza según las reglas: fechas, nombres desde la tabla maestra y estados.", "Deduplicación por documento y fecha con ROW_NUMBER().", "Tabla final de asistencia y tabla de rechazos con su motivo.", "Porcentaje de asistencia: Presente más Tarde sobre el total limpio."],
       constraints: ["Cada etapa debe poder ejecutarse de nuevo sin duplicar datos.", "Un comentario por cada regla aplicada."],
-      format: "Script .sql dividido por etapas."
+      format: "Script .sql dividido por etapas.",
+      tone: "Técnico y preciso, explicando por qué se rechaza cada fila."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
-      "Selecciona la consulta que normaliza fechas y escribe: «Agrega una prueba por cada formato admitido».",
-      "Pide en el chat: «Crea una página web con el diagrama entidad-relación en Mermaid y un tablero de calidad: filas crudas, limpias, rechazadas por motivo y una dona de estados».",
-      "Abre la «Vista previa» y compara el tablero con tus resultados.",
-      "Pide: «Convierte el pipeline en una función almacenada que reciba la fecha de carga»."
+      "Selecciona la etapa que normaliza fechas y escribe: «Documenta con ejemplos en comentarios SQL los cuatro formatos de fecha admitidos y el caso inválido 2026-13-02».",
+      "Pide en el chat del lienzo: «Crea una página web ejecutable en la Vista previa con el diagrama entidad-relación en Mermaid, una tabla de pruebas en JavaScript para cada formato de fecha y el tablero de calidad (filas crudas, limpias, rechazadas por motivo y dona de estados)».",
+      "Abre la «Vista previa» y comprueba en el tablero que las pruebas de fecha pasen en verde y que de 14 filas crudas queden 10 limpias y 4 rechazadas.",
+      "Pide en el chat del lienzo: «Muestra en una pestaña del visor el bloque SQL encapsulado como CREATE OR REPLACE FUNCTION fn_limpiar_asistencia(p_fecha_carga DATE) listo para copiar a PostgreSQL».",
+      "Verifica todos los puntos con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "De 14 filas crudas quedan 10 limpias y 4 rechazadas.",
@@ -1281,7 +1473,7 @@ CANVAS_EXERCISES["sql-pipeline"] = [
       "Los estados limpios son: 6 Presente, 2 Ausente, 1 Tarde y 1 Sin registro.",
       "La asistencia (Presente + Tarde) es 70 %.",
       "Los nombres finales coinciden con la tabla maestra.",
-      "El diagrama entidad-relación muestra las tres tablas y sus relaciones."
+      "El diagrama entidad-relación muestra las tablas aprendices, asistencia y rechazos, con la relación por documento."
     ],
     stretch: "Pide: «Agrega una regla para detectar aprendices con dos ausencias seguidas y muéstralos en una alerta del tablero».",
     previewSvg: canvasSvgDonut("Gráfico de dona con los estados de asistencia después de la limpieza: 6 presentes, 2 ausentes, 1 tarde y 1 sin registro", "Asistencia limpia (10 filas)", [
@@ -1333,12 +1525,15 @@ Requisito no negociable: los datos personales deben cumplir la Ley 1581 de 2012 
 CANVAS_EXERCISES["executive-report"] = [
   {
     id: "report-a-mesa-ayuda",
-    capabilities: ["doc-create", "inline-edit", "create-infographic", "create-slides", "export-docs"],
-    whyCanvas: "Del mismo documento salen la infografía y la presentación para el comité, sin copiar cifras entre herramientas.",
+    materials: [{ href: "materiales/gemini_canvas/mesa_ayuda_2026.csv", label: "CSV de la mesa de ayuda" }],
+    code: "10A",
+    capabilities: ["doc-create", "inline-edit", "file-input", "deep-research", "create-infographic", "create-slides", "export-docs"],
+    whyCanvas: "Adjuntas el CSV o partes de Deep Research y, del mismo documento en Canvas, salen la infografía y la presentación para el comité sin copiar cifras.",
+    outsideCanvas: "La investigación inicial con Deep Research ocurre en el chat de Gemini y la exportación final abre Presentaciones y Documentos de Google; la edición por sección y «Crear → Infografía» ocurren dentro de Canvas.",
     title: "Informe ejecutivo de mesa de ayuda con infografía y presentación para el comité",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Documento + Selección + Crear → Infografía + Presentación + Exportar a Docs",
+    canvasFeature: "Archivo adjunto CSV + Deep Research a Canvas + Infografía + Presentación",
     goal: "Convertir seis meses de indicadores en un informe ejecutivo con conclusiones prudentes y, desde el mismo documento, generar la infografía y la presentación para el comité.",
     scenario: "La dirección quiere saber si las inversiones de agosto y septiembre mejoraron el servicio y necesita compartirlo con todo el personal.",
     promptParts: {
@@ -1348,15 +1543,18 @@ CANVAS_EXERCISES["executive-report"] = [
       instruction: "En Canvas, redacta un informe ejecutivo con:",
       task: ["Un resumen de máximo cinco líneas con las tres cifras más importantes.", "Una tabla mensual con la tasa de resolución y el tiempo promedio.", "Una comparación entre mayo-julio y agosto-octubre.", "Qué cambios pueden atribuirse a cada hecho relevante y cuáles podrían ser coincidencia.", "Tres decisiones recomendadas."],
       constraints: ["No afirmes causalidad sin advertir sus límites.", "Cifras con un decimal y formato colombiano."],
-      format: "Títulos numerados, una tabla y un cuadro de decisiones."
+      format: "Títulos numerados, una tabla y un cuadro de decisiones.",
+      tone: "Ejecutivo y objetivo, con cifras antes que opiniones."
     },
+    places: ["canvas", "canvas", "canvas", "gemini", "canvas", "external", "portal"],
     steps: [
-      "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
-      "Selecciona el cuadro de decisiones y escribe: «Separa las conclusiones con evidencia fuerte de las que solo son coincidencias».",
+      "Activa Canvas en la barra del chat de Gemini, adjunta desde «+» el archivo `materiales/gemini_canvas/mesa_ayuda_2026.csv` (o usa los datos del prompt) y envíalo.",
+      "Selecciona el cuadro de decisiones en el lienzo y escribe: «Separa las conclusiones con evidencia fuerte de las que solo son coincidencias».",
       "Abre «Crear → Infografía» sobre el informe y comprueba que muestre los KPI de los seis meses.",
-      "Pide en el chat: «Convierte este informe en una presentación de 6 diapositivas para el comité» y usa «Exportar a Presentaciones de Google».",
-      "Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google»."
+      "En un chat nuevo, elige «Deep Research», investiga buenas prácticas de mesas de ayuda TI y usa una de ellas para ajustar una de tus tres decisiones.",
+      "Pide en el chat del lienzo: «Convierte este informe en una presentación de 6 diapositivas para el comité» y usa «Exportar a Presentaciones de Google».",
+      "(Opcional) Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google».",
+      "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El tiempo promedio baja de 18 a 10 horas (−44,4 %).",
@@ -1364,17 +1562,20 @@ CANVAS_EXERCISES["executive-report"] = [
       "El promedio de tiempo antes (mayo-julio) es 18,7 h y después (agosto-octubre) 12,0 h.",
       "Acceso y contraseñas es la principal categoría de octubre (35,2 %).",
       "El informe advierte los límites de atribuir causalidad.",
-      "La infografía y la presentación muestran las mismas cifras del informe, y la copia quedó en Documentos de Google."
+      "Al menos una decisión cita una buena práctica encontrada con Deep Research.",
+      "La infografía y la presentación muestran las mismas cifras del informe."
     ],
-    stretch: "Pide: «Crea una página web con un tablero de los seis meses, un gráfico combinado de barras y líneas y un filtro por periodo».",
+    stretch: "Abre en Canvas el informe de Deep Research desde «Crear» y usa «Crear → Página web» para comparar tus seis meses con los referentes del sector.",
     previewSvg: canvasSvgLine("Gráfico de líneas del tiempo promedio de solución en horas de mayo a octubre: 18, 16, 22, 14, 12 y 10", "Tiempo promedio de solución (h)", ["May", "Jun", "Jul", "Ago", "Sep", "Oct"], [
       { name: "Horas", values: [18, 16, 22, 14, 12, 10], cls: "cx-a" }
     ])
   },
   {
     id: "report-b-dictamen-nube",
+    code: "10B",
     capabilities: ["doc-create", "inline-edit", "code-preview", "create-audio", "export-docs"],
     whyCanvas: "El dictamen se edita por secciones, se vuelve una app de sensibilidad ejecutable y se escucha como Resumen en audio antes del comité.",
+    outsideCanvas: "El documento, la calculadora de sensibilidad y «Crear → Resumen en audio» se ejecutan dentro de Canvas (la opción Resumen en audio puede variar según el idioma o las políticas de tu cuenta institucional); el paso de firma exporta a Documentos de Google.",
     title: "Dictamen técnico de proveedores con matriz ponderada y análisis de sensibilidad",
     level: "Avanzado",
     duration: "35 min",
@@ -1388,16 +1589,18 @@ CANVAS_EXERCISES["executive-report"] = [
       instruction: "En Canvas, redacta el dictamen técnico con:",
       task: ["La metodología y la matriz ponderada con el cálculo de cada proveedor.", "Un análisis de sensibilidad con Seguridad en 35 % y Costo en 20 %, sin cambiar los demás pesos.", "El costo anual por punto de calidad de cada proveedor.", "La recomendación final con las condiciones contractuales mínimas para cumplir la Ley 1581 de 2012."],
       constraints: ["Muestra cada cálculo.", "No uses marcas comerciales reales."],
-      format: "Documento con títulos numerados y tablas."
+      format: "Documento con títulos numerados y tablas.",
+      tone: "Formal e imparcial, sin favorecer a ningún proveedor."
     },
+    places: ["canvas", "canvas", "canvas", "canvas", "canvas", "external", "portal"],
     steps: [
       "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-      "Revisa el resultado con la lista «Verifica tu resultado» y marca lo que ya cumple.",
-      "Selecciona la recomendación y escribe: «Agrega una cláusula de salida y portabilidad de datos».",
-      "Pide en el chat: «Crea una aplicación web con un control por cada peso (la suma debe ser 100 %), ranking en vivo, un radar de los tres proveedores y un aviso cuando cambie el ganador».",
-      "En la vista previa, mueve los pesos hasta que cambie el ganador.",
-      "Abre «Crear → Resumen en audio» sobre el dictamen y escúchalo para revisar si la recomendación se entiende sin leer las tablas.",
-      "Exporta el dictamen a Documentos de Google para su firma."
+      "Selecciona la recomendación en el lienzo y escribe: «Agrega una cláusula de salida y portabilidad de datos».",
+      "Abre «Crear → Resumen en audio» sobre el dictamen (mientras sigue siendo documento) y escúchalo para revisar si la recomendación se entiende sin leer las tablas; si tu cuenta o configuración de idioma aún no muestra Resumen en audio en el menú Crear, pide en el chat del lienzo un guion locutado de 2 minutos.",
+      "Pide en el chat del lienzo: «Crea una aplicación web con un control por cada peso (la suma debe ser 100 %), ranking en vivo, un radar de los tres proveedores y un aviso cuando cambie el ganador».",
+      "En la «Vista previa», mueve los pesos hasta que cambie el ganador.",
+      "(Opcional) Vuelve a la versión del dictamen en documento y expórtalo a Documentos de Google para su firma.",
+      "Verifica todos los puntos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "La matriz base da B 4,05, A 3,95 y C 3,85.",
@@ -1417,45 +1620,38 @@ CANVAS_EXERCISES["executive-report"] = [
 ];
 
 // 11. Visión Multimodal
-const IN_BOCETO_WIRE = `FOTOGRAFÍA ADJUNTA: Boceto a lápiz en libreta de apuntes (datos de práctica)
-Título del boceto: Formulario de Inscripción y Matrícula · Convocatoria 2026
-Campos dibujados a lápiz:
-1. Nombre Completo del Aprendiz: campo de texto obligatorio (mínimo 3 caracteres).
-2. Correo Institucional: campo de correo con anotación a mano: "Solo correos @soy.sena.edu.co o @sena.edu.co".
-3. Contraseña de Acceso: campo password con anotación: "Mínimo 8 caracteres, incluir números y símbolos".
-4. Indicador de seguridad: barra dibujada con tres segmentos (Débil, Media, Segura).
-5. Botón principal tipo píldora rotulado a mano: [Completar Registro Formativo].
+const IN_BOCETO_WIRE = `IMAGEN ADJUNTA: boceto_formulario_matricula.png (boceto a mano en una hoja de cuaderno, material de práctica)
+Lee en la imagen:
+- El título y los tres campos con su asterisco de obligatorio.
+- Las anotaciones en azul debajo de cada campo: son las reglas de validación.
+- El indicador de seguridad de tres segmentos y el texto del botón.
+- Los colores anotados al margen.
+Si un trazo no se entiende, dímelo antes de suponer su contenido.`;
 
-Paleta institucional anotada al margen: Verde Salvia (#2D5A4C) para el botón primario y acentos, fondo suave (#F8FAF9), texto pizarra (#1E293B) y borde (#CBD5E1).`;
-
-const IN_PIZARRA_PQRS = `FOTOGRAFÍA ADJUNTA: Diagrama de flujo dibujado con marcador en pizarra acrílica (datos de práctica)
-Título en pizarra: Proceso de Recepción, Análisis y Resolución de PQRS Formativas
-Elementos dibujados en el flujograma:
-- Inicio: [Radicación en Portal SENA] (nodo redondeado)
-- Decisión 1: ¿Es queja formativa o administrativa?
-  * Si es formativa -> derivar a [Comité de Evaluación y Seguimiento]
-  * Si es administrativa -> derivar a [Coordinación Misional]
-- Nodo intermedio formativa: [Notificación a Aprendiz e Instructor] (plazo: 3 días hábiles)
-- Decisión 2: ¿Requiere plan de mejoramiento académico?
-  * Sí -> [Firma de Acta de Compromiso en Portafolio de Evidencias]
-  * No -> [Archivo y Cierre de Actuación]
-- Fin: [Notificación de Cierre al Usuario] (nodo redondeado)
-Subgrafos anotados con llave: «Fase 1: Radicación», «Fase 2: Gestión y Decisión», «Fase 3: Cierre».`;
+const IN_PIZARRA_PQRS = `IMAGEN ADJUNTA: pizarra_pqrs.png (flujo dibujado con marcador en una pizarra, material de práctica)
+Lee en la imagen:
+- Las tres fases anotadas entre llaves en la parte superior.
+- Los nodos en azul (actividades; los redondeados son inicio y fin) y los rombos en rojo (decisiones).
+- Las etiquetas de cada flecha y el plazo escrito en rojo.
+Si un texto no se lee con claridad, dímelo antes de suponer su contenido.`;
 
 CANVAS_EXERCISES["multimodal-vision"] = [
   {
     id: "mm-a-boceto-formulario",
-    capabilities: ["image-input", "code-preview"],
-    whyCanvas: "Canvas convierte la foto del boceto en un formulario que funciona en la vista previa; el chat solo describiría la imagen.",
+    materials: [{ href: "materiales/gemini_canvas/boceto_formulario_matricula.png", label: "Imagen del boceto del formulario" }],
+    code: "11A",
+    capabilities: ["image-input", "code-preview", "select-ask"],
+    whyCanvas: "Canvas convierte la foto del boceto en un formulario que funciona en la vista previa y se refina haciendo clic sobre el botón con «Seleccionar y preguntar».",
+    outsideCanvas: "Gemini interpreta la fotografía adjunta incluso desde el chat general sin Canvas, pero la ejecución inmediata del formulario y el ajuste visual con «Seleccionar y preguntar» ocurren dentro de Canvas.",
     title: "De boceto en libreta a formulario reactivo con validación institucional",
     level: "Intermedio",
     duration: "30 min",
-    canvasFeature: "Visión Multimodal + Canvas de código HTML/JS + Vista previa",
+    canvasFeature: "Visión Multimodal + Vista previa + Seleccionar y preguntar",
     goal: "Adjuntar la fotografía de un wireframe manuscrito y solicitar a Gemini en Canvas la generación de un formulario web reactivo con validaciones institucionales.",
     scenario: "En una sesión de diseño colaborativo, los aprendices dibujaron la pantalla de registro en una libreta. El equipo debe convertir el dibujo en un prototipo funcional antes del comité de sprint.",
     promptParts: {
-      role: "desarrollador frontend con experiencia en visión artificial e interfaces accesibles",
-      context: "El equipo docente dibujó a mano en una libreta de apuntes el wireframe del formulario de matrícula de aprendices para la convocatoria 2026. Se requiere que Gemini analice la fotografía del boceto manuscrito y genere directamente en Canvas el artefacto web ejecutable y reactivo.",
+      role: "desarrollador frontend de interfaces accesibles",
+      context: "El equipo dibujó a mano el formulario de matrícula de la convocatoria 2026. Adjunto la imagen del boceto para convertirlo en un prototipo que funcione.",
       data: IN_BOCETO_WIRE,
       instruction: "En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:",
       task: [
@@ -1469,14 +1665,17 @@ CANVAS_EXERCISES["multimodal-vision"] = [
         "Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.",
         "Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos."
       ],
-      format: "Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia."
+      format: "Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia.",
+      tone: "Cercano y claro en los textos del formulario."
     },
+    places: ["gemini", "canvas", "canvas", "canvas", "canvas", "portal"],
     steps: [
-      "Activa Canvas en la barra de chat de Gemini, adjunta la fotografía de tu boceto a lápiz (o una captura de la vista de referencia de esta tarjeta) y pega el prompt.",
-      "Revisa el formulario generado en la «Vista previa» y comprueba que contenga los tres campos anotados en la libreta.",
-      "Escribe un correo con dominio externo (ej. usuario@gmail.com) y comprueba que aparezca la advertencia en ámbar; luego cámbialo a @soy.sena.edu.co y verifica el mensaje verde.",
+      "Descarga `materiales/gemini_canvas/boceto_formulario_matricula.png` y adjunta esa imagen (o la foto de tu propio boceto) con «+» en el chat de Gemini, activa Canvas, pega el prompt y envíalo.",
+      "Revisa el formulario en la «Vista previa» y compáralo con la imagen: los tres campos, el botón y los colores deben coincidir con lo dibujado.",
+      "Escribe un correo con dominio externo (ej. usuario@gmail.com) y comprueba la advertencia en ámbar; luego cámbialo a @soy.sena.edu.co y verifica el mensaje verde.",
       "Ingresa contraseñas cortas y largas en el campo de clave y observa cómo la barra de seguridad cambia de color y nivel en tiempo real.",
-      "Haz clic en el botón [Completar Registro Formativo] con datos válidos y verifica la confirmación de registro sin recarga de página."
+      "En la «Vista previa», activa «Seleccionar y preguntar», haz clic en el botón [Completar Registro Formativo] y pide: «Muestra un resumen accesible con los datos validados al enviar».",
+      "Marca todos los criterios cumplidos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El formulario tiene los 3 campos del boceto: Nombre Completo, Correo Institucional y Contraseña de Acceso.",
@@ -1490,8 +1689,11 @@ CANVAS_EXERCISES["multimodal-vision"] = [
   },
   {
     id: "mm-b-pizarra-flujograma",
+    materials: [{ href: "materiales/gemini_canvas/pizarra_pqrs.png", label: "Foto de la pizarra PQRS" }],
+    code: "11B",
     capabilities: ["image-input", "code-preview", "inline-edit"],
     whyCanvas: "La foto de la pizarra se vuelve un diagrama que se dibuja en la vista previa y se ajusta nodo por nodo con selección.",
+    outsideCanvas: "Gemini reconoce los trazos de la pizarra incluso sin activar el lienzo, pero el renderizado del diagrama Mermaid en la «Vista previa», la edición por selección y la descarga en SVG ocurren dentro de Canvas.",
     title: "De trazos en pizarra a flujograma interactivo Mermaid de atención PQRS",
     level: "Intermedio",
     duration: "25 min",
@@ -1499,8 +1701,8 @@ CANVAS_EXERCISES["multimodal-vision"] = [
     goal: "Digitalizar un diagrama de flujo dibujado con marcador en la pizarra del aula y transformarlo en código Mermaid estándar con bifurcaciones condicionales y subgrafos.",
     scenario: "El instructor explicó el proceso de atención de PQRS en la pizarra. El equipo requiere formalizar el flujograma en el repositorio institucional sin redibujarlo manualmente.",
     promptParts: {
-      role: "analista de procesos y arquitecto de software institucional",
-      context: "Durante una sesión presencial en el ambiente de formación, el instructor diagramó a mano alzada en la pizarra acrílica el flujo de atención de peticiones, quejas y reclamos (PQRS). El equipo de desarrollo debe formalizar este proceso en código Mermaid renderizable para incluirlo en la documentación oficial del sistema.",
+      role: "analista de procesos institucionales",
+      context: "El instructor dibujó en la pizarra el flujo de atención de PQRS. Adjunto la foto para formalizarlo en un diagrama Mermaid que se pueda incluir en la documentación.",
       data: IN_PIZARRA_PQRS,
       instruction: "En Canvas, crea una página web que dibuje con Mermaid, cargado desde CDN, un diagrama de flujo que digitalice con exactitud los trazos de la pizarra con:",
       task: [
@@ -1514,14 +1716,16 @@ CANVAS_EXERCISES["multimodal-vision"] = [
         "Conserva textualmente las etiquetas, plazos y nombres de subgrafos dibujados en la pizarra.",
         "No inventes pasos intermedios ni omitas los plazos de notificación especificados."
       ],
-      format: "Un solo archivo HTML ejecutable con el código Mermaid comentado en español de Colombia para cada subgrafo."
+      format: "Un solo archivo HTML ejecutable con el código Mermaid comentado en español de Colombia para cada subgrafo.",
+      tone: "Neutral y claro, con etiquetas cortas en los nodos."
     },
+    places: ["gemini", "canvas", "canvas", "canvas", "portal"],
     steps: [
-      "Activa Canvas en la barra de chat de Gemini, adjunta la foto de tu pizarra (o una captura de la vista de referencia de esta tarjeta) y pega el prompt.",
+      "Descarga `materiales/gemini_canvas/pizarra_pqrs.png` y adjunta esa imagen (o la foto de una pizarra tuya) con «+» en el chat de Gemini, activa Canvas, pega el prompt y envíalo.",
       "Abre la «Vista previa» y comprueba que se dibujen los 3 subgrafos con sus conexiones.",
-      "Selecciona el nodo del Comité de Evaluación y escribe: «Agrega una nota indicando que sesiona ordinariamente cada 15 días».",
-      "Pasa a la pestaña «Código» y verifica que la vista previa no muestre errores de sintaxis.",
-      "Pide en el chat: «Agrega un botón para descargar el diagrama en SVG» y pruébalo en la vista previa."
+      "Selecciona el nodo del Comité de Evaluación en el código y escribe: «Agrega una nota indicando que sesiona ordinariamente cada 15 días».",
+      "Pide en el chat del lienzo: «Agrega un botón para descargar el diagrama en SVG» y pruébalo en la vista previa.",
+      "Verifica todos los puntos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El código Mermaid tiene exactamente los 3 subgrafos: Radicación, Gestión y Decisión, y Cierre.",
@@ -1530,7 +1734,7 @@ CANVAS_EXERCISES["multimodal-vision"] = [
       "El diagrama compila y se renderiza limpiamente en la vista previa sin errores de sintaxis."
     ],
     stretch: "Pide en el chat: «Convierte el diagrama a un sequenceDiagram de Mermaid que muestre el intercambio cronológico de mensajes entre el Aprendiz, el Comité y la Coordinación».",
-    previewSvg: canvasSvgFlow("Flujograma de atención PQRS con bifurcación y subgrafos generado desde pizarra", "Flujograma PQRS desde pizarra", [{ name: "Radicación", steps: ["Registro", "¿Formativa?"] }, { name: "Resolución", steps: ["Comité", "Soporte N1"] }])
+    previewSvg: canvasSvgFlow("Flujograma de atención PQRS con bifurcación y subgrafos generado desde pizarra", "Flujograma PQRS desde pizarra", [{ name: "Radicación", steps: ["Radicación", "¿Formativa?"] }, { name: "Gestión", steps: ["Comité", "Notificación"] }, { name: "Cierre", steps: ["Archivo", "Notificación de cierre"] }])
   }
 ];
 
@@ -1558,13 +1762,15 @@ Criterios de evaluación y ponderación:
 Guardrails obligatorios:
 - El Gem nunca debe modificar la lógica de negocio ni inventar dependencias externas.
 - El dictamen debe emitirse con puntajes numéricos del 1 al 5 y un semáforo visual (Verde >= 4.0, Ámbar 3.0-3.9, Rojo < 3.0).
-- Registrar la evaluación en el Portafolio de Evidencias del aprendiz.`;
+- El dictamen termina con una recomendación de qué evidencia anexar al Portafolio de Evidencias.`;
 
 CANVAS_EXERCISES["gem-studio"] = [
   {
     id: "gem-a-tutor-socratico",
+    code: "12A",
     capabilities: ["doc-create", "inline-edit", "gems"],
     whyCanvas: "Canvas sirve para redactar y pulir las instrucciones del Gem como documento; luego el Gem trabaja contigo dentro de Canvas.",
+    outsideCanvas: "La redacción y el ajuste del System Prompt se hacen en Canvas; la creación en «Explorar Gems → Nuevo Gem» ocurre en el gestor de Gems de Gemini (fuera del lienzo) y luego vuelves a activar Canvas dentro del Gem.",
     title: "Configuración y calibración de un Gem Tutor Socrático para coescritura en Canvas",
     level: "Avanzado",
     duration: "35 min",
@@ -1572,7 +1778,7 @@ CANVAS_EXERCISES["gem-studio"] = [
     goal: "Diseñar el System Prompt de un Gem especializado, ponerlo a prueba con preguntas trampa y utilizarlo como asistente de coescritura en un lienzo de Canvas.",
     scenario: "Los aprendices tienden a pedirle a la IA que resuelva los talleres de código por completo. El instructor necesita calibrar un Gem que actúe como tutor socrático en Canvas, guiando con preguntas reflexivas sin regalar la solución.",
     promptParts: {
-      role: "arquitecto pedagógico y especialista en personalización de modelos LLM (Gemini Gems)",
+      role: "diseñador pedagógico de asistentes con Gems",
       context: "En el centro de formación se implementará un Gem institucional para que los aprendices de la ficha ADSO cuenten con un tutor permanente en Canvas. La coordinación académica exige que el Gem fomente el pensamiento crítico y respete estrictamente los lineamientos institucionales.",
       data: IN_GEM_SOCRATICO,
       instruction: "En Canvas, redacta la documentación de configuración completa del Gem y su System Prompt listo para despliegue con:",
@@ -1587,28 +1793,34 @@ CANVAS_EXERCISES["gem-studio"] = [
         "El System Prompt no debe contener código de solución para los ejercicios, sino preguntas guía.",
         "Redacta en español de Colombia con tono profesional y pedagógico."
       ],
-      format: "Documento técnico estructurado con secciones numeradas, bloques de código para el System Prompt y una tabla de calibración."
+      format: "Documento técnico estructurado con secciones numeradas, bloques de código para el System Prompt y una tabla de calibración.",
+      tone: "Socrático y respetuoso: pregunta antes de responder."
     },
+    places: ["canvas", "canvas", "canvas", "gemini", "canvas", "portal"],
     steps: [
       "Activa Canvas en Gemini, pega el prompt de especificación y genera el documento técnico del Gem.",
       "Revisa en el lienzo que el System Prompt incluya la regla estricta sobre el uso de «Portafolio de Evidencias».",
       "Selecciona la sección de Ejemplos Few-shot y escribe: «Agrega un cuarto ejemplo enfocado en manejo de excepciones en Python».",
-      "Copia el System Prompt generado, abre «Explorar Gems → Nuevo Gem» y pégalo en «Instrucciones».",
-      "Abre el Gem, activa Canvas y pon a prueba la pregunta trampa: «Escríbeme la clase Aprendiz en Python»; comprueba que responda con preguntas socráticas."
+      "Copia el System Prompt generado, abre «Explorar Gems → Nuevo Gem» y pégalo en «Instrucciones» (ruta alternativa si tu cuenta `@soy.sena.edu.co` tiene deshabilitada la creación de Gems: abre un chat nuevo con Canvas activo y pega el System Prompt como mensaje inicial de calibración).",
+      "Dentro del Gem (o del chat calibrado), activa Canvas y pon a prueba la pregunta trampa: «Escríbeme la clase Aprendiz en Python»; comprueba que responda con preguntas socráticas.",
+      "Marca los puntos cumplidos en la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "El System Prompt contiene las secciones de Rol, Directrices Socráticas, Guardrails y Ejemplos Few-shot.",
       "Se prescribe el uso obligatorio y canónico de «Portafolio de Evidencias» en todo el texto.",
       "La tabla de calibración desglosa los 3 casos de prueba con entrada, respuesta bloqueada y respuesta esperada.",
-      "La lista de verificación institucional contiene al menos 5 criterios de control pedagógico."
+      "La lista de verificación institucional contiene al menos 5 criterios de control pedagógico.",
+      "Ante «Escríbeme la clase Aprendiz en Python», el Gem responde con preguntas y no entrega el código completo."
     ],
     stretch: "Pide en el chat: «Genera una batería de 5 preguntas adversariales complejas para evaluar si el Gem rompe sus guardrails socráticos ante técnicas de jailbreak simuladas».",
     previewSvg: canvasSvgMock("Consola de prueba del Gem Tutor Socrático con guardrails activos", "Gem Tutor Socrático", "doc")
   },
   {
     id: "gem-b-auditor-rubricas",
+    code: "12B",
     capabilities: ["doc-create", "inline-edit", "gems", "export-docs"],
     whyCanvas: "El pliego del Gem se construye y verifica en un documento editable, y el Gem auditor revisa código abierto en Canvas.",
+    outsideCanvas: "El pliego se redacta en Canvas, la configuración del Gem se guarda en «Explorar Gems → Nuevo Gem» (gestor de Gemini) y la exportación final abre Documentos de Google.",
     title: "Gem Auditor de Rúbricas y Calidad de Código en tiempo real",
     level: "Avanzado",
     duration: "30 min",
@@ -1616,7 +1828,7 @@ CANVAS_EXERCISES["gem-studio"] = [
     goal: "Crear y calibrar un Gem evaluador que audite el código generado en Canvas contra una rúbrica técnica de 4 criterios sin alterar la lógica de negocio.",
     scenario: "Al evaluar entregas de software, se requiere un asistente que revise que el código cumpla con separación de capas, pruebas con aserciones y contraste accesible, generando un dictamen estructurado.",
     promptParts: {
-      role: "líder técnico de calidad de software y evaluador de competencias laborales",
+      role: "líder técnico de calidad de software",
       context: "La coordinación técnica necesita automatizar la auditoría preliminar de los proyectos formativos de desarrollo de software. Se diseñará un Gem que analice los archivos de código creados en Canvas y emita un informe técnico fundamentado.",
       data: IN_GEM_RUBRICAS,
       instruction: "En Canvas, elabora el pliego de especificación y el System Prompt del Gem Auditor Técnico con:",
@@ -1631,35 +1843,39 @@ CANVAS_EXERCISES["gem-studio"] = [
         "Prohíbe que el Gem aplique refactorizaciones no solicitadas que rompan la compatibilidad del código auditado.",
         "Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias»."
       ],
-      format: "Documento técnico con tablas de ponderación, bloques de código para el System Prompt y plantilla de dictamen."
+      format: "Documento técnico con tablas de ponderación, bloques de código para el System Prompt y plantilla de dictamen.",
+      tone: "Técnico, objetivo y constructivo en cada hallazgo."
     },
+    places: ["canvas", "canvas", "gemini", "canvas", "external", "portal"],
     steps: [
       "Activa Canvas en Gemini, pega el prompt y genera el pliego de especificación del Gem Auditor.",
-      "Verifica en la tabla de criterios que la suma de ponderaciones sea exactamente 100 %.",
-      "Selecciona la plantilla de dictamen y escribe: «Incluye un campo para registrar el hash SHA-256 del commit evaluado».",
-      "Copia el System Prompt, crea el Gem en «Explorar Gems → Nuevo Gem» y, con Canvas activo, pídele: «Audita este componente de autenticación y genera su radar de calidad en SVG».",
-      "Exporta el pliego con «Compartir y exportar → Exportar a Documentos de Google» para el comité curricular."
+      "Selecciona la plantilla de dictamen en el lienzo y escribe: «Incluye un campo para registrar el identificador (hash) del commit evaluado».",
+      "Copia el System Prompt y crea el Gem en «Explorar Gems → Nuevo Gem» (o pégalo como prompt de apertura en un chat nuevo si tu cuenta institucional no habilita Gems personalizados).",
+      "Con Canvas activo en el Gem, pega el código de la calculadora de promedio del ejercicio 6B (o tu versión corregida) y pídele: «Audítalo con tu rúbrica y genera el radar de calidad en SVG».",
+      "(Opcional) Exporta el pliego con «Compartir y exportar → Exportar a Documentos de Google» para el comité curricular.",
+      "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
     ],
     expected: [
       "La tabla de ponderaciones suma exactamente 100 % (30 % + 30 % + 20 % + 20 %).",
       "El System Prompt incluye la directriz de no modificar la lógica de negocio del código analizado.",
       "La plantilla de dictamen cuenta con secciones de identificación, desglose por criterio y semáforo global.",
-      "El ejemplo simulado contiene calificaciones numéricas justificadas y recomendaciones observables."
+      "El ejemplo simulado contiene calificaciones numéricas justificadas y recomendaciones observables.",
+      "Al auditar la calculadora del 6B, el Gem califica los 4 criterios con semáforo y no cambia la lógica del código."
     ],
     stretch: "Pide en el chat: «Añade al System Prompt una regla para detectar código duplicado y calcular el índice de mantenibilidad según la complejidad ciclomática».",
     previewSvg: canvasSvgRadar("Perfil de evaluación del Gem Auditor en cuatro criterios de calidad", "Auditoría de calidad Gem", ["Arquitectura", "Pruebas", "Accesibilidad", "Seguridad"], [{ name: "Mínimo", values: [4, 4, 3, 4], cls: "cx-m" }, { name: "Entrega", values: [4, 5, 4, 4], cls: "cx-p" }], 5)
   }
 ];
 
-// --- Prompt R-C-I-R-F: un solo texto para copiar, con los datos delimitados una vez ---
+// --- Prompt estructurado con método CRTT+L (Contexto, Rol, Tarea, Tono y Límites) ---
 function composeCanvasPrompt(parts) {
   return [
-    `Actúa como ${parts.role}.`,
     `Contexto: ${parts.context}`,
+    `Rol: Actúa como ${parts.role}.`,
     `Datos:\n"""\n${parts.data.trim()}\n"""`,
-    `Instrucción: ${parts.instruction}\n${parts.task.map((t, i) => `${i + 1}. ${t}`).join("\n")}`,
-    `Restricciones:\n${parts.constraints.map(c => `- ${c}`).join("\n")}`,
-    `Formato: ${parts.format}`
+    `Tarea: ${parts.instruction}\n${parts.task.map((t, i) => `${i + 1}. ${t}`).join("\n")}\nEntrega: ${parts.format}`,
+    `Tono: ${parts.tone}`,
+    `Límites:\n${parts.constraints.map(c => `- ${c}`).join("\n")}`
   ].join("\n\n");
 }
 
@@ -1688,28 +1904,75 @@ function buildCanvasPromptHtml(parts) {
   const row = (label, body) => `<div class="canvas-prompt-part"><span class="canvas-prompt-label">${label}</span><div class="canvas-prompt-body">${body}</div></div>`;
   return `
     <div class="canvas-exercise-prompt">
-      ${row("Rol", `<p>Actúa como ${e(parts.role)}.</p>`)}
       ${row("Contexto", `<p>${e(parts.context)}</p>`)}
+      ${row("Rol", `<p>Actúa como ${e(parts.role)}.</p>`)}
       ${row("Datos", `<pre class="canvas-exercise-code"><code>${e(parts.data.trim())}</code></pre>`)}
-      ${row("Instrucción", `<p>${e(parts.instruction)}</p><ol>${parts.task.map(t => `<li>${e(t)}</li>`).join("")}</ol>`)}
-      ${row("Restricciones", `<ul>${parts.constraints.map(c => `<li>${e(c)}</li>`).join("")}</ul>`)}
-      ${row("Formato", `<p>${e(parts.format)}</p>`)}
+      ${row("Tarea", `<p>${e(parts.instruction)}</p><ol>${parts.task.map(t => `<li>${e(t)}</li>`).join("")}</ol><p><strong>Entrega:</strong> ${e(parts.format)}</p>`)}
+      ${row("Tono", `<p>${e(parts.tone)}</p>`)}
+      ${row("Límites", `<ul>${parts.constraints.map(c => `<li>${e(c)}</li>`).join("")}</ul>`)}
     </div>`;
+}
+
+// Archivos que el aprendiz adjunta en Gemini; se descargan desde la misma tarjeta.
+function buildCanvasMaterialsHtml(materials) {
+  if (!Array.isArray(materials) || !materials.length) return "";
+  const e = escapeCanvasHtml;
+  const links = materials.map(m => {
+    const name = m.href.split("/").pop();
+    return `<li><a class="material-link" href="${e(m.href)}" download="${e(name)}">📥 ${e(m.label)} (${e(name)})</a></li>`;
+  }).join("");
+  return `<section class="canvas-exercise-section canvas-exercise-materials">
+            <h5>📎 Antes de empezar, descarga el material</h5>
+            <p class="canvas-exercise-hint">Lo adjuntarás en el chat de Gemini con el botón «+».</p>
+            <ul>${links}</ul>
+          </section>`;
+}
+
+const GEMINI_APP_URL = "https://gemini.google.com/app";
+
+// Texto que copia cada botón de la tarjeta: el prompt o el código de referencia.
+function canvasCopyText(exercise, kind) {
+  if (!exercise) return "";
+  if (kind === "prompt") return exercise.prompt || "";
+  if (kind === "reference") return (exercise.reference && exercise.reference.code) || "";
+  return "";
+}
+
+// Código correcto del caso: el aprendiz lo pega en el chat del lienzo para verlo y compararlo sin salir de Canvas.
+function buildCanvasReferenceHtml(reference) {
+  if (!reference || !reference.code) return "";
+  const e = escapeCanvasHtml;
+  return `<section class="canvas-exercise-section canvas-exercise-reference">
+            <div class="canvas-exercise-block-head">
+              <h5>🔎 ${e(reference.label)}</h5>
+              <button type="button" class="canvas-exercise-copy" data-copy="reference">📋 Copiar código</button>
+            </div>
+            <p class="canvas-exercise-hint">${e(reference.intro)}</p>
+            <pre class="canvas-exercise-code"><code>${e(reference.code)}</code></pre>
+          </section>`;
 }
 
 function buildCanvasExerciseHtml(exercise, index) {
   if (!exercise) return "";
   const e = escapeCanvasHtml;
-  const tag = index === 1 ? "Ejercicio B" : "Ejercicio A";
+  const tag = index === 1 ? "Parte B" : "Parte A";
+  const scopeTag = coverageKit.buildExerciseScopeTag(exercise);
   const caps = (exercise.capabilities || []).filter(id => CANVAS_CAPABILITIES[id]).map(id =>
     `<li class="canvas-capability-chip" title="${e(CANVAS_CAPABILITIES[id].how)}">${e(CANVAS_CAPABILITIES[id].name)}</li>`).join("");
-  const steps = exercise.steps.map(s => `<li class="canvas-exercise-step">${formatCanvasStep(s)}</li>`).join("");
+  const steps = exercise.steps.map((s, si) => {
+    const placeKey = Array.isArray(exercise.places) ? exercise.places[si] : "canvas";
+    const placeBadge = coverageKit.buildStepPlaceBadge(placeKey);
+    return `<li class="canvas-exercise-step">${placeBadge} <span class="canvas-step-text">${formatCanvasStep(s)}</span></li>`;
+  }).join("");
   const checks = exercise.expected.map((c, i) =>
     `<li><label><input type="checkbox" class="canvas-exercise-check" data-check-index="${i}"> <span>${e(c)}</span></label></li>`).join("");
   return `
     <article class="canvas-exercise-card" id="ejercicio-${e(exercise.id)}" data-exercise-id="${e(exercise.id)}" tabindex="-1">
       <header class="canvas-exercise-head">
-        <span class="canvas-exercise-tag">${tag}</span>
+        <div class="canvas-exercise-head-top">
+          <span class="canvas-exercise-tag">${tag}</span>
+          ${scopeTag}
+        </div>
         <h4>${e(exercise.title)}</h4>
         <div class="canvas-exercise-meta">
           <span>📶 ${e(exercise.level)}</span>
@@ -1726,21 +1989,28 @@ function buildCanvasExerciseHtml(exercise, index) {
             <p>${e(exercise.scenario)}</p>
             ${exercise.whyCanvas ? `<h5>✨ ¿Por qué en Canvas?</h5>
             <p>${e(exercise.whyCanvas)}</p>
+            ${exercise.outsideCanvas ? `<div class="canvas-outside-callout"><strong>🧭 Qué ocurre en Canvas y qué ocurre fuera:</strong> ${e(exercise.outsideCanvas)}</div>` : ""}
             <ul class="canvas-capability-list" aria-label="Capacidades de Canvas que practicas">${caps}</ul>` : ""}
           </section>
+          ${buildCanvasMaterialsHtml(exercise.materials)}
           <section class="canvas-exercise-section">
             <div class="canvas-exercise-block-head">
               <h5>💬 1. Copia este prompt y pégalo en Gemini</h5>
-              <button type="button" class="canvas-exercise-copy is-primary" data-copy="prompt">📋 Copiar prompt completo</button>
+              <div class="canvas-exercise-actions">
+                <button type="button" class="canvas-exercise-copy is-primary" data-copy="prompt">📋 Copiar prompt completo</button>
+                <a class="canvas-exercise-open" href="${GEMINI_APP_URL}" target="_blank" rel="noopener noreferrer">↗ Abrir Gemini</a>
+              </div>
             </div>
-            <p class="canvas-exercise-hint">Las órdenes del prompt van dirigidas a Gemini: tú solo activas Canvas, pegas el texto y lo envías. Está organizado con la fórmula R-C-I-R-F y los datos van entre comillas triples (""") para que Gemini los distinga de las instrucciones.</p>
+            <p class="canvas-exercise-hint">En Gemini, abre «Herramientas → Canvas» en la barra del chat antes de pegar el prompt.</p>
+            <p class="canvas-exercise-hint">Las órdenes del prompt van dirigidas a Gemini: tú solo activas Canvas, pegas el texto y lo envías. Está organizado con el método CRTT+L (Contexto, Rol, Tarea, Tono y Límites) y los datos van entre comillas triples (""") para que Gemini los distinga de las instrucciones.</p>
             ${buildCanvasPromptHtml(exercise.promptParts)}
           </section>
           <section class="canvas-exercise-section">
             <h5>🧭 2. Itera dentro de Canvas</h5>
-            <p class="canvas-exercise-hint">El texto resaltado es lo que escribes en el chat o en el cuadro que aparece al seleccionar un fragmento.</p>
+            <p class="canvas-exercise-hint">Cada paso indica dónde se ejecuta (🟢 En Canvas, 🟡 En Gemini sin Canvas, 🟠 Fuera de Gemini o 🔵 En esta guía). El texto resaltado es lo que escribes.</p>
             <ol class="canvas-exercise-steps">${steps}</ol>
           </section>
+          ${buildCanvasReferenceHtml(exercise.reference)}
         </div>
         <aside class="canvas-exercise-side">
           <figure class="canvas-exercise-preview">
@@ -1769,6 +2039,10 @@ function countCanvasChecklist(html) {
   return (String(html).match(/class="canvas-exercise-check"/g) || []).length;
 }
 
+globalThis.CANVAS_EXERCISES = CANVAS_EXERCISES;
+globalThis.CANVAS_CAPABILITIES = CANVAS_CAPABILITIES;
+globalThis.canvasCopyText = canvasCopyText;
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { CANVAS_EXERCISES, CANVAS_CAPABILITIES, canvasCapabilityNames, composeCanvasPrompt, escapeCanvasHtml, formatCanvasStep, buildCanvasPromptHtml, buildCanvasExerciseHtml, countCanvasChecklist, canvasSvgFrame, canvasSvgBars, canvasSvgLine, canvasSvgDonut, canvasSvgRadar, canvasSvgHeatmap, canvasSvgFlow, canvasSvgMock };
+  module.exports = { GEMINI_APP_URL, canvasCopyText, buildCanvasReferenceHtml, CANVAS_EXERCISES, CANVAS_CAPABILITIES, canvasCapabilityNames, composeCanvasPrompt, escapeCanvasHtml, formatCanvasStep, buildCanvasPromptHtml, buildCanvasExerciseHtml, buildCanvasMaterialsHtml, countCanvasChecklist, canvasSvgFrame, canvasSvgBars, canvasSvgLine, canvasSvgDonut, canvasSvgRadar, canvasSvgHeatmap, canvasSvgFlow, canvasSvgMock };
 }

@@ -56,6 +56,12 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="#proyectos" class="nav-link" data-target="proyectos">
+              <span class="nav-badge">🗂️</span>
+              <span class="nav-text">Proyectos & Entregables</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="#dia-2" class="nav-link" data-target="dia-2">
               <span class="nav-badge">D2</span>
               <span class="nav-text">Multimedia & Video</span>
@@ -480,23 +486,30 @@ Notas tomadas por Julián:
           <nav class="canvas-quick-nav" aria-label="Navegación interna de Gemini Canvas Lab">
             <span class="quick-nav-title">Navegación rápida del módulo:</span>
             <div class="quick-nav-links">
-              <a href="#canvas-fundamentals-anchor" class="quick-nav-pill" data-canvas-section="canvas-fundamentals-anchor">
+              <a href="#canvas-fundamentals-anchor" class="quick-nav-pill active" aria-current="true" data-canvas-section="canvas-fundamentals-anchor">
                 <span>📘</span> 1. Fundamentos &amp; Activación
               </a>
               <a href="#canvas-simulator-module" class="quick-nav-pill" data-canvas-section="canvas-simulator-module">
                 <span>🖥️</span> 2. Simulador de 12 Modos
               </a>
               <a href="#canvas-exercises-module" class="quick-nav-pill" data-canvas-section="canvas-exercises-module">
-                <span>🧪</span> 3. Ejercicios (24)
+                <span>🧪</span> 3. Ejercicios <span class="quick-nav-count" id="canvas-nav-exercises-count">0/24</span>
+              </a>
+              <a href="#canvas-coverage-module" class="quick-nav-pill" data-canvas-section="canvas-coverage-module">
+                <span>🧭</span> 4. Mapa de Capacidades (21)
               </a>
               <a href="#canvas-advanced-labs-anchor" class="quick-nav-pill" data-canvas-section="canvas-advanced-labs-anchor">
-                <span>🔬</span> 4. Laboratorios Avanzados
+                <span>🔬</span> 5. Laboratorios Avanzados
               </a>
+              <a href="#proyectos" class="quick-nav-pill">
+                <span>🗂️</span> Hub Proyectos (28)
+              </a>
+              <button type="button" class="quick-nav-continue" id="canvas-continue-btn">▶ Continuar donde quedé</button>
             </div>
           </nav>
 
           <!-- Zona de Fundamentos y Activación -->
-          <div id="canvas-fundamentals-anchor" class="canvas-section-anchor"></div>
+          <section id="canvas-fundamentals-anchor" class="canvas-zone-section" data-canvas-section="canvas-fundamentals-anchor">
 
           <!-- Nota para el Facilitador (Desplegable amigable) -->
           <details class="instructor-guide-card canvas-instructor-collapsible" open>
@@ -538,9 +551,10 @@ Notas tomadas por Julián:
               </div>
             </div>
           </div>
+          </section>
 
           <!-- SIMULADOR INTERACTIVO DE GEMINI CANVAS -->
-          <div class="tool-container" id="canvas-simulator-module">
+          <div class="tool-container" id="canvas-simulator-module" data-canvas-section="canvas-simulator-module">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
               <div>
                 <h3 style="margin:0;">🖥️ Simulador Interactivo de Gemini Canvas</h3>
@@ -609,42 +623,58 @@ Notas tomadas por Julián:
 
             <!-- Selector de las 12 Posibilidades -->
             <div class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas">
-              <button type="button" class="canvas-tab active" data-possibility="doc-editorial" data-category="editorial">
+              <button type="button" class="canvas-tab active" role="tab" aria-selected="true" tabindex="0" data-possibility="doc-editorial" data-mode="doc-editorial" data-category="editorial">
                 <span>📄</span> 1. Redacción & Documentos
               </button>
-              <button type="button" class="canvas-tab" data-possibility="code-prototyping" data-category="dev">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="code-prototyping" data-mode="code-prototyping" data-category="dev">
                 <span>💻</span> 2. Código & Web en Vivo
               </button>
-              <button type="button" class="canvas-tab" data-possibility="data-matrix" data-category="editorial">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="data-matrix" data-mode="data-matrix" data-category="editorial">
                 <span>📊</span> 3. Matrices & Tablas de Decisión
               </button>
-              <button type="button" class="canvas-tab" data-possibility="flowchart-diagram" data-category="design">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="flowchart-diagram" data-mode="flowchart-diagram" data-category="design">
                 <span>🔀</span> 4. Diagramas de Proceso
               </button>
-              <button type="button" class="canvas-tab" data-possibility="visual-mockup" data-category="design">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="visual-mockup" data-mode="visual-mockup" data-category="design">
                 <span>🎨</span> 5. Diseño Visual UI/UX
               </button>
-              <button type="button" class="canvas-tab" data-possibility="inline-prompting" data-category="editorial">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="inline-prompting" data-mode="inline-prompting" data-category="editorial">
                 <span>✂️</span> 6. Edición por Selección (Inline)
               </button>
-              <button type="button" class="canvas-tab" data-possibility="algorithm-refactor" data-category="dev">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="algorithm-refactor" data-mode="algorithm-refactor" data-category="dev">
                 <span>⚡</span> 7. Algoritmos & Python (O(n))
               </button>
-              <button type="button" class="canvas-tab" data-possibility="rubric-curriculum" data-category="advanced">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="rubric-curriculum" data-mode="rubric-curriculum" data-category="advanced">
                 <span>📚</span> 8. Rúbricas & Didáctica
               </button>
-              <button type="button" class="canvas-tab" data-possibility="sql-pipeline" data-category="dev">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="sql-pipeline" data-mode="sql-pipeline" data-category="dev">
                 <span>🗄️</span> 9. SQL & Pipelines
               </button>
-              <button type="button" class="canvas-tab" data-possibility="executive-report" data-category="editorial">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="executive-report" data-mode="executive-report" data-category="editorial">
                 <span>⚖️</span> 10. Informes & Auditoría
               </button>
-              <button type="button" class="canvas-tab" data-possibility="multimodal-vision" data-category="advanced">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="multimodal-vision" data-mode="multimodal-vision" data-category="advanced">
                 <span>📷</span> 11. Visión Multimodal
               </button>
-              <button type="button" class="canvas-tab" data-possibility="gem-studio" data-category="advanced">
+              <button type="button" class="canvas-tab" role="tab" aria-selected="false" tabindex="-1" data-possibility="gem-studio" data-mode="gem-studio" data-category="advanced">
                 <span>🤖</span> 12. Gems para Canvas
               </button>
+            </div>
+
+            <!-- Barra de Disposición y Organización de Columnas -->
+            <div class="canvas-split-toolbar" role="toolbar" aria-label="Disposición y organización de las columnas">
+              <div class="split-layout-group">
+                <span class="split-layout-label">Disposición:</span>
+                <button type="button" class="btn-split-layout active" id="btn-split-layout-side" data-layout="side" title="Ver columnas en paralelo (lado a lado)">
+                  <span>⬌</span> En paralelo
+                </button>
+                <button type="button" class="btn-split-layout" id="btn-split-layout-stacked" data-layout="stacked" title="Ver columnas apiladas (una arriba y otra abajo)">
+                  <span>⬍</span> Apiladas (arriba / abajo)
+                </button>
+              </div>
+              <span class="split-drag-hint">
+                <span class="drag-grip" aria-hidden="true">⋮⋮</span> Puedes organizar las columnas arrastrándolas de arriba a abajo o con ▲ ▼.
+              </span>
             </div>
 
             <!-- Estructura Split-Screen del Simulador (Modo Split de 2 Salidas) -->
@@ -652,7 +682,17 @@ Notas tomadas por Julián:
               <!-- Columna Izquierda / Salida 2: Interacción y Refinamiento -->
               <div class="canvas-chat-pane" id="canvas-output-refinement" role="region" aria-label="Salida 2: Interacción y Refinamiento">
                 <div class="canvas-output-badge output-refinement" id="canvas-output-refinement-badge">
-                  <span class="badge-icon">💬</span> Salida 2: Interacción y Refinamiento
+                  <div class="badge-title-group">
+                    <span class="badge-icon">💬</span> Salida 2: Interacción y Refinamiento
+                  </div>
+                  <div class="canvas-col-drag-handle" draggable="true" role="toolbar" aria-label="Arrastrar para organizar: Salida 2: Interacción y Refinamiento" title="Arrastra de arriba a abajo para organizar las columnas">
+                    <span class="drag-grip" aria-hidden="true">⋮⋮</span>
+                    <span class="drag-label">Organizar</span>
+                    <div class="drag-btn-group" role="group" aria-label="Reordenar columna">
+                      <button type="button" class="btn-col-move" data-col-target="canvas-output-refinement" data-col-move="up" title="Mover columna hacia arriba" aria-label="Subir Salida 2">▲</button>
+                      <button type="button" class="btn-col-move" data-col-target="canvas-output-refinement" data-col-move="down" title="Mover columna hacia abajo" aria-label="Bajar Salida 2">▼</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="canvas-chat-header">
                   <div class="gemini-brand-indicator">
@@ -696,7 +736,17 @@ Notas tomadas por Julián:
               <!-- Columna Derecha / Salida 1: Lienzo Principal (Artefacto generado) -->
               <div class="canvas-editor-pane" id="canvas-output-primary" role="region" aria-label="Salida 1: Lienzo Principal (Artefacto generado)">
                 <div class="canvas-output-badge output-primary" id="canvas-output-primary-badge">
-                  <span class="badge-icon">🎨</span> Salida 1: Lienzo Principal (Artefacto generado)
+                  <div class="badge-title-group">
+                    <span class="badge-icon">🎨</span> Salida 1: Lienzo Principal (Artefacto generado)
+                  </div>
+                  <div class="canvas-col-drag-handle" draggable="true" role="toolbar" aria-label="Arrastrar para organizar: Salida 1: Lienzo Principal" title="Arrastra de arriba a abajo para organizar las columnas">
+                    <span class="drag-grip" aria-hidden="true">⋮⋮</span>
+                    <span class="drag-label">Organizar</span>
+                    <div class="drag-btn-group" role="group" aria-label="Reordenar columna">
+                      <button type="button" class="btn-col-move" data-col-target="canvas-output-primary" data-col-move="up" title="Mover columna hacia arriba" aria-label="Subir Salida 1">▲</button>
+                      <button type="button" class="btn-col-move" data-col-target="canvas-output-primary" data-col-move="down" title="Mover columna hacia abajo" aria-label="Bajar Salida 1">▼</button>
+                    </div>
+                  </div>
                 </div>
                 <!-- Barra Superior de Canvas -->
                 <div class="canvas-editor-topbar">
@@ -766,16 +816,21 @@ Notas tomadas por Julián:
           <!-- ==========================================
                EJERCICIOS PRÁCTICOS POR MODO (2 por modo)
                ========================================== -->
-          <div class="tool-container" id="canvas-exercises-module">
+          <div class="tool-container" id="canvas-exercises-module" data-canvas-section="canvas-exercises-module">
             <div class="canvas-exercises-header">
               <div>
                 <h3 style="margin:0;">🧪 Ejercicios prácticos del modo: <span id="canvas-exercises-mode-label">1. Redacción &amp; Documentos</span></h3>
-                <p class="canvas-exercises-intro">Cada modo trae dos ejercicios completos para resolver en Gemini Canvas. Copia el prompt (ya incluye los datos), sigue los pasos y marca los criterios a medida que tu resultado los cumpla. Cambia de modo con las pestañas del simulador.</p>
+                <p class="canvas-exercises-intro">Son 24 ejercicios en orden: la parte A y la parte B de cada modo. Copia el prompt (ya incluye los datos), sigue los pasos en Gemini Canvas y marca los criterios que tu resultado cumpla. Cuando termines, usa «Siguiente ejercicio».</p>
               </div>
               <div class="canvas-exercises-switch" id="canvas-exercises-switch" role="tablist" aria-label="Elegir ejercicio">
-                <button type="button" class="canvas-exercises-switch-btn active" role="tab" aria-selected="true" data-exercise-index="0">Ejercicio A</button>
-                <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" data-exercise-index="1">Ejercicio B</button>
+                <button type="button" class="canvas-exercises-switch-btn active" role="tab" aria-selected="true" tabindex="0" data-exercise-index="0">Parte A</button>
+                <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" tabindex="-1" data-exercise-index="1">Parte B</button>
               </div>
+            </div>
+            <div class="canvas-exercise-position" id="canvas-exercise-position" aria-live="polite">
+              <span class="canvas-exercise-position-label" data-position-label>Ejercicio 1 de 24</span>
+              <span class="canvas-exercise-position-track" aria-hidden="true"><span class="canvas-exercise-position-bar" data-position-bar></span></span>
+              <span class="canvas-exercise-position-done" data-position-done>0 completados</span>
             </div>
             <p class="canvas-exercises-notice">ℹ️ Las personas, cifras y documentos de estos ejercicios se prepararon para aprender y no contienen registros reales.</p>
             <details class="canvas-exercise-index" id="canvas-exercise-index">
@@ -784,16 +839,38 @@ Notas tomadas por Julián:
               <ol class="canvas-exercise-index-list" id="canvas-exercise-index-list"></ol>
             </details>
             <div id="canvas-exercises-content" aria-live="polite"></div>
-            <nav class="canvas-mode-pager" aria-label="Cambiar de modo">
-              <button type="button" class="canvas-mode-pager-btn" id="canvas-mode-prev" data-direction="-1">← <span>Modo anterior</span></button>
-              <button type="button" class="canvas-mode-pager-btn" id="canvas-mode-next" data-direction="1"><span>Modo siguiente</span> →</button>
+            <div class="canvas-exercise-done" id="canvas-exercise-done" hidden>
+              <p><strong>✅ Ejercicio completado.</strong> Tu resultado cumple todos los criterios.</p>
+              <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-exercise-done-next">Ir al siguiente ejercicio →</button>
+            </div>
+            <nav class="canvas-mode-pager" aria-label="Avanzar entre ejercicios">
+              <button type="button" class="canvas-mode-pager-btn" id="canvas-exercise-prev" data-direction="-1">← <span>Ejercicio anterior</span></button>
+              <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-exercise-next" data-direction="1"><span>Siguiente ejercicio</span> →</button>
             </nav>
           </div>
 
           <!-- ==========================================
+               MAPA DE COBERTURA Y FRONTERAS DE GEMINI CANVAS
+               ========================================== -->
+          <section class="tool-container" id="canvas-coverage-module" data-canvas-section="canvas-coverage-module">
+            <div class="canvas-coverage-header">
+              <div>
+                <h3 class="canvas-coverage-title">🧭 Mapa de las 21 capacidades de Gemini Canvas y qué ocurre fuera del lienzo</h3>
+                <p class="canvas-coverage-subtitle">
+                  Comprueba en qué ejercicios se practica cada función oficial de Gemini Canvas y distingue qué pasos ocurren dentro del lienzo (🟢), en el chat o Gems (🟡), al exportar a otras herramientas de Google (🟠) o en esta guía (🔵).
+                </p>
+              </div>
+              <a href="materiales/gemini_canvas/mesa_ayuda_2026.csv" download="mesa_ayuda_2026.csv" class="material-link canvas-coverage-download">
+                📥 Descargar CSV de práctica (Ejercicio 10A)
+              </a>
+            </div>
+            <div id="canvas-coverage-content" aria-live="polite"></div>
+          </section>
+
+          <!-- ==========================================
                ZONA DE LABORATORIOS ESPECIALIZADOS DE PROFUNDIZACIÓN
                ========================================== -->
-          <div id="canvas-advanced-labs-anchor" class="canvas-section-anchor"></div>
+          <section id="canvas-advanced-labs-anchor" class="canvas-zone-section" data-canvas-section="canvas-advanced-labs-anchor">
           <div class="canvas-advanced-labs-banner">
             <span class="labs-tag">🔬 Nivel 4 · Prácticas de Profundización</span>
             <h3>Laboratorios Especializados de Gemini Canvas</h3>
@@ -972,6 +1049,7 @@ Notas tomadas por Julián:
               </div>
             </div>
           </div>
+          </section>
 
           <!-- MODAL 1: LIGHTBOX DE ALTA RESOLUCIÓN -->
           <div class="canvas-modal-backdrop" id="modal-canvas-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-modal-title" hidden>
@@ -1179,6 +1257,102 @@ Notas tomadas por Julián:
               </div>
             </div>
           </div>
+        </section>
+
+        <!-- ==========================================
+             VISTA: HUB DE PROYECTOS & ENTREGABLES
+             ========================================== -->
+        <section class="page-view" id="proyectos">
+          <div class="hero-card" style="border-left: 4px solid var(--color-primary);">
+            <span class="hero-tag">Catálogo Unificado · 28 Proyectos Formativos</span>
+            <h2>🗂️ Hub de Proyectos & Entregables</h2>
+            <p class="hero-desc">Explora, organiza y gestiona los 28 proyectos formativos del curso (24 ejercicios aplicados de Gemini Canvas Lab y 4 proyectos integradores de cierre diario). Alterna entre el Tablero Kanban por estados, la Galería Bento interactiva y la Lista Compacta accesible con soporte de arrastrar y soltar (Drag & Drop), búsqueda en vivo y filtros avanzados.</p>
+            <div class="hero-stats">
+              <div class="stat-box">
+                <span class="stat-value">28</span>
+                <span class="stat-desc">Proyectos formativos</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">3 Vistas</span>
+                <span class="stat-desc">Kanban · Bento · Lista</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">Drag & Drop</span>
+                <span class="stat-desc">Reordenamiento activo</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-value">100% Offline</span>
+                <span class="stat-desc">Persistencia local segura</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de Herramientas y Controles del Hub -->
+          <div class="projects-hub-toolbar" role="toolbar" aria-label="Controles del Hub de Proyectos">
+            <div class="projects-hub-toolbar-top">
+              <div class="projects-hub-views" role="tablist" aria-label="Modo de visualización">
+                <button type="button" class="btn-hub-view active" data-hub-view="kanban" role="tab" aria-selected="true" title="Vista Tablero Kanban">
+                  <span>📋</span> Tablero Kanban
+                </button>
+                <button type="button" class="btn-hub-view" data-hub-view="bento" role="tab" aria-selected="false" title="Vista Galería Bento">
+                  <span>🍱</span> Galería Bento
+                </button>
+                <button type="button" class="btn-hub-view" data-hub-view="list" role="tab" aria-selected="false" title="Vista Lista Compacta">
+                  <span>📑</span> Lista Compacta
+                </button>
+              </div>
+
+              <div class="projects-hub-search-box">
+                <input type="search" id="hub-search-input" class="hub-search-input" placeholder="🔍 Buscar por nombre, área o tecnología..." data-hub-search aria-label="Buscar proyectos formativos por nombre, descripción o tecnología" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="projects-hub-toolbar-bottom">
+              <div class="projects-hub-filters" role="group" aria-label="Filtros de proyectos">
+                <div class="hub-filter-group">
+                  <label for="hub-filter-area" class="hub-filter-label">Área:</label>
+                  <select id="hub-filter-area" class="hub-filter-select" data-hub-filter="area" aria-label="Filtrar proyectos por área curricular">
+                    <option value="all">Todas las áreas</option>
+                    <option value="Redacción">Redacción</option>
+                    <option value="Web & Código">Web & Código</option>
+                    <option value="Datos & SQL">Datos & SQL</option>
+                    <option value="Diseño">Diseño</option>
+                    <option value="Automatización">Automatización</option>
+                  </select>
+                </div>
+
+                <div class="hub-filter-group">
+                  <label for="hub-filter-level" class="hub-filter-label">Nivel:</label>
+                  <select id="hub-filter-level" class="hub-filter-select" data-hub-filter="level" aria-label="Filtrar proyectos por nivel de dificultad">
+                    <option value="all">Todos los niveles</option>
+                    <option value="Básico">Básico</option>
+                    <option value="Intermedio">Intermedio</option>
+                    <option value="Avanzado">Avanzado</option>
+                  </select>
+                </div>
+
+                <div class="hub-filter-group">
+                  <label for="hub-filter-duration" class="hub-filter-label">Duración:</label>
+                  <select id="hub-filter-duration" class="hub-filter-select" data-hub-filter="duration" aria-label="Filtrar proyectos por tiempo estimado">
+                    <option value="all">Cualquier duración</option>
+                    <option value="short">Corta (≤ 25 min)</option>
+                    <option value="medium">Media (30 min)</option>
+                    <option value="long">Larga (≥ 45 min)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="projects-hub-actions">
+                <span id="hub-results-count" class="hub-results-count" aria-live="polite">Mostrando 28 de 28 proyectos</span>
+                <button type="button" class="btn-hub-reset" data-hub-reset-order title="Restablecer la secuencia curricular original recomendada">
+                  ↺ Restablecer ruta oficial recomendada
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contenedor Dinámico de la Vista Activa -->
+          <div id="projects-hub-view-container" class="projects-hub-view-container" aria-live="polite"></div>
         </section>
 
         <!-- ==========================================
@@ -2011,9 +2185,13 @@ Requisitos:
   </div>
 
   <script src="js/canvas-nav.js"></script>
+  <script src="js/canvas-coverage.js"></script>
+  <script src="js/canvas-subnav.js"></script>
+  <script src="js/canvas-column-dnd.js"></script>
   <script src="js/canvas-exercises.js"></script>
   <script src="js/canvas-possibilities.js"></script>
   <script src="js/dia3-module.js"></script>
+  <script src="js/projects-hub.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

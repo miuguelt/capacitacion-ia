@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-11-09T04:32:04.272Z",
+  "project": "capacitacion-ia",
+  "component": "#proyectos (Hub de Proyectos & Entregables)",
+  "totalScreenshots": 18,
+  "screenshots": [
+    {
+      "fileName": "kanban-320px.png",
+      "view": "kanban",
+      "viewLabel": "Tablero Kanban",
+      "viewportWidth": 320,
+      "viewportHeight": 800,
+      "viewportLabel": "320px",
+      "fileSizeBytes": 90660
+    },
+    {
+      "fileName": "kanban-390px.png",
+      "view": "kanban",
+      "viewLabel": "Tablero Kanban",
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "viewportLabel": "390px",
+      "fileSizeBytes": 108872
+    },
+    {
+      "fileName": "kanban-768px.png",
+      "view": "kanban",
+      "viewLabel": "Tablero Kanban",
+      "viewportWidth": 768,
+      "viewportHeight": 1024,
+      "viewportLabel": "768px",
+      "fileSizeBytes": 180744
+    },
+    {
+      "fileName": "kanban-1440px.png",
+      "view": "kanban",
+      "viewLabel": "Tablero Kanban",
+      "viewportWidth": 1440,
+      "viewportHeight": 900,
+      "viewportLabel": "1440px",
+      "fileSizeBytes": 231214
+    },
+    {
+      "fileName": "kanban-1920px.png",
+      "view": "kanban",
+      "viewLabel": "Tablero Kanban",
+      "viewportWidth": 1920,
+      "viewportHeight": 1080,
+      "viewportLabel": "1920px",
+      "fileSizeBytes": 246467
+    },
+    {
+      "fileName": "kanban-2560px.png",
+      "view": "kanban",
+      "viewLabel": "Tablero Kanban",
+      "viewportWidth": 2560,
+      "viewportHeight": 1440,
+      "viewportLabel": "2560px",
+      "fileSizeBytes": 308087
+    },
+    {
+      "fileName": "bento-320px.png",
+      "view": "bento",
+      "viewLabel": "Galería Bento",
+      "viewportWidth": 320,
+      "viewportHeight": 800,
+      "viewportLabel": "320px",
+      "fileSizeBytes": 90660
+    },
+    {
+      "fileName": "bento-390px.png",
+      "view": "bento",
+      "viewLabel": "Galería Bento",
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "viewportLabel": "390px",
+      "fileSizeBytes": 108827
+    },
+    {
+      "fileName": "bento-768px.png",
+      "view": "bento",
+      "viewLabel": "Galería Bento",
+      "viewportWidth": 768,
+      "viewportHeight": 1024,
+      "viewportLabel": "768px",
+      "fileSizeBytes": 180111
+    },
+    {
+      "fileName": "bento-1440px.png",
+      "view": "bento",
+      "viewLabel": "Galería Bento",
+      "viewportWidth": 1440,
+      "viewportHeight": 900,
+      "viewportLabel": "1440px",
+      "fileSizeBytes": 224839
+    },
+    {
+      "fileName": "bento-1920px.png",
+      "view": "bento",
+      "viewLabel": "Galería Bento",
+      "viewportWidth": 1920,
+      "viewportHeight": 1080,
+      "viewportLabel": "1920px",
+      "fileSizeBytes": 273359
+    },
+    {
+      "fileName": "bento-2560px.png",
+      "view": "bento",
+      "viewLabel": "Galería Bento",
+      "viewportWidth": 2560,
+      "viewportHeight": 1440,
+      "viewportLabel": "2560px",
+      "fileSizeBytes": 344432
+    },
+    {
+      "fileName": "lista-320px.png",
+      "view": "list",
+      "viewLabel": "Lista Compacta",
+      "viewportWidth": 320,
+      "viewportHeight": 800,
+      "viewportLabel": "320px",
+      "fileSizeBytes": 90660
+    },
+    {
+      "fileName": "lista-390px.png",
+      "view": "list",
+      "viewLabel": "Lista Compacta",
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "viewportLabel": "390px",
+      "fileSizeBytes": 108868
+    },
+    {
+      "fileName": "lista-768px.png",
+      "view": "list",
+      "viewLabel": "Lista Compacta",
+      "viewportWidth": 768,
+      "viewportHeight": 1024,
+      "viewportLabel": "768px",
+      "fileSizeBytes": 180729
+    },
+    {
+      "fileName": "lista-1440px.png",
+      "view": "list",
+      "viewLabel": "Lista Compacta",
+      "viewportWidth": 1440,
+      "viewportHeight": 900,
+      "viewportLabel": "1440px",
+      "fileSizeBytes": 235791
+    },
+    {
+      "fileName": "lista-1920px.png",
+      "view": "list",
+      "viewLabel": "Lista Compacta",
+      "viewportWidth": 1920,
+      "viewportHeight": 1080,
+      "viewportLabel": "1920px",
+      "fileSizeBytes": 283368
+    },
+    {
+      "fileName": "lista-2560px.png",
+      "view": "list",
+      "viewLabel": "Lista Compacta",
+      "viewportWidth": 2560,
+      "viewportHeight": 1440,
+      "viewportLabel": "2560px",
+      "fileSizeBytes": 364424
+    }
+  ]
+}
