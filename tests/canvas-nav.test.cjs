@@ -9,6 +9,7 @@ const MODES = ["doc-editorial", "code-prototyping", "data-matrix"];
 
 test("parseCanvasRoute lee página, modo y ejercicio", () => {
   assert.deepEqual(parseCanvasRoute("#gemini-canvas/code-prototyping/b", MODES), { page: "gemini-canvas", mode: "code-prototyping", exercise: 1 });
+  assert.deepEqual(parseCanvasRoute("#gemini-canvas/code-prototyping/c", MODES), { page: "gemini-canvas", mode: "code-prototyping", exercise: 2 });
   assert.deepEqual(parseCanvasRoute("#gemini-canvas/data-matrix/a", MODES), { page: "gemini-canvas", mode: "data-matrix", exercise: 0 });
   assert.deepEqual(parseCanvasRoute("#gemini-canvas/data-matrix", MODES), { page: "gemini-canvas", mode: "data-matrix", exercise: null });
   assert.deepEqual(parseCanvasRoute("#gemini-canvas", MODES), { page: "gemini-canvas", mode: null, exercise: null });
@@ -28,6 +29,7 @@ test("parseCanvasRoute devuelve la página para otras secciones y vacío sin has
 
 test("buildCanvasRoute arma el hash inverso", () => {
   assert.equal(buildCanvasRoute("data-matrix", 1), "#gemini-canvas/data-matrix/b");
+  assert.equal(buildCanvasRoute("doc-editorial", 2), "#gemini-canvas/doc-editorial/c");
   assert.equal(buildCanvasRoute("data-matrix", 0), "#gemini-canvas/data-matrix/a");
   assert.equal(buildCanvasRoute("data-matrix"), "#gemini-canvas/data-matrix");
   assert.equal(buildCanvasRoute(null), "#gemini-canvas");

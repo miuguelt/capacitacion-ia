@@ -1,7 +1,7 @@
-// Rutas profundas del módulo Gemini Canvas: #gemini-canvas/<modo>/<a|b>.
+// Rutas profundas del módulo Gemini Canvas: #gemini-canvas/<modo>/<a|b|c>.
 // Funciones puras: app.js las usa para navegar y las pruebas las comprueban sin DOM.
 const CANVAS_ROUTE_PAGE = "gemini-canvas";
-const CANVAS_EXERCISE_LETTERS = ["a", "b"];
+const CANVAS_EXERCISE_LETTERS = ["a", "b", "c"];
 
 function parseCanvasRoute(hash, modes) {
   const clean = String(hash || "").replace(/^#/, "");

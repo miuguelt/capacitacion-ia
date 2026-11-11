@@ -1235,8 +1235,8 @@ Si un trazo no se entiende, dímelo antes de suponer su contenido.`,
     instruction: "En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:",
     task: [
       "El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.",
-      "Validación reactiva en tiempo real del correo institucional: mensaje verde si contiene @soy.sena.edu.co o @sena.edu.co, y advertencia ámbar en caso contrario.",
-      "Medidor dinámico de seguridad de contraseña con barra de progreso que cambie de color (rojo < 50 %, ámbar 50-79 %, verde ≥ 80 %) según longitud, números y caracteres especiales.",
+      "Validación reactiva en tiempo real del correo institucional: mensaje verde si termina en @soy.sena.edu.co o @sena.edu.co; en otro caso, un error que diga cuáles dominios se aceptan.",
+      "Medidor de seguridad de la contraseña con tres segmentos (Débil, Media, Segura): Débil si tiene menos de 8 caracteres, Media si tiene 8 o más pero le faltan números o símbolos, Segura si cumple la regla del boceto.",
       "Manejo del evento submit sin recargar la página, mostrando una confirmación accesible con el nombre del aprendiz registrado."
     ],
     constraints: [
@@ -1325,8 +1325,7 @@ Guardrails obligatorios (Restricciones del System Prompt):
 1. Método socrático: cuando el usuario pida una solución completa, formula preguntas guía en lugar de dar el producto terminado.
 2. Alineación curricular: referenciar siempre resultados de aprendizaje (RAP) y competencias del programa ADSO.
 3. Tono y estilo: redacción en español de Colombia (es-CO), respetuoso, claro y técnico; cero uso de extranjerismos o términos ajenos (usar siempre "Portafolio de Evidencias").
-4. Estructura de salida en Canvas: organizar todo artefacto técnico en 4 secciones canónicas: 1) Identificación, 2) Planteamiento didáctico, 3) Criterios observables de evaluación, 4) Tareas de verificación.
-Temperatura configurada: 0.2 (rigor pedagógico determinista).`,
+4. Estructura de salida en Canvas: organizar todo artefacto técnico en 4 secciones canónicas: 1) Identificación, 2) Planteamiento didáctico, 3) Criterios observables de evaluación, 4) Tareas de verificación.`,
     instruction: "En Canvas, redacta la ficha técnica y de configuración completa del Gem en un documento formal con:",
     task: [
       "El System Prompt exhaustivo listo para copiar y pegar en la configuración de Gemini Gems, estructurado con Rol, Misión, Guardrails y Ejemplos de Interacción (Few-shot).",
@@ -1359,7 +1358,7 @@ Temperatura configurada: 0.2 (rigor pedagógico determinista).`,
       <div class="gem-studio-interactive-demo" style="font-family:var(--font-sans);">
         <div style="border-bottom:2px solid var(--color-primary); padding-bottom:0.5rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center;">
           <h4 style="margin:0; color:var(--color-primary);">🤖 Consola de calibración del Gem</h4>
-          <span class="badge badge-success">Temperatura: 0.2</span>
+          <span class="badge badge-success">Instrucciones + guardrails</span>
         </div>
         <div style="margin-bottom:0.75rem;">
           <small style="color:var(--text-muted); display:block; margin-bottom:0.25rem;">Cargar preajuste de calibración:</small>
@@ -1382,7 +1381,7 @@ Temperatura configurada: 0.2 (rigor pedagógico determinista).`,
     blocks: [
       { type: "heading", text: "FICHA TÉCNICA · GEM COESCRITOR PEDAGÓGICO ADSO" },
       { type: "paragraph", text: "Configuración de asistente a medida (Gem) para coescritura socrática en Gemini Canvas." },
-      { type: "callout", title: "Guardrails del System Prompt", text: "Método socrático activo · Rigor curricular ADSO · Portafolio de Evidencias obligatorio · Temperatura: 0.2" },
+      { type: "callout", title: "Guardrails del System Prompt", text: "Método socrático activo · Rigor curricular ADSO · Portafolio de Evidencias obligatorio" },
       { type: "table", headers: ["Caso de Calibración", "Entrada del Usuario", "Respuesta Bloqueada", "Respuesta Socrática Esperada"], rows: [
         ["1. Solicitud directa", "Escríbeme el código completo del taller", "Entrega de solución copiable", "Formula 2 preguntas orientadoras sobre el diagrama de clases"],
         ["2. Rúbrica evaluativa", "Califica este ejercicio sin justificar", "Nota numérica sin detalle", "Desglosa puntaje por criterio observable y sugiere mejoras"],

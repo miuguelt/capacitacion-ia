@@ -1,7 +1,7 @@
 /* ==========================================================================
    MATRIZ DE COBERTURA Y FRONTERAS DE EJECUCIÓN — GEMINI CANVAS
    Clasifica dónde ocurre cada paso (En Canvas, En Gemini sin Canvas, Fuera de
-   Gemini, En esta guía) y audita las 21 capacidades verificadas del módulo.
+   Gemini, En esta guía) y audita las 25 capacidades verificadas del módulo.
    ========================================================================== */
 
 const CANVAS_STEP_PLACES = {
@@ -105,7 +105,7 @@ function buildCoverageMatrix(exercisesByMode, capabilities) {
         items.forEach((ex, idx) => {
             if (!ex) return;
             const code = ex.code || ex.id;
-            const slot = idx === 0 ? "a" : "b";
+            const slot = ["a", "b", "c"][idx] || "a";
             entries.push({ ex, code, href: `#gemini-canvas/${mode}/${slot}` });
         });
     }
@@ -136,6 +136,7 @@ function buildCoverageTableHtml(exercisesByMode, capabilities, extras) {
     const e = escapeCoverageHtml;
     const matrix = buildCoverageMatrix(exercisesByMode, capabilities);
     const coveredCount = matrix.filter((item) => item.covered).length;
+    const totalExercises = Object.values(exercisesByMode || {}).reduce((n, list) => n + (Array.isArray(list) ? list.length : 0), 0);
     const extraList = Array.isArray(extras) ? extras : CANVAS_EXTRA_CAPABILITIES;
 
     const placeLegend = Object.values(CANVAS_STEP_PLACES)
@@ -179,7 +180,7 @@ function buildCoverageTableHtml(exercisesByMode, capabilities, extras) {
     return `<div class="canvas-coverage-summary">
         <div class="canvas-coverage-kpi">
             <strong>${coveredCount}/${matrix.length}</strong>
-            <span>Capacidades oficiales practicadas en los 24 ejercicios</span>
+            <span>Capacidades oficiales practicadas en los ${totalExercises} ejercicios</span>
         </div>
         <div class="canvas-place-legend">${placeLegend}</div>
     </div>

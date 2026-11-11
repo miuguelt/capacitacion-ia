@@ -91,7 +91,7 @@ function initNavigation() {
     }
   });
 
-  // Rutas: #<sección> o #gemini-canvas/<modo>/<a|b>. Atrás y adelante vuelven a aplicarlas.
+  // Rutas: #<sección> o #gemini-canvas/<modo>/<a|b|c>. Atrás y adelante vuelven a aplicarlas.
   function applyHashRoute() {
     const modes = typeof CANVAS_POSSIBILITIES !== "undefined" ? Object.keys(CANVAS_POSSIBILITIES) : [];
     const route = parseCanvasRoute(window.location.hash, modes);
@@ -530,7 +530,7 @@ function initCanvasLab() {
       const items = (CANVAS_EXERCISES[mode] || []).map((ex, i) => {
         const current = mode === currentExerciseMode && i === currentExerciseIndex;
         const mark = done.includes(ex.id) ? '<span class="canvas-index-done" aria-label="completado">✓</span> ' : "";
-        return `<li><a href="${buildCanvasRoute(mode, i)}"${current ? ' aria-current="true"' : ""}>${mark}${i === 0 ? "A" : "B"}. ${escapeCanvasHtml(ex.title)}</a></li>`;
+        return `<li><a href="${buildCanvasRoute(mode, i)}"${current ? ' aria-current="true"' : ""}>${mark}${"ABC"[i] || "A"}. ${escapeCanvasHtml(ex.title)}</a></li>`;
       }).join("");
       return `<li><span class="canvas-index-mode">${escapeCanvasHtml(CANVAS_POSSIBILITIES[mode].name)}</span><ul>${items}</ul></li>`;
     }).join("");
@@ -544,12 +544,15 @@ function initCanvasLab() {
       currentExerciseMode = id;
       currentExerciseIndex = 0;
     }
+    if (!list[currentExerciseIndex]) currentExerciseIndex = 0;
     const exercise = list[currentExerciseIndex];
     if (exercisesModeLabelEl && CANVAS_POSSIBILITIES[id]) {
       exercisesModeLabelEl.textContent = CANVAS_POSSIBILITIES[id].name;
     }
     exerciseSwitchBtns.forEach(btn => {
-      const active = Number(btn.getAttribute("data-exercise-index")) === currentExerciseIndex;
+      const btnIndex = Number(btn.getAttribute("data-exercise-index"));
+      btn.hidden = btnIndex >= list.length;
+      const active = btnIndex === currentExerciseIndex;
       btn.classList.toggle("active", active);
       btn.setAttribute("aria-selected", String(active));
     });
@@ -562,7 +565,7 @@ function initCanvasLab() {
         const kind = btn.getAttribute("data-copy");
         navigator.clipboard.writeText(canvasCopyText(exercise, kind)).then(() => {
           showCanvasToast(kind === "reference"
-            ? "📋 Código copiado: pégalo en el chat del lienzo para verlo en la vista previa."
+            ? "📋 Código copiado: pégalo en el chat de la izquierda para verlo en la vista previa."
             : "📋 Prompt copiado: pégalo en Gemini con Canvas activo.");
         });
       });
@@ -595,7 +598,7 @@ function initCanvasLab() {
     });
   });
 
-  // --- Recorrido lineal de los 24 ejercicios: anterior, siguiente, posición y retomar ---
+  // --- Recorrido lineal de todos los ejercicios: anterior, siguiente, posición y retomar ---
   const exerciseSequence = listExerciseSequence(Object.keys(CANVAS_POSSIBILITIES), CANVAS_EXERCISES);
   const pagerBtns = document.querySelectorAll("#canvas-exercise-prev, #canvas-exercise-next");
   const exerciseDoneEl = document.getElementById("canvas-exercise-done");
@@ -615,7 +618,7 @@ function initCanvasLab() {
     const pos = exercisePosition(exerciseSequence, currentExerciseMode, currentExerciseIndex);
     if (!pos) return;
     const done = readCanvasCompleted().length;
-    positionEl.querySelector("[data-position-label]").textContent = `Ejercicio ${pos.number} de ${pos.total} · ${CANVAS_POSSIBILITIES[currentExerciseMode].name} · Parte ${currentExerciseIndex === 0 ? "A" : "B"}`;
+    positionEl.querySelector("[data-position-label]").textContent = `Ejercicio ${pos.number} de ${pos.total} · ${CANVAS_POSSIBILITIES[currentExerciseMode].name} · Parte ${"ABC"[currentExerciseIndex] || "A"}`;
     positionEl.querySelector("[data-position-bar]").style.width = `${(done / pos.total) * 100}%`;
     positionEl.querySelector("[data-position-done]").textContent = `${done} de ${pos.total} completados`;
     if (continueBtn) {
@@ -1024,7 +1027,7 @@ function initCanvasLab() {
   function openCanvasRoute(mode, exercise) {
     if (!CANVAS_POSSIBILITIES[mode]) return;
     if (mode !== currentExerciseMode || !document.querySelector(`.canvas-tab.active[data-possibility="${mode}"]`)) selectMode(mode);
-    const hasExercise = exercise === 0 || exercise === 1;
+    const hasExercise = Number.isInteger(exercise) && exercise >= 0 && exercise < (CANVAS_EXERCISES[mode] || []).length;
     if (hasExercise && exercise !== currentExerciseIndex) {
       currentExerciseIndex = exercise;
       renderCanvasExercises(mode);
@@ -1202,7 +1205,7 @@ function initCommandPalette() {
       category: "Navegación",
       icon: "🗂️",
       title: "Ir a Hub de Proyectos & Entregables",
-      desc: "Catálogo unificado de los 28 proyectos formativos con vistas Kanban, Bento y Lista.",
+      desc: "Catálogo unificado de los 35 proyectos formativos con vistas Kanban, Bento y Lista.",
       keywords: ["proyectos", "entregables", "hub", "kanban", "bento", "lista", "catalogo", "dnd", "tareas"],
       action: () => {
         if (window.switchPage) window.switchPage("proyectos");
@@ -1213,7 +1216,7 @@ function initCommandPalette() {
       category: "Hub de Proyectos",
       icon: "📋",
       title: "Ver Proyectos en Tablero Kanban",
-      desc: "Organizar los 28 proyectos por estado (Por Iniciar, En Desarrollo, Completado) con arrastrar y soltar.",
+      desc: "Organizar los 35 proyectos por estado (Por Iniciar, En Desarrollo, Completado) con arrastrar y soltar.",
       keywords: ["kanban", "tablero", "estados", "proyectos", "arrastrar", "columnas"],
       action: () => {
         if (window.switchPage) window.switchPage("proyectos");
@@ -1230,7 +1233,7 @@ function initCommandPalette() {
       category: "Hub de Proyectos",
       icon: "🍱",
       title: "Ver Proyectos en Galería Bento",
-      desc: "Explorar los 28 proyectos con vistas previas interactivas y tarjetas adaptables.",
+      desc: "Explorar los 35 proyectos con vistas previas interactivas y tarjetas adaptables.",
       keywords: ["bento", "galeria", "cuadricula", "proyectos", "tarjetas", "visual"],
       action: () => {
         if (window.switchPage) window.switchPage("proyectos");
@@ -1367,7 +1370,7 @@ function initCommandPalette() {
     {
       category: "Gemini Canvas Lab",
       icon: "✨",
-      title: "Ver Desglose de Prompt Imagen 3 (5 Bloques)",
+      title: "Ver Desglose de Prompt de Imagen (5 Bloques)",
       desc: "Estructura pedagógica: Sujeto, Entorno, Iluminación, Estilo y Restricciones Negativas.",
       keywords: ["imagen3", "desglose", "prompt", "fotografia", "estilo", "bloques"],
       action: () => {
@@ -1756,9 +1759,9 @@ function initMultimodalSimulator() {
           <div style="background:#fefce8; border:2px dashed #ca8a04; border-radius:6px; padding:1.25rem; font-family:var(--font-mono); color:#713f12; text-align:left;">
             <div style="font-weight:700; margin-bottom:0.5rem; border-bottom:1px solid #eab308; padding-bottom:0.25rem;">[Boceto en Libreta: Formulario Matrícula]</div>
             <div>[Campo Texto] Nombre Completo __________________</div>
-            <div style="margin-top:0.4rem;">[Campo Email] Correo Institucional (debe ser @sena.edu.co)</div>
-            <div style="margin-top:0.4rem;">[Campo Pass] Contraseña de acceso (mínimo 8 caracteres)</div>
-            <div style="margin-top:0.6rem; display:inline-block; background:#ca8a04; color:#fff; padding:0.25rem 0.6rem; border-radius:4px;">[ BOTÓN: REGISTRARSE ]</div>
+            <div style="margin-top:0.4rem;">[Campo Email] Correo Institucional (solo @soy.sena.edu.co o @sena.edu.co)</div>
+            <div style="margin-top:0.4rem;">[Campo Pass] Contraseña de acceso (mín. 8 caracteres, con números y símbolos)</div>
+            <div style="margin-top:0.6rem; display:inline-block; background:#ca8a04; color:#fff; padding:0.25rem 0.6rem; border-radius:4px;">[ BOTÓN: Completar Registro Formativo ]</div>
           </div>
         `;
       }
@@ -1796,7 +1799,7 @@ function initMultimodalSimulator() {
               </div>
             </div>
             <button type="submit" class="copy-btn" style="margin-top:0.35rem; padding:0.5rem; width:100%; font-size:0.84rem;">
-              ✓ Registrarse en Plataforma
+              ✓ Completar Registro Formativo
             </button>
           </form>
         </div>

@@ -75,17 +75,17 @@ test("countCompletedExercises y formatProgressLabel calculan avance global y por
 
     const nullCompletedStats = subnav.countCompletedExercises(null, CANVAS_EXERCISES);
     assert.equal(nullCompletedStats.done, 0);
-    assert.equal(nullCompletedStats.total, 24);
+    assert.equal(nullCompletedStats.total, 31);
 
     const stats = subnav.countCompletedExercises(
         ["doc-a-informe-desercion", "code-a-simulador-presupuesto", "id-inexistente"],
         CANVAS_EXERCISES
     );
     assert.equal(stats.done, 2);
-    assert.equal(stats.total, 24);
-    assert.deepEqual(stats.byMode["doc-editorial"], { done: 1, total: 2 });
-    assert.deepEqual(stats.byMode["code-prototyping"], { done: 1, total: 2 });
-    assert.deepEqual(stats.byMode["visual-mockup"], { done: 0, total: 2 });
+    assert.equal(stats.total, 31);
+    assert.deepEqual(stats.byMode["doc-editorial"], { done: 1, total: 3 });
+    assert.deepEqual(stats.byMode["code-prototyping"], { done: 1, total: 3 });
+    assert.deepEqual(stats.byMode["visual-mockup"], { done: 0, total: 3 });
 
     const nonArrayMode = subnav.countCompletedExercises(["x"], { broken: null });
     assert.deepEqual(nonArrayMode.byMode.broken, { done: 0, total: 0 });
@@ -255,7 +255,7 @@ test("bindTablistKeyboard e initCanvasSubnav sincronizan píldoras, pestañas, p
         localStorage: {
             getItem(key) {
                 if (key === "canvas_exercises_completed_v1") {
-                    return JSON.stringify(["doc-a-informe-desercion", "doc-b-propuesta-huerta"]);
+                    return JSON.stringify(["doc-a-informe-desercion", "doc-b-propuesta-huerta", "doc-c-recorrido-interfaz"]);
                 }
                 return null;
             }
@@ -265,12 +265,12 @@ test("bindTablistKeyboard e initCanvasSubnav sincronizan píldoras, pestañas, p
     const api = subnav.initCanvasSubnav(fakeDoc, fakeWin);
     assert.ok(api);
     assert.equal(typeof api.refreshProgress, "function");
-    assert.equal(countBadge.textContent, "2/24");
+    assert.equal(countBadge.textContent, "3/31");
     assert.equal(observed.length, 2);
 
     const docProgress = tabDoc.querySelector(".canvas-tab-progress");
     assert.ok(docProgress);
-    assert.equal(docProgress.textContent, "2/2");
+    assert.equal(docProgress.textContent, "3/3");
     assert.equal(docProgress.classList.contains("is-complete"), true);
 
     const unknownProgress = tabCustom.querySelector(".canvas-tab-progress");

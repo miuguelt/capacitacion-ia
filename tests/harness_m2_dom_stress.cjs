@@ -87,7 +87,7 @@ runTest('2. Integridad de los 24 ejercicios en CANVAS_EXERCISES para los 12 modo
   modeKeys.forEach(modeId => {
     const exercises = CANVAS_EXERCISES[modeId];
     assert.ok(Array.isArray(exercises), `CANVAS_EXERCISES[${modeId}] debe ser un array`);
-    assert.strictEqual(exercises.length, 2, `CANVAS_EXERCISES[${modeId}] debe contener exactamente 2 ejercicios (A y B)`);
+    assert.ok(exercises.length === 2 || exercises.length === 3, `CANVAS_EXERCISES[${modeId}] debe contener 2 ejercicios (A y B) o 3 con la parte C`);
 
     exercises.forEach((ex, exIdx) => {
       totalExercises++;
@@ -100,7 +100,7 @@ runTest('2. Integridad de los 24 ejercicios en CANVAS_EXERCISES para los 12 modo
     });
   });
 
-  assert.strictEqual(totalExercises, 24, `El total de ejercicios prácticos debe ser exactamente 24`);
+  assert.strictEqual(totalExercises, 31, `El total de ejercicios prácticos debe ser exactamente 31`);
 });
 
 // 3. Simulación reactiva: comprobar que todos los destinos de app.js#loadPossibility existen en index.html

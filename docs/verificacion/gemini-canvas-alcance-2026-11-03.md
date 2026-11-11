@@ -17,7 +17,7 @@ Algunos de los 24 ejercicios no aprovechaban Canvas, porque su resultado era una
 
 ## Qué cambió
 
-- **Catálogo único:** `CANVAS_CAPABILITIES`, en `js/canvas-exercises.js`, define 16 capacidades. Cada ejercicio declara las suyas en `capabilities` y explica en `whyCanvas` qué aporta Canvas frente al chat.
+- **Catálogo único:** `CANVAS_CAPABILITIES`, en `js/canvas-exercises.js`, definía 16 capacidades (hoy son 25; véase `gemini-canvas-revision-2026-11-11.md`). Cada ejercicio declara las suyas en `capabilities` y explica en `whyCanvas` qué aporta Canvas frente al chat.
 - **Pruebas** (`tests/canvas-exercises.test.cjs`). Las pruebas exigen que:
   - cada capacidad declarada aparezca en algún paso;
   - los 24 ejercicios cubran el catálogo completo;

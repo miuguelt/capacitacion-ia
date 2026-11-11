@@ -479,10 +479,10 @@ test("STRESS-FILTER-9: Umbrales y brechas de duración (gap 36-39 min, NaN, nega
 // SUITE 2: PRUEBAS GENERATIVAS DE PERMUTACIÓN E INVARIANTES DE REORDENAMIENTO
 // ============================================================================
 
-test("STRESS-PERM-1: 5.000 permutaciones aleatorias sobre 28 proyectos conservan invariantes y reversibilidad", () => {
+test("STRESS-PERM-1: 5.000 permutaciones aleatorias sobre 35 proyectos conservan invariantes y reversibilidad", () => {
   const baseProjects = collateAllProjects(CANVAS_EXERCISES);
   const baseIds = baseProjects.map(p => p.id);
-  assert.equal(baseIds.length, 28);
+  assert.equal(baseIds.length, 35);
 
   // Generador pseudo-aleatorio determinista LCG
   let seed = 123456789;
@@ -504,11 +504,11 @@ test("STRESS-PERM-1: 5.000 permutaciones aleatorias sobre 28 proyectos conservan
     const reordered = reorderProjectList(currentList, sourceId, targetId, position);
 
     // Invariante 1: Cardinalidad exacta
-    assert.equal(reordered.length, 28, `Pérdida de elementos en iteración ${i}`);
+    assert.equal(reordered.length, 35, `Pérdida de elementos en iteración ${i}`);
 
     // Invariante 2: No duplicados (Set size === 28)
     const set = new Set(reordered);
-    assert.equal(set.size, 28, `Duplicados creados en iteración ${i}`);
+    assert.equal(set.size, 35, `Duplicados creados en iteración ${i}`);
 
     // Invariante 3: Conservación de todos los IDs originales
     for (const id of baseIds) {
@@ -841,7 +841,7 @@ test("STRESS-INTEGRATION-1: initProjectsHub con customOrder corrupto (IDs duplic
     // Si el usuario presiona reset, debe restaurar la secuencia oficial limpia
     api.resetOrder();
     const cleanOrder = api.getOrder();
-    assert.equal(new Set(cleanOrder).size, 28);
+    assert.equal(new Set(cleanOrder).size, 35);
   });
 });
 

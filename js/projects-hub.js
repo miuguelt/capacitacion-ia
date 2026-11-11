@@ -1,4 +1,4 @@
-// Hub de Proyectos & Entregables: consolidación de 28 proyectos formativos (24 Canvas + 4 Días).
+// Hub de Proyectos & Entregables: consolidación de 35 proyectos formativos (31 Canvas + 4 Días).
 // Módulo desacoplado de funciones puras, persistencia tolerante y accesibilidad (WCAG).
 
 const DEFAULT_DAILY_PROJECTS = [

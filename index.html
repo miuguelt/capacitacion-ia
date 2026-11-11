@@ -493,16 +493,16 @@ Notas tomadas por Julián:
                 <span>🖥️</span> 2. Simulador de 12 Modos
               </a>
               <a href="#canvas-exercises-module" class="quick-nav-pill" data-canvas-section="canvas-exercises-module">
-                <span>🧪</span> 3. Ejercicios <span class="quick-nav-count" id="canvas-nav-exercises-count">0/24</span>
+                <span>🧪</span> 3. Ejercicios <span class="quick-nav-count" id="canvas-nav-exercises-count">0/31</span>
               </a>
               <a href="#canvas-coverage-module" class="quick-nav-pill" data-canvas-section="canvas-coverage-module">
-                <span>🧭</span> 4. Mapa de Capacidades (21)
+                <span>🧭</span> 4. Mapa de Capacidades (25)
               </a>
               <a href="#canvas-advanced-labs-anchor" class="quick-nav-pill" data-canvas-section="canvas-advanced-labs-anchor">
                 <span>🔬</span> 5. Laboratorios Avanzados
               </a>
               <a href="#proyectos" class="quick-nav-pill">
-                <span>🗂️</span> Hub Proyectos (28)
+                <span>🗂️</span> Hub Proyectos (35)
               </a>
               <button type="button" class="quick-nav-continue" id="canvas-continue-btn">▶ Continuar donde quedé</button>
             </div>
@@ -814,27 +814,28 @@ Notas tomadas por Julián:
           </div>
 
           <!-- ==========================================
-               EJERCICIOS PRÁCTICOS POR MODO (2 por modo)
+               EJERCICIOS PRÁCTICOS POR MODO (A y B en cada modo; C en siete)
                ========================================== -->
           <div class="tool-container" id="canvas-exercises-module" data-canvas-section="canvas-exercises-module">
             <div class="canvas-exercises-header">
               <div>
                 <h3 style="margin:0;">🧪 Ejercicios prácticos del modo: <span id="canvas-exercises-mode-label">1. Redacción &amp; Documentos</span></h3>
-                <p class="canvas-exercises-intro">Son 24 ejercicios en orden: la parte A y la parte B de cada modo. Copia el prompt (ya incluye los datos), sigue los pasos en Gemini Canvas y marca los criterios que tu resultado cumpla. Cuando termines, usa «Siguiente ejercicio».</p>
+                <p class="canvas-exercises-intro">Son 31 ejercicios en orden: la parte A y la parte B de cada modo, y una parte C en siete modos. Copia el prompt (ya incluye los datos), sigue los pasos en Gemini Canvas y marca los criterios que tu resultado cumpla. Cuando termines, usa «Siguiente ejercicio».</p>
               </div>
               <div class="canvas-exercises-switch" id="canvas-exercises-switch" role="tablist" aria-label="Elegir ejercicio">
                 <button type="button" class="canvas-exercises-switch-btn active" role="tab" aria-selected="true" tabindex="0" data-exercise-index="0">Parte A</button>
                 <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" tabindex="-1" data-exercise-index="1">Parte B</button>
+                <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" tabindex="-1" data-exercise-index="2" hidden>Parte C</button>
               </div>
             </div>
             <div class="canvas-exercise-position" id="canvas-exercise-position" aria-live="polite">
-              <span class="canvas-exercise-position-label" data-position-label>Ejercicio 1 de 24</span>
+              <span class="canvas-exercise-position-label" data-position-label>Ejercicio 1 de 31</span>
               <span class="canvas-exercise-position-track" aria-hidden="true"><span class="canvas-exercise-position-bar" data-position-bar></span></span>
               <span class="canvas-exercise-position-done" data-position-done>0 completados</span>
             </div>
             <p class="canvas-exercises-notice">ℹ️ Las personas, cifras y documentos de estos ejercicios se prepararon para aprender y no contienen registros reales.</p>
             <details class="canvas-exercise-index" id="canvas-exercise-index">
-              <summary>🗂️ Índice de los 24 ejercicios <span class="canvas-exercise-index-count" id="canvas-exercise-index-count"></span></summary>
+              <summary>🗂️ Índice de los 31 ejercicios <span class="canvas-exercise-index-count" id="canvas-exercise-index-count"></span></summary>
               <p class="canvas-exercise-hint">Cada enlace abre el ejercicio y se puede compartir. La marca ✓ indica los ejercicios que completaste en este navegador.</p>
               <ol class="canvas-exercise-index-list" id="canvas-exercise-index-list"></ol>
             </details>
@@ -855,7 +856,7 @@ Notas tomadas por Julián:
           <section class="tool-container" id="canvas-coverage-module" data-canvas-section="canvas-coverage-module">
             <div class="canvas-coverage-header">
               <div>
-                <h3 class="canvas-coverage-title">🧭 Mapa de las 21 capacidades de Gemini Canvas y qué ocurre fuera del lienzo</h3>
+                <h3 class="canvas-coverage-title">🧭 Mapa de las 25 capacidades de Gemini Canvas y qué ocurre fuera del lienzo</h3>
                 <p class="canvas-coverage-subtitle">
                   Comprueba en qué ejercicios se practica cada función oficial de Gemini Canvas y distingue qué pasos ocurren dentro del lienzo (🟢), en el chat o Gems (🟡), al exportar a otras herramientas de Google (🟠) o en esta guía (🔵).
                 </p>
@@ -989,24 +990,15 @@ Notas tomadas por Julián:
                   <textarea id="gem-instructions-input" class="gem-textarea" rows="6"></textarea>
                 </div>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
-                  <div>
+                <div>
                     <label for="gem-knowledge-select">Conocimiento Adjunto:</label>
                     <select id="gem-knowledge-select" class="gem-input">
                       <option value="reglamento">Reglamento del Aprendiz (Acuerdo 007)</option>
                       <option value="curriculo">Malla Curricular ADSO (Fase Ejecución)</option>
                       <option value="norma-iso">Norma ISO/IEC 25010 Calidad Software</option>
                     </select>
+                    <small style="color:var(--text-muted);">Un Gem solo tiene nombre, instrucciones y archivos de conocimiento; no se le ajusta la temperatura. El rigor sale de instrucciones claras y de las pruebas de calibración.</small>
                   </div>
-                  <div>
-                    <label for="gem-temperature-select">Temperatura / Rigor:</label>
-                    <select id="gem-temperature-select" class="gem-input">
-                      <option value="0.1">0.1 - Determinista y riguroso (Recomendado)</option>
-                      <option value="0.4">0.4 - Balance didáctico</option>
-                      <option value="0.7">0.7 - Creativo y exploratorio</option>
-                    </select>
-                  </div>
-                </div>
 
                 <div style="font-size:0.78rem; color:var(--text-muted); background:var(--bg-surface); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border-light);">
                   💡 <strong>Regla de Oro:</strong> Un buen Gem nunca regala el código o el resultado directo; formula preguntas de reflexión y cita la norma aplicable.
@@ -1191,7 +1183,7 @@ Notas tomadas por Julián:
                 <div class="canvas-modal-title-group">
                   <span class="modal-icon">🖼️</span>
                   <div>
-                    <h4 id="imagen3-modal-title" class="canvas-modal-title">Desglose de Ingeniería de Prompt: Imagen 3 en Gemini</h4>
+                    <h4 id="imagen3-modal-title" class="canvas-modal-title">Desglose de Ingeniería de Prompt: imágenes de maquetas en Gemini</h4>
                     <small class="canvas-modal-subtitle">Generación de Maquetas UI/UX de Alta Fidelidad sin Deformaciones</small>
                   </div>
                 </div>
@@ -1199,7 +1191,7 @@ Notas tomadas por Julián:
               </div>
               <div class="canvas-modal-body">
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
-                  Imagen 3 dentro de Gemini Canvas destaca por su fidelidad gráfica y renderizado de texto. Para maquetas de software, desglosa el prompt en 5 bloques canónicos:
+                  Gemini puede generar imágenes de maquetas desde el chat con el modelo de imágenes que tenga tu cuenta; el nombre del modelo cambia con el tiempo. Para maquetas de software, desglosa el prompt en 5 bloques canónicos:
                 </p>
 
                 <div class="prompt-anatomy-grid">
@@ -1266,7 +1258,7 @@ Notas tomadas por Julián:
           <div class="hero-card" style="border-left: 4px solid var(--color-primary);">
             <span class="hero-tag">Catálogo Unificado · 28 Proyectos Formativos</span>
             <h2>🗂️ Hub de Proyectos & Entregables</h2>
-            <p class="hero-desc">Explora, organiza y gestiona los 28 proyectos formativos del curso (24 ejercicios aplicados de Gemini Canvas Lab y 4 proyectos integradores de cierre diario). Alterna entre el Tablero Kanban por estados, la Galería Bento interactiva y la Lista Compacta accesible con soporte de arrastrar y soltar (Drag & Drop), búsqueda en vivo y filtros avanzados.</p>
+            <p class="hero-desc">Explora, organiza y gestiona los 35 proyectos formativos del curso (31 ejercicios aplicados de Gemini Canvas Lab y 4 proyectos integradores de cierre diario). Alterna entre el Tablero Kanban por estados, la Galería Bento interactiva y la Lista Compacta accesible con soporte de arrastrar y soltar (Drag & Drop), búsqueda en vivo y filtros avanzados.</p>
             <div class="hero-stats">
               <div class="stat-box">
                 <span class="stat-value">28</span>
@@ -1343,7 +1335,7 @@ Notas tomadas por Julián:
               </div>
 
               <div class="projects-hub-actions">
-                <span id="hub-results-count" class="hub-results-count" aria-live="polite">Mostrando 28 de 28 proyectos</span>
+                <span id="hub-results-count" class="hub-results-count" aria-live="polite">Mostrando 35 de 35 proyectos</span>
                 <button type="button" class="btn-hub-reset" data-hub-reset-order title="Restablecer la secuencia curricular original recomendada">
                   ↺ Restablecer ruta oficial recomendada
                 </button>

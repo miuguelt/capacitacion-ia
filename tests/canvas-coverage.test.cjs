@@ -60,9 +60,9 @@ test("summarizeStepPlaces y buildExerciseScopeTag distinguen ejercicios 100 % Ca
     assert.match(geminiScope, /Combina chat\/Gems y Canvas/);
 });
 
-test("Los 24 ejercicios declaran places alineados con steps, outsideCanvas claro y cubren las 21 capacidades", () => {
+test("Los 31 ejercicios declaran places alineados con steps, outsideCanvas claro y cubren las 25 capacidades", () => {
     const allExercises = Object.values(exercisesMod.CANVAS_EXERCISES).flat();
-    assert.equal(allExercises.length, 24);
+    assert.equal(allExercises.length, 31);
 
     for (const ex of allExercises) {
         assert.ok(Array.isArray(ex.places), `${ex.id} debe incluir arreglo places`);
@@ -76,13 +76,13 @@ test("Los 24 ejercicios declaran places alineados con steps, outsideCanvas claro
     }
 
     const capKeys = Object.keys(exercisesMod.CANVAS_CAPABILITIES);
-    assert.equal(capKeys.length, 21);
+    assert.equal(capKeys.length, 25);
     for (const required of ["select-ask", "versions", "manual-edit", "file-input", "deep-research"]) {
         assert.ok(exercisesMod.CANVAS_CAPABILITIES[required], `Falta capacidad ${required}`);
     }
 
     const matrix = coverage.buildCoverageMatrix(exercisesMod.CANVAS_EXERCISES, exercisesMod.CANVAS_CAPABILITIES);
-    assert.equal(matrix.length, 21);
+    assert.equal(matrix.length, 25);
     assert.deepEqual(coverage.listUncoveredCapabilities(matrix), []);
 
     const emptyMatrix = coverage.buildCoverageMatrix(null, null);
@@ -107,7 +107,7 @@ test("buildCoverageTableHtml renderiza la matriz verificable con enlaces profund
         coverage.CANVAS_EXTRA_CAPABILITIES
     );
     assert.match(html, /canvas-coverage-summary/);
-    assert.match(html, /21\/21/);
+    assert.match(html, /25\/25/);
     assert.match(html, /Seleccionar y preguntar en la vista previa/);
     assert.match(html, /De Deep Research a Canvas/);
     assert.match(html, /Tarjetas de estudio/);
@@ -121,8 +121,8 @@ test("buildCoverageTableHtml renderiza la matriz verificable con enlaces profund
 
     const ex9B = exercisesMod.CANVAS_EXERCISES["sql-pipeline"][1];
     assert.doesNotMatch(ex9B.steps.join(" "), /Agrega una prueba por cada formato admitido/);
-    assert.match(ex9B.steps[2], /tabla de pruebas en JavaScript/);
-    assert.match(ex9B.steps[4], /CREATE OR REPLACE FUNCTION/);
+    assert.match(ex9B.steps[2], /Pyodide[\s\S]*sqlite3/);
+    assert.match(ex9B.steps[5], /CREATE OR REPLACE FUNCTION/);
 
     const ex11A = exercisesMod.CANVAS_EXERCISES["multimodal-vision"][0];
     const ex11B = exercisesMod.CANVAS_EXERCISES["multimodal-vision"][1];

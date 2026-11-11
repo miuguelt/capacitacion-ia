@@ -79,7 +79,7 @@ function bindTablistKeyboard(tablist) {
     const getTabs = () =>
         Array.from(
             tablist.querySelectorAll(".canvas-tab, .canvas-exercises-switch-btn, .canvas-exercise-case-btn")
-        );
+        ).filter((tab) => !tab.hidden);
     const initialTabs = getTabs();
     const initialActive =
         initialTabs.find((t) => t.classList && t.classList.contains("active")) || initialTabs[0];

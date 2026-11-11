@@ -48,7 +48,7 @@ Tradicionalmente, la interacción con un modelo de lenguaje ocurre mediante un *
 - **Ventanas emergentes:** permite las ventanas emergentes de gemini.google.com; «Exportar a Documentos de Google» y «Exportar a Colab» abren una pestaña nueva.
 - **Archivos de práctica:** los ejercicios 10A, 11A y 11B adjuntan un archivo con el botón «+» del chat; descárgalo antes desde la tarjeta del ejercicio.
 - **Límites de la vista previa:** la vista previa se ejecuta en un contenedor aislado. Puede cargar librerías desde CDN (Chart.js, Mermaid, Pyodide), pero no garantiza descargas de archivos ni conserva `localStorage` entre sesiones, y no ejecuta un archivo `.py` por sí sola. Por eso los ejercicios comprueban los resultados en pantalla y dejan las exportaciones como pasos opcionales.
-- **Diagramas Mermaid:** no necesitas Mermaid Live. Pide una página HTML que cargue Mermaid desde CDN; si quieres comparar, pega el código de referencia de la guía en el chat del lienzo y pide que lo dibuje en la vista previa.
+- **Diagramas Mermaid:** no necesitas Mermaid Live. Pide una página HTML que cargue Mermaid desde CDN; si quieres comparar, pega el código de referencia de la guía en el chat de la izquierda y pide que lo dibuje en la vista previa.
 
 ---
 
@@ -797,6 +797,7 @@ Tono: Formal y persuasivo, propio de una convocatoria institucional.
 Límites:
 - Muestra los cálculos paso a paso.
 - Montos en pesos colombianos con punto de miles.
+- Si la inversión no se recupera en las 16 semanas, dilo con claridad y propón una medida.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -813,12 +814,75 @@ Límites:
 
 - [ ] La tabla de presupuesto suma 8.000.000 COP y la estructura NFT pesa 40 %.
 - [ ] Los tres objetivos específicos tienen un indicador medible.
-- [ ] El cálculo de costo por kilogramo y punto de equilibrio aparece paso a paso.
+- [ ] El costo del primer ciclo es 8.000.000 ÷ 220 kg ≈ 36.364 COP por kg y el punto de equilibrio a 9.000 COP es ≈ 889 kg.
+- [ ] El informe concluye que la inversión no se recupera en las 16 semanas (dos ciclos dan 440 kg y 3.960.000 COP) y propone una medida.
 - [ ] El cronograma cubre las 16 semanas sin huecos.
 - [ ] El cuestionario de «Crear → Cuestionario» pregunta por presupuesto, cronograma e indicadores y explica cada respuesta.
 - [ ] «Mostrar cambios recientes» o «Versión anterior» deja ver la diferencia del cambio de tono.
 
 **Reto extra:** Pide: «Agrega un escenario optimista con dos ciclos más y compáralo en una tabla con el escenario base».
+
+#### Ejercicio B (1C): Recorrido por la interfaz de Canvas con una guía de bienvenida
+
+- **Nivel:** Básico · **Duración:** 20 min · **Función de Canvas:** Documento + Ajustar longitud y tono + Versiones + Exportar a PDF
+- **Qué vas a lograr:** Reconocer las dos zonas de Canvas y usar sus controles básicos sobre un documento corto. Si es tu primera vez en Canvas, haz este ejercicio antes que 1A.
+- **Situación:** Vas a dar la bienvenida a un grupo nuevo. Necesitas una guía de una página, con las reglas de convivencia, que puedas acortar, formalizar y guardar como PDF.
+- **¿Por qué en Canvas?:** Aquí conoces los controles de Canvas en un documento corto: el chat queda a la izquierda, el documento a la derecha, y puedes cambiar longitud y tono, volver a una versión anterior y ver el PDF antes de guardarlo.
+- **¿Qué ocurre fuera de Canvas?:** Todo el recorrido ocurre en Gemini: el documento, los botones de longitud, tono y versiones y la vista previa del PDF. El archivo PDF solo se guarda en tu equipo si decides conservarlo.
+- **Capacidades que practicas:** Documento en Canvas · Ajustar longitud y tono · Historial de versiones y cambios · Exportar a PDF con vista previa
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: Un grupo nuevo de 25 aprendices empieza clases virtuales y necesita conocer las reglas de convivencia el primer día.
+
+Rol: Actúa como redactor de guías de bienvenida para aprendices.
+
+Datos:
+"""
+GUÍA DE BIENVENIDA AL AULA VIRTUAL — FICHA DE PRÁCTICA (datos de práctica)
+
+Grupo: 25 aprendices de primer trimestre. Sesiones: martes y jueves, de 6:00 p. m. a 9:00 p. m.
+
+Reglas de convivencia en las sesiones virtuales:
+1. Ingresar 10 minutos antes y dejar el micrófono apagado.
+2. Usar el chat para las preguntas; el instructor las responde al final de cada bloque.
+3. Entregar las evidencias en la plataforma antes de las 11:59 p. m. del día acordado.
+4. Avisar con 24 horas de anticipación si no puede asistir.
+5. Cuidar el lenguaje en el chat y en los foros.
+"""
+
+Tarea: En Canvas, redacta la guía de bienvenida con:
+1. Un título y un saludo de dos líneas.
+2. Las cinco reglas numeradas, cada una con una frase que explique para qué sirve.
+3. Un cierre con el horario de las sesiones.
+Entrega: Documento con título y lista numerada.
+
+Tono: Cercano y claro, dirigido a jóvenes aprendices.
+
+Límites:
+- Conserva las horas y los plazos de los datos.
+- No agregues reglas nuevas.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
+2. [🟢 En Canvas] Ubica las dos zonas: a la izquierda el chat de Gemini y a la derecha el documento de Canvas. Escribe en el chat: «Agrega una sexta regla sobre puntualidad» y observa que el documento cambia.
+3. [🟢 En Canvas] Usa «Ajustar longitud → Más corto» y después «Cambiar tono → Más formal»; el documento cambia sin que escribas nada.
+4. [🟢 En Canvas] Abre «Versión anterior» para ver el texto antes del cambio de tono y «Versión siguiente» para volver al más reciente.
+5. [🟢 En Canvas] Abre «Compartir y exportar → Exportar a PDF» y revisa la vista previa del PDF antes de guardarlo.
+6. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] El documento tiene seis reglas numeradas y una de ellas habla de puntualidad.
+- [ ] Después de «Ajustar longitud → Más corto», el documento es más breve que el original y conserva las seis reglas.
+- [ ] «Versión anterior» muestra el texto previo al cambio de tono y «Versión siguiente» devuelve el más reciente.
+- [ ] Las horas y los plazos siguen igual: 6:00 p. m. a 9:00 p. m., 10 minutos antes, 11:59 p. m. y 24 horas de anticipación.
+- [ ] La vista previa del PDF muestra el título y las seis reglas.
+
+**Reto extra:** Pide en el chat: «Agrega al final una tabla con las cinco reglas y quién las vigila: aprendiz, instructor o coordinación».
 
 ### 2. Desarrollo y Prototipado Web en Vivo
 
@@ -861,7 +925,7 @@ Reglas de negocio:
 Tarea: En Canvas, crea una aplicación web de una sola página que permita:
 1. Ajustar el porcentaje de cada categoría con un control deslizante y ver su valor en pesos.
 2. Mantener la suma en 100 % repartiendo la diferencia entre las demás categorías.
-3. Ver la distribución en un gráfico de dona que se actualice en vivo (Chart.js desde CDN).
+3. Ver la distribución en un gráfico de dona que se actualice en vivo, dibujado con SVG.
 4. Recibir las alertas de las reglas de negocio.
 5. Restablecer los valores iniciales.
 Entrega: Un solo archivo HTML con CSS y JavaScript.
@@ -871,6 +935,7 @@ Tono: Sencillo y amable: lo usará gente sin formación técnica.
 Límites:
 - Formato de moneda colombiano.
 - Diseño responsivo y accesible: contraste AA y controles con etiqueta.
+- Sin librerías externas ni descargas de archivos.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -880,7 +945,7 @@ Límites:
 3. [🟢 En Canvas] Sube «Logística» a 50 % y observa cómo se redistribuyen las demás categorías.
 4. [🟢 En Canvas] Baja «Imprevistos» a 6 % y comprueba que aparezca la advertencia.
 5. [🟢 En Canvas] Si la vista previa muestra un error, abre la consola o usa «Corregir error» en Canvas para repararlo.
-6. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega un botón para descargar la distribución en CSV y un interruptor de modo oscuro».
+6. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega un botón que muestre la distribución en formato CSV dentro de un cuadro de texto para copiarla y un interruptor de modo oscuro».
 7. [🔵 En esta guía] Comprueba todos los puntos en la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
@@ -890,7 +955,7 @@ Límites:
 - [ ] La suma de porcentajes se mantiene en 100 al mover cualquier control.
 - [ ] La dona cambia en vivo con animación.
 - [ ] Las alertas roja y amarilla aparecen según las reglas.
-- [ ] El CSV descargado contiene las cinco categorías y el modo oscuro funciona.
+- [ ] El cuadro de texto con el CSV lista las cinco categorías y el modo oscuro funciona.
 
 **Reto extra:** Pide: «Agrega un segundo escenario guardado y un gráfico de barras que compare ambos escenarios lado a lado».
 
@@ -932,7 +997,7 @@ Tarea: En Canvas, crea un tablero Kanban web que:
 1. Muestre las tareas en las columnas Por hacer, En curso y Hecho.
 2. Permita mover las tarjetas arrastrándolas y también con el teclado.
 3. Sume los puntos de cada columna y muestre el avance del sprint.
-4. Incluya un gráfico burndown con la línea ideal y la real (Chart.js desde CDN).
+4. Incluya un gráfico burndown con la línea ideal y la real, dibujado con SVG.
 5. Filtre las tarjetas por responsable.
 Entrega: Un solo archivo HTML ejecutable.
 
@@ -950,7 +1015,7 @@ Límites:
 3. [🟢 En Canvas] En la «Vista previa», activa «Seleccionar y preguntar», haz clic sobre el encabezado de una columna y pide: «Muestra el porcentaje de puntos de esta columna frente al total».
 4. [🟢 En Canvas] Pasa a «Código», selecciona la función del gráfico y escribe: «Marca los días en que la línea real supera a la ideal».
 5. [🟢 En Canvas] Usa «Versión anterior» y «Mostrar cambios» en la barra superior de Canvas para comparar la diferencia del código y regresa a la versión más reciente.
-6. [🟢 En Canvas] Pide en el chat del lienzo: «Guarda el estado del tablero en localStorage y agrega dos botones (Exportar e Importar JSON) por si el contenedor aislado de la vista previa reinicia la sesión».
+6. [🟢 En Canvas] Pide en el chat de la izquierda: «Guarda el estado del tablero en localStorage y agrega dos botones: Exportar muestra el JSON en un cuadro de texto e Importar lo lee desde ese cuadro, por si el contenedor aislado de la vista previa reinicia la sesión».
 7. [🔵 En esta guía] Revisa todos los criterios en la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
@@ -963,6 +1028,68 @@ Límites:
 - [ ] El estado se conserva con localStorage o mediante los botones de exportar e importar JSON.
 
 **Reto extra:** Pide: «Agrega una columna Bloqueado con límite WIP de 2 tarjetas y una alerta visual cuando se supere».
+
+#### Ejercicio B (2C): Juego de decisiones «Meta de ahorro» para compartir y copiar
+
+- **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Juego en la vista previa + Compartir + Copiar Canvas
+- **Qué vas a lograr:** Construir un juego por turnos con reglas exactas, comprobar sus resultados jugando y compartirlo para que otra persona lo copie y cambie una regla.
+- **Situación:** El grupo practica finanzas personales. Quieren un juego corto donde cada decisión de ahorro tenga un efecto que se pueda comprobar con cuentas simples.
+- **¿Por qué en Canvas?:** El juego se juega en la vista previa, se comparte con un enlace y un compañero hace su propia copia con «Copiar Canvas» para cambiar una regla sin tocar tu original.
+- **¿Qué ocurre fuera de Canvas?:** Todo ocurre en Gemini. Los enlaces compartidos abren solo en gemini.google.com, no en la aplicación móvil. Si tu cuenta institucional no permite enlaces, usa «Copiar contenido» y pega el código en un chat nuevo con Canvas.
+- **Capacidades que practicas:** Código con vista previa · Consola y corrección de errores · Compartir el Canvas · Copiar un Canvas compartido
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: Los aprendices decidirán cuánto ahorrar cada semana y verán al final si cumplieron la meta. El juego se compartirá con otros grupos.
+
+Rol: Actúa como diseñador de juegos educativos de finanzas personales.
+
+Datos:
+"""
+JUEGO «META DE AHORRO» (reglas de práctica)
+
+Duración: 6 semanas. Sueldo semanal: 200.000 COP.
+Cada semana el jugador elige ahorrar 0, 25, 50 o 75 % del sueldo.
+Meta: terminar con al menos 500.000 COP ahorrados.
+Evento fijo de la semana 3: imprevisto de 80.000 COP.
+El imprevisto se paga primero con el dinero no ahorrado de esa semana; si no alcanza, lo que falta se toma de lo ahorrado en esa semana.
+Pantalla: semana actual, barra de ahorro acumulado, botones 0 %, 25 %, 50 % y 75 %, y botón Reiniciar.
+"""
+
+Tarea: En Canvas, crea un juego web de una sola página con:
+1. La pantalla y los botones de las reglas, con una barra de ahorro acumulado que se anima.
+2. El cálculo semanal con el imprevisto de la semana 3 y el resultado final frente a la meta.
+3. Un mensaje de resultado accesible (aria-live) y un botón para reiniciar.
+Entrega: Un solo archivo HTML ejecutable.
+
+Tono: Motivador y claro, para jóvenes aprendices.
+
+Límites:
+- Sin librerías externas ni descargas de archivos.
+- Montos en pesos colombianos con punto de miles.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
+2. [🟢 En Canvas] Abre la «Vista previa» y juega una partida eligiendo 50 % las seis semanas; comprueba el ahorro final y el mensaje de resultado.
+3. [🟢 En Canvas] Si la vista previa muestra un error, abre la consola o usa «Corregir error» para que Gemini lo repare.
+4. [🟢 En Canvas] Reinicia y juega otra partida con 75 % las seis semanas; comprueba que la semana 3 ahorra menos por el imprevisto.
+5. [🟢 En Canvas] Usa «Compartir» en «Compartir y exportar» para generar el enlace (si tu cuenta institucional no lo permite, usa «Copiar contenido» y pégalo en un chat nuevo con Canvas).
+6. [🟢 En Canvas] Pide a un compañero que abra tu enlace y pulse «Copiar Canvas»; en su copia debe cambiar el imprevisto de la semana 3 a 120.000 COP y jugar con 75 %. Tu juego original no cambia.
+7. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] Con 50 % las seis semanas el ahorro final es 600.000 COP y el juego dice que cumpliste la meta de 500.000 COP.
+- [ ] Con 25 % las seis semanas el ahorro final es 300.000 COP y el juego dice que no cumpliste la meta.
+- [ ] Con 75 % las seis semanas el ahorro final es 870.000 COP; la semana 3 ahorra 120.000 COP por el imprevisto.
+- [ ] El botón Reiniciar deja la semana en 1 y el ahorro en 0.
+- [ ] Con el imprevisto en 120.000 COP, 75 % deja 830.000 COP en la copia de tu compañero.
+- [ ] Tu juego original conserva el imprevisto de 80.000 COP después de que tu compañero edita su copia.
+
+**Reto extra:** Pide: «Agrega una semana 5 con un aumento de sueldo de 10 % y una tabla con el ahorro semanal de la partida».
 
 ### 3. Análisis Estructurado, Matrices y Tablas
 
@@ -1019,9 +1146,9 @@ Límites:
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Abre la «Vista previa» y revisa los totales anuales y el gráfico de barras apiladas.
-3. [🟢 En Canvas] Pide en el chat del lienzo: «Colorea cada total mensual con una escala de color de menor a mayor».
+3. [🟢 En Canvas] Pide en el chat de la izquierda: «Colorea cada total mensual con una escala de color de menor a mayor».
 4. [🟢 En Canvas] En el código, selecciona la función que calcula la variación mensual y escribe: «Muestra la variación con signo y un decimal, en rojo si es negativa».
-5. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega un botón que copie la tabla en formato CSV» y pruébalo en la vista previa.
+5. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega un botón que copie la tabla en formato CSV» y pruébalo en la vista previa.
 6. [🟢 En Canvas] Usa «Compartir» en «Compartir y exportar» para generar el enlace del tablero (ruta alternativa en cuenta institucional `@soy.sena.edu.co`: si el administrador deshabilitó enlaces públicos, usa «Copiar contenido» y guarda el archivo `.html`).
 7. [🔵 En esta guía] Comprueba las cifras con la lista «Verifica tu resultado» de esta guía.
 
@@ -1088,7 +1215,7 @@ Límites:
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Selecciona la columna de acciones en el lienzo y escribe: «Agrega un responsable y una fecha límite a cada acción».
-3. [🟢 En Canvas] Pide en el chat del lienzo: «Crea una aplicación web con un mapa de calor 5 x 5 de estos riesgos; al hacer clic en una celda, muestra sus riesgos y acciones».
+3. [🟢 En Canvas] Pide en el chat de la izquierda: «Crea una aplicación web con un mapa de calor 5 x 5 de estos riesgos; al hacer clic en una celda, muestra sus riesgos y acciones».
 4. [🟢 En Canvas] En la «Vista previa», haz clic en la celda de probabilidad 2 e impacto 5 y comprueba los dos riesgos.
 5. [🟢 En Canvas] Usa «Compartir» para generar el enlace al comité de seguimiento (ruta alternativa en `@soy.sena.edu.co`: usa «Copiar contenido» o «Exportar a Documentos de Google» si los enlaces públicos están restringidos).
 6. [🔵 En esta guía] Revisa tu entregable con la lista «Verifica tu resultado» de esta guía.
@@ -1112,7 +1239,7 @@ Límites:
 - **Qué vas a lograr:** Convertir un procedimiento escrito en un diagrama de flujo por carriles, con decisiones, camino feliz resaltado y tabla de tiempos, que puedas revisar y ajustar sin salir de Canvas.
 - **Situación:** Bienestar y coordinación tienen versiones distintas del proceso de matrícula. Un diagrama único evita confusiones en la reunión de alineación.
 - **¿Por qué en Canvas?:** Canvas dibuja el diagrama en la vista previa; si Mermaid falla, la consola muestra el error y Gemini lo corrige en el mismo panel, sin instalar nada.
-- **¿Qué ocurre fuera de Canvas?:** Todo ocurre dentro de Canvas: el código Mermaid se escribe en «Código», el diagrama se ve en «Vista previa» y el código de referencia de esta guía se pega en el mismo chat del lienzo para compararlo. No necesitas Mermaid Live ni otro editor.
+- **¿Qué ocurre fuera de Canvas?:** Todo ocurre dentro de Canvas: el código Mermaid se escribe en «Código», el diagrama se ve en «Vista previa» y el código de referencia de esta guía se pega en el mismo chat de la izquierda para compararlo. No necesitas Mermaid Live ni otro editor.
 - **Capacidades que practicas:** Código con vista previa · Consola y corrección de errores · Edición por selección
 
 **1. Prompt (CRTT+L) para pegar en Gemini:**
@@ -1154,7 +1281,7 @@ Entrega: Un solo archivo HTML ejecutable.
 Tono: Claro y neutral, con etiquetas cortas en los nodos.
 
 Límites:
-- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js y usa solo sintaxis válida de flowchart.
+- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js con sintaxis válida de flowchart; si no carga, muestra un aviso y el código en un bloque de texto.
 - Máximo seis palabras por nodo para que se lea en el proyector.
 - No uses descargas de archivos: la vista previa de Canvas puede bloquearlas.
 ```
@@ -1163,13 +1290,13 @@ Límites:
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Cuando termine, abre la «Vista previa» del Canvas y cuenta los cuatro carriles y las cuatro decisiones.
-3. [🟢 En Canvas] Si en lugar del diagrama ves texto o un aviso de error, usa «Corregir error» o pide en el chat del lienzo: «Corrige la sintaxis de Mermaid sin cambiar el contenido del diagrama».
+3. [🟢 En Canvas] Si en lugar del diagrama ves texto o un aviso de error, usa «Corregir error» o pide en el chat de la izquierda: «Corrige la sintaxis de Mermaid sin cambiar el contenido del diagrama».
 4. [🟢 En Canvas] En «Código», selecciona la línea que empieza por ENT y escribe: «Agrega al texto del nodo su duración de 3 días».
 5. [🟢 En Canvas] En la «Vista previa», activa el conmutador «Vista vertical» y comprueba que el diagrama se dibuje de arriba hacia abajo sin cortarse.
-6. [🟢 En Canvas] Copia el código de referencia de esta guía, pégalo en el chat del lienzo con la frase: «Muestra este diagrama debajo del tuyo para compararlos» y anota qué le falta a tu versión.
+6. [🟢 En Canvas] Copia el código de referencia de esta guía, pégalo en el chat de la izquierda con la frase: «Muestra este diagrama debajo del tuyo para compararlos» y anota qué le falta a tu versión.
 7. [🔵 En esta guía] Comprueba todos los criterios en la lista «Verifica tu resultado» de esta guía.
 
-**Código Mermaid de referencia para comparar:** Cópialo y pégalo en el chat del lienzo de Canvas con la frase «Muestra este diagrama debajo del tuyo para compararlos». Gemini lo dibuja en la misma vista previa, sin salir de la herramienta.
+**Código Mermaid de referencia para comparar:** Cópialo y pégalo en el chat de la izquierda de Canvas con la frase «Muestra este diagrama debajo del tuyo para compararlos». Gemini lo dibuja en la misma vista previa, sin salir de la herramienta.
 
 ```mermaid
 flowchart LR
@@ -1227,7 +1354,7 @@ flowchart LR
 - **Qué vas a lograr:** Documentar el flujo de autenticación con tokens y el plan de implementación en dos diagramas conectados que se revisan en la vista previa de Canvas.
 - **Situación:** El equipo de desarrollo debe explicar en la revisión técnica cómo funciona el login y cuándo estará listo.
 - **¿Por qué en Canvas?:** Los dos diagramas quedan en una página que se ejecuta en la vista previa; seleccionas solo el bloque gantt para cambiarlo y compartes el resultado con un enlace.
-- **¿Qué ocurre fuera de Canvas?:** Todo ocurre dentro de Canvas: pestañas, diagramas y glosario se prueban en «Vista previa», y el código de referencia se pega en el mismo chat del lienzo. «Compartir» es opcional; si tu cuenta lo restringe, el resultado queda en tu chat de Gemini.
+- **¿Qué ocurre fuera de Canvas?:** Todo ocurre dentro de Canvas: pestañas, diagramas y glosario se prueban en «Vista previa», y el código de referencia se pega en el mismo chat de la izquierda. «Compartir» es opcional; si tu cuenta lo restringe, el resultado queda en tu chat de Gemini.
 - **Capacidades que practicas:** Código con vista previa · Edición por selección · Compartir el Canvas
 
 **1. Prompt (CRTT+L) para pegar en Gemini:**
@@ -1255,12 +1382,12 @@ Flujo:
 
 Plan del proyecto (año 2026; duraciones en días calendario):
 Tarea,Inicio,Duración
-Diseño del flujo,2026-11-02,5 días
-Endpoint de login,2026-11-09,4 días
-Middleware de validación,2026-11-13,3 días
-Refresh token,2026-11-18,3 días
-Pruebas de seguridad,2026-11-23,4 días
-Despliegue (hito),2026-11-27,0 días
+Diseño del flujo,2026-11-16,5 días
+Endpoint de login,2026-11-23,4 días
+Middleware de validación,2026-11-27,3 días
+Refresh token,2026-12-02,3 días
+Pruebas de seguridad,2026-12-07,4 días
+Despliegue (hito),2026-12-11,0 días
 """
 
 Tarea: En Canvas, crea una página web con dos diagramas Mermaid en pestañas:
@@ -1271,7 +1398,7 @@ Entrega: Un solo archivo HTML ejecutable.
 Tono: Técnico y preciso, con términos estándar de autenticación.
 
 Límites:
-- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js.
+- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js; si no carga, muestra un aviso y el código en un bloque de texto.
 - Los códigos HTTP y las fechas deben coincidir con los datos.
 - Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse.
 ```
@@ -1282,12 +1409,12 @@ Límites:
 2. [🟢 En Canvas] Cuando termine, abre la «Vista previa» del Canvas y recorre las dos pestañas con la tecla Tab y las flechas.
 3. [🟢 En Canvas] En la pestaña de secuencia, ubica los dos bloques de error 401; si un diagrama no se dibuja, usa «Corregir error».
 4. [🟢 En Canvas] En «Código», selecciona el bloque gantt y escribe: «Marca como crítica la tarea de pruebas de seguridad».
-5. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega una pestaña de glosario con JWT, access token, refresh token, firma y código 401, cada uno en una frase».
-6. [🟢 En Canvas] Copia el código de referencia de esta guía y pégalo en el chat del lienzo con la frase: «Compara estos diagramas con los tuyos y dime qué diferencias hay»; corrige lo que falte.
+5. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega una pestaña de glosario con JWT, access token, refresh token, firma y código 401, cada uno en una frase».
+6. [🟢 En Canvas] Copia el código de referencia de esta guía y pégalo en el chat de la izquierda con la frase: «Compara estos diagramas con los tuyos y dime qué diferencias hay»; corrige lo que falte.
 7. [🟢 En Canvas] (Opcional) Usa «Compartir» para enviar el enlace al equipo; si tu cuenta `@soy.sena.edu.co` restringe enlaces públicos, el resultado queda guardado en tu chat de Gemini.
 8. [🔵 En esta guía] Verifica tu entregable con la lista «Verifica tu resultado» de esta guía.
 
-**Código Mermaid de referencia para comparar:** Contiene los dos diagramas separados por una línea en blanco. Cópialo y pégalo en el chat del lienzo para que Gemini lo compare con tu página o lo dibuje en la vista previa.
+**Código Mermaid de referencia para comparar:** Contiene los dos diagramas separados por una línea en blanco. Cópialo y pégalo en el chat de la izquierda para que Gemini lo compare con tu página o lo dibuje en la vista previa.
 
 ```mermaid
 sequenceDiagram
@@ -1323,14 +1450,14 @@ gantt
   dateFormat YYYY-MM-DD
   axisFormat %d/%m
   section Desarrollo
-  Diseño del flujo         :t1, 2026-11-02, 5d
-  Endpoint de login        :t2, 2026-11-09, 4d
-  Middleware de validación :t3, 2026-11-13, 3d
-  Refresh token            :t4, 2026-11-18, 3d
+  Diseño del flujo         :t1, 2026-11-16, 5d
+  Endpoint de login        :t2, 2026-11-23, 4d
+  Middleware de validación :t3, 2026-11-27, 3d
+  Refresh token            :t4, 2026-12-02, 3d
   section Calidad
-  Pruebas de seguridad     :crit, t5, 2026-11-23, 4d
+  Pruebas de seguridad     :crit, t5, 2026-12-07, 4d
   section Entrega
-  Despliegue               :milestone, t6, 2026-11-27, 0d
+  Despliegue               :milestone, t6, 2026-12-11, 0d
 ```
 
 **3. Verifica tu resultado:**
@@ -1338,7 +1465,7 @@ gantt
 - [ ] El diagrama de secuencia muestra los cinco participantes en orden.
 - [ ] Existen las ramas 401 por credenciales y 401 por token expirado con refresh.
 - [ ] La nota indica 15 minutos para el access token y 7 días para el refresh token.
-- [ ] El Gantt muestra seis tareas sin solapamiento, pruebas de seguridad marcada como crítica y el hito el 27/11/2026.
+- [ ] El Gantt muestra seis tareas sin solapamiento, pruebas de seguridad marcada como crítica y el hito el 11/12/2026.
 - [ ] Las pestañas funcionan con teclado y cada diagrama se dibuja al abrirla.
 - [ ] El glosario explica los cinco términos en una frase cada uno.
 
@@ -1408,7 +1535,7 @@ Límites:
 2. [🟢 En Canvas] Cuando termine, abre la «Vista previa» del Canvas, prueba el formulario con letras y activa el modo oscuro.
 3. [🟢 En Canvas] En la «Vista previa», activa «Seleccionar y preguntar», haz clic en el bloque héroe y pide: «Agrega una ilustración SVG sencilla de un escritorio con libros».
 4. [🟢 En Canvas] En el código, selecciona la sección de horarios y escribe: «Destaca con un borde la franja con más cubículos libres».
-5. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega en el encabezado un conmutador Vista móvil (390 px) / Vista escritorio que ajuste el contenedor principal a 390 px centrados y apile las columnas sin desbordamiento».
+5. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega en el encabezado un conmutador Vista móvil (390 px) / Vista escritorio que ajuste el contenedor principal a 390 px centrados y apile las columnas sin desbordamiento».
 6. [🟢 En Canvas] Vuelve a la «Vista previa», activa la vista de 390 px y comprueba que el acordeón funcione con teclado.
 7. [🔵 En esta guía] Verifica tu resultado con la lista de comprobación de esta guía.
 
@@ -1480,7 +1607,7 @@ Límites:
 3. [🟢 En Canvas] Navega por las cuatro pantallas con la barra inferior.
 4. [🟢 En Canvas] Crea un reporte de tipo Agua en «Bloque D-110» con prioridad Alta y búscalo en Inicio.
 5. [🟢 En Canvas] En el código, selecciona la línea de tiempo del detalle y escribe: «Agrega la fecha y hora de cada cambio de estado».
-6. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega un filtro por prioridad en Inicio».
+6. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega un filtro por prioridad en Inicio».
 7. [🔵 En esta guía] Comprueba todos los puntos en la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
@@ -1493,6 +1620,65 @@ Límites:
 - [ ] Los botones cumplen el tamaño mínimo táctil.
 
 **Reto extra:** Selecciona la pantalla Estadísticas en el código y pide: «Agrega una insignia con el número de reportes de prioridad Alta abiertos».
+
+#### Ejercicio B (5C): App con funciones de Gemini: redactor de reportes de incidencias
+
+- **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Vista previa + Agregar funciones de Gemini + Seleccionar y preguntar
+- **Qué vas a lograr:** Crear una app con un formulario validado y un botón que use IA para redactar el reporte, y comprobar el resultado con criterios que no dependen del texto exacto que escriba la IA.
+- **Situación:** Los aprendices reportan daños con frases sueltas. Mantenimiento prefiere un reporte formal y corto, pero necesita que siempre repita el tipo, la ubicación y la prioridad.
+- **¿Por qué en Canvas?:** La app corre en la vista previa y, con «Agregar funciones de Gemini», su botón usa IA para redactar el reporte; luego ajustas la interfaz señalando un elemento con «Seleccionar y preguntar».
+- **¿Qué ocurre fuera de Canvas?:** Todo ocurre en Canvas. «Agregar funciones de Gemini» exige ser mayor de 18 años; si tu cuenta no lo muestra, el paso 3 trae una ruta con plantilla en JavaScript que se prueba igual en la vista previa.
+- **Capacidades que practicas:** Código con vista previa · Funciones de Gemini dentro de la app · Seleccionar y preguntar en la vista previa
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: Mantenimiento quiere recibir reportes claros. La app debe convertir los campos del formulario en un texto formal sin inventar nada.
+
+Rol: Actúa como diseñador de producto que integra IA en aplicaciones web.
+
+Datos:
+"""
+APP «REDACTOR DE REPORTES» — INCIDENCIAS DE INFRAESTRUCTURA (contenido de práctica)
+
+Campos del formulario: tipo (Eléctrico, Agua, Mobiliario, Red), ubicación (bloque y salón), prioridad (Baja, Media, Alta) y descripción corta (máximo 120 caracteres, con contador).
+Botón «Redactar reporte»: la IA convierte los campos en un reporte formal de máximo 3 líneas para Mantenimiento.
+Ejemplo de entrada: Eléctrico · Bloque A-201 · Alta · «se va la luz cuando prendo el proyector».
+Reglas: tipo, ubicación y prioridad son obligatorios. El reporte debe repetir exactamente el tipo, la ubicación y la prioridad, no debe inventar causas ni nombres y no debe incluir datos personales.
+"""
+
+Tarea: En Canvas, crea una app web con vista previa que tenga:
+1. El formulario con sus campos obligatorios, el contador de caracteres y mensajes que expliquen cómo corregir.
+2. El botón «Redactar reporte» y un cuadro donde aparezca el reporte.
+3. Un mensaje claro si la redacción falla.
+Entrega: Un solo archivo HTML ejecutable.
+
+Tono: Cercano y directo en los textos de la app.
+
+Límites:
+- Sin librerías externas.
+- Por ahora el botón puede mostrar una plantilla de texto; en un paso posterior se conecta a Gemini.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
+2. [🟢 En Canvas] Abre la «Vista previa», deja la ubicación vacía y pulsa «Redactar reporte»; comprueba el mensaje que explica qué falta.
+3. [🟢 En Canvas] Usa «Agregar funciones de Gemini» y pide: «Haz que el botón Redactar reporte use Gemini para escribir el reporte formal a partir de los campos» (ruta alternativa si tu cuenta no muestra el botón o eres menor de 18 años: pide un generador con plantilla en JavaScript que arme el reporte con los mismos campos).
+4. [🟢 En Canvas] En la «Vista previa», escribe la entrada de ejemplo y pulsa «Redactar reporte»; revisa que el texto incluya «Eléctrico», «Bloque A-201» y «Alta».
+5. [🟢 En Canvas] Activa «Seleccionar y preguntar», haz clic en el cuadro del reporte y pide: «Agrega un botón Copiar reporte y un aviso cuando se copie».
+6. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] Con la ubicación vacía, la app no redacta y dice qué campo falta.
+- [ ] El contador de la descripción llega a 120 caracteres como máximo y no deja escribir más.
+- [ ] El reporte generado tiene máximo 3 líneas e incluye Eléctrico, Bloque A-201 y Alta.
+- [ ] El reporte no inventa causas ni nombres que no estén en la entrada.
+- [ ] El botón «Copiar reporte» copia el texto y muestra un aviso.
+- [ ] Si la redacción falla, la app muestra un mensaje claro en lugar de quedarse en blanco.
+
+**Reto extra:** Pide: «Agrega un selector de tono (formal o breve) y compara los dos reportes generados con la misma entrada». Recuerda que la IA puede variar el texto: revisa las reglas, no las palabras exactas.
 
 ### 6. Edición Quirúrgica por Selección (Inline)
 
@@ -1520,9 +1706,9 @@ Señores acudientes:
 
 Les informamos que el rendimiento del grupo es muy malo y que varios aprendices no están cumpliendo con nada. Si no asisten a la reunión, no nos hacemos responsables de lo que pase con la matrícula.
 
-La reunión será el viernes 6 de noviembre de 2026 a las 6:00 p. m. en el auditorio principal. También se puede asistir por videollamada con el enlace que se enviará el miércoles.
+La reunión será el viernes 4 de diciembre de 2026 a las 6:00 p. m. en el auditorio principal. También se puede asistir por videollamada con el enlace que se enviará el miércoles.
 
-Los temas son: resultados del trimestre, inasistencias, plan de mejoramiento, uso del celular en clase, salida pedagógica de diciembre.
+Los temas son: resultados del trimestre, inasistencias, plan de mejoramiento, uso del celular en clase, salida pedagógica de enero.
 
 Es obligatorio confirmar. El que no confirme se entiende que no le interesa.
 
@@ -1545,7 +1731,7 @@ Límites:
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Selecciona solo el párrafo que empieza «Les informamos…» y escribe: «Reescríbelo con tono empático y propositivo, sin culpar a nadie».
 3. [🟢 En Canvas] Selecciona la lista de temas y escribe: «Conviértela en viñetas ordenadas por prioridad».
-4. [🟢 En Canvas] Selecciona la línea «Es obligatorio confirmar…» y escribe: «Pide la confirmación con amabilidad y fija como plazo el jueves 5 de noviembre».
+4. [🟢 En Canvas] Selecciona la línea «Es obligatorio confirmar…» y escribe: «Pide la confirmación con amabilidad y fija como plazo el jueves 3 de diciembre».
 5. [🟢 En Canvas] Haz clic directamente en el documento y pon en negrita la fecha con la barra de formato.
 6. [🟢 En Canvas] Abre «Mostrar cambios recientes» en la barra superior de Canvas para verificar que la fecha, la hora y el lugar siguen intactos.
 7. [🔵 En esta guía] Comprueba todos los criterios en la lista «Verifica tu resultado» de esta guía.
@@ -1555,8 +1741,8 @@ Límites:
 - [ ] Solo cambiaron los fragmentos seleccionados.
 - [ ] El párrafo inicial ya no contiene juicios como «muy malo» ni amenazas.
 - [ ] Los temas aparecen como lista con viñetas.
-- [ ] La solicitud de confirmación es amable e incluye el jueves 5 de noviembre.
-- [ ] Fecha (viernes 6 de noviembre de 2026), hora (6:00 p. m.) y lugar quedaron intactos.
+- [ ] La solicitud de confirmación es amable e incluye el jueves 3 de diciembre.
+- [ ] Fecha (viernes 4 de diciembre de 2026), hora (6:00 p. m.) y lugar quedaron intactos.
 - [ ] El correo final se lee en menos de un minuto.
 
 **Reto extra:** Selecciona el correo completo y pide: «Crea una versión corta para WhatsApp de máximo 400 caracteres».
@@ -1639,19 +1825,78 @@ Límites:
 3. [🟢 En Canvas] Selecciona solo la función calcularPromedio y escribe: «Corrige el error del ciclo sin tocar nada más».
 4. [🟢 En Canvas] Selecciona solo leerNotas y escribe: «Convierte cada nota a número y descarta los valores vacíos».
 5. [🟢 En Canvas] Selecciona solo estado y escribe: «Un promedio de 3.5 debe quedar Aprobado».
-6. [🟢 En Canvas] Prueba en la «Vista previa» los tres casos de prueba de los datos.
-7. [🔵 En esta guía] Marca los puntos cumplidos en la lista «Verifica tu resultado» de esta guía.
+6. [🟢 En Canvas] Selecciona la línea que muestra el promedio y escribe: «Muestra el promedio con un decimal usando toFixed(1)».
+7. [🟢 En Canvas] Prueba en la «Vista previa» los tres casos de prueba de los datos.
+8. [🔵 En esta guía] Marca los puntos cumplidos en la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
 
 - [ ] El ciclo usa i < notas.length.
 - [ ] leerNotas devuelve números (Number o parseFloat) y filtra vacíos.
 - [ ] estado usa promedio >= 3.5.
-- [ ] Los tres casos dan ≈ 4.1, 3.5 y 3.0 con el estado correcto (si ves 4.1000000000000005, resuélvelo con el reto extra).
+- [ ] Los tres casos muestran 4.1, 3.5 y 3.0 (un decimal con toFixed) y el estado correcto: Aprobado, Aprobado y Plan de mejoramiento.
 - [ ] Las líneas que no seleccionaste quedaron iguales.
 - [ ] La «Vista previa» muestra el promedio y el estado sin errores en la consola.
 
-**Reto extra:** Pide: «Muestra el promedio con un decimal usando toFixed y agrega validación para notas fuera de 1.0 a 5.0».
+**Reto extra:** Pide: «Agrega validación para notas fuera de 1.0 a 5.0 y muestra un mensaje que diga cuál nota es inválida».
+
+#### Ejercicio B (6C): Comunicado con errores: aceptar y rechazar sugerencias de edición
+
+- **Nivel:** Básico · **Duración:** 20 min · **Función de Canvas:** Sugerencias de edición + Edición directa + Historial de versiones
+- **Qué vas a lograr:** Corregir un comunicado revisando cada sugerencia de Gemini, aceptando las de ortografía y rechazando las que tocan fechas, horas o cifras.
+- **Situación:** La coordinación redactó un comunicado con prisa. Debe salir hoy y las fechas y los horarios no pueden cambiar.
+- **¿Por qué en Canvas?:** «Sugerencias de edición» propone cambios sobre el texto que seleccionas y tú decides cuáles aceptar: así corriges ortografía y redacción sin que cambien las fechas ni las horas.
+- **¿Qué ocurre fuera de Canvas?:** Todo ocurre dentro del documento de Canvas. En el chat normal, Gemini podría reescribir el comunicado completo y cambiar fechas o cifras sin que lo notes.
+- **Capacidades que practicas:** Sugerencias de edición · Edición por selección · Edición directa y formato en el lienzo · Historial de versiones y cambios
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: Voy a practicar las sugerencias de edición de Canvas con un comunicado que tiene errores a propósito. Necesito el texto original intacto para revisarlo después.
+
+Rol: Actúa como corrector de estilo de comunicaciones institucionales.
+
+Datos:
+"""
+COMUNICADO — CAMBIO DE HORARIO DE LA SALA DE SISTEMAS (documento de práctica con errores a propósito)
+
+Estimados aprendices:
+
+Les informamos que a partir del lunes 23 de noviembre de 2026 la sala de sistemas abrira de 7:00 a. m. a 5:00 p. m. Los aprendices que necesiten usar los equipos fuera de ese horario deben solicitar autorización con tres dias de anticipación en la coordinación, y la solicitud debe incluir el nombre completo, la ficha, el motivo, el programa de formación y los equipos que van a usar, porque sin esos datos no se puede aprobar el permiso y tampoco se puede garantizar que haiga un instructor disponible en la sala.
+
+El sabado 28 de noviembre la sala estara cerrada por mantenimiento. Los trabajos se haran entre las 8:00 a. m. y las 12:00 m., y el domingo 29 de noviembre se normalizara el servicio.
+
+Cualquier duda, escribir a coordinacion@ejemplo.edu.co.
+"""
+
+Tarea: Copia el comunicado en Canvas sin cambiar ninguna palabra. Luego, en el chat:
+1. Lista los errores de ortografía y de redacción que encuentres, sin corregirlos y sin modificar el documento.
+Entrega: Documento en Canvas y una lista breve en el chat.
+
+Tono: Respetuoso y neutral en las observaciones.
+
+Límites:
+- No cambies ninguna palabra del documento en este paso.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
+2. [🟢 En Canvas] Selecciona el primer párrafo completo y pulsa «Sugerencias de edición»; lee cada sugerencia antes de aceptarla.
+3. [🟢 En Canvas] Acepta las sugerencias de ortografía y de redacción, y rechaza cualquiera que cambie una fecha, una hora o un número.
+4. [🟢 En Canvas] Haz clic directamente en el documento y corrige a mano lo que Gemini no haya detectado en el segundo párrafo.
+5. [🟢 En Canvas] Abre «Mostrar cambios recientes» o «Versión anterior» para comparar y confirmar que las fechas y las horas siguen iguales.
+6. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] Las palabras sin tilde quedaron corregidas: abrirá, días, estará, harán, normalizará y sábado.
+- [ ] «haiga» quedó como «haya».
+- [ ] Las fechas (lunes 23, sábado 28 y domingo 29 de noviembre de 2026) y las horas (7:00 a. m., 5:00 p. m., 8:00 a. m. y 12:00 m.) no cambiaron.
+- [ ] La solicitud de autorización dejó de ser una sola frase larga: queda en frases más cortas o en una lista de datos.
+- [ ] «Mostrar cambios recientes» o «Versión anterior» deja ver que solo cambiaron los fragmentos que aceptaste.
+
+**Reto extra:** Pide: «Selecciona el comunicado completo y crea una versión de tres líneas para un mensaje de WhatsApp, sin cambiar fechas ni horas».
 
 ### 7. Auditoría, Explicación y Refactorización de Algoritmos
 
@@ -1703,10 +1948,11 @@ Límites:
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo para generar el código Python.
 2. [🟢 En Canvas] Selecciona el bloque de pruebas en el lienzo Python y escribe: «Agrega una medición de tiempo con 10.000 elementos usando time.perf_counter».
-3. [🟢 En Canvas] Pide en el chat del lienzo: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js, ejecute este código Python con sus pruebas y muestre ✓ o ✗ por prueba y el tiempo medido»; abre la «Vista previa» y revisa el resultado (si Pyodide no carga, pide la misma función y pruebas en JavaScript).
-4. [🟢 En Canvas] De regreso en Gemini Canvas, pide en el chat: «Crea una página web con un gráfico de operaciones contra n para ambas versiones, con escala logarítmica y un control para elegir n».
-5. [🟢 En Canvas] Abre la «Vista previa» del nuevo lienzo HTML, mueve el control hasta 10.000 y activa la escala logarítmica.
-6. [🔵 En esta guía] Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía.
+3. [🟢 En Canvas] Pide en el chat de la izquierda: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js, ejecute este código Python con sus pruebas y muestre ✓ o ✗ por prueba y el tiempo medido».
+4. [🟢 En Canvas] Abre la «Vista previa» y revisa el resultado; si Pyodide no carga, pide la misma función y pruebas en JavaScript.
+5. [🟢 En Canvas] De regreso en Gemini Canvas, pide en el chat: «Crea una página web con un gráfico de operaciones contra n para ambas versiones, con escala logarítmica y un control para elegir n».
+6. [🟢 En Canvas] Abre la «Vista previa» del nuevo lienzo HTML, mueve el control hasta 10.000 y activa la escala logarítmica.
+7. [🔵 En esta guía] Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
 
@@ -1775,19 +2021,91 @@ Límites:
 3. [🟢 En Canvas] Presiona «Iniciar» con velocidad media y espera a que ambos terminen.
 4. [🟢 En Canvas] Reinicia y usa «Paso a paso» en merge sort; observa qué subarreglos mezcla en cada paso.
 5. [🟢 En Canvas] En el código, selecciona la función de burbuja y escribe: «Agrega parada temprana y muestra cuántas comparaciones ahorra».
-6. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega un botón que genere un arreglo aleatorio de 16 valores».
+6. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega un botón que genere un arreglo aleatorio de 16 valores».
 7. [🔵 En esta guía] Verifica todos los resultados con la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
 
 - [ ] Ambos paneles terminan con el arreglo ordenado esperado.
 - [ ] Burbuja registra 120 comparaciones sin parada temprana.
-- [ ] Merge sort registra 64 comparaciones o menos.
+- [ ] Merge sort registra 47 comparaciones con la mezcla estándar (puede variar en 1 o 2 según cómo escribas la comparación).
 - [ ] Los colores cambian según el estado de cada barra.
 - [ ] Pausa, paso a paso y reinicio funcionan.
 - [ ] El botón de arreglo aleatorio genera una nueva ejecución que termina ordenada.
 
 **Reto extra:** Pide: «Agrega un modo carrera con 100 barras y un gráfico final de comparaciones por algoritmo».
+
+#### Ejercicio B (7C): Análisis de notas en Python: de Canvas a un cuaderno de Colab
+
+- **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Canvas de código Python + Exportar a Colab
+- **Qué vas a lograr:** Escribir un script de estadística básica en Canvas, ajustarlo por selección, ejecutarlo en Colab y volver a Canvas para ampliarlo.
+- **Situación:** La instructora tiene las notas del proyecto final de la ficha 2871 y quiere promedio, mediana, desviación y porcentaje de aprobados sin usar una hoja de cálculo.
+- **¿Por qué en Canvas?:** Canvas escribe y ajusta el Python por selección, y «Exportar a Colab» lo convierte en un cuaderno que se ejecuta de verdad: escribes en un lugar y compruebas en otro con un solo clic.
+- **¿Qué ocurre fuera de Canvas?:** Canvas edita el Python, pero no lo ejecuta por sí solo: los pasos 3, 4 y 6 ocurren en Google Colab, fuera de Gemini, y necesitas tu cuenta de Google para abrir el cuaderno.
+- **Capacidades que practicas:** Exportar a Colab · Edición por selección
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: La instructora quiere entender cómo le fue al grupo en el proyecto final. El script debe poder ejecutarse en un cuaderno sin instalar nada.
+
+Rol: Actúa como profesor de programación que enseña estadística básica.
+
+Datos:
+"""
+NOTAS DEL PROYECTO FINAL — FICHA 2871 (datos de práctica)
+
+aprendiz,nota
+A01,4.2
+A02,3.8
+A03,2.9
+A04,4.5
+A05,3.1
+A06,3.6
+A07,4.8
+A08,2.5
+A09,3.9
+A10,4.0
+A11,3.3
+A12,4.4
+
+Regla: aprueba quien tiene nota mayor o igual a 3.5.
+Estadística pedida: promedio, mediana, desviación estándar poblacional y porcentaje de aprobados.
+"""
+
+Tarea: En Canvas, escribe un script de Python con:
+1. Las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con docstring y anotaciones de tipo.
+2. Cuatro pruebas con assert, una por función, con las notas de los datos.
+3. Un informe impreso con cada cifra redondeada a dos decimales.
+Entrega: Un script de Python comentado.
+
+Tono: Didáctico, con comentarios breves.
+
+Límites:
+- Solo biblioteca estándar de Python.
+- Todo el código en un archivo, listo para ejecutarse de arriba abajo.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo para generar el script de Python.
+2. [🟢 En Canvas] Selecciona la función de desviación y escribe: «Agrega un docstring con la fórmula y un ejemplo con tres notas».
+3. [🟠 Fuera de Gemini] Abre «Compartir y exportar → Exportar a Colab»; Colab abre un cuaderno nuevo con tu código.
+4. [🟠 Fuera de Gemini] En Colab, ejecuta la celda con el botón de reproducir y lee la salida; si una prueba falla, copia el error.
+5. [🟢 En Canvas] Vuelve a Canvas y pide en el chat de la izquierda: «Agrega una función en_riesgo que devuelva las notas menores a 3.0 y una prueba con assert». Si Colab mostró un error, pégalo en el mismo mensaje.
+6. [🟠 Fuera de Gemini] Exporta de nuevo con «Exportar a Colab» y ejecuta el cuaderno: las pruebas nuevas también deben pasar.
+7. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] El script tiene las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con docstring.
+- [ ] En Colab, el promedio es 3,75 y la mediana es 3,85.
+- [ ] La desviación estándar poblacional es 0,67.
+- [ ] Aprobaron 8 de 12 aprendices: 66,67 %.
+- [ ] Las cuatro pruebas con assert pasan en Colab sin errores.
+- [ ] La función en_riesgo devuelve 2.5 y 2.9, y su prueba pasa.
+
+**Reto extra:** Pide: «Agrega una función que agrupe las notas por rango (menor de 3, de 3 a 3.9 y de 4 en adelante) y cuente cuántos aprendices hay en cada uno».
 
 ### 8. Guías Didácticas y Rúbricas Analíticas de Evaluación
 
@@ -1846,7 +2164,7 @@ Límites:
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Selecciona una celda que te parezca ambigua y escribe: «Hazla verificable con una evidencia concreta».
 3. [🟠 Fuera de Gemini] (Opcional) Exporta la rúbrica con «Compartir y exportar → Exportar a Documentos de Google» para compartirla con otros instructores.
-4. [🟢 En Canvas] Pide en el chat del lienzo: «Crea una calculadora web: elijo el puntaje de 1 a 5 de cada criterio (se admiten valores intermedios), veo la nota en vivo y un radar del perfil frente al nivel esperado de 4».
+4. [🟢 En Canvas] Pide en el chat de la izquierda: «Crea una calculadora web: elijo el puntaje de 1 a 5 de cada criterio (se admiten valores intermedios), veo la nota en vivo y un radar del perfil frente al nivel esperado de 4».
 5. [🟢 En Canvas] En la «Vista previa», carga los valores del aprendiz 1 y luego sube Pruebas a 4.
 6. [🟢 En Canvas] Usa «Agregar funciones de Gemini» y pide: «Redacta la retroalimentación del aprendiz según su criterio más bajo» (ruta alternativa si tu cuenta `@soy.sena.edu.co` no muestra el botón: pide un generador determinista de retroalimentación en JavaScript por criterio y nivel).
 7. [🔵 En esta guía] Verifica tu entregable con la lista «Verifica tu resultado» de esta guía.
@@ -1868,7 +2186,7 @@ Límites:
 - **Qué vas a lograr:** Producir una guía didáctica estructurada por momentos y un cuestionario interactivo con retroalimentación inmediata.
 - **Situación:** Mañana inicia la competencia de control de versiones y el instructor necesita guía, actividad práctica y evaluación diagnóstica.
 - **¿Por qué en Canvas?:** La guía se ajusta por secciones y «Crear → Cuestionario» genera la evaluación desde el mismo contenido, sin escribir preguntas aparte.
-- **¿Qué ocurre fuera de Canvas?:** La edición modular de la guía y «Crear → Cuestionario» ocurren en Canvas; si tu cuenta incluye «Crear → Tarjetas de estudio», también puedes repasar los comandos de Git allí antes de exportar a Documentos de Google.
+- **¿Qué ocurre fuera de Canvas?:** La edición modular de la guía y «Crear → Cuestionario» ocurren en Canvas; la exportación final abre Documentos de Google.
 - **Capacidades que practicas:** Documento en Canvas · Edición por selección · Crear → Cuestionario · Exportar a Documentos de Google
 
 **1. Prompt (CRTT+L) para pegar en Gemini:**
@@ -1934,15 +2252,77 @@ Límites:
 
 **Reto extra:** Pide en el chat: «Crea una página web con un cuestionario de 10 preguntas, puntaje en una dona y reinicio con preguntas mezcladas». Luego pide: «Agrega un simulador visual de ramas que dibuje los commits como círculos conectados al ejecutar comandos escritos».
 
+#### Ejercicio B (8C): Ficha de fórmulas de calificación con LaTeX y exportación a PDF
+
+- **Nivel:** Intermedio · **Duración:** 25 min · **Función de Canvas:** Documento + fórmulas LaTeX + Exportar a PDF
+- **Qué vas a lograr:** Redactar la fórmula de la nota final con formato matemático, calcular dos casos y revisar cómo queda en un PDF.
+- **Situación:** Los instructores quieren publicar cómo se calcula la nota del proyecto para que ningún aprendiz tenga dudas. La ficha debe verse bien impresa.
+- **¿Por qué en Canvas?:** Las fórmulas de calificación quedan en un documento con formato matemático: las ajustas por selección y compruebas en la vista previa del PDF que ninguna ecuación se parta.
+- **¿Qué ocurre fuera de Canvas?:** Todo ocurre en Gemini: el documento, las fórmulas y la vista previa del PDF. La opción de fórmulas en el menú «Crear» puede llamarse distinto o no aparecer en tu cuenta; en ese caso el paso 3 trae una alternativa por chat.
+- **Capacidades que practicas:** Documento en Canvas · Edición por selección · Fórmulas con LaTeX · Exportar a PDF con vista previa
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: Los aprendices recibirán esta ficha impresa. Las fórmulas deben leerse con claridad y los cálculos deben poder repetirse a mano.
+
+Rol: Actúa como diseñador de instrumentos de evaluación por competencias.
+
+Datos:
+"""
+FICHA DE FÓRMULAS DE CALIFICACIÓN — PROYECTO API REST (datos de práctica)
+
+Criterios y pesos: Diseño 30 %, Validación 25 %, Documentación 20 %, Pruebas 25 %.
+Puntajes posibles: de 1 a 5 (se admiten valores intermedios).
+Nota final = suma de (puntaje x peso). Aprobado si la nota final es mayor o igual a 3,5.
+Regla extra: si algún criterio queda por debajo de 3, se exige plan de mejoramiento.
+
+Aprendiz 2: Diseño 5, Validación 4, Documentación 3, Pruebas 3.
+Aprendiz 3: Diseño 3, Validación 3, Documentación 4, Pruebas 2.
+"""
+
+Tarea: En Canvas, redacta la ficha con:
+1. La fórmula de la nota final con una sumatoria y la regla de aprobación como desigualdad.
+2. El cálculo paso a paso de los aprendices 2 y 3, cada uno con sus ecuaciones.
+3. Una tabla con criterio, peso, puntaje y aporte de cada aprendiz.
+Entrega: Documento con títulos numerados, ecuaciones y una tabla.
+
+Tono: Formativo y preciso, sin tecnicismos innecesarios.
+
+Límites:
+- Escribe las ecuaciones en LaTeX, no como texto con símbolos.
+- Usa los pesos como decimales: 0,30; 0,25; 0,20 y 0,25.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
+2. [🟢 En Canvas] Selecciona la ecuación de la nota final y escribe: «Escríbela con una sumatoria y con los pesos como decimales».
+3. [🟢 En Canvas] Abre el menú «Crear» y elige la opción de fórmulas LaTeX para que las ecuaciones se muestren con formato matemático (si tu cuenta no la muestra, pide en el chat de la izquierda: «Escribe todas las ecuaciones en LaTeX»).
+4. [🟢 En Canvas] Revisa que las ecuaciones se vean como fórmulas y no como texto con signos de dólar o barras invertidas.
+5. [🟢 En Canvas] Abre «Compartir y exportar → Exportar a PDF» y revisa en la vista previa que ninguna ecuación ni la tabla se parta entre páginas.
+6. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] La nota del aprendiz 2 es 3,85 y queda «Aprobado» sin plan de mejoramiento.
+- [ ] La nota del aprendiz 3 es 2,95: «No aprobado», con plan de mejoramiento porque Pruebas está por debajo de 3.
+- [ ] La fórmula usa una sumatoria con los pesos 0,30, 0,25, 0,20 y 0,25.
+- [ ] Las ecuaciones se ven con formato matemático, sin signos de dólar ni barras invertidas visibles.
+- [ ] La tabla tiene cuatro criterios y una fila de nota final por aprendiz.
+- [ ] En la vista previa del PDF, las ecuaciones y la tabla quedan completas.
+
+**Reto extra:** Pide: «Agrega la fórmula del promedio del grupo y un ejemplo con las notas de los aprendices 2 y 3».
+
 ### 9. Consultas SQL Complejas, ETL y Modelado Relacional
 
 #### Ejercicio A (9A): Consultas SQL de biblioteca con tablero en vista previa y ejecución en Colab
 
-- **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código + Vista previa + Exportar a Colab
+- **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código + SQLite con Pyodide en la vista previa + Exportar a Colab
 - **Qué vas a lograr:** Escribir consultas con JOIN, agregaciones y funciones de ventana, y ejecutarlas en el navegador para alimentar un tablero visual.
 - **Situación:** La biblioteca necesita saber qué libros rotan más, quién tiene préstamos vencidos y qué programa usa más el servicio.
-- **¿Por qué en Canvas?:** Las consultas se editan en Canvas y su resultado se calcula y se prueba en la vista previa, que alimenta un tablero visual en la misma página.
-- **¿Qué ocurre fuera de Canvas?:** Canvas no tiene motor PostgreSQL integrado: el script `.sql` se edita en Canvas y sus resultados se comprueban en la vista previa con el tablero en JavaScript y una prueba por consulta. Exportar a Colab para ejecutar SQLite real queda como paso opcional fuera de Gemini.
+- **¿Por qué en Canvas?:** Las consultas se editan en Canvas y se ejecutan de verdad en la vista previa con SQLite dentro del navegador, que alimenta un tablero visual en la misma página.
+- **¿Qué ocurre fuera de Canvas?:** Canvas no trae un motor de base de datos, pero la vista previa carga Pyodide (Python en el navegador), que incluye sqlite3: así el SQL se ejecuta de verdad dentro de Canvas. PostgreSQL queda como dialecto de referencia. Exportar a Colab es un paso opcional fuera de Gemini.
 - **Capacidades que practicas:** Código con vista previa · Edición por selección · Exportar a Colab
 
 **1. Prompt (CRTT+L) para pegar en Gemini:**
@@ -1990,7 +2370,7 @@ INSERT INTO prestamos VALUES
 (12,1,6,'2026-10-16','2026-10-30','2026-10-24');
 """
 
-Tarea: En Canvas, escribe consultas PostgreSQL que respondan:
+Tarea: En Canvas, escribe consultas SQL, válidas en SQLite y en PostgreSQL, que respondan:
 1. ¿Qué libros se prestan más? Usa RANK().
 2. ¿Qué préstamos están vencidos y con cuántos días de atraso?
 3. ¿Cuántos préstamos tiene cada programa?
@@ -2003,17 +2383,19 @@ Tono: Didáctico, con comentarios breves en cada consulta.
 Límites:
 - Antes de cada consulta, escribe un comentario con la pregunta de negocio.
 - Usa JOIN explícitos y alias legibles.
+- Si una función de fecha es propia de SQLite, deja en un comentario su equivalente en PostgreSQL.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Selecciona la consulta de vencidos en el script SQL y escribe: «Agrega el nombre del usuario y ordena por días de atraso».
-3. [🟢 En Canvas] Pide en el chat del lienzo: «Crea una página web que cargue estos datos en arreglos de JavaScript, muestre cada consulta junto a su resultado calculado, tarjetas y un gráfico por programa».
-4. [🟢 En Canvas] Abre la «Vista previa» del tablero web y revisa los indicadores por programa.
-5. [🟢 En Canvas] Pide en el chat del lienzo: «Junto a cada consulta SQL, muestra una prueba en JavaScript que compare el resultado calculado con el valor esperado y marque ✓ o ✗»; revisa en la «Vista previa» que todas queden en ✓.
-6. [🟠 Fuera de Gemini] (Opcional) Si quieres un cuaderno aparte, pide un script Python con sqlite3 y usa «Compartir y exportar → Exportar a Colab»; este paso ocurre fuera de Gemini.
-7. [🔵 En esta guía] Comprueba todos los resultados con la lista «Verifica tu resultado» de esta guía.
+3. [🟢 En Canvas] Pide en el chat de la izquierda: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js, cree la base en memoria con sqlite3 usando el script de datos, ejecute cada consulta SQL y muestre su resultado en una tabla». Si Pyodide no carga, pídele que te avise con un mensaje claro.
+4. [🟢 En Canvas] Abre la «Vista previa», espera a que termine de cargar y revisa que aparezcan las cinco tablas de resultado.
+5. [🟢 En Canvas] Pide en el chat de la izquierda: «Junto a cada consulta, agrega una prueba que compare el resultado devuelto por SQLite con el valor de la lista Verifica tu resultado y marque ✓ o ✗»; revisa en la «Vista previa» que todas queden en ✓.
+6. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega tarjetas con los totales y un gráfico de barras con los préstamos por programa, calculados con los resultados de las consultas».
+7. [🟠 Fuera de Gemini] (Opcional) Si quieres un cuaderno aparte, pide un script Python con sqlite3 y usa «Compartir y exportar → Exportar a Colab»; este paso ocurre fuera de Gemini.
+8. [🔵 En esta guía] Comprueba todos los resultados con la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
 
@@ -2022,17 +2404,17 @@ Límites:
 - [ ] Por programa: ADSO 6, Multimedia 4 y Contabilidad 2.
 - [ ] El promedio general de días de los devueltos es 11,0.
 - [ ] Solo el préstamo 6 se devolvió con retraso (14 días).
-- [ ] Las pruebas en JavaScript de la vista previa marcan ✓ en las cinco consultas, sin errores en la consola.
+- [ ] Las pruebas de la vista previa ejecutan el SQL con SQLite y marcan ✓ en las cinco consultas, sin errores en la consola.
 
 **Reto extra:** Pide: «Agrega una vista materializada de indicadores mensuales y un gráfico de líneas de préstamos por semana».
 
 #### Ejercicio B (9B): Pipeline de limpieza de asistencia con diagrama entidad-relación
 
-- **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código SQL + Mermaid erDiagram + tablero de calidad
+- **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código SQL + SQLite con Pyodide + Mermaid erDiagram + tablero de calidad
 - **Qué vas a lograr:** Diseñar un pipeline ETL que limpia un archivo con errores reales, documentarlo con un diagrama entidad-relación y medir la calidad antes y después.
 - **Situación:** El reporte de asistencia llega de varias sedes con formatos distintos y la coordinación no confía en los porcentajes.
-- **¿Por qué en Canvas?:** El pipeline se revisa por etapas con selección y el tablero de calidad muestra en la vista previa cuántas filas pasa cada regla.
-- **¿Qué ocurre fuera de Canvas?:** El script SQL y su función almacenada se redactan y revisan por etapas dentro de Canvas, mientras que las pruebas de formato y reglas de limpieza se ejecutan en JavaScript dentro de la «Vista previa» (para correr el SQL en un motor real usarías PostgreSQL local o Colab).
+- **¿Por qué en Canvas?:** El pipeline se revisa por etapas con selección y se ejecuta de verdad en la vista previa con SQLite; el tablero de calidad muestra cuántas filas pasa cada regla.
+- **¿Qué ocurre fuera de Canvas?:** El script SQL se redacta, se revisa por etapas y se ejecuta con SQLite (Pyodide) dentro de Canvas. La función `fn_limpiar_asistencia` para PostgreSQL se muestra para copiarla, pero Canvas no la ejecuta: para probarla usarías un PostgreSQL propio.
 - **Capacidades que practicas:** Código con vista previa · Edición por selección
 
 **1. Prompt (CRTT+L) para pegar en Gemini:**
@@ -2072,7 +2454,7 @@ REGLAS DE LIMPIEZA:
 5. Un mismo documento y fecha cuenta una sola vez (se conserva la primera fila).
 """
 
-Tarea: En Canvas, escribe en PostgreSQL un pipeline de limpieza por etapas:
+Tarea: En Canvas, escribe en SQL, válido en SQLite y en PostgreSQL, un pipeline de limpieza por etapas:
 1. Carga del archivo crudo en una tabla de staging con todas las columnas como texto.
 2. Limpieza según las reglas: fechas, nombres desde la tabla maestra y estados.
 3. Deduplicación por documento y fecha con ROW_NUMBER().
@@ -2091,10 +2473,11 @@ Límites:
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Selecciona la etapa que normaliza fechas y escribe: «Documenta con ejemplos en comentarios SQL los cuatro formatos de fecha admitidos y el caso inválido 2026-13-02».
-3. [🟢 En Canvas] Pide en el chat del lienzo: «Crea una página web ejecutable en la Vista previa con el diagrama entidad-relación en Mermaid, una tabla de pruebas en JavaScript para cada formato de fecha y el tablero de calidad (filas crudas, limpias, rechazadas por motivo y dona de estados)».
-4. [🟢 En Canvas] Abre la «Vista previa» y comprueba en el tablero que las pruebas de fecha pasen en verde y que de 14 filas crudas queden 10 limpias y 4 rechazadas.
-5. [🟢 En Canvas] Pide en el chat del lienzo: «Muestra en una pestaña del visor el bloque SQL encapsulado como CREATE OR REPLACE FUNCTION fn_limpiar_asistencia(p_fecha_carga DATE) listo para copiar a PostgreSQL».
-6. [🔵 En esta guía] Verifica todos los puntos con la lista «Verifica tu resultado» de esta guía.
+3. [🟢 En Canvas] Pide en el chat de la izquierda: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js, ejecute este script SQL con sqlite3 y muestre las tablas asistencia y rechazos y una tabla de calidad con filas crudas, limpias y rechazadas por motivo». Si Pyodide no carga, pídele que te avise con un mensaje claro.
+4. [🟢 En Canvas] Abre la «Vista previa» y comprueba en la tabla de calidad que de 14 filas crudas queden 10 limpias y 4 rechazadas.
+5. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega el diagrama entidad-relación en Mermaid de aprendices, asistencia y rechazos y una dona con los estados limpios; si Mermaid no carga, dibújalo con SVG».
+6. [🟢 En Canvas] Pide en el chat de la izquierda: «Muestra en una pestaña el bloque SQL encapsulado como CREATE OR REPLACE FUNCTION fn_limpiar_asistencia(p_fecha_carga DATE) listo para copiar a PostgreSQL»; solo se lee y se copia, porque Canvas no ejecuta PostgreSQL.
+7. [🔵 En esta guía] Verifica todos los puntos con la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
 
@@ -2102,6 +2485,7 @@ Límites:
 - [ ] Rechazos: 2 duplicados, 1 sin documento y 1 fecha imposible (2026-13-02).
 - [ ] Los estados limpios son: 6 Presente, 2 Ausente, 1 Tarde y 1 Sin registro.
 - [ ] La asistencia (Presente + Tarde) es 70 %.
+- [ ] Las tablas asistencia y rechazos creadas por SQLite tienen 10 y 4 filas, sin errores en la consola.
 - [ ] Los nombres finales coinciden con la tabla maestra.
 - [ ] El diagrama entidad-relación muestra las tablas aprendices, asistencia y rechazos, con la relación por documento.
 
@@ -2170,8 +2554,8 @@ Límites:
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, adjunta desde «+» el archivo `materiales/gemini_canvas/mesa_ayuda_2026.csv` (o usa los datos del prompt) y envíalo.
 2. [🟢 En Canvas] Selecciona el cuadro de decisiones en el lienzo y escribe: «Separa las conclusiones con evidencia fuerte de las que solo son coincidencias».
 3. [🟢 En Canvas] Abre «Crear → Infografía» sobre el informe y comprueba que muestre los KPI de los seis meses.
-4. [🟡 En Gemini sin Canvas] En un chat nuevo, elige «Deep Research», investiga buenas prácticas de mesas de ayuda TI y usa una de ellas para ajustar una de tus tres decisiones.
-5. [🟢 En Canvas] Pide en el chat del lienzo: «Convierte este informe en una presentación de 6 diapositivas para el comité» y usa «Exportar a Presentaciones de Google».
+4. [🟡 En Gemini sin Canvas] (Opcional) En un chat nuevo, elige «Deep Research», investiga buenas prácticas de mesas de ayuda TI y usa una de ellas para ajustar una de tus tres decisiones.
+5. [🟢 En Canvas] Abre «Crear → Presentación» sobre el informe; si tu cuenta no lo muestra, pide en el chat de la izquierda: «Convierte este informe en una presentación de 6 diapositivas para el comité». Luego usa «Exportar a Presentaciones de Google».
 6. [🟠 Fuera de Gemini] (Opcional) Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google».
 7. [🔵 En esta guía] Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía.
 
@@ -2182,7 +2566,7 @@ Límites:
 - [ ] El promedio de tiempo antes (mayo-julio) es 18,7 h y después (agosto-octubre) 12,0 h.
 - [ ] Acceso y contraseñas es la principal categoría de octubre (35,2 %).
 - [ ] El informe advierte los límites de atribuir causalidad.
-- [ ] Al menos una decisión cita una buena práctica encontrada con Deep Research.
+- [ ] Si hiciste el paso opcional de Deep Research, al menos una decisión cita una buena práctica encontrada.
 - [ ] La infografía y la presentación muestran las mismas cifras del informe.
 
 **Reto extra:** Abre en Canvas el informe de Deep Research desde «Crear» y usa «Crear → Página web» para comparar tus seis meses con los referentes del sector.
@@ -2238,8 +2622,8 @@ Límites:
 
 1. [🟢 En Canvas] Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.
 2. [🟢 En Canvas] Selecciona la recomendación en el lienzo y escribe: «Agrega una cláusula de salida y portabilidad de datos».
-3. [🟢 En Canvas] Abre «Crear → Resumen en audio» sobre el dictamen (mientras sigue siendo documento) y escúchalo para revisar si la recomendación se entiende sin leer las tablas; si tu cuenta o configuración de idioma aún no muestra Resumen en audio en el menú Crear, pide en el chat del lienzo un guion locutado de 2 minutos.
-4. [🟢 En Canvas] Pide en el chat del lienzo: «Crea una aplicación web con un control por cada peso (la suma debe ser 100 %), ranking en vivo, un radar de los tres proveedores y un aviso cuando cambie el ganador».
+3. [🟢 En Canvas] Abre «Crear → Resumen en audio» sobre el dictamen (mientras sigue siendo documento) y escúchalo para revisar si la recomendación se entiende sin leer las tablas; si tu cuenta o configuración de idioma aún no muestra Resumen en audio en el menú Crear, pide en el chat de la izquierda un guion locutado de 2 minutos.
+4. [🟢 En Canvas] Pide en el chat de la izquierda: «Crea una aplicación web con un control por cada peso (la suma debe ser 100 %), ranking en vivo, un radar de los tres proveedores y un aviso cuando cambie el ganador».
 5. [🟢 En Canvas] En la «Vista previa», mueve los pesos hasta que cambie el ganador.
 6. [🟠 Fuera de Gemini] (Opcional) Vuelve a la versión del dictamen en documento y expórtalo a Documentos de Google para su firma.
 7. [🔵 En esta guía] Verifica todos los puntos en la lista «Verifica tu resultado» de esta guía.
@@ -2285,9 +2669,9 @@ Si un trazo no se entiende, dímelo antes de suponer su contenido.
 """
 
 Tarea: En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:
-1. El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.
-2. Validación reactiva en tiempo real del correo institucional: mensaje verde si contiene @soy.sena.edu.co o @sena.edu.co, y advertencia ámbar en caso contrario.
-3. Medidor dinámico de seguridad de contraseña con barra de progreso que cambie de color (rojo < 50 %, ámbar 50-79 %, verde ≥ 80 %) según longitud, números y caracteres especiales.
+1. El formulario completo con sus 3 campos accesibles (<label> y aria-describedby), el nombre obligatorio de mínimo 3 caracteres y el botón primario con la paleta Verde Salvia #2D5A4C.
+2. Validación reactiva en tiempo real del correo institucional: mensaje verde si termina en @soy.sena.edu.co o @sena.edu.co; en otro caso, un error que diga cuáles dominios se aceptan.
+3. Medidor de seguridad de la contraseña con tres segmentos (Débil, Media, Segura) que se llenan en vivo: Débil si tiene menos de 8 caracteres, Media si tiene 8 o más pero le faltan números o símbolos, Segura si cumple la regla del boceto (mínimo 8 caracteres, con números y símbolos).
 4. Manejo del evento submit sin recargar la página, mostrando una confirmación accesible con el nombre del aprendiz registrado.
 Entrega: Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia.
 
@@ -2303,8 +2687,8 @@ Límites:
 
 1. [🟡 En Gemini sin Canvas] Descarga `materiales/gemini_canvas/boceto_formulario_matricula.png` y adjunta esa imagen (o la foto de tu propio boceto) con «+» en el chat de Gemini, activa Canvas, pega el prompt y envíalo.
 2. [🟢 En Canvas] Revisa el formulario en la «Vista previa» y compáralo con la imagen: los tres campos, el botón y los colores deben coincidir con lo dibujado.
-3. [🟢 En Canvas] Escribe un correo con dominio externo (ej. usuario@gmail.com) y comprueba la advertencia en ámbar; luego cámbialo a @soy.sena.edu.co y verifica el mensaje verde.
-4. [🟢 En Canvas] Ingresa contraseñas cortas y largas en el campo de clave y observa cómo la barra de seguridad cambia de color y nivel en tiempo real.
+3. [🟢 En Canvas] Escribe un correo con dominio externo (ej. usuario@gmail.com) y comprueba el error con los dominios aceptados; luego cámbialo a @soy.sena.edu.co y verifica el mensaje verde.
+4. [🟢 En Canvas] Escribe en la contraseña «abc», luego «abcdefgh» y después «Abcdef1!» y observa los tres segmentos: Débil, Media y Segura.
 5. [🟢 En Canvas] En la «Vista previa», activa «Seleccionar y preguntar», haz clic en el botón [Completar Registro Formativo] y pide: «Muestra un resumen accesible con los datos validados al enviar».
 6. [🔵 En esta guía] Marca todos los criterios cumplidos en la lista «Verifica tu resultado» de esta guía.
 
@@ -2312,11 +2696,12 @@ Límites:
 
 - [ ] El formulario tiene los 3 campos del boceto: Nombre Completo, Correo Institucional y Contraseña de Acceso.
 - [ ] El botón principal dice «Completar Registro Formativo» y usa el color Verde Salvia #2D5A4C.
-- [ ] Al escribir un correo con @soy.sena.edu.co aparece la validación positiva en verde; con otro dominio muestra la advertencia.
-- [ ] La barra de contraseña avanza y cambia de color al combinar letras, números y símbolos.
+- [ ] Con @soy.sena.edu.co o @sena.edu.co aparece la validación en verde; con otro dominio, un error que nombra los dominios aceptados.
+- [ ] Un nombre de menos de 3 caracteres muestra un mensaje que explica cómo corregirlo.
+- [ ] El medidor marca «abc» como Débil, «abcdefgh» como Media y «Abcdef1!» como Segura.
 - [ ] Al enviar el formulario con datos válidos no se recarga la página y se muestra la confirmación de bienvenida.
 
-**Reto extra:** Pide en el chat: «Agrega un selector de tipo de documento (CC, TI, CE) y exporta los datos registrados a un objeto JSON descargable al hacer clic en un botón secundario».
+**Reto extra:** Pide en el chat: «Agrega un selector de tipo de documento (CC, TI, CE) y muestra los datos registrados como JSON en un cuadro de texto, con un botón secundario para copiarlo».
 
 #### Ejercicio B (11B): De trazos en pizarra a flujograma interactivo Mermaid de atención PQRS
 
@@ -2324,7 +2709,7 @@ Límites:
 - **Qué vas a lograr:** Digitalizar un diagrama de flujo dibujado con marcador en la pizarra del aula y transformarlo en código Mermaid estándar con bifurcaciones condicionales y subgrafos.
 - **Situación:** El instructor explicó el proceso de atención de PQRS en la pizarra. El equipo requiere formalizar el flujograma en el repositorio institucional sin redibujarlo manualmente.
 - **¿Por qué en Canvas?:** La foto de la pizarra se vuelve un diagrama que se dibuja en la vista previa y se ajusta nodo por nodo con selección.
-- **¿Qué ocurre fuera de Canvas?:** Gemini reconoce los trazos de la pizarra incluso sin activar el lienzo, pero el renderizado del diagrama Mermaid en la «Vista previa», la edición por selección y la descarga en SVG ocurren dentro de Canvas.
+- **¿Qué ocurre fuera de Canvas?:** Gemini reconoce los trazos de la pizarra incluso sin activar el lienzo, pero el renderizado del diagrama Mermaid en la «Vista previa», la edición por selección y la copia del SVG ocurren dentro de Canvas.
 - **Capacidades que practicas:** Imagen como punto de partida · Código con vista previa · Edición por selección
 
 **1. Prompt (CRTT+L) para pegar en Gemini:**
@@ -2346,7 +2731,7 @@ Si un texto no se lee con claridad, dímelo antes de suponer su contenido.
 
 Tarea: En Canvas, crea una página web que dibuje con Mermaid, cargado desde CDN, un diagrama de flujo que digitalice con exactitud los trazos de la pizarra con:
 1. Sintaxis Mermaid flowchart TD limpia y válida, dividida en los 3 subgrafos anotados en la pizarra: Radicación, Gestión y Decisión, y Cierre.
-2. Rombos de decisión para las dos bifurcaciones condicionales con etiquetas claras en las ramas («Sí», «No», «Formativa», «Administrativa»).
+2. Rombos para las dos decisiones: «¿Formativa o administrativa?» (ramas Formativa y Administrativa) y «¿Requiere plan de mejoramiento?» (ramas Sí y No).
 3. Nodos rectangulares para actividades y redondeados para los eventos de inicio y fin.
 4. Estilos visuales con paleta institucional mediante directivas classDef o style (color primario #2D5A4C).
 Entrega: Un solo archivo HTML ejecutable con el código Mermaid comentado en español de Colombia para cada subgrafo.
@@ -2354,7 +2739,7 @@ Entrega: Un solo archivo HTML ejecutable con el código Mermaid comentado en esp
 Tono: Neutral y claro, con etiquetas cortas en los nodos.
 
 Límites:
-- Usa únicamente sintaxis Mermaid estándar para que se dibuje sin errores en la vista previa.
+- Usa únicamente sintaxis Mermaid estándar para que se dibuje sin errores; si Mermaid no carga, muestra un aviso y el código en un bloque de texto.
 - Conserva textualmente las etiquetas, plazos y nombres de subgrafos dibujados en la pizarra.
 - No inventes pasos intermedios ni omitas los plazos de notificación especificados.
 ```
@@ -2364,17 +2749,78 @@ Límites:
 1. [🟡 En Gemini sin Canvas] Descarga `materiales/gemini_canvas/pizarra_pqrs.png` y adjunta esa imagen (o la foto de una pizarra tuya) con «+» en el chat de Gemini, activa Canvas, pega el prompt y envíalo.
 2. [🟢 En Canvas] Abre la «Vista previa» y comprueba que se dibujen los 3 subgrafos con sus conexiones.
 3. [🟢 En Canvas] Selecciona el nodo del Comité de Evaluación en el código y escribe: «Agrega una nota indicando que sesiona ordinariamente cada 15 días».
-4. [🟢 En Canvas] Pide en el chat del lienzo: «Agrega un botón para descargar el diagrama en SVG» y pruébalo en la vista previa.
+4. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega un botón que muestre el código SVG del diagrama en un cuadro de texto para copiarlo» y pruébalo en la vista previa.
 5. [🔵 En esta guía] Verifica todos los puntos en la lista «Verifica tu resultado» de esta guía.
 
 **3. Verifica tu resultado:**
 
 - [ ] El código Mermaid tiene exactamente los 3 subgrafos: Radicación, Gestión y Decisión, y Cierre.
-- [ ] Contiene las dos decisiones condicionales con ramas identificadas para trámite formativo y administrativo.
+- [ ] Contiene las dos decisiones: «¿Formativa o administrativa?» con ramas Formativa y Administrativa, y «¿Requiere plan de mejoramiento?» con ramas Sí y No.
+- [ ] La rama Administrativa llega a «Coordinación Misional»; la rama Sí pasa por «Firma de Acta de Compromiso», con la nota «en Portafolio de Evidencias», y ambas ramas terminan en «Notificación de Cierre al Usuario».
 - [ ] El plazo de 3 días hábiles aparece explícitamente en el nodo de notificación.
 - [ ] El diagrama compila y se renderiza limpiamente en la vista previa sin errores de sintaxis.
 
 **Reto extra:** Pide en el chat: «Convierte el diagrama a un sequenceDiagram de Mermaid que muestre el intercambio cronológico de mensajes entre el Aprendiz, el Comité y la Coordinación».
+
+#### Ejercicio B (11C): De la foto de un inventario a un tablero de compras
+
+- **Nivel:** Intermedio · **Duración:** 25 min · **Función de Canvas:** Imagen adjunta + Vista previa + edición por selección
+- **Qué vas a lograr:** Digitalizar una tabla manuscrita, verificar que Gemini leyó bien cada cifra y convertirla en un tablero que calcula qué hay que comprar.
+- **Situación:** El encargado del laboratorio de redes lleva el inventario en una hoja de cuaderno. Necesita saber rápido qué insumos están por debajo del mínimo y cuántas unidades faltan.
+- **¿Por qué en Canvas?:** Canvas convierte la foto de una tabla escrita a mano en una página que funciona: puedes corregir una cifra mal leída por selección y probar un conteo nuevo en la vista previa.
+- **¿Qué ocurre fuera de Canvas?:** Gemini también lee la foto en el chat sin Canvas, pero la tabla con el conteo editable y el ajuste por selección ocurren dentro de Canvas.
+- **Capacidades que practicas:** Imagen como punto de partida · Código con vista previa · Edición por selección
+
+**1. Prompt (CRTT+L) para pegar en Gemini:**
+
+```text
+Contexto: El laboratorio de redes lleva el inventario a mano. Adjunto la foto de la hoja para convertirla en un tablero que muestre qué hay que comprar.
+
+Rol: Actúa como analista de inventarios que digitaliza registros en papel.
+
+Datos:
+"""
+IMAGEN ADJUNTA: inventario_laboratorio.png (tabla escrita a mano en una hoja de cuaderno, material de práctica)
+Lee en la imagen:
+- El título, la fecha del conteo y las tres columnas: Insumo, Cantidad y Mínimo.
+- Las seis filas con sus cifras, incluidas las que están encerradas en rojo.
+- Las notas al pie sobre cómo se marca lo que está por debajo del mínimo.
+Si una cifra no se lee con claridad, dímelo antes de suponer su valor.
+"""
+
+Tarea: En Canvas, crea una página web con vista previa que digitalice la tabla de la imagen con:
+1. Una tabla con los seis insumos, su cantidad y su mínimo, tal como aparecen en la foto.
+2. Una columna «Faltan» con las unidades que faltan para llegar al mínimo y un estado escrito («Completo» o «Por comprar»), no solo con color.
+3. Tarjetas con el número de insumos por comprar y el total de unidades que faltan.
+4. Un cuadro de texto con la lista de compra para copiar, una línea por insumo.
+Entrega: Un solo archivo HTML ejecutable.
+
+Tono: Claro y directo, para el encargado del laboratorio.
+
+Límites:
+- Conserva los nombres y las cifras de la foto; si una cifra no se lee, indícalo.
+- Sin librerías externas ni descargas de archivos.
+```
+
+**2. Itera paso a paso (con frontera de ejecución):**
+
+1. [🟡 En Gemini sin Canvas] Descarga `materiales/gemini_canvas/inventario_laboratorio.png` y adjunta esa imagen (o la foto de una tabla tuya) con «+» en el chat de Gemini, activa Canvas, pega el prompt y envíalo.
+2. [🟢 En Canvas] Abre la «Vista previa» y compara la tabla con la imagen fila por fila; anota cualquier cifra que Gemini haya leído mal.
+3. [🟢 En Canvas] Si una cifra está mal, selecciona esa fila en el código y escribe: «Corrige esta fila con los valores de la foto».
+4. [🟢 En Canvas] Pide en el chat de la izquierda: «Agrega un campo para registrar un conteo nuevo de un insumo y que el tablero se actualice al instante».
+5. [🟢 En Canvas] En la «Vista previa», escribe 60 en el conteo de Conector RJ45 y comprueba que el total de unidades que faltan baje de 36 a 21 y que ese insumo pase a «Completo».
+6. [🔵 En esta guía] Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía.
+
+**3. Verifica tu resultado:**
+
+- [ ] La tabla muestra los seis insumos con las cifras de la foto, por ejemplo Conector RJ45: 35 de 50.
+- [ ] Hay 3 insumos por comprar: Conector RJ45 (faltan 15), Switch 8 puertos (falta 1) y Etiquetas (faltan 20).
+- [ ] El total de unidades que faltan es 36.
+- [ ] El estado se lee con texto («Por comprar» o «Completo»), no solo con color.
+- [ ] Con 60 conectores RJ45 el total baja a 21 y ese insumo queda en «Completo».
+- [ ] La lista de compra para copiar tiene una línea por cada insumo por comprar.
+
+**Reto extra:** Pide: «Agrega un precio por unidad en cada fila y calcula el costo total de la compra».
 
 ### 12. Gems para Canvas (Asistente especializado de coescritura)
 
@@ -2531,8 +2977,8 @@ Si un trazo no se entiende, dímelo antes de suponer su contenido.
 
 Tarea: En Canvas, genera una sola página HTML ejecutable (HTML5, CSS y JavaScript nativo sin dependencias externas) que traduzca fielmente el boceto manuscrito con:
 1. El formulario completo con sus 3 campos accesibles (<label> y aria-describedby) y el botón primario con la paleta Verde Salvia #2D5A4C.
-2. Validación reactiva en tiempo real del correo institucional: mensaje verde si contiene @soy.sena.edu.co o @sena.edu.co, y advertencia ámbar en caso contrario.
-3. Medidor dinámico de seguridad de contraseña con barra de progreso que cambie de color (rojo < 50 %, ámbar 50-79 %, verde ≥ 80 %) según longitud, números y caracteres especiales.
+2. Validación reactiva en tiempo real del correo institucional: mensaje verde si termina en @soy.sena.edu.co o @sena.edu.co; en otro caso, un error que diga cuáles dominios se aceptan.
+3. Medidor de seguridad de la contraseña con tres segmentos (Débil, Media, Segura): Débil si tiene menos de 8 caracteres, Media si tiene 8 o más pero le faltan números o símbolos, Segura si cumple la regla del boceto.
 4. Manejo del evento submit sin recargar la página, mostrando una confirmación accesible con el nombre del aprendiz registrado.
 Entrega: Un único archivo HTML con estilos CSS embebidos, JavaScript reactivo nativo y comentarios breves en español de Colombia.
 
@@ -2566,7 +3012,6 @@ Guardrails obligatorios (Restricciones del System Prompt):
 2. Alineación curricular: referenciar siempre resultados de aprendizaje (RAP) y competencias del programa ADSO.
 3. Tono y estilo: redacción en español de Colombia (es-CO), respetuoso, claro y técnico; cero uso de extranjerismos o términos ajenos (usar siempre "Portafolio de Evidencias").
 4. Estructura de salida en Canvas: organizar todo artefacto técnico en 4 secciones canónicas: 1) Identificación, 2) Planteamiento didáctico, 3) Criterios observables de evaluación, 4) Tareas de verificación.
-Temperatura configurada: 0.2 (rigor pedagógico determinista).
 """
 
 Tarea: En Canvas, redacta la ficha técnica y de configuración completa del Gem en un documento formal con:

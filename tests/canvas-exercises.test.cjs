@@ -35,12 +35,19 @@ const allExercises = () => MODES.flatMap(mode => CANVAS_EXERCISES[mode] || []);
 // La instrucción se dirige a Gemini y nombra Canvas como lugar de trabajo; activar Canvas es un paso del aprendiz.
 const CANVAS_INSTRUCTION = /^(En Canvas, |Copia (el|la) \S+ en Canvas sin cambiar )/;
 
-test("cada uno de los 12 modos tiene exactamente dos ejercicios", () => {
+// Siete modos suman una parte C con funciones que las partes A y B no practican.
+const MODES_WITH_PART_C = ["doc-editorial", "code-prototyping", "visual-mockup", "inline-prompting", "algorithm-refactor", "rubric-curriculum", "multimodal-vision"];
+
+test("cada modo tiene las partes A y B, y siete modos suman una parte C", () => {
   assert.deepEqual(Object.keys(CANVAS_EXERCISES).sort(), [...MODES].sort());
   for (const mode of MODES) {
-    assert.equal(CANVAS_EXERCISES[mode].length, 2, `${mode} debe tener 2 ejercicios`);
+    const expected = MODES_WITH_PART_C.includes(mode) ? 3 : 2;
+    assert.equal(CANVAS_EXERCISES[mode].length, expected, `${mode} debe tener ${expected} ejercicios`);
   }
-  assert.equal(allExercises().length, 24);
+  assert.equal(allExercises().length, 31);
+  const codes = allExercises().map(ex => ex.code);
+  assert.equal(new Set(codes).size, 31, "los códigos de ejercicio no se repiten");
+  MODES.forEach((mode, i) => CANVAS_EXERCISES[mode].forEach((ex, j) => assert.equal(ex.code, `${i + 1}${"ABC"[j]}`, `${ex.id}: código según su posición`)));
 });
 
 test("cada ejercicio trae toda la información necesaria para resolverlo", () => {
@@ -114,7 +121,7 @@ test("cada ejercicio declara capacidades de Canvas que de verdad usa en sus paso
   }
 });
 
-test("los 24 ejercicios cubren todas las capacidades del catálogo", () => {
+test("los 31 ejercicios cubren todas las capacidades del catálogo", () => {
   const used = new Set(allExercises().flatMap(ex => ex.capabilities));
   assert.deepEqual([...used].sort(), Object.keys(CANVAS_CAPABILITIES).sort());
 });
@@ -226,7 +233,7 @@ test("buildCanvasMaterialsHtml enlaza archivos descargables y se omite sin mater
 test("los ejercicios con archivo adjunto traen material real y lo muestran en la tarjeta", () => {
   const fs = require("node:fs");
   const withFiles = allExercises().filter(ex => ex.materials);
-  assert.deepEqual(withFiles.map(ex => ex.code).sort(), ["10A", "11A", "11B"]);
+  assert.deepEqual(withFiles.map(ex => ex.code).sort(), ["10A", "11A", "11B", "11C"]);
   for (const ex of withFiles) {
     for (const m of ex.materials) {
       assert.ok(fs.existsSync(path.join(__dirname, "..", m.href)), `${ex.id}: falta ${m.href}`);
@@ -244,8 +251,8 @@ test("los días de la semana del correo 6A coinciden con el calendario", () => {
   const ex = allExercises().find(x => x.code === "6A");
   const text = JSON.stringify(ex);
   const days = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
-  const months = { noviembre: 10 };
-  const found = [...text.matchAll(/(lunes|martes|miércoles|jueves|viernes|sábado|domingo) (\d{1,2}) de (noviembre)/g)];
+  const months = { noviembre: 10, diciembre: 11 };
+  const found = [...text.matchAll(/(lunes|martes|miércoles|jueves|viernes|sábado|domingo) (\d{1,2}) de (noviembre|diciembre)/g)];
   assert.ok(found.length >= 2);
   for (const [, day, num, month] of found) {
     assert.equal(days[new Date(2026, months[month], Number(num)).getDay()], day, `${num} de ${month} de 2026`);
@@ -312,7 +319,7 @@ test("4A y 4B se resuelven por completo en Canvas y traen código Mermaid de ref
   assert.ok(a.expected.some(c => c.includes(`${tiempos} días`)));
   assert.match(b.reference.code, /sequenceDiagram/);
   assert.match(b.reference.code, /gantt/);
-  assert.match(b.reference.code, /milestone, \w+, 2026-11-27/);
+  assert.match(b.reference.code, /milestone, \w+, 2026-12-11/);
   assert.match(b.prompt, /alt/);
 });
 
@@ -326,7 +333,8 @@ test("7A y 9A ejecutan su código dentro de la vista previa de Canvas", () => {
   const a9 = allExercises().find(x => x.code === "9A");
   assert.ok(!a7.places.includes("external"), "7A sin Colab obligatorio");
   assert.match(a7.steps.join(" "), /Pyodide/);
-  assert.match(a9.steps.join(" "), /prueba en JavaScript/);
+  assert.match(a9.steps.join(" "), /Pyodide[\s\S]*sqlite3/);
+  assert.match(a9.steps.join(" "), /prueba que compare el resultado devuelto por SQLite/);
   assert.ok(!a9.expected.some(c => /Colab/.test(c)), "9A se verifica sin Colab");
   assert.match(a9.steps.find(s => /Colab/.test(s)), /^\(Opcional\)/);
 });
@@ -334,7 +342,8 @@ test("7A y 9A ejecutan su código dentro de la vista previa de Canvas", () => {
 test("las exportaciones a Documentos de Google son opcionales y no bloquean la verificación", () => {
   for (const ex of allExercises()) {
     ex.steps.forEach((s, i) => {
-      if (ex.places[i] === "external") assert.match(s, /^\(Opcional\)/, `${ex.id} paso ${i + 1}`);
+      // Solo el ejercicio cuyo objetivo es ejecutar en Colab (externalRequired) exige pasos fuera de Gemini.
+      if (ex.places[i] === "external" && !ex.externalRequired) assert.match(s, /^\(Opcional\)/, `${ex.id} paso ${i + 1}`);
     });
     assert.ok(!ex.expected.some(c => /quedó (guardad[oa] )?en Documentos de Google|Existe una copia .* Documentos de Google/.test(c)), `${ex.id}: criterio verificable en Canvas`);
   }

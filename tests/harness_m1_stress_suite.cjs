@@ -204,10 +204,10 @@ runTest("2.1 Exactly 24 exercises (2 per each of the 12 modes)", () => {
   for (const modeId of EXPECTED_MODES) {
     const exList = CANVAS_EXERCISES[modeId];
     assert.ok(Array.isArray(exList), `${modeId}: exercises must be an array`);
-    assert.equal(exList.length, 2, `${modeId}: must have exactly 2 exercises, got ${exList.length}`);
+    assert.equal(exList.length, ["doc-editorial", "code-prototyping", "visual-mockup", "inline-prompting", "algorithm-refactor", "rubric-curriculum", "multimodal-vision"].includes(modeId) ? 3 : 2, `${modeId}: unexpected exercise count ${exList.length}`);
     totalEx += exList.length;
   }
-  assert.equal(totalEx, 24, `Total exercises must be 24, got ${totalEx}`);
+  assert.equal(totalEx, 31, `Total exercises must be 31, got ${totalEx}`);
 });
 
 runTest("2.2 Unique IDs across all 24 exercises", () => {
@@ -218,7 +218,7 @@ runTest("2.2 Unique IDs across all 24 exercises", () => {
       seenIds.add(ex.id);
     }
   }
-  assert.equal(seenIds.size, 24, "Must have 24 unique exercise IDs");
+  assert.equal(seenIds.size, 31, "Must have 31 unique exercise IDs");
 });
 
 runTest("2.3 Structural completeness of each exercise", () => {
@@ -511,11 +511,11 @@ runTest("4.1 banco_prompts_canvas.json exists, valid JSON, correct totals", () =
   const raw = fs.readFileSync(jsonPath, "utf8");
   const bank = JSON.parse(raw);
   assert.equal(bank.totalPossibilities, 12, `bank.totalPossibilities must be 12, got ${bank.totalPossibilities}`);
-  assert.equal(bank.totalExercises, 24, `bank.totalExercises must be 24, got ${bank.totalExercises}`);
+  assert.equal(bank.totalExercises, 31, `bank.totalExercises must be 31, got ${bank.totalExercises}`);
   assert.equal(bank.possibilities.length, 12, `bank.possibilities.length must be 12, got ${bank.possibilities.length}`);
 
   const totalEx = bank.possibilities.reduce((acc, p) => acc + (p.exercises ? p.exercises.length : 0), 0);
-  assert.equal(totalEx, 24, `Sum of exercises in bank must be 24, got ${totalEx}`);
+  assert.equal(totalEx, 31, `Sum of exercises in bank must be 31, got ${totalEx}`);
 });
 
 runTest("4.2 Deep discrepancy check: Possibilities in JSON vs JS module", () => {
@@ -553,7 +553,7 @@ runTest("4.3 Deep discrepancy check: Exercises in JSON vs JS module", () => {
     const modeId = jsonPoss.id;
     const jsExercises = CANVAS_EXERCISES[modeId];
     assert.ok(Array.isArray(jsonPoss.exercises), `JSON mode ${modeId} has no exercises array`);
-    assert.equal(jsonPoss.exercises.length, 2, `JSON mode ${modeId} exercises count != 2`);
+    assert.equal(jsonPoss.exercises.length, (exercisesModule.CANVAS_EXERCISES[modeId] || []).length, `JSON mode ${modeId} exercises count differs from the JS module`);
 
     for (let j = 0; j < 2; j++) {
       const jsEx = jsExercises[j];

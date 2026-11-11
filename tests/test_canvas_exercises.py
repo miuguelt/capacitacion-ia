@@ -26,6 +26,9 @@ MODES = [
     "gem-studio",
 ]
 
+# Siete modos suman una parte C con funciones que las partes A y B no practican.
+MODES_WITH_PART_C = ["doc-editorial", "code-prototyping", "visual-mockup", "inline-prompting", "algorithm-refactor", "rubric-curriculum", "multimodal-vision"]
+
 
 def _html():
     return (BASE_DIR / "index.html").read_text(encoding="utf-8")
@@ -56,7 +59,7 @@ def test_exercises_module_markup():
     ]:
         assert f'id="{element_id}"' in html, f"Falta #{element_id}"
     assert html.index('id="canvas-simulator-module"') < html.index('id="canvas-exercises-module"') < html.index('id="multimodal-simulator-module"')
-    assert 'data-exercise-index="0"' in html and 'data-exercise-index="1"' in html
+    assert all(f'data-exercise-index="{i}"' in html for i in range(3))
 
 
 def test_exercises_script_loads_before_app():
@@ -80,12 +83,13 @@ def test_exercises_css_present():
 
 def test_json_bank_matches_js_exercises():
     data = json.loads((BASE_DIR / "materiales" / "gemini_canvas" / "banco_prompts_canvas.json").read_text(encoding="utf-8"))
-    assert data["totalExercises"] == 24
+    assert data["totalExercises"] == 31
     js_ex = _js_exercises()
     by_id = {p["id"]: p for p in data["possibilities"]}
     for mode in MODES:
         bank = by_id[mode]["exercises"]
-        assert len(bank) == 2, f"{mode} debe tener 2 ejercicios en el banco JSON"
+        esperados = 3 if mode in MODES_WITH_PART_C else 2
+        assert len(bank) == esperados == len(js_ex[mode]), f"{mode} debe tener {esperados} ejercicios en el banco JSON"
         for bank_ex, js_ex_item in zip(bank, js_ex[mode]):
             assert bank_ex["id"] == js_ex_item["id"]
             assert bank_ex["title"] == js_ex_item["title"]
