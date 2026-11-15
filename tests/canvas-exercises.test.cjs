@@ -358,3 +358,15 @@ test("cada tarjeta incluye el hilo paso a paso, enlace de regreso al simulador y
   const stepChecks = (html.match(/class="canvas-step-done"/g) || []).length;
   assert.equal(stepChecks, ex.steps.length, "un control por cada paso");
 });
+
+test("buildCanvasExerciseHtml y canvasCopyText manejan índices >= 3 y propiedades opcionales ausentes", () => {
+  const base = CANVAS_EXERCISES["doc-editorial"][0];
+  const minimal = {
+    ...base,
+    capabilities: null,
+    places: null
+  };
+  const html = buildCanvasExerciseHtml(minimal, 5, "doc-editorial");
+  assert.match(html, /Parte A/);
+  assert.equal(canvasCopyText({ prompt: "" }, "prompt"), "");
+});

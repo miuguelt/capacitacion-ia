@@ -151,3 +151,24 @@ test("El archivo de práctica mesa_ayuda_2026.csv existe y contiene las filas de
     assert.match(content, /Categoria_Octubre,Acceso y contraseñas,45/);
     assert.doesNotMatch(content, /contrasenas|tecnico|autenticacion/, "el CSV conserva las tildes");
 });
+
+test("buildCoverageMatrix y buildCoverageTableHtml cubren índices >= 3 y entradas nulas", () => {
+    const matrix = coverage.buildCoverageMatrix(
+        {
+            doc: [
+                { id: "d1", capabilities: [] },
+                { id: "d2", capabilities: [] },
+                { id: "d3", capabilities: [] },
+                { id: "d4", capabilities: ["capA"] }
+            ]
+        },
+        { capA: { name: "Cap A", how: "Uso" } }
+    );
+    assert.deepEqual(matrix[0].exerciseLinks, [{ code: "d4", href: "#gemini-canvas/doc/a" }]);
+
+    const htmlNull = coverage.buildCoverageTableHtml(null, null, null);
+    assert.match(htmlNull, /0\/0/);
+
+    const htmlBrokenList = coverage.buildCoverageTableHtml({ broken: null }, {}, null);
+    assert.match(htmlBrokenList, /en los 0 ejercicios/);
+});

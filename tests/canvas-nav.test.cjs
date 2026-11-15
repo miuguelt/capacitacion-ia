@@ -113,3 +113,12 @@ test("isModeTransition detecta cuando el siguiente ejercicio cambia de modo", ()
   assert.equal(isModeTransition(null, "doc-editorial"), false);
   assert.equal(isModeTransition("doc-editorial", null), false);
 });
+
+test("canvas-nav maneja entradas nulas o modos ausentes en el banco", () => {
+  const seq = listExerciseSequence(["doc-editorial", "sin-ejercicios"], BANK);
+  assert.equal(seq.length, 2);
+  assert.deepEqual(firstPendingExercise(seq, null), { mode: "doc-editorial", exercise: 0, id: "d-a" });
+  assert.deepEqual(modeExerciseProgress("doc-editorial", BANK, null), {
+    done: 0, total: 2, nextIndex: 0, allDone: false
+  });
+});
