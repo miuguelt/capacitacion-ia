@@ -348,3 +348,13 @@ test("las exportaciones a Documentos de Google son opcionales y no bloquean la v
     assert.ok(!ex.expected.some(c => /quedó (guardad[oa] )?en Documentos de Google|Existe una copia .* Documentos de Google/.test(c)), `${ex.id}: criterio verificable en Canvas`);
   }
 });
+
+test("cada tarjeta incluye el hilo paso a paso, enlace de regreso al simulador y pasos marcables", () => {
+  const ex = CANVAS_EXERCISES["doc-editorial"][0];
+  const html = buildCanvasExerciseHtml(ex, 0);
+  assert.match(html, /class="canvas-exercise-stepper"/);
+  assert.match(html, /data-go-simulator/, "incluye botón para volver a ver el ejemplo en el simulador");
+  assert.match(html, /class="canvas-step-done"/, "cada paso de iteración tiene control de avance");
+  const stepChecks = (html.match(/class="canvas-step-done"/g) || []).length;
+  assert.equal(stepChecks, ex.steps.length, "un control por cada paso");
+});

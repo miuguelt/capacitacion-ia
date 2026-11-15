@@ -89,3 +89,27 @@ test("serializeChecks y parseChecks conservan casillas marcadas a medias", () =>
   assert.deepEqual(parseChecks([9, -1, "x"], 2), [false, false], "ignora índices inválidos");
   assert.deepEqual(parseChecks(null, 2), [false, false]);
 });
+
+const { modeExerciseProgress, isModeTransition } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
+
+test("modeExerciseProgress calcula completados, total y siguiente pendiente por modo", () => {
+  assert.deepEqual(modeExerciseProgress("doc-editorial", BANK, []), {
+    done: 0, total: 2, nextIndex: 0, allDone: false
+  });
+  assert.deepEqual(modeExerciseProgress("doc-editorial", BANK, ["d-a"]), {
+    done: 1, total: 2, nextIndex: 1, allDone: false
+  });
+  assert.deepEqual(modeExerciseProgress("doc-editorial", BANK, ["d-a", "d-b"]), {
+    done: 2, total: 2, nextIndex: 0, allDone: true
+  });
+  assert.deepEqual(modeExerciseProgress("desconocido", BANK, []), {
+    done: 0, total: 0, nextIndex: 0, allDone: false
+  });
+});
+
+test("isModeTransition detecta cuando el siguiente ejercicio cambia de modo", () => {
+  assert.equal(isModeTransition("doc-editorial", "code-prototyping"), true);
+  assert.equal(isModeTransition("doc-editorial", "doc-editorial"), false);
+  assert.equal(isModeTransition(null, "doc-editorial"), false);
+  assert.equal(isModeTransition("doc-editorial", null), false);
+});

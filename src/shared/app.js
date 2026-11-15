@@ -453,8 +453,116 @@ function initCanvasLab() {
       }
     }
 
-    // Actualizar ejercicios prácticos del modo
+    // Actualizar ejercicios prácticos del modo y el puente ejemplo <-> ejercicios
     renderCanvasExercises(id);
+    renderCanvasSimBridge(id);
+    updateCanvasTabBadges();
+  }
+
+  const simBridgeEl = document.getElementById("canvas-sim-bridge");
+  const modeTransitionBannerEl = document.getElementById("canvas-mode-transition-banner");
+
+  function updateCanvasTabBadges() {
+    if (typeof CANVAS_EXERCISES === "undefined" || typeof modeExerciseProgress !== "function") return;
+    const completed = readCanvasCompleted();
+    tabs.forEach(tab => {
+      const pId = tab.getAttribute("data-possibility");
+      if (!pId) return;
+      const stats = modeExerciseProgress(pId, CANVAS_EXERCISES, completed);
+      if (!stats.total) return;
+      let badge = tab.querySelector(".canvas-tab-progress");
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "canvas-tab-progress";
+        tab.appendChild(badge);
+      }
+      badge.textContent = stats.allDone ? "✓" : `${stats.done}/${stats.total}`;
+      badge.classList.toggle("is-complete", stats.allDone);
+      badge.title = `${stats.done} de ${stats.total} ejercicios completados`;
+    });
+  }
+
+  function renderCanvasSimBridge(id) {
+    if (!simBridgeEl || typeof CANVAS_EXERCISES === "undefined" || typeof modeExerciseProgress !== "function") return;
+    const list = CANVAS_EXERCISES[id] || [];
+    const data = CANVAS_POSSIBILITIES[id];
+    if (!list.length || !data) {
+      simBridgeEl.innerHTML = "";
+      return;
+    }
+    const completed = readCanvasCompleted();
+    const stats = modeExerciseProgress(id, CANVAS_EXERCISES, completed);
+    const nextLetter = "ABC"[stats.nextIndex] || "A";
+    const nextEx = list[stats.nextIndex] || list[0];
+    const partBtns = list.map((ex, idx) => {
+      const letter = "ABC"[idx] || "A";
+      const isDone = completed.includes(ex.id);
+      return `<button type="button" class="canvas-bridge-part-btn${isDone ? " is-done" : ""}" data-bridge-mode="${escapeCanvasHtml(id)}" data-bridge-index="${idx}">${isDone ? "✓ " : ""}Parte ${letter}: ${escapeCanvasHtml(ex.title)}</button>`;
+    }).join("");
+
+    const ctaLabel = stats.allDone
+      ? `🔁 Repasar Parte A de este modo →`
+      : `🧪 Practicar ahora: Parte ${nextLetter} (${escapeCanvasHtml(nextEx.code)}) →`;
+
+    simBridgeEl.innerHTML = `
+      <div class="canvas-sim-bridge-info">
+        <span class="canvas-sim-bridge-tag">Paso siguiente · Del ejemplo a tu práctica</span>
+        <p class="canvas-sim-bridge-text">Ya viste cómo funciona <strong>${escapeCanvasHtml(data.name)}</strong> en el simulador. Completa los ejercicios de este modo (${stats.done} de ${stats.total} hechos):</p>
+        <div class="canvas-sim-bridge-parts">${partBtns}</div>
+      </div>
+      <div class="canvas-sim-bridge-cta">
+        <button type="button" class="canvas-mode-pager-btn is-primary" data-bridge-mode="${escapeCanvasHtml(id)}" data-bridge-index="${stats.nextIndex}">${ctaLabel}</button>
+      </div>
+    `;
+
+    simBridgeEl.querySelectorAll("[data-bridge-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetMode = btn.getAttribute("data-bridge-mode");
+        const targetIdx = Number(btn.getAttribute("data-bridge-index"));
+        if (modeTransitionBannerEl) modeTransitionBannerEl.hidden = true;
+        openCanvasRoute(targetMode, targetIdx);
+      });
+    });
+  }
+
+  function showSimulatorForModeTransition(step) {
+    if (!step || !CANVAS_POSSIBILITIES[step.mode]) return;
+    selectMode(step.mode);
+    currentExerciseIndex = step.exercise;
+    renderCanvasExercises(step.mode);
+    const ex = (CANVAS_EXERCISES[step.mode] || [])[step.exercise];
+    const modeInfo = CANVAS_POSSIBILITIES[step.mode];
+    const letter = "ABC"[step.exercise] || "A";
+    if (modeTransitionBannerEl && ex && modeInfo) {
+      modeTransitionBannerEl.hidden = false;
+      modeTransitionBannerEl.innerHTML = `
+        <div class="canvas-transition-copy">
+          <span class="canvas-transition-badge">🆕 Nuevo modo</span>
+          <p>Pasaste a <strong>${escapeCanvasHtml(modeInfo.name)}</strong>. Revisa primero este ejemplo resuelto en el simulador y luego pasa al ejercicio <strong>${escapeCanvasHtml(ex.code)} (Parte ${letter})</strong>.</p>
+        </div>
+        <div class="canvas-transition-actions">
+          <button type="button" class="canvas-mode-pager-btn is-primary" id="btn-transition-go-exercise">🧪 Practicar ${escapeCanvasHtml(ex.code)} →</button>
+          <button type="button" class="canvas-exercise-reset" id="btn-transition-dismiss" aria-label="Ocultar aviso">Entendido</button>
+        </div>
+      `;
+      const goBtn = document.getElementById("btn-transition-go-exercise");
+      if (goBtn) {
+        goBtn.addEventListener("click", () => {
+          modeTransitionBannerEl.hidden = true;
+          openCanvasRoute(step.mode, step.exercise);
+        });
+      }
+      const dismissBtn = document.getElementById("btn-transition-dismiss");
+      if (dismissBtn) {
+        dismissBtn.addEventListener("click", () => {
+          modeTransitionBannerEl.hidden = true;
+        });
+      }
+    }
+    const simEl = document.getElementById("canvas-simulator-module");
+    if (simEl) requestAnimationFrame(() => simEl.scrollIntoView({ behavior: "smooth", block: "start" }));
+    const route = buildCanvasRoute(step.mode, step.exercise);
+    if (window.location.hash !== route) history.replaceState(null, "", route);
   }
 
   // --- Ejercicios prácticos por modo (datos en js/canvas-exercises.js) ---
@@ -487,6 +595,8 @@ function initCanvasLab() {
       if (!complete && had) writeCanvasCompleted(saved.filter(x => x !== exId));
       renderCanvasExerciseIndex();
       updateExercisePosition();
+      renderCanvasSimBridge(currentExerciseMode);
+      updateCanvasTabBadges();
     }
     if (exerciseDoneEl) exerciseDoneEl.hidden = !complete || !exerciseNextStep();
   }
@@ -556,10 +666,41 @@ function initCanvasLab() {
       btn.classList.toggle("active", active);
       btn.setAttribute("aria-selected", String(active));
     });
-    exercisesContentEl.innerHTML = buildCanvasExerciseHtml(exercise, currentExerciseIndex);
+    exercisesContentEl.innerHTML = buildCanvasExerciseHtml(exercise, currentExerciseIndex, id);
 
     const card = exercisesContentEl.querySelector(".canvas-exercise-card");
     if (!card) return;
+    const goSimBtn = card.querySelector("[data-go-simulator]");
+    if (goSimBtn) {
+      goSimBtn.addEventListener("click", () => {
+        const targetMode = goSimBtn.getAttribute("data-go-simulator") || currentExerciseMode;
+        if (targetMode && CANVAS_POSSIBILITIES[targetMode]) {
+          selectMode(targetMode);
+        }
+        const simEl = document.getElementById("canvas-simulator-module");
+        if (simEl) requestAnimationFrame(() => simEl.scrollIntoView({ behavior: "smooth", block: "start" }));
+      });
+    }
+    const stepperItems = card.querySelectorAll(".canvas-exercise-stepper .stepper-item");
+    const stepChecks = card.querySelectorAll(".canvas-step-done");
+    const syncStepper = () => {
+      const doneSteps = Array.from(stepChecks).filter(c => c.checked).length;
+      const allStepsDone = stepChecks.length > 0 && doneSteps === stepChecks.length;
+      if (stepperItems.length >= 4) {
+        stepperItems[1].classList.toggle("is-done", doneSteps > 0);
+        stepperItems[1].classList.toggle("is-current", doneSteps === 0);
+        stepperItems[2].classList.toggle("is-done", allStepsDone);
+        stepperItems[2].classList.toggle("is-current", doneSteps > 0 && !allStepsDone);
+        stepperItems[3].classList.toggle("is-current", allStepsDone);
+      }
+    };
+    stepChecks.forEach(sc => {
+      sc.addEventListener("change", () => {
+        const li = sc.closest(".canvas-exercise-step");
+        if (li) li.classList.toggle("is-step-done", sc.checked);
+        syncStepper();
+      });
+    });
     card.querySelectorAll("[data-copy]").forEach(btn => {
       btn.addEventListener("click", () => {
         const kind = btn.getAttribute("data-copy");
@@ -638,7 +779,12 @@ function initCanvasLab() {
     updateExercisePosition();
   }
   function goToStep(step) {
-    if (step) openCanvasRoute(step.mode, step.exercise);
+    if (!step) return;
+    if (typeof isModeTransition === "function" && isModeTransition(currentExerciseMode, step.mode)) {
+      showSimulatorForModeTransition(step);
+      return;
+    }
+    openCanvasRoute(step.mode, step.exercise);
   }
   pagerBtns.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -1043,6 +1189,7 @@ function initCanvasLab() {
     tab.addEventListener("click", () => {
       const pId = tab.getAttribute("data-possibility");
       if (pId) {
+        if (modeTransitionBannerEl) modeTransitionBannerEl.hidden = true;
         selectMode(pId);
         history.replaceState(null, "", buildCanvasRoute(pId));
       }

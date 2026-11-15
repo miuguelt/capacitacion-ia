@@ -67,9 +67,28 @@ function parseChecks(saved, count) {
   return Array.from({ length: count }, (_, i) => list.includes(i));
 }
 
+function modeExerciseProgress(mode, bank, completedIds) {
+  const list = bank && Array.isArray(bank[mode]) ? bank[mode] : [];
+  if (!list.length) return { done: 0, total: 0, nextIndex: 0, allDone: false };
+  const completed = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const done = list.filter(ex => completed.has(ex.id)).length;
+  const pendingIdx = list.findIndex(ex => !completed.has(ex.id));
+  return {
+    done,
+    total: list.length,
+    nextIndex: pendingIdx >= 0 ? pendingIdx : 0,
+    allDone: done === list.length
+  };
+}
+
+function isModeTransition(prevMode, nextMode) {
+  return Boolean(prevMode && nextMode && prevMode !== nextMode);
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     parseCanvasRoute, buildCanvasRoute, neighborCanvasMode, listExerciseSequence,
-    neighborExercise, firstPendingExercise, exercisePosition, serializeChecks, parseChecks
+    neighborExercise, firstPendingExercise, exercisePosition, serializeChecks, parseChecks,
+    modeExerciseProgress, isModeTransition
   };
 }

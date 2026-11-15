@@ -2352,7 +2352,7 @@ function buildCanvasReferenceHtml(reference) {
           </section>`;
 }
 
-function buildCanvasExerciseHtml(exercise, index) {
+function buildCanvasExerciseHtml(exercise, index, mode) {
   if (!exercise) return "";
   const e = escapeCanvasHtml;
   const tag = `Parte ${["A", "B", "C"][index] || "A"}`;
@@ -2362,7 +2362,7 @@ function buildCanvasExerciseHtml(exercise, index) {
   const steps = exercise.steps.map((s, si) => {
     const placeKey = Array.isArray(exercise.places) ? exercise.places[si] : "canvas";
     const placeBadge = coverageKit.buildStepPlaceBadge(placeKey);
-    return `<li class="canvas-exercise-step">${placeBadge} <span class="canvas-step-text">${formatCanvasStep(s)}</span></li>`;
+    return `<li class="canvas-exercise-step" data-step-index="${si}"><label class="canvas-step-check-wrap"><input type="checkbox" class="canvas-step-done" data-step-index="${si}" aria-label="Marcar paso ${si + 1} como realizado"> ${placeBadge} <span class="canvas-step-text">${formatCanvasStep(s)}</span></label></li>`;
   }).join("");
   const checks = exercise.expected.map((c, i) =>
     `<li><label><input type="checkbox" class="canvas-exercise-check" data-check-index="${i}"> <span>${e(c)}</span></label></li>`).join("");
@@ -2372,6 +2372,7 @@ function buildCanvasExerciseHtml(exercise, index) {
         <div class="canvas-exercise-head-top">
           <span class="canvas-exercise-tag">${tag}</span>
           ${scopeTag}
+          <button type="button" class="canvas-back-simulator-btn" data-go-simulator="${e(mode || "")}">👁️ Ver ejemplo en el simulador</button>
         </div>
         <h4>${e(exercise.title)}</h4>
         <div class="canvas-exercise-meta">
@@ -2380,6 +2381,15 @@ function buildCanvasExerciseHtml(exercise, index) {
           <span>✨ ${e(exercise.canvasFeature)}</span>
         </div>
       </header>
+      <nav class="canvas-exercise-stepper" aria-label="Ruta guiada del ejercicio">
+        <span class="stepper-item is-done">0. Ejemplo visto</span>
+        <span class="stepper-sep" aria-hidden="true">→</span>
+        <span class="stepper-item is-current">1. Copia el prompt</span>
+        <span class="stepper-sep" aria-hidden="true">→</span>
+        <span class="stepper-item">2. Itera en Canvas</span>
+        <span class="stepper-sep" aria-hidden="true">→</span>
+        <span class="stepper-item">3. Verifica y avanza</span>
+      </nav>
       <div class="canvas-exercise-grid">
         <div class="canvas-exercise-main">
           <section class="canvas-exercise-section">
