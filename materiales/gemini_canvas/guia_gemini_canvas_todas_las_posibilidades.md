@@ -392,13 +392,13 @@ Reescribe este punto en tono respetuoso y claro, en dos viñetas: 1) cómo y en 
 ### Posibilidad 7: Auditoría, Explicación y Refactorización de Algoritmos
 
 * **Propósito:** Depurar cuellos de botella de rendimiento, optimizar la complejidad asintótica de funciones críticas y generar documentación técnica verificable.
-* **Controles del simulador:** ⚡ Solución de referencia · 🧪 Pruebas de referencia
+* **Controles del simulador:** ⚡ Solución de referencia · 🧪 Comprobaciones de referencia
 * **Prompt maestro (CRTT+L, con datos):**
 
 ```text
-Contexto: La función agrupa las entregas de cada corte (10.000 registros) y se volvió lenta. Se necesita una versión eficiente que devuelva exactamente el mismo resultado.
+Contexto: Tengo una función que agrupa entregas (como clasificar facturas, pedidos o tareas), pero con 10.000 registros se vuelve muy lenta. Quiero una versión rápida que dé exactamente el mismo resultado y entender por qué mejora.
 
-Rol: Actúa como ingeniero de software que revisa el rendimiento de código Python.
+Rol: Actúa como profesor de programación que explica con ejemplos cotidianos a personas que están empezando.
 
 Datos:
 """
@@ -432,25 +432,25 @@ entregas = [
 """
 
 Tarea: En Canvas, entrega:
-1. Una explicación de dos frases de por qué la función actual es O(n²), señalando la línea responsable.
-2. La función refactorizada en O(n), con el mismo nombre, type hints y docstring en español.
-3. Un archivo de pruebas con pytest que cubra la lista vacía, un documento repetido y los límites 0, 49.9, 50, 69.9 y 70.
-4. Un bloque final que imprima el resultado con la entrada de ejemplo.
-Entrega: La explicación primero y después dos bloques de código: la función y las pruebas.
+1. Una explicación sencilla en dos frases (sin jerga difícil) de por qué la función actual es lenta (O(n²)), señalando la línea culpable y comparándola con buscar en una pila desordenada.
+2. La función mejorada en forma rápida de una sola pasada (O(n)), usando una libreta de «ya vistos» (set en Python), con el mismo nombre, etiquetas claras de entrada/salida y comentarios en español.
+3. Una página de Vista previa en Canvas que ejecute automáticamente las comprobaciones (lista vacía, documento repetido y límites 0, 49.9, 50, 69.9 y 70) y muestre ✓ o ✗ sin instalar nada en el computador.
+4. El resultado exacto que imprime con la entrada de ejemplo.
+Entrega: Primero la explicación cotidiana, luego el código Python comentado y al final la vista previa con las comprobaciones en vivo.
 
-Tono: Didáctico y preciso, con ejemplos numéricos.
+Tono: Cercano, didáctico y claro, con ejemplos de la vida diaria.
 
 Límites:
 - Conserva el comportamiento: si un documento se repite, cuenta su primer registro.
-- Usa solo la biblioteca estándar de Python.
+- Usa lenguaje cotidiano para alguien que no es programador.
 ```
 
 * **Cómo verificar el resultado:**
-  * [ ] La explicación señala la línea «if e["documento"] in vistos»: buscar en una lista recorre sus elementos, y eso ocurre dentro del ciclo. *Cómo comprobarlo:* Lee la explicación antes del código.
-  * [ ] La versión nueva usa un set (conjunto) para vistos y conserva el nombre agrupar_por_estado. *Cómo comprobarlo:* Busca «set(» en el código.
-  * [ ] Con la entrada de ejemplo imprime {'al_dia': ['Ana', 'Iván'], 'en_progreso': ['Luis', 'Marta'], 'apoyo': ['Jorge', 'Sara']}. *Cómo comprobarlo:* Copia el código a tu equipo o a Google Colab y ejecútalo.
-  * [ ] Las pruebas cubren la lista vacía, el documento repetido y los 5 límites, y «python -m pytest» termina sin fallos. *Cómo comprobarlo:* Guarda la función como clasificador.py y las pruebas como test_clasificador.py, y ejecuta pytest. Si Gemini entrega todo en un solo archivo, ejecuta pytest sobre ese archivo.
-  * [ ] La función tiene type hints y un docstring en español que menciona la complejidad O(n). *Cómo comprobarlo:* Lee la firma y el docstring.
+  * [ ] La explicación señala la línea «if e["documento"] in vistos» y explica en palabras simples que buscar en una lista recorre todo de nuevo en cada paso. *Cómo comprobarlo:* Lee la explicación antes del código.
+  * [ ] La versión nueva usa un set (conjunto o libreta de «ya vistos») para vistos y conserva el nombre agrupar_por_estado. *Cómo comprobarlo:* Busca «set(» en el código.
+  * [ ] Con la entrada de ejemplo imprime {'al_dia': ['Ana', 'Iván'], 'en_progreso': ['Luis', 'Marta'], 'apoyo': ['Jorge', 'Sara']}. *Cómo comprobarlo:* Revisa la salida mostrada en la Vista previa de Canvas.
+  * [ ] La Vista previa muestra ✓ en todas las comprobaciones: lista vacía, documento repetido y los 5 límites (0, 49.9, 50, 69.9 y 70), sin pedir terminal ni instalaciones. *Cómo comprobarlo:* Abre la pestaña «Vista previa» en Gemini Canvas y verifica los ✓ verdes.
+  * [ ] La función incluye una nota explicativa en español que aclara por qué ahora recorre los datos una sola vez (O(n)). *Cómo comprobarlo:* Lee el comentario inicial de la función.
 
 ---
 
@@ -518,9 +518,9 @@ Límites:
 * **Prompt maestro (CRTT+L, con datos):**
 
 ```text
-Contexto: El reporte mensual por ficha tarda demasiado con 5.000 aprendices. Antes de llevar la nueva consulta a producción, se valida con la muestra de los datos.
+Contexto: Un reporte mensual tarda demasiado con 5.000 registros y cuando alguien no tiene asistencias (como Sara) desaparece del listado. Quiero una consulta SQL clara que resuelva esto y entender cómo una base de datos ordenada potencia cualquier aplicación o negocio.
 
-Rol: Actúa como analista de bases de datos PostgreSQL.
+Rol: Actúa como profesor de bases de datos que explica con ejemplos claros a cualquier perfil profesional.
 
 Datos:
 """
@@ -539,26 +539,26 @@ INSERT INTO registro_asistencia VALUES
 """
 
 Tarea: En Canvas, escribe en SQL:
-1. Una consulta con dos CTE: una para el promedio de notas y otra para la asistencia del 2026-10-01 al 2026-10-31.
-2. El puesto de cada aprendiz dentro de su ficha con ROW_NUMBER(), ordenado por promedio de mayor a menor.
-3. El porcentaje de asistencia con un decimal; si un aprendiz no tiene registros, debe aparecer con NULL y sin error de división por cero.
-4. La sentencia que crea un índice compuesto en registro_asistencia (aprendiz_id, fecha) que incluya asistio.
+1. Una consulta con dos pasos intermedios ordenados (CTE con WITH): uno para el promedio de notas y otro para la asistencia del 2026-10-01 al 2026-10-31.
+2. El puesto de cada persona dentro de su grupo (ficha) usando ROW_NUMBER(), ordenado de mayor a menor promedio.
+3. El porcentaje de asistencia con un decimal; si alguien no tiene registros (como Sara), debe aparecer con NULL y sin error de división por cero.
+4. La regla que crea un índice (como el índice de un libro para buscar al instante) en registro_asistencia (aprendiz_id, fecha) incluyendo asistio.
 5. La tabla de resultado que esperas con los datos de muestra.
-Entrega: Un bloque SQL comentado y, debajo, la tabla de resultado esperada.
+Entrega: Un bloque SQL comentado en español sencillo para cualquier profesión y, debajo, la tabla de resultado esperada.
 
-Tono: Didáctico, con comentarios breves en cada consulta.
+Tono: Cercano, didáctico y sin jerga innecesaria.
 
 Límites:
-- No uses subconsultas correlacionadas.
-- Usa ROUND(…, 1) para el promedio y el porcentaje, y ordena por ficha y puesto.
+- No uses subconsultas anidadas dentro de SELECT o WHERE; usa pasos ordenados (CTE).
+- Usa ROUND(…, 1) para redondear el promedio y el porcentaje, y ordena por ficha y puesto.
 ```
 
 * **Cómo verificar el resultado:**
-  * [ ] La consulta usa WITH con dos CTE y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC). *Cómo comprobarlo:* Lee el bloque SQL.
-  * [ ] Usa LEFT JOIN y NULLIF (o CASE) para que Sara aparezca con NULL en asistencia. *Cómo comprobarlo:* Busca «LEFT JOIN» y «NULLIF» en el código.
-  * [ ] Resultado con la muestra: 2871 → 1 Marta 4,6 · 100,0; 2 Ana 4,3 · 100,0; 3 Luis 4,0 · 75,0. 2872 → 1 Sara 4,9 · NULL; 2 Jorge 3,2 · 50,0. *Cómo comprobarlo:* Ejecuta el esquema y la consulta en PostgreSQL (local o en un editor en línea) y compara fila por fila.
+  * [ ] La consulta usa WITH con dos pasos intermedios (CTE) y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC). *Cómo comprobarlo:* Lee el bloque SQL.
+  * [ ] Usa LEFT JOIN (para no borrar a Sara) y NULLIF (para evitar dividir por cero), mostrando NULL en asistencia. *Cómo comprobarlo:* Busca «LEFT JOIN» y «NULLIF» en el código.
+  * [ ] Resultado con la muestra: 2871 → 1 Marta 4,6 · 100,0; 2 Ana 4,3 · 100,0; 3 Luis 4,0 · 75,0. 2872 → 1 Sara 4,9 · NULL; 2 Jorge 3,2 · 50,0. *Cómo comprobarlo:* Revisa la tabla de resultado generada en Canvas o pruébala en la Vista previa sin instalar nada.
   * [ ] El índice es CREATE INDEX … ON registro_asistencia (aprendiz_id, fecha) INCLUDE (asistio). *Cómo comprobarlo:* Lee la sentencia del índice.
-  * [ ] No hay subconsultas dentro de SELECT ni de WHERE. *Cómo comprobarlo:* Busca «(SELECT» en el código; solo debe aparecer dentro de las CTE.
+  * [ ] No hay subconsultas dentro de SELECT ni de WHERE. *Cómo comprobarlo:* Busca «(SELECT» en el código; solo debe aparecer dentro de los pasos WITH.
 
 ---
 
@@ -959,7 +959,7 @@ Límites:
 
 **Reto extra:** Pide: «Agrega un segundo escenario guardado y un gráfico de barras que compare ambos escenarios lado a lado».
 
-#### Ejercicio B (2B): Tablero Kanban arrastrable con gráfico de avance del sprint
+#### Ejercicio B (2B): Tablero de tareas arrastrable (Kanban) con gráfico de avance diario
 
 - **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Vista previa + Seleccionar y preguntar + Historial de versiones
 - **Qué vas a lograr:** Crear un tablero Kanban funcional con arrastrar y soltar, contadores por columna y un gráfico burndown que compara el avance ideal y el real.
@@ -1301,7 +1301,7 @@ Límites:
 
 ### 4. Diagramación de Procesos y Flujogramas
 
-#### Ejercicio A (4A): Flujograma de matrícula por carriles con Mermaid
+#### Ejercicio A (4A): Flujograma por carriles con texto que dibuja (Mermaid): proceso de matrícula
 
 - **Nivel:** Intermedio · **Duración:** 25 min · **Función de Canvas:** Código Mermaid renderizado en vista previa
 - **Qué vas a lograr:** Convertir un procedimiento escrito en un diagrama de flujo por carriles, con decisiones, camino feliz resaltado y tabla de tiempos, que puedas revisar y ajustar sin salir de Canvas.
@@ -1416,7 +1416,7 @@ flowchart LR
 
 **Reto extra:** Pide: «Agrega indicadores de cuello de botella: colorea en ámbar la etapa más lenta y explica en una nota por qué lo es».
 
-#### Ejercicio B (4B): Diagrama de secuencia JWT y cronograma Gantt en una sola página
+#### Ejercicio B (4B): Cómo viajan los datos al iniciar sesión (JWT) y calendario de tareas (Gantt)
 
 - **Nivel:** Avanzado · **Duración:** 30 min · **Función de Canvas:** Mermaid (sequenceDiagram + gantt) en vista previa
 - **Qué vas a lograr:** Documentar el flujo de autenticación con tokens y el plan de implementación en dos diagramas conectados que se revisan en la vista previa de Canvas.
@@ -1539,7 +1539,7 @@ gantt
 
 **Reto extra:** Pide: «Agrega un diagrama de estados del token: emitido, vigente, expirado, renovado y revocado».
 
-#### Ejercicio C (4C): Máquina de estados de mantenimiento y depuración en consola
+#### Ejercicio C (4C): Mapa de etapas de un arreglo (máquina de estados) y prueba interactiva
 
 - **Nivel:** Intermedio · **Duración:** 25 min · **Función de Canvas:** Vista previa + Consola y corrección de errores + Versiones + Edición por selección
 - **Qué vas a lograr:** Modelar el ciclo de vida de una orden de mantenimiento con stateDiagram-v2, simular el estado activo en la página y verificar la recuperación ante errores de sintaxis.
@@ -1613,7 +1613,7 @@ Límites:
 
 ### 5. Diseño Visual y Mockups de Interfaz (UI)
 
-#### Ejercicio A (5A): Landing de reservas con modo oscuro y ocupación en vivo
+#### Ejercicio A (5A): Página de reservas con modo oscuro y horarios en vivo
 
 - **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Vista previa responsiva + Seleccionar y preguntar
 - **Qué vas a lograr:** Diseñar y construir una página de aterrizaje completa, accesible y con modo oscuro, que muestre la ocupación por franja con un gráfico.
@@ -1887,7 +1887,7 @@ Límites:
 
 **Reto extra:** Selecciona el correo completo y pide: «Crea una versión corta para WhatsApp de máximo 400 caracteres».
 
-#### Ejercicio B (6B): Depurar una app seleccionando solo la función con error
+#### Ejercicio B (6B): Corregir errores paso a paso (depurar) seleccionando solo la parte dañada
 
 - **Nivel:** Intermedio · **Duración:** 25 min · **Función de Canvas:** Canvas de código + selección de función + Vista previa
 - **Qué vas a lograr:** Corregir tres errores de una calculadora de promedios seleccionando cada función por separado y comprobando el resultado en la vista previa.
@@ -2040,7 +2040,7 @@ Límites:
 
 ### 7. Auditoría, Explicación y Refactorización de Algoritmos
 
-#### Ejercicio A (7A): De O(n²) a O(n): refactorizar y visualizar la diferencia
+#### Ejercicio A (7A): Detectar repetidos en 1 segundo: de búsqueda lenta a libreta rápida
 
 - **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Canvas de código Python + Pyodide en vista previa + página HTML con gráfico
 - **Qué vas a lograr:** Refactorizar una búsqueda de duplicados cuadrática a lineal, explicarla y demostrar la mejora con un gráfico interactivo.
@@ -2105,7 +2105,7 @@ Límites:
 
 **Reto extra:** Pide: «Agrega una tercera versión con collections.Counter y compárala en la misma tabla».
 
-#### Ejercicio B (7B): Visualizador animado: burbuja contra merge sort
+#### Ejercicio B (7B): Carrera visual para ordenar listas: método paso a paso vs. divide y vencerás
 
 - **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código + animación en vista previa
 - **Qué vas a lograr:** Crear un visualizador que ejecuta dos algoritmos de ordenamiento lado a lado, con contadores en vivo, para comprender su eficiencia.
@@ -2175,7 +2175,7 @@ Límites:
 
 **Reto extra:** Pide: «Agrega un modo carrera con 100 barras y un gráfico final de comparaciones por algoritmo».
 
-#### Ejercicio C (7C): Análisis de notas en Python: de Canvas a un cuaderno de Colab
+#### Ejercicio C (7C): Calcular promedios y notas en Python: de Canvas a Google Colab con un clic
 
 - **Nivel:** Intermedio · **Duración:** 30 min · **Función de Canvas:** Canvas de código Python + Exportar a Colab
 - **Qué vas a lograr:** Escribir un script de estadística básica en Canvas, ajustarlo por selección, ejecutarlo en Colab y volver a Canvas para ampliarlo.
@@ -2320,7 +2320,7 @@ Límites:
 
 **Reto extra:** Pide: «Permite registrar 5 aprendices y muestra un radar promedio del grupo con el criterio más débil resaltado».
 
-#### Ejercicio B (8B): Guía didáctica de Git con cuestionario autocalificable
+#### Ejercicio B (8B): Guía para principiantes sobre guardar versiones (Git) con cuestionario autocalificable
 
 - **Nivel:** Básico · **Duración:** 30 min · **Función de Canvas:** Documento + Cuestionario web interactivo en Canvas
 - **Qué vas a lograr:** Producir una guía didáctica estructurada por momentos y un cuestionario interactivo con retroalimentación inmediata.
@@ -2392,7 +2392,7 @@ Límites:
 
 **Reto extra:** Pide en el chat: «Crea una página web con un cuestionario de 10 preguntas, puntaje en una dona y reinicio con preguntas mezcladas». Luego pide: «Agrega un simulador visual de ramas que dibuje los commits como círculos conectados al ejecutar comandos escritos».
 
-#### Ejercicio C (8C): Ficha de fórmulas de calificación con LaTeX y exportación a PDF
+#### Ejercicio C (8C): Ficha de fórmulas claras (LaTeX) y exportación a PDF sin cortes
 
 - **Nivel:** Intermedio · **Duración:** 25 min · **Función de Canvas:** Documento + fórmulas LaTeX + Exportar a PDF
 - **Qué vas a lograr:** Redactar la fórmula de la nota final con formato matemático, calcular dos casos y revisar cómo queda en un PDF.
@@ -2456,7 +2456,7 @@ Límites:
 
 ### 9. Consultas SQL Complejas, ETL y Modelado Relacional
 
-#### Ejercicio A (9A): Consultas SQL de biblioteca con tablero en vista previa y ejecución en Colab
+#### Ejercicio A (9A): Hacerle preguntas a tus datos (SQL) con tablero en vivo sin instalar nada
 
 - **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código + SQLite con Pyodide en la vista previa + Exportar a Colab
 - **Qué vas a lograr:** Escribir consultas con JOIN, agregaciones y funciones de ventana, y ejecutarlas en el navegador para alimentar un tablero visual.
@@ -2548,7 +2548,7 @@ Límites:
 
 **Reto extra:** Pide: «Agrega una vista materializada de indicadores mensuales y un gráfico de líneas de préstamos por semana».
 
-#### Ejercicio B (9B): Pipeline de limpieza de asistencia con diagrama entidad-relación
+#### Ejercicio B (9B): Limpiar una tabla desordenada paso a paso (SQL) y ver el mapa de datos
 
 - **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Canvas de código SQL + SQLite con Pyodide + Mermaid erDiagram + tablero de calidad
 - **Qué vas a lograr:** Diseñar un pipeline ETL que limpia un archivo con errores reales, documentarlo con un diagrama entidad-relación y medir la calidad antes y después.
@@ -2631,7 +2631,7 @@ Límites:
 
 **Reto extra:** Pide: «Agrega una regla para detectar aprendices con dos ausencias seguidas y muéstralos en una alerta del tablero».
 
-#### Ejercicio C (9C): Conciliación SQL de certificación y reporte auditable en PDF
+#### Ejercicio C (9C): Cruzar listas sin perder a nadie (LEFT JOIN) y exportar el reporte en PDF
 
 - **Nivel:** Avanzado · **Duración:** 30 min · **Función de Canvas:** Documento y código SQL + Vista previa + Edición por selección + Exportar a PDF
 - **Qué vas a lograr:** Escribir una consulta SQL que determine qué aprendices cumplen los requisitos de certificación sin excluir a quienes tienen cero entregas, y generar el acta en PDF.
@@ -3089,7 +3089,7 @@ Límites:
 
 ### 12. Gems para Canvas (Asistente especializado de coescritura)
 
-#### Ejercicio A (12A): Configuración y calibración de un Gem Tutor Socrático para coescritura en Canvas
+#### Ejercicio A (12A): Crear un asistente tutor (Gem) que te guía con preguntas sin hacer la tarea por ti
 
 - **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Documento en Canvas + Nuevo Gem + coescritura con Canvas activo
 - **Qué vas a lograr:** Diseñar el System Prompt de un Gem especializado, ponerlo a prueba con preguntas trampa y utilizarlo como asistente de coescritura en un lienzo de Canvas.
@@ -3154,7 +3154,7 @@ Límites:
 
 **Reto extra:** Pide en el chat: «Genera una batería de 5 preguntas adversariales complejas para evaluar si el Gem rompe sus guardrails socráticos ante técnicas de jailbreak simuladas».
 
-#### Ejercicio B (12B): Gem Auditor de Rúbricas y Calidad de Código en tiempo real
+#### Ejercicio B (12B): Asistente revisor (Gem) que califica con rúbrica sin dañar tu trabajo
 
 - **Nivel:** Avanzado · **Duración:** 30 min · **Función de Canvas:** Documento en Canvas + Nuevo Gem + Auditoría de código en Canvas
 - **Qué vas a lograr:** Crear y calibrar un Gem evaluador que audite el código generado en Canvas contra una rúbrica técnica de 4 criterios sin alterar la lógica de negocio.
@@ -3220,7 +3220,7 @@ Límites:
 
 **Reto extra:** Pide en el chat: «Añade al System Prompt una regla para detectar código duplicado y calcular el índice de mantenibilidad según la complejidad ciclomática».
 
-#### Ejercicio C (12C): Proyecto Integrador 360°: de Gem socrático a aplicación web verificadora para el Portafolio de Evidencias
+#### Ejercicio C (12C): Proyecto Final 360°: de asistente tutor (Gem) a aplicación web verificadora para tu Portafolio de Evidencias
 
 - **Nivel:** Avanzado · **Duración:** 35 min · **Función de Canvas:** Nuevo Gem + Documento + Crear → Página web + Funciones de Gemini + Copiar Canvas
 - **Qué vas a lograr:** Integrar en un solo flujo de principio a fin la creación de un Gem, la especificación documental en Canvas, su transformación en aplicación web con asistencia de IA y su empaquetado para el Portafolio de Evidencias.

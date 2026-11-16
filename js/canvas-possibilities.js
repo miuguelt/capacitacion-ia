@@ -861,8 +861,8 @@ const ALGORITHM_REFACTOR = {
   docTitle: "clasificador.py",
   image: "assets/images/canvas/canvas_algoritmo.jpg",
   promptParts: {
-    role: "ingeniero de software que revisa el rendimiento de código Python",
-    context: "La función agrupa las entregas de cada corte (10.000 registros) y se volvió lenta. Se necesita una versión eficiente que devuelva exactamente el mismo resultado.",
+    role: "profesor de programación que explica con ejemplos cotidianos a personas que están empezando",
+    context: "Tengo una función que agrupa entregas (como clasificar facturas, pedidos o tareas), pero con 10.000 registros se vuelve muy lenta. Quiero una versión rápida que dé exactamente el mismo resultado y entender por qué mejora.",
     data: `Función actual (Python 3.11):
 
 def agrupar_por_estado(entregas):
@@ -886,43 +886,66 @@ ${DELIVERIES.map(d => `    {"documento": "${d.documento}", "nombre": "${d.nombre
 ]`,
     instruction: "En Canvas, entrega:",
     task: [
-      "Una explicación de dos frases de por qué la función actual es O(n²), señalando la línea responsable.",
-      "La función refactorizada en O(n), con el mismo nombre, type hints y docstring en español.",
-      "Un archivo de pruebas con pytest que cubra la lista vacía, un documento repetido y los límites 0, 49.9, 50, 69.9 y 70.",
-      "Un bloque final que imprima el resultado con la entrada de ejemplo."
+      "Una explicación sencilla en dos frases (sin jerga difícil) de por qué la función actual es lenta (O(n²)), señalando la línea culpable y comparándola con buscar en una pila desordenada.",
+      "La función mejorada en forma rápida de una sola pasada (O(n)), usando una libreta de «ya vistos» (set en Python), con el mismo nombre, etiquetas claras de entrada/salida y comentarios en español.",
+      "Una página de Vista previa en Canvas que ejecute automáticamente las comprobaciones (lista vacía, documento repetido y límites 0, 49.9, 50, 69.9 y 70) y muestre ✓ o ✗ sin instalar nada en el computador.",
+      "El resultado exacto que imprime con la entrada de ejemplo."
     ],
     constraints: [
       "Conserva el comportamiento: si un documento se repite, cuenta su primer registro.",
-      "Usa solo la biblioteca estándar de Python."
+      "Usa lenguaje cotidiano para alguien que no es programador."
     ],
-    format: "La explicación primero y después dos bloques de código: la función y las pruebas.",
-    tone: "Didáctico y preciso, con ejemplos numéricos."
+    format: "Primero la explicación cotidiana, luego el código Python comentado y al final la vista previa con las comprobaciones en vivo.",
+    tone: "Cercano, didáctico y claro, con ejemplos de la vida diaria."
   },
   expected: [
-    { criterion: "La explicación señala la línea «if e[\"documento\"] in vistos»: buscar en una lista recorre sus elementos, y eso ocurre dentro del ciclo.", how: "Lee la explicación antes del código." },
-    { criterion: "La versión nueva usa un set (conjunto) para vistos y conserva el nombre agrupar_por_estado.", how: "Busca «set(» en el código." },
-    { criterion: `Con la entrada de ejemplo imprime ${DELIVERIES_OUTPUT}.`, how: "Copia el código a tu equipo o a Google Colab y ejecútalo." },
-    { criterion: "Las pruebas cubren la lista vacía, el documento repetido y los 5 límites, y «python -m pytest» termina sin fallos.", how: "Guarda la función como clasificador.py y las pruebas como test_clasificador.py, y ejecuta pytest. Si Gemini entrega todo en un solo archivo, ejecuta pytest sobre ese archivo." },
-    { criterion: "La función tiene type hints y un docstring en español que menciona la complejidad O(n).", how: "Lee la firma y el docstring." }
+    { criterion: "La explicación señala la línea «if e[\"documento\"] in vistos» y explica en palabras simples que buscar en una lista recorre todo de nuevo en cada paso.", how: "Lee la explicación antes del código." },
+    { criterion: "La versión nueva usa un set (conjunto o libreta de «ya vistos») para vistos y conserva el nombre agrupar_por_estado.", how: "Busca «set(» en el código." },
+    { criterion: `Con la entrada de ejemplo imprime ${DELIVERIES_OUTPUT}.`, how: "Revisa la salida mostrada en la Vista previa de Canvas." },
+    { criterion: "La Vista previa muestra ✓ en todas las comprobaciones: lista vacía, documento repetido y los 5 límites (0, 49.9, 50, 69.9 y 70), sin pedir terminal ni instalaciones.", how: "Abre la pestaña «Vista previa» en Gemini Canvas y verifica los ✓ verdes." },
+    { criterion: "La función incluye una nota explicativa en español que aclara por qué ahora recorre los datos una sola vez (O(n)).", how: "Lee el comentario inicial de la función." }
   ],
-  aiResponse: "Refactoricé la función en el Canvas: el cuello de botella era buscar en una lista dentro del ciclo, y ahora uso un set. Incluí las pruebas con pytest y un bloque que imprime el resultado de la entrada de ejemplo.",
+  aiResponse: "Mejoré la función en Canvas para que recorra los datos una sola vez: cambié la lista «vistos» por un set (como una libreta de ya vistos) y dejé las comprobaciones listas en la Vista previa sin necesidad de instalar nada.",
   quickActions: [
-    { id: "act-algo-code", label: "⚡ Solución de referencia", modal: { title: "clasificador.py · versión O(n) de referencia", badge: "Python 3.11+", content: ALGO_REFERENCE } },
-    { id: "act-algo-pytest", label: "🧪 Pruebas de referencia", modal: { title: "test_clasificador.py · ejecútalo con «python -m pytest»", badge: "pytest", content: ALGO_TESTS } }
+    { id: "act-algo-code", label: "⚡ Solución de referencia", modal: { title: "clasificador.py · versión rápida (una sola pasada)", badge: "Python 3.11+", content: ALGO_REFERENCE } },
+    { id: "act-algo-pytest", label: "🧪 Comprobaciones de referencia", modal: { title: "Casos de prueba para verificar en Vista previa o Colab", badge: "7 comprobaciones", content: ALGO_TESTS } }
   ],
   interactiveHtml: `
       <div class="algo-interactive-demo" style="font-family:var(--font-sans);">
+        <div style="margin-bottom:0.85rem; padding:0.75rem 0.9rem; background:var(--bg-subtle); border:1px solid var(--border-light); border-left:4px solid var(--color-primary); border-radius:8px;">
+          <h4 style="margin:0 0 0.4rem 0; color:var(--color-primary);">💡 ¿Por qué importa programar? (Receta + diagrama en la vida diaria)</h4>
+          <p style="font-size:0.84rem; margin:0 0 0.55rem 0;">Programar es <strong>escribir una receta exacta</strong> para que el computador haga en 1 segundo lo que a mano tomaría horas (por ejemplo, revisar 10.000 recibos, pagos o contactos repetidos). Elegir un buen algoritmo es como pasar de buscar en una pila desordenada (<strong>O(n²)</strong>: lento) a anotar en una libreta de «ya vistos» (<strong>O(n)</strong>: rápido).</p>
+          <svg viewBox="0 0 640 96" role="img" aria-label="Diagrama de flujo: Lista de 10.000 recibos entra a una regla de decisión (¿ya lo vi? y ¿puntaje?) y sale un resumen ordenado en 1 segundo" style="width:100%; max-width:640px; height:auto; display:block; margin:0 auto;">
+            <rect x="6" y="18" width="168" height="58" rx="10" fill="#eef4f1" stroke="#3d7057" stroke-width="1.5"/>
+            <text x="90" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a2f">1. Datos de entrada</text>
+            <text x="90" y="60" text-anchor="middle" font-size="11" fill="#374151">10.000 recibos o entregas</text>
+            <path d="M178 47 L214 47" stroke="#3d7057" stroke-width="2" marker-end="url(#algo-arrow)"/>
+            <rect x="218" y="12" width="204" height="70" rx="10" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
+            <text x="320" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">2. Regla del programa</text>
+            <text x="320" y="51" text-anchor="middle" font-size="11" fill="#374151">¿Ya está en mi libreta (set)?</text>
+            <text x="320" y="68" text-anchor="middle" font-size="11" fill="#374151">Si no, clasifica por puntaje</text>
+            <path d="M426 47 L462 47" stroke="#3d7057" stroke-width="2" marker-end="url(#algo-arrow)"/>
+            <rect x="466" y="18" width="168" height="58" rx="10" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
+            <text x="550" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">3. Resultado limpio</text>
+            <text x="550" y="60" text-anchor="middle" font-size="11" fill="#374151">Sin repetidos en 1 segundo</text>
+            <defs>
+              <marker id="algo-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#3d7057"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
         <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; border-bottom:1px solid var(--border-light); padding-bottom:0.5rem; margin-bottom:0.75rem;">
-          <h4 style="margin:0; color:var(--color-primary);">⚡ agrupar_por_estado(): de O(n²) a O(n)</h4>
+          <h4 style="margin:0; color:var(--color-primary);">⚡ agrupar_por_estado(): de lento O(n²) a rápido O(n)</h4>
           <span class="badge badge-success">Mismo resultado</span>
         </div>
         <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
-          <strong style="font-size:0.78rem; color:var(--text-main);">🧪 Ejecutar lote de prueba en vivo:</strong>
+          <strong style="font-size:0.78rem; color:var(--text-main);">🧪 Probar ahora mismo sin instalar nada:</strong>
           <button type="button" class="calibration-pill active" data-sim-algo-case="sample">Muestra (7 entregas, doc 101 repetido)</button>
           <button type="button" class="calibration-pill" data-sim-algo-case="empty">Lista vacía []</button>
           <button type="button" class="calibration-pill" data-sim-algo-case="boundaries">Fronteras (0 · 49,9 · 50,0 · 69,9 · 70,0)</button>
         </div>
-        <p style="font-size:0.84rem; margin:0 0 0.6rem 0;"><strong>Causa:</strong> <code>if e["documento"] in vistos</code> busca en una lista; con 10.000 entregas son hasta 10.000 comparaciones por cada entrega. Un <code>set</code> responde en tiempo constante.</p>
+        <p style="font-size:0.84rem; margin:0 0 0.6rem 0;"><strong>¿Por qué era lento?</strong> La línea <code>if e["documento"] in vistos</code> busca en una lista desde el principio cada vez; con 10.000 entregas hace millones de comparaciones. Un <code>set</code> (libreta de ya vistos) responde en un solo vistazo.</p>
         <pre style="background:#1e1e1e; color:#d4d4d4; padding:0.85rem; border-radius:6px; font-size:0.76rem; overflow-x:auto; white-space:pre; margin:0 0 0.6rem 0;"><code>${ALGO_REFERENCE}</code></pre>
         <p id="demo-algo-live-output" style="font-size:0.84rem; margin:0;"><strong>Salida esperada con la entrada de ejemplo:</strong><br><code>${DELIVERIES_OUTPUT}</code></p>
       </div>`,
@@ -935,9 +958,9 @@ ${DELIVERIES.map(d => `    {"documento": "${d.documento}", "nombre": "${d.nombre
       { type: "bullets", items: ["test_lista_vacia", "test_limites[0.0, 49.9, 50.0, 69.9, 70.0]", "test_documento_repetido_cuenta_el_primero"] }
     ]
   },
-  insightsHtml: canvasInsight("🧪 La entrada de ejemplo es la prueba de oro", "Incluye límites (49.9, 50, 69.9 y 70) y un documento repetido. Si la versión nueva imprime lo mismo que la anterior, la refactorización conservó el comportamiento.") +
-    canvasInsight("⏱️ Mide tú mismo", "El simulador no promete milisegundos. Si quieres comparar, mide las dos versiones con el módulo timeit en tu equipo y con los mismos datos."),
-  variationTip: "En el chat escribe: «Agrega una prueba con 10.000 entregas generadas y compara el tiempo de las dos versiones con timeit»."
+  insightsHtml: canvasInsight("🧪 La entrada de ejemplo es la prueba de oro", "Incluye casos límite (49.9, 50, 69.9 y 70) y un documento repetido. Si la versión nueva imprime exactamente lo mismo que la anterior, mejoraste la velocidad sin dañar el resultado.") +
+    canvasInsight("🏠 Úsalo en tu vida diaria", "Este mismo truco (usar un set como libreta de ya vistos) te sirve para encontrar facturas pagadas dos veces, correos duplicados o productos repetidos en una lista larga."),
+  variationTip: "En el chat de Gemini escribe: «Adapta este mismo ejemplo para detectar facturas o gastos duplicados en una lista del hogar, con la misma explicación sencilla»."
 };
 
 // =====================================================================
@@ -1097,8 +1120,8 @@ const SQL_PIPELINE = {
   docTitle: "Reporte_Mensual_Por_Ficha.sql",
   image: "assets/images/canvas/canvas_sql.jpg",
   promptParts: {
-    role: "analista de bases de datos PostgreSQL",
-    context: "El reporte mensual por ficha tarda demasiado con 5.000 aprendices. Antes de llevar la nueva consulta a producción, se valida con la muestra de los datos.",
+    role: "profesor de bases de datos que explica con ejemplos claros a cualquier perfil profesional",
+    context: "Un reporte mensual tarda demasiado con 5.000 registros y cuando alguien no tiene asistencias (como Sara) desaparece del listado. Quiero una consulta SQL clara que resuelva esto y entender cómo una base de datos ordenada potencia cualquier aplicación o negocio.",
     data: `CREATE TABLE aprendices (id INT PRIMARY KEY, nombre TEXT NOT NULL, ficha_id INT NOT NULL);
 CREATE TABLE entregas (aprendiz_id INT REFERENCES aprendices(id), calificacion NUMERIC(2,1));
 CREATE TABLE registro_asistencia (aprendiz_id INT REFERENCES aprendices(id), fecha DATE, asistio BOOLEAN);
@@ -1110,33 +1133,56 @@ ${[1, 2, 3, 4].map(id => SQL_DATA.attendance.filter(r => r.aprendiz_id === id).m
 -- Sara (id 5) no tiene registros de asistencia en octubre.`,
     instruction: "En Canvas, escribe en SQL:",
     task: [
-      "Una consulta con dos CTE: una para el promedio de notas y otra para la asistencia del 2026-10-01 al 2026-10-31.",
-      "El puesto de cada aprendiz dentro de su ficha con ROW_NUMBER(), ordenado por promedio de mayor a menor.",
-      "El porcentaje de asistencia con un decimal; si un aprendiz no tiene registros, debe aparecer con NULL y sin error de división por cero.",
-      "La sentencia que crea un índice compuesto en registro_asistencia (aprendiz_id, fecha) que incluya asistio.",
+      "Una consulta con dos pasos intermedios ordenados (CTE con WITH): uno para el promedio de notas y otro para la asistencia del 2026-10-01 al 2026-10-31.",
+      "El puesto de cada persona dentro de su grupo (ficha) usando ROW_NUMBER(), ordenado de mayor a menor promedio.",
+      "El porcentaje de asistencia con un decimal; si alguien no tiene registros (como Sara), debe aparecer con NULL y sin error de división por cero.",
+      "La regla que crea un índice (como el índice de un libro para buscar al instante) en registro_asistencia (aprendiz_id, fecha) incluyendo asistio.",
       "La tabla de resultado que esperas con los datos de muestra."
     ],
     constraints: [
-      "No uses subconsultas correlacionadas.",
-      "Usa ROUND(…, 1) para el promedio y el porcentaje, y ordena por ficha y puesto."
+      "No uses subconsultas anidadas dentro de SELECT o WHERE; usa pasos ordenados (CTE).",
+      "Usa ROUND(…, 1) para redondear el promedio y el porcentaje, y ordena por ficha y puesto."
     ],
-    format: "Un bloque SQL comentado y, debajo, la tabla de resultado esperada.",
-    tone: "Didáctico, con comentarios breves en cada consulta."
+    format: "Un bloque SQL comentado en español sencillo para cualquier profesión y, debajo, la tabla de resultado esperada.",
+    tone: "Cercano, didáctico y sin jerga innecesaria."
   },
   expected: [
-    { criterion: "La consulta usa WITH con dos CTE y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC).", how: "Lee el bloque SQL." },
-    { criterion: "Usa LEFT JOIN y NULLIF (o CASE) para que Sara aparezca con NULL en asistencia.", how: "Busca «LEFT JOIN» y «NULLIF» en el código." },
-    { criterion: `Resultado con la muestra: ${SQL_RESULT_TEXT}.`, how: "Ejecuta el esquema y la consulta en PostgreSQL (local o en un editor en línea) y compara fila por fila." },
+    { criterion: "La consulta usa WITH con dos pasos intermedios (CTE) y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC).", how: "Lee el bloque SQL." },
+    { criterion: "Usa LEFT JOIN (para no borrar a Sara) y NULLIF (para evitar dividir por cero), mostrando NULL en asistencia.", how: "Busca «LEFT JOIN» y «NULLIF» en el código." },
+    { criterion: `Resultado con la muestra: ${SQL_RESULT_TEXT}.`, how: "Revisa la tabla de resultado generada en Canvas o pruébala en la Vista previa sin instalar nada." },
     { criterion: "El índice es CREATE INDEX … ON registro_asistencia (aprendiz_id, fecha) INCLUDE (asistio).", how: "Lee la sentencia del índice." },
-    { criterion: "No hay subconsultas dentro de SELECT ni de WHERE.", how: "Busca «(SELECT» en el código; solo debe aparecer dentro de las CTE." }
+    { criterion: "No hay subconsultas dentro de SELECT ni de WHERE.", how: "Busca «(SELECT» en el código; solo debe aparecer dentro de los pasos WITH." }
   ],
-  aiResponse: "Escribí en el Canvas la consulta con dos CTE, el puesto por ficha con ROW_NUMBER(), el porcentaje de asistencia protegido con NULLIF, el índice compuesto y la tabla de resultado que debe dar la muestra.",
+  aiResponse: "Escribí en Canvas la consulta SQL organizada en dos pasos claros (CTE), el ranking por grupo con ROW_NUMBER(), la protección con LEFT JOIN y NULLIF para no perder a Sara, el índice de búsqueda rápida y la tabla de resultado esperada.",
   quickActions: [
     { id: "act-sql-reference", label: "🗄️ Consulta de referencia", modal: { title: "Consulta de referencia (PostgreSQL)", badge: "SQL", content: SQL_REFERENCE } },
     { id: "act-sql-result", label: "📋 Resultado esperado", modal: { title: "Resultado esperado con los datos de muestra", badge: "Resultado", content: ["ficha_id | puesto | nombre | promedio | pct_asistencia", ...SQL_RESULT.map(r => `${r.ficha_id} | ${r.puesto} | ${r.nombre} | ${r.promedio.toFixed(1)} | ${r.pct_asistencia === null ? "NULL" : r.pct_asistencia.toFixed(1)}`)].join("\n") } }
   ],
   interactiveHtml: `
       <div class="sql-interactive-demo" style="font-family:var(--font-sans);">
+        <div style="margin-bottom:0.85rem; padding:0.75rem 0.9rem; background:var(--bg-subtle); border:1px solid var(--border-light); border-left:4px solid var(--color-primary); border-radius:8px;">
+          <h4 style="margin:0 0 0.4rem 0; color:var(--color-primary);">💡 ¿Por qué importan las bases de datos y cómo potencian cualquier aplicación?</h4>
+          <p style="font-size:0.84rem; margin:0 0 0.55rem 0;">En una hoja de cálculo suelta, si cambias un dato en un archivo y olvidas otro, la información se contradice. Una <strong>base de datos</strong> guarda cada dato una sola vez en tablas conectadas (personas, entregas, asistencias) y permite que cualquier aplicación —de ventas, salud, contabilidad o educación— responda preguntas complejas en milisegundos.</p>
+          <svg viewBox="0 0 640 96" role="img" aria-label="Diagrama de 3 pasos: Aplicación o formulario envía una pregunta, Base de datos conectada cruza tablas sin duplicados y entrega decisiones en segundos" style="width:100%; max-width:640px; height:auto; display:block; margin:0 auto;">
+            <rect x="6" y="18" width="168" height="58" rx="10" fill="#eef4f1" stroke="#3d7057" stroke-width="1.5"/>
+            <text x="90" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a2f">1. Tu App o Formulario</text>
+            <text x="90" y="60" text-anchor="middle" font-size="11" fill="#374151">Pide datos o registra</text>
+            <path d="M178 47 L214 47" stroke="#3d7057" stroke-width="2" marker-end="url(#sql-arrow)"/>
+            <rect x="218" y="12" width="204" height="70" rx="10" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
+            <text x="320" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">2. Base de datos (SQL)</text>
+            <text x="320" y="51" text-anchor="middle" font-size="11" fill="#374151">Cruza tablas conectadas</text>
+            <text x="320" y="68" text-anchor="middle" font-size="11" fill="#374151">Sin duplicados ni errores</text>
+            <path d="M426 47 L462 47" stroke="#3d7057" stroke-width="2" marker-end="url(#sql-arrow)"/>
+            <rect x="466" y="18" width="168" height="58" rx="10" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
+            <text x="550" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">3. Decisión al instante</text>
+            <text x="550" y="60" text-anchor="middle" font-size="11" fill="#374151">Reportes y tableros en vivo</text>
+            <defs>
+              <marker id="sql-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="#3d7057"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
         <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; border-bottom:1px solid var(--border-light); padding-bottom:0.5rem; margin-bottom:0.75rem;">
           <h4 style="margin:0; color:var(--color-primary);">🗄️ Reporte mensual por ficha</h4>
           <span class="badge badge-success">5 filas esperadas</span>
@@ -1159,9 +1205,9 @@ ${[1, 2, 3, 4].map(id => SQL_DATA.attendance.filter(r => r.aprendiz_id === id).m
       { type: "table", headers: ["ficha_id", "puesto", "nombre", "promedio", "pct_asistencia"], rows: SQL_RESULT_ROWS }
     ]
   },
-  insightsHtml: canvasInsight("🧪 Una muestra pequeña con un caso difícil", "Sara no tiene registros de asistencia. Si la consulta usa JOIN en vez de LEFT JOIN, Sara desaparece; si no protege la división, falla. La tabla esperada lo delata.") +
-    canvasInsight("⏱️ El rendimiento se mide, no se promete", "Ejecuta EXPLAIN ANALYZE en tu base con datos reales antes y después del índice. El simulador no inventa tiempos de ejecución."),
-  variationTip: "En el chat escribe: «Convierte la consulta en una vista materializada y dime con qué sentencia se refresca sin bloquear las lecturas»."
+  insightsHtml: canvasInsight("🧪 Un caso real que protege tus decisiones", "Sara no tiene registros de asistencia. Si cruzas las tablas mal (INNER JOIN), Sara desaparece del reporte; si no proteges la división (NULLIF), el sistema falla. Así es como una buena base de datos evita errores silenciosos.") +
+    canvasInsight("🚀 Cómo potencia tu profesión", "Este mismo diseño sirve para cruzar clientes con facturas pendientes en un negocio, pacientes con citas en una clínica o inventario con ventas diarias."),
+  variationTip: "En el chat de Gemini escribe: «Adapta estas 3 tablas para un negocio de ventas (clientes, facturas y pagos) y dime qué clientes tienen saldo pendiente»."
 };
 
 // =====================================================================

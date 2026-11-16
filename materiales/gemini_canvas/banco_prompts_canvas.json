@@ -429,8 +429,8 @@
         {
           "id": "code-b-kanban-burndown",
           "code": "2B",
-          "title": "Tablero Kanban arrastrable con gráfico de avance del sprint",
-          "level": "Avanzado",
+          "title": "Tablero de tareas arrastrable (Kanban) con gráfico de avance diario",
+          "level": "Intermedio",
           "duration": "35 min",
           "canvasFeature": "Vista previa + Seleccionar y preguntar + Historial de versiones",
           "capabilities": [
@@ -439,8 +439,8 @@
             "select-ask",
             "versions"
           ],
-          "whyCanvas": "La app corre en la vista previa y puedes señalar un elemento con «Seleccionar y preguntar», editar solo una función en el código o volver a una versión anterior.",
-          "outsideCanvas": "Todo el flujo técnico transcurre 100 % dentro de Canvas (pestañas «Vista previa», «Código», «Seleccionar y preguntar» e historial de versiones). Nota: como la vista previa se ejecuta en un contenedor aislado (sandbox), algunas sesiones no conservan localStorage al recargar; por eso incluimos exportación/importación JSON como respaldo.",
+          "whyCanvas": "La app corre en la «Vista previa» y puedes señalar cualquier parte con «Seleccionar y preguntar», editar solo un bloque del código o volver a una versión anterior.",
+          "outsideCanvas": "Todo ocurre 100 % dentro de Canvas (pestañas «Vista previa», «Código», «Seleccionar y preguntar» e historial). Incluimos botones para exportar/importar texto por si la sesión se recarga.",
           "places": [
             "canvas",
             "canvas",
@@ -450,26 +450,26 @@
             "canvas",
             "portal"
           ],
-          "goal": "Crear un tablero Kanban funcional con arrastrar y soltar, contadores por columna y un gráfico burndown que compara el avance ideal y el real.",
-          "scenario": "El equipo del sprint 3 quiere ver en una sola pantalla qué tareas faltan y si va atrasado frente a la línea ideal.",
+          "goal": "Crear un tablero visual de columnas (Por hacer, En curso y Hecho) donde arrastras tareas y ves en un gráfico si vas al día o atrasado frente a tu meta.",
+          "scenario": "Sirve igual para un proyecto de trabajo, una mudanza o tus pendientes de la semana: ver en una sola pantalla qué falta y cuánto has avanzado evita olvidos.",
           "promptParts": {
-            "role": "desarrollador frontend con experiencia en herramientas ágiles",
-            "context": "El equipo del sprint 3 necesita ver en una sola pantalla qué falta y si va atrasado frente al plan.",
+            "role": "diseñador de herramientas visuales para organizar tareas diarias",
+            "context": "Un equipo necesita ver en una sola pantalla qué tareas faltan por hacer, cuáles están en marcha y si el avance real va al ritmo del plan (sprint 3).",
             "data": "TAREAS DEL SPRINT 3 — APP DE CITAS DEL CENTRO (datos de práctica)\n\nid,titulo,responsable,puntos,estado\nT1,Diseñar pantalla de login,Ana,3,Hecho\nT2,Conectar API de usuarios,Luis,5,Hecho\nT3,Validar formulario de cita,Marta,3,En curso\nT4,Calendario de disponibilidad,Jorge,8,En curso\nT5,Notificación por correo,Sara,5,Por hacer\nT6,Pruebas unitarias del backend,Iván,5,Por hacer\nT7,Panel del instructor,Ana,8,Por hacer\nT8,Accesibilidad y contraste,Marta,3,Hecho\n\nSprint de 10 días con 40 puntos.\nPuntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,29,29",
             "instruction": "En Canvas, crea un tablero Kanban web que:",
             "task": [
               "Muestre las tareas en las columnas Por hacer, En curso y Hecho.",
-              "Permita mover las tarjetas arrastrándolas y también con el teclado.",
-              "Sume los puntos de cada columna y muestre el avance del sprint.",
-              "Incluya un gráfico burndown con la línea ideal y la real, dibujado con SVG.",
+              "Permita mover las tarjetas arrastrándolas con el ratón y también con el teclado.",
+              "Sume los puntos de cada columna y muestre el porcentaje de avance.",
+              "Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.",
               "Filtre las tarjetas por responsable."
             ],
             "constraints": [
-              "Sin frameworks: solo HTML, CSS y JavaScript.",
-              "Cada tarjeta debe poder enfocarse y tener una etiqueta para lectores de pantalla."
+              "Sin herramientas externas: solo HTML, CSS y JavaScript.",
+              "Cada tarjeta debe poder usarse con teclado y tener etiqueta accesible."
             ],
-            "format": "Un solo archivo HTML ejecutable.",
-            "tone": "Técnico y conciso en los comentarios del código."
+            "format": "Un solo archivo HTML listo para abrir en Vista previa.",
+            "tone": "Claro y conciso en los comentarios del código."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -489,7 +489,7 @@
             "El estado se conserva con localStorage o mediante los botones de exportar e importar JSON."
           ],
           "stretch": "Pide: «Agrega una columna Bloqueado con límite WIP de 2 tarjetas y una alerta visual cuando se supere».",
-          "prompt": "Contexto: El equipo del sprint 3 necesita ver en una sola pantalla qué falta y si va atrasado frente al plan.\n\nRol: Actúa como desarrollador frontend con experiencia en herramientas ágiles.\n\nDatos:\n\"\"\"\nTAREAS DEL SPRINT 3 — APP DE CITAS DEL CENTRO (datos de práctica)\n\nid,titulo,responsable,puntos,estado\nT1,Diseñar pantalla de login,Ana,3,Hecho\nT2,Conectar API de usuarios,Luis,5,Hecho\nT3,Validar formulario de cita,Marta,3,En curso\nT4,Calendario de disponibilidad,Jorge,8,En curso\nT5,Notificación por correo,Sara,5,Por hacer\nT6,Pruebas unitarias del backend,Iván,5,Por hacer\nT7,Panel del instructor,Ana,8,Por hacer\nT8,Accesibilidad y contraste,Marta,3,Hecho\n\nSprint de 10 días con 40 puntos.\nPuntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,29,29\n\"\"\"\n\nTarea: En Canvas, crea un tablero Kanban web que:\n1. Muestre las tareas en las columnas Por hacer, En curso y Hecho.\n2. Permita mover las tarjetas arrastrándolas y también con el teclado.\n3. Sume los puntos de cada columna y muestre el avance del sprint.\n4. Incluya un gráfico burndown con la línea ideal y la real, dibujado con SVG.\n5. Filtre las tarjetas por responsable.\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Técnico y conciso en los comentarios del código.\n\nLímites:\n- Sin frameworks: solo HTML, CSS y JavaScript.\n- Cada tarjeta debe poder enfocarse y tener una etiqueta para lectores de pantalla."
+          "prompt": "Contexto: Un equipo necesita ver en una sola pantalla qué tareas faltan por hacer, cuáles están en marcha y si el avance real va al ritmo del plan (sprint 3).\n\nRol: Actúa como diseñador de herramientas visuales para organizar tareas diarias.\n\nDatos:\n\"\"\"\nTAREAS DEL SPRINT 3 — APP DE CITAS DEL CENTRO (datos de práctica)\n\nid,titulo,responsable,puntos,estado\nT1,Diseñar pantalla de login,Ana,3,Hecho\nT2,Conectar API de usuarios,Luis,5,Hecho\nT3,Validar formulario de cita,Marta,3,En curso\nT4,Calendario de disponibilidad,Jorge,8,En curso\nT5,Notificación por correo,Sara,5,Por hacer\nT6,Pruebas unitarias del backend,Iván,5,Por hacer\nT7,Panel del instructor,Ana,8,Por hacer\nT8,Accesibilidad y contraste,Marta,3,Hecho\n\nSprint de 10 días con 40 puntos.\nPuntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,29,29\n\"\"\"\n\nTarea: En Canvas, crea un tablero Kanban web que:\n1. Muestre las tareas en las columnas Por hacer, En curso y Hecho.\n2. Permita mover las tarjetas arrastrándolas con el ratón y también con el teclado.\n3. Sume los puntos de cada columna y muestre el porcentaje de avance.\n4. Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.\n5. Filtre las tarjetas por responsable.\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Claro y conciso en los comentarios del código.\n\nLímites:\n- Sin herramientas externas: solo HTML, CSS y JavaScript.\n- Cada tarjeta debe poder usarse con teclado y tener etiqueta accesible."
         },
         {
           "id": "code-c-juego-ahorro",
@@ -1020,17 +1020,17 @@
         {
           "id": "flow-a-matricula-swimlanes",
           "code": "4A",
-          "title": "Flujograma de matrícula por carriles con Mermaid",
+          "title": "Flujograma por carriles con texto que dibuja (Mermaid): proceso de matrícula",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Código Mermaid renderizado en vista previa",
+          "canvasFeature": "Texto que dibuja diagramas (Mermaid) en Vista previa",
           "capabilities": [
             "code-preview",
             "console-fix",
             "inline-edit"
           ],
-          "whyCanvas": "Canvas dibuja el diagrama en la vista previa; si Mermaid falla, la consola muestra el error y Gemini lo corrige en el mismo panel, sin instalar nada.",
-          "outsideCanvas": "Todo ocurre dentro de Canvas: el código Mermaid se escribe en «Código», el diagrama se ve en «Vista previa» y el código de referencia de esta guía se pega en el mismo chat de la izquierda para compararlo. No necesitas Mermaid Live ni otro editor.",
+          "whyCanvas": "Canvas dibuja el diagrama en la «Vista previa» a partir de texto sencillo (Mermaid); si algo falla al dibujar, la consola te avisa y Gemini lo corrige en el mismo panel sin instalar nada.",
+          "outsideCanvas": "Todo ocurre dentro de Canvas: el texto del diagrama se escribe en «Código», el dibujo aparece en «Vista previa» y el ejemplo de referencia se pega en el chat de la izquierda para compararlo.",
           "places": [
             "canvas",
             "canvas",
@@ -1040,27 +1040,27 @@
             "canvas",
             "portal"
           ],
-          "goal": "Convertir un procedimiento escrito en un diagrama de flujo por carriles, con decisiones, camino feliz resaltado y tabla de tiempos, que puedas revisar y ajustar sin salir de Canvas.",
-          "scenario": "Bienestar y coordinación tienen versiones distintas del proceso de matrícula. Un diagrama único evita confusiones en la reunión de alineación.",
+          "goal": "Convertir un procedimiento escrito en un diagrama de flujo por carriles (como un mapa de quién hace qué y en qué orden), útil para trámites, compras o procesos diarios.",
+          "scenario": "Cuando varias áreas (o personas en un proyecto) tienen versiones distintas de un trámite, un dibujo único con responsables y tiempos evita confusiones.",
           "promptParts": {
-            "role": "analista de procesos que documenta con diagramas Mermaid",
-            "context": "Bienestar y coordinación académica tienen versiones distintas del proceso de matrícula. Se necesita un diagrama único para proyectarlo en la reunión de alineación.",
+            "role": "analista de procesos que explica con diagramas visuales sencillos",
+            "context": "Bienestar y coordinación académica tienen versiones distintas del proceso de matrícula. Se necesita un diagrama único y claro para proyectarlo en la reunión.",
             "data": "PROCESO DE MATRÍCULA DE APRENDICES (descripción de práctica)\n\nActores (carriles): Aspirante | Plataforma de inscripción | Bienestar | Coordinación académica\n\n1. El aspirante se registra en la plataforma de inscripción y elige el programa.\n2. La plataforma valida que el documento no tenga otra matrícula activa.\n   - Si ya tiene matrícula activa: se notifica al aspirante y el proceso termina.\n3. El aspirante presenta la prueba de conocimientos.\n4. Coordinación académica revisa el puntaje.\n   - Puntaje >= 60: pasa a entrevista.\n   - Puntaje < 60: queda en lista de espera y recibe un correo.\n5. Bienestar realiza la entrevista y verifica documentos.\n6. Si faltan documentos, el aspirante tiene 3 días hábiles para cargarlos; si no lo hace, se libera el cupo.\n7. Coordinación académica asigna ficha y horario.\n8. La plataforma envía el correo de bienvenida y el aspirante pasa a ser aprendiz.\n\nTiempos promedio: registro 1 día, prueba 2 días, revisión 1 día, entrevista 3 días, asignación 1 día.",
             "instruction": "En Canvas, crea una página web que muestre el proceso como diagrama de flujo con:",
             "task": [
-              "Un diagrama «flowchart LR» con un bloque «subgraph» por actor (Aspirante, Plataforma de inscripción, Bienestar y Coordinación académica); cada subgraph es un carril.",
+              "Un diagrama «flowchart LR» (de izquierda a derecha) con un bloque «subgraph» (carril) por actor: Aspirante, Plataforma de inscripción, Bienestar y Coordinación académica.",
               "Nodos de inicio y fin con forma redondeada y rombos {} para las cuatro decisiones: matrícula activa, puntaje >= 60, documentos completos y carga en 3 días.",
-              "El camino feliz resaltado con un «classDef» y terminado en el nodo «Aprendiz matriculado»; usa el identificador ENT para el nodo de la entrevista.",
+              "El camino feliz (cuando todo sale bien) resaltado con un «classDef» y terminado en el nodo «Aprendiz matriculado»; usa el identificador ENT para el nodo de la entrevista.",
               "Debajo del diagrama, una tabla con la duración de cada etapa y el tiempo total del camino feliz.",
-              "Un botón «Copiar código Mermaid» y un conmutador «Vista vertical» que vuelva a dibujar el diagrama con «flowchart TB»."
+              "Un botón «Copiar código Mermaid» y un botón «Vista vertical» que vuelva a dibujar el diagrama de arriba hacia abajo con «flowchart TB»."
             ],
             "constraints": [
               "Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js con sintaxis válida de flowchart; si no carga, muestra un aviso y el código en un bloque de texto.",
-              "Máximo seis palabras por nodo para que se lea en el proyector.",
+              "Máximo seis palabras por cuadro para que se lea fácil.",
               "No uses descargas de archivos: la vista previa de Canvas puede bloquearlas."
             ],
-            "format": "Un solo archivo HTML ejecutable.",
-            "tone": "Claro y neutral, con etiquetas cortas en los nodos."
+            "format": "Un solo archivo HTML listo para abrir en Vista previa.",
+            "tone": "Claro y neutral, con etiquetas cortas y comprensibles."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -1080,22 +1080,22 @@
             "El conmutador «Vista vertical» redibuja el diagrama de arriba hacia abajo sin desbordarse."
           ],
           "stretch": "Pide: «Agrega indicadores de cuello de botella: colorea en ámbar la etapa más lenta y explica en una nota por qué lo es».",
-          "prompt": "Contexto: Bienestar y coordinación académica tienen versiones distintas del proceso de matrícula. Se necesita un diagrama único para proyectarlo en la reunión de alineación.\n\nRol: Actúa como analista de procesos que documenta con diagramas Mermaid.\n\nDatos:\n\"\"\"\nPROCESO DE MATRÍCULA DE APRENDICES (descripción de práctica)\n\nActores (carriles): Aspirante | Plataforma de inscripción | Bienestar | Coordinación académica\n\n1. El aspirante se registra en la plataforma de inscripción y elige el programa.\n2. La plataforma valida que el documento no tenga otra matrícula activa.\n   - Si ya tiene matrícula activa: se notifica al aspirante y el proceso termina.\n3. El aspirante presenta la prueba de conocimientos.\n4. Coordinación académica revisa el puntaje.\n   - Puntaje >= 60: pasa a entrevista.\n   - Puntaje < 60: queda en lista de espera y recibe un correo.\n5. Bienestar realiza la entrevista y verifica documentos.\n6. Si faltan documentos, el aspirante tiene 3 días hábiles para cargarlos; si no lo hace, se libera el cupo.\n7. Coordinación académica asigna ficha y horario.\n8. La plataforma envía el correo de bienvenida y el aspirante pasa a ser aprendiz.\n\nTiempos promedio: registro 1 día, prueba 2 días, revisión 1 día, entrevista 3 días, asignación 1 día.\n\"\"\"\n\nTarea: En Canvas, crea una página web que muestre el proceso como diagrama de flujo con:\n1. Un diagrama «flowchart LR» con un bloque «subgraph» por actor (Aspirante, Plataforma de inscripción, Bienestar y Coordinación académica); cada subgraph es un carril.\n2. Nodos de inicio y fin con forma redondeada y rombos {} para las cuatro decisiones: matrícula activa, puntaje >= 60, documentos completos y carga en 3 días.\n3. El camino feliz resaltado con un «classDef» y terminado en el nodo «Aprendiz matriculado»; usa el identificador ENT para el nodo de la entrevista.\n4. Debajo del diagrama, una tabla con la duración de cada etapa y el tiempo total del camino feliz.\n5. Un botón «Copiar código Mermaid» y un conmutador «Vista vertical» que vuelva a dibujar el diagrama con «flowchart TB».\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Claro y neutral, con etiquetas cortas en los nodos.\n\nLímites:\n- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js con sintaxis válida de flowchart; si no carga, muestra un aviso y el código en un bloque de texto.\n- Máximo seis palabras por nodo para que se lea en el proyector.\n- No uses descargas de archivos: la vista previa de Canvas puede bloquearlas."
+          "prompt": "Contexto: Bienestar y coordinación académica tienen versiones distintas del proceso de matrícula. Se necesita un diagrama único y claro para proyectarlo en la reunión.\n\nRol: Actúa como analista de procesos que explica con diagramas visuales sencillos.\n\nDatos:\n\"\"\"\nPROCESO DE MATRÍCULA DE APRENDICES (descripción de práctica)\n\nActores (carriles): Aspirante | Plataforma de inscripción | Bienestar | Coordinación académica\n\n1. El aspirante se registra en la plataforma de inscripción y elige el programa.\n2. La plataforma valida que el documento no tenga otra matrícula activa.\n   - Si ya tiene matrícula activa: se notifica al aspirante y el proceso termina.\n3. El aspirante presenta la prueba de conocimientos.\n4. Coordinación académica revisa el puntaje.\n   - Puntaje >= 60: pasa a entrevista.\n   - Puntaje < 60: queda en lista de espera y recibe un correo.\n5. Bienestar realiza la entrevista y verifica documentos.\n6. Si faltan documentos, el aspirante tiene 3 días hábiles para cargarlos; si no lo hace, se libera el cupo.\n7. Coordinación académica asigna ficha y horario.\n8. La plataforma envía el correo de bienvenida y el aspirante pasa a ser aprendiz.\n\nTiempos promedio: registro 1 día, prueba 2 días, revisión 1 día, entrevista 3 días, asignación 1 día.\n\"\"\"\n\nTarea: En Canvas, crea una página web que muestre el proceso como diagrama de flujo con:\n1. Un diagrama «flowchart LR» (de izquierda a derecha) con un bloque «subgraph» (carril) por actor: Aspirante, Plataforma de inscripción, Bienestar y Coordinación académica.\n2. Nodos de inicio y fin con forma redondeada y rombos {} para las cuatro decisiones: matrícula activa, puntaje >= 60, documentos completos y carga en 3 días.\n3. El camino feliz (cuando todo sale bien) resaltado con un «classDef» y terminado en el nodo «Aprendiz matriculado»; usa el identificador ENT para el nodo de la entrevista.\n4. Debajo del diagrama, una tabla con la duración de cada etapa y el tiempo total del camino feliz.\n5. Un botón «Copiar código Mermaid» y un botón «Vista vertical» que vuelva a dibujar el diagrama de arriba hacia abajo con «flowchart TB».\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Claro y neutral, con etiquetas cortas y comprensibles.\n\nLímites:\n- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js con sintaxis válida de flowchart; si no carga, muestra un aviso y el código en un bloque de texto.\n- Máximo seis palabras por cuadro para que se lea fácil.\n- No uses descargas de archivos: la vista previa de Canvas puede bloquearlas."
         },
         {
           "id": "flow-b-secuencia-jwt-gantt",
           "code": "4B",
-          "title": "Diagrama de secuencia JWT y cronograma Gantt en una sola página",
-          "level": "Avanzado",
+          "title": "Cómo viajan los datos al iniciar sesión (JWT) y calendario de tareas (Gantt)",
+          "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Mermaid (sequenceDiagram + gantt) en vista previa",
+          "canvasFeature": "Diagrama de pasos (secuencia) + calendario Gantt en Vista previa",
           "capabilities": [
             "code-preview",
             "inline-edit",
             "share"
           ],
-          "whyCanvas": "Los dos diagramas quedan en una página que se ejecuta en la vista previa; seleccionas solo el bloque gantt para cambiarlo y compartes el resultado con un enlace.",
-          "outsideCanvas": "Todo ocurre dentro de Canvas: pestañas, diagramas y glosario se prueban en «Vista previa», y el código de referencia se pega en el mismo chat de la izquierda. «Compartir» es opcional; si tu cuenta lo restringe, el resultado queda en tu chat de Gemini.",
+          "whyCanvas": "Los dos diagramas quedan en una página interactiva dentro de «Vista previa»; seleccionas solo el cronograma para cambiarlo sin tocar el resto.",
+          "outsideCanvas": "Todo ocurre dentro de Canvas: pestañas, diagramas y glosario se prueban en «Vista previa», y el código de referencia se pega en el mismo chat de la izquierda.",
           "places": [
             "canvas",
             "canvas",
@@ -1106,24 +1106,24 @@
             "canvas",
             "portal"
           ],
-          "goal": "Documentar el flujo de autenticación con tokens y el plan de implementación en dos diagramas conectados que se revisan en la vista previa de Canvas.",
-          "scenario": "El equipo de desarrollo debe explicar en la revisión técnica cómo funciona el login y cuándo estará listo.",
+          "goal": "Entender y dibujar en dos pestañas cómo funciona un inicio de sesión seguro (con pases temporales o tokens) y cómo organizar las fechas de un proyecto en un calendario visual.",
+          "scenario": "Explicar con palabras cómo entra una persona a una app o cuánto dura cada tarea suele ser enredado; un diagrama de pasos y un calendario visual lo aclaran al instante (sirve también para eventos o viajes).",
           "promptParts": {
-            "role": "arquitecto de software que documenta flujos de autenticación",
-            "context": "El equipo explicará en la revisión técnica cómo funciona el inicio de sesión y cuándo estará listo.",
+            "role": "diseñador de diagramas claros para explicar tecnología a no programadores",
+            "context": "El equipo explicará cómo funciona el inicio de sesión seguro (como una manilla temporal de entrada: access token de 15 min y refresh token de 7 días) y el calendario del proyecto.",
             "data": "INICIO DE SESIÓN CON JWT Y PLAN DEL PROYECTO (datos de práctica)\n\nParticipantes: Usuario, App web, API de autenticación, Base de datos, API de citas\n\nFlujo:\n1. Usuario escribe correo y contraseña en la App web.\n2. App web envía POST /auth/login a la API de autenticación.\n3. API consulta el usuario en la Base de datos y compara el hash de la contraseña.\n4. Si es inválido: responde 401 y la App muestra \"Credenciales incorrectas\".\n5. Si es válido: firma un access token (15 min) y un refresh token (7 días) y responde 200.\n6. App web llama GET /citas a la API de citas con el header Authorization: Bearer <token>.\n7. API de citas valida la firma y la expiración; responde 200 con las citas.\n8. Si el access token expiró: responde 401, la App llama POST /auth/refresh y repite la petición.\n\nPlan del proyecto (año 2026; duraciones en días calendario):\nTarea,Inicio,Duración\nDiseño del flujo,2026-11-16,5 días\nEndpoint de login,2026-11-23,4 días\nMiddleware de validación,2026-11-27,3 días\nRefresh token,2026-12-02,3 días\nPruebas de seguridad,2026-12-07,4 días\nDespliegue (hito),2026-12-11,0 días",
             "instruction": "En Canvas, crea una página web con dos diagramas Mermaid en pestañas:",
             "task": [
-              "Secuencia: un «sequenceDiagram» con los cinco participantes en el orden de los datos, bloques «alt/else» para los dos caminos de error (credenciales inválidas y token vencido) y una «Note» con la vigencia de cada token.",
-              "Cronograma: un «gantt» con «dateFormat YYYY-MM-DD», las seis tareas con sus fechas y el despliegue marcado como «milestone»."
+              "Secuencia: un «sequenceDiagram» con los cinco participantes en el orden de los datos, bloques «alt/else» (caminos alternos) para los dos errores (clave incorrecta y pase vencido) y una «Note» con la duración de cada pase.",
+              "Cronograma: un «gantt» con «dateFormat YYYY-MM-DD», las seis tareas con sus fechas y el lanzamiento final marcado como «milestone» (hito)."
             ],
             "constraints": [
               "Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js; si no carga, muestra un aviso y el código en un bloque de texto.",
               "Los códigos HTTP y las fechas deben coincidir con los datos.",
               "Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse."
             ],
-            "format": "Un solo archivo HTML ejecutable.",
-            "tone": "Técnico y preciso, con términos estándar de autenticación."
+            "format": "Un solo archivo HTML listo para abrir en Vista previa.",
+            "tone": "Claro y didáctico, explicando los términos de seguridad en lenguaje sencillo."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -1144,23 +1144,23 @@
             "El glosario explica los cinco términos en una frase cada uno."
           ],
           "stretch": "Pide: «Agrega un diagrama de estados del token: emitido, vigente, expirado, renovado y revocado».",
-          "prompt": "Contexto: El equipo explicará en la revisión técnica cómo funciona el inicio de sesión y cuándo estará listo.\n\nRol: Actúa como arquitecto de software que documenta flujos de autenticación.\n\nDatos:\n\"\"\"\nINICIO DE SESIÓN CON JWT Y PLAN DEL PROYECTO (datos de práctica)\n\nParticipantes: Usuario, App web, API de autenticación, Base de datos, API de citas\n\nFlujo:\n1. Usuario escribe correo y contraseña en la App web.\n2. App web envía POST /auth/login a la API de autenticación.\n3. API consulta el usuario en la Base de datos y compara el hash de la contraseña.\n4. Si es inválido: responde 401 y la App muestra \"Credenciales incorrectas\".\n5. Si es válido: firma un access token (15 min) y un refresh token (7 días) y responde 200.\n6. App web llama GET /citas a la API de citas con el header Authorization: Bearer <token>.\n7. API de citas valida la firma y la expiración; responde 200 con las citas.\n8. Si el access token expiró: responde 401, la App llama POST /auth/refresh y repite la petición.\n\nPlan del proyecto (año 2026; duraciones en días calendario):\nTarea,Inicio,Duración\nDiseño del flujo,2026-11-16,5 días\nEndpoint de login,2026-11-23,4 días\nMiddleware de validación,2026-11-27,3 días\nRefresh token,2026-12-02,3 días\nPruebas de seguridad,2026-12-07,4 días\nDespliegue (hito),2026-12-11,0 días\n\"\"\"\n\nTarea: En Canvas, crea una página web con dos diagramas Mermaid en pestañas:\n1. Secuencia: un «sequenceDiagram» con los cinco participantes en el orden de los datos, bloques «alt/else» para los dos caminos de error (credenciales inválidas y token vencido) y una «Note» con la vigencia de cada token.\n2. Cronograma: un «gantt» con «dateFormat YYYY-MM-DD», las seis tareas con sus fechas y el despliegue marcado como «milestone».\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Técnico y preciso, con términos estándar de autenticación.\n\nLímites:\n- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js; si no carga, muestra un aviso y el código en un bloque de texto.\n- Los códigos HTTP y las fechas deben coincidir con los datos.\n- Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse."
+          "prompt": "Contexto: El equipo explicará cómo funciona el inicio de sesión seguro (como una manilla temporal de entrada: access token de 15 min y refresh token de 7 días) y el calendario del proyecto.\n\nRol: Actúa como diseñador de diagramas claros para explicar tecnología a no programadores.\n\nDatos:\n\"\"\"\nINICIO DE SESIÓN CON JWT Y PLAN DEL PROYECTO (datos de práctica)\n\nParticipantes: Usuario, App web, API de autenticación, Base de datos, API de citas\n\nFlujo:\n1. Usuario escribe correo y contraseña en la App web.\n2. App web envía POST /auth/login a la API de autenticación.\n3. API consulta el usuario en la Base de datos y compara el hash de la contraseña.\n4. Si es inválido: responde 401 y la App muestra \"Credenciales incorrectas\".\n5. Si es válido: firma un access token (15 min) y un refresh token (7 días) y responde 200.\n6. App web llama GET /citas a la API de citas con el header Authorization: Bearer <token>.\n7. API de citas valida la firma y la expiración; responde 200 con las citas.\n8. Si el access token expiró: responde 401, la App llama POST /auth/refresh y repite la petición.\n\nPlan del proyecto (año 2026; duraciones en días calendario):\nTarea,Inicio,Duración\nDiseño del flujo,2026-11-16,5 días\nEndpoint de login,2026-11-23,4 días\nMiddleware de validación,2026-11-27,3 días\nRefresh token,2026-12-02,3 días\nPruebas de seguridad,2026-12-07,4 días\nDespliegue (hito),2026-12-11,0 días\n\"\"\"\n\nTarea: En Canvas, crea una página web con dos diagramas Mermaid en pestañas:\n1. Secuencia: un «sequenceDiagram» con los cinco participantes en el orden de los datos, bloques «alt/else» (caminos alternos) para los dos errores (clave incorrecta y pase vencido) y una «Note» con la duración de cada pase.\n2. Cronograma: un «gantt» con «dateFormat YYYY-MM-DD», las seis tareas con sus fechas y el lanzamiento final marcado como «milestone» (hito).\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Claro y didáctico, explicando los términos de seguridad en lenguaje sencillo.\n\nLímites:\n- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js; si no carga, muestra un aviso y el código en un bloque de texto.\n- Los códigos HTTP y las fechas deben coincidir con los datos.\n- Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse."
         },
         {
           "id": "flow-c-estados-mantenimiento",
           "code": "4C",
-          "title": "Máquina de estados de mantenimiento y depuración en consola",
+          "title": "Mapa de etapas de un arreglo (máquina de estados) y prueba interactiva",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Vista previa + Consola y corrección de errores + Versiones + Edición por selección",
+          "canvasFeature": "Vista previa + Consola y corrección + Versiones + Edición por selección",
           "capabilities": [
             "code-preview",
             "console-fix",
             "versions",
             "inline-edit"
           ],
-          "whyCanvas": "En un Canvas de código puedes renderizar una máquina de estados Mermaid, inspeccionar la consola si una transición falla, corregirla por selección y comparar con «Versión anterior».",
-          "outsideCanvas": "Todo el ciclo de diagramación, prueba interactiva, depuración en consola y control de versiones ocurre dentro de Gemini Canvas.",
+          "whyCanvas": "En Canvas puedes dibujar un mapa de etapas (máquina de estados), probar qué pasa si falla algo en la consola, corregirlo seleccionando una línea y comparar con «Versión anterior».",
+          "outsideCanvas": "Todo el diseño del mapa de etapas, la prueba interactiva con botones y la comparación de versiones ocurren dentro de Gemini Canvas.",
           "places": [
             "canvas",
             "canvas",
@@ -1169,24 +1169,24 @@
             "canvas",
             "portal"
           ],
-          "goal": "Modelar el ciclo de vida de una orden de mantenimiento con stateDiagram-v2, simular el estado activo en la página y verificar la recuperación ante errores de sintaxis.",
-          "scenario": "El área de infraestructura necesita documentar los 6 estados oficiales de una orden de mantenimiento y probar qué ocurre cuando una revisión técnica devuelve la orden a reparación.",
+          "goal": "Dibujar las 6 etapas por las que pasa una orden de mantenimiento (como seguir un paquete o una reparación en casa) y simular cada paso con botones.",
+          "scenario": "Cualquier servicio (un arreglo en casa, un pedido o un soporte técnico) pasa por etapas claras. Dibujarlo y simularlo evita que un caso se quede atascado sin saber quién sigue.",
           "promptParts": {
-            "role": "arquitecto de procesos y sistemas de soporte",
-            "context": "El equipo de mantenimiento requiere una página interactiva con el diagrama de estados oficial y un simulador de transiciones para capacitar a los técnicos nuevos.",
+            "role": "diseñador de procesos claros para equipos no técnicos",
+            "context": "El equipo necesita una página interactiva con el mapa oficial de las 6 etapas de un arreglo y un simulador con botones para entrenar a personas nuevas.",
             "data": "CICLO DE ESTADOS — ÓRDENES DE MANTENIMIENTO DE AMBIENTES (datos de práctica)\n\nEstados válidos:\n- Radicada (estado inicial después de [*])\n- EnDiagnostico\n- EsperandoRepuesto\n- EnReparacion\n- Verificada\n- Cerrada (estado final hacia [*])\n\nTransiciones permitidas:\n1. [*] → Radicada: instructor registra daño\n2. Radicada → EnDiagnostico: técnico asignado en menos de 4 h\n3. EnDiagnostico → EsperandoRepuesto: requiere pieza nueva\n4. EnDiagnostico → EnReparacion: ajuste directo en sitio\n5. EsperandoRepuesto → EnReparacion: almacén entrega repuesto\n6. EnReparacion → Verificada: prueba funcional aprobada\n7. Verificada → EnReparacion: falla persiste en revisión\n8. Verificada → Cerrada: acta firmada por instructor\n9. Cerrada → [*]",
             "instruction": "En Canvas, crea una página HTML ejecutable que incluya:",
             "task": [
-              "El diagrama Mermaid con sintaxis stateDiagram-v2 que represente los 6 estados y las 9 transiciones de los datos.",
-              "Un panel interactivo con botones para avanzar por las transiciones desde Radicada hasta Cerrada, incluyendo el bucle de retorno de Verificada a EnReparacion.",
-              "Un contador de pasos transcurridos y el historial de estados visitados en la sesión."
+              "El diagrama Mermaid con sintaxis stateDiagram-v2 que represente las 6 etapas (estados) y los 9 saltos (transiciones) de los datos.",
+              "Un panel interactivo con botones para avanzar desde Radicada hasta Cerrada, incluyendo el regreso de Verificada a EnReparacion si algo sigue fallando.",
+              "Un contador de pasos transcurridos y el historial de etapas visitadas en la sesión."
             ],
             "constraints": [
-              "Usa exactamente los nombres de estado y las 9 transiciones de los datos.",
+              "Usa exactamente los nombres de etapa y los 9 saltos de los datos.",
               "Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión."
             ],
-            "format": "Un solo archivo HTML con CSS y JavaScript nativo.",
-            "tone": "Técnico, estructurado y didáctico."
+            "format": "Un solo archivo HTML listo para abrir en Vista previa.",
+            "tone": "Claro, estructurado y fácil de entender sin saber programar."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera la página con el diagrama de estados.",
@@ -1204,7 +1204,7 @@
             "«Versión anterior» permite comparar el diagrama antes y después de agregar la nota de SLA."
           ],
           "stretch": "Pide: «Agrega un botón que exporte el registro de transiciones probadas como una tabla Markdown lista para pegar en el informe».",
-          "prompt": "Contexto: El equipo de mantenimiento requiere una página interactiva con el diagrama de estados oficial y un simulador de transiciones para capacitar a los técnicos nuevos.\n\nRol: Actúa como arquitecto de procesos y sistemas de soporte.\n\nDatos:\n\"\"\"\nCICLO DE ESTADOS — ÓRDENES DE MANTENIMIENTO DE AMBIENTES (datos de práctica)\n\nEstados válidos:\n- Radicada (estado inicial después de [*])\n- EnDiagnostico\n- EsperandoRepuesto\n- EnReparacion\n- Verificada\n- Cerrada (estado final hacia [*])\n\nTransiciones permitidas:\n1. [*] → Radicada: instructor registra daño\n2. Radicada → EnDiagnostico: técnico asignado en menos de 4 h\n3. EnDiagnostico → EsperandoRepuesto: requiere pieza nueva\n4. EnDiagnostico → EnReparacion: ajuste directo en sitio\n5. EsperandoRepuesto → EnReparacion: almacén entrega repuesto\n6. EnReparacion → Verificada: prueba funcional aprobada\n7. Verificada → EnReparacion: falla persiste en revisión\n8. Verificada → Cerrada: acta firmada por instructor\n9. Cerrada → [*]\n\"\"\"\n\nTarea: En Canvas, crea una página HTML ejecutable que incluya:\n1. El diagrama Mermaid con sintaxis stateDiagram-v2 que represente los 6 estados y las 9 transiciones de los datos.\n2. Un panel interactivo con botones para avanzar por las transiciones desde Radicada hasta Cerrada, incluyendo el bucle de retorno de Verificada a EnReparacion.\n3. Un contador de pasos transcurridos y el historial de estados visitados en la sesión.\nEntrega: Un solo archivo HTML con CSS y JavaScript nativo.\n\nTono: Técnico, estructurado y didáctico.\n\nLímites:\n- Usa exactamente los nombres de estado y las 9 transiciones de los datos.\n- Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión."
+          "prompt": "Contexto: El equipo necesita una página interactiva con el mapa oficial de las 6 etapas de un arreglo y un simulador con botones para entrenar a personas nuevas.\n\nRol: Actúa como diseñador de procesos claros para equipos no técnicos.\n\nDatos:\n\"\"\"\nCICLO DE ESTADOS — ÓRDENES DE MANTENIMIENTO DE AMBIENTES (datos de práctica)\n\nEstados válidos:\n- Radicada (estado inicial después de [*])\n- EnDiagnostico\n- EsperandoRepuesto\n- EnReparacion\n- Verificada\n- Cerrada (estado final hacia [*])\n\nTransiciones permitidas:\n1. [*] → Radicada: instructor registra daño\n2. Radicada → EnDiagnostico: técnico asignado en menos de 4 h\n3. EnDiagnostico → EsperandoRepuesto: requiere pieza nueva\n4. EnDiagnostico → EnReparacion: ajuste directo en sitio\n5. EsperandoRepuesto → EnReparacion: almacén entrega repuesto\n6. EnReparacion → Verificada: prueba funcional aprobada\n7. Verificada → EnReparacion: falla persiste en revisión\n8. Verificada → Cerrada: acta firmada por instructor\n9. Cerrada → [*]\n\"\"\"\n\nTarea: En Canvas, crea una página HTML ejecutable que incluya:\n1. El diagrama Mermaid con sintaxis stateDiagram-v2 que represente las 6 etapas (estados) y los 9 saltos (transiciones) de los datos.\n2. Un panel interactivo con botones para avanzar desde Radicada hasta Cerrada, incluyendo el regreso de Verificada a EnReparacion si algo sigue fallando.\n3. Un contador de pasos transcurridos y el historial de etapas visitadas en la sesión.\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Claro, estructurado y fácil de entender sin saber programar.\n\nLímites:\n- Usa exactamente los nombres de etapa y los 9 saltos de los datos.\n- Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión."
         }
       ],
       "expected": [
@@ -1376,10 +1376,10 @@
         {
           "id": "ui-a-landing-biblioturnos",
           "code": "5A",
-          "title": "Landing de reservas con modo oscuro y ocupación en vivo",
+          "title": "Página de reservas con modo oscuro y horarios en vivo",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Vista previa responsiva + Seleccionar y preguntar",
+          "canvasFeature": "Vista previa adaptable a celular + Seleccionar y preguntar",
           "capabilities": [
             "code-preview",
             "inline-edit",
@@ -1396,24 +1396,24 @@
             "canvas",
             "portal"
           ],
-          "goal": "Diseñar y construir una página de aterrizaje completa, accesible y con modo oscuro, que muestre la ocupación por franja con un gráfico.",
-          "scenario": "La biblioteca quiere lanzar las reservas en línea la próxima semana y necesita una página atractiva y clara para los aprendices.",
+          "goal": "Construir una página de reservas clara, cómoda de leer (con buen contraste y modo oscuro) y fácil de usar desde el celular, igual que para pedir citas o turnos en un negocio.",
+          "scenario": "La biblioteca quiere lanzar sus reservas en línea (algo similar a reservar una cita médica, una cancha o un turno de peluquería) y necesita que funcione bien en celular.",
           "promptParts": {
-            "role": "diseñador UI/UX que también desarrolla frontend",
-            "context": "La biblioteca lanzará la próxima semana las reservas en línea de cubículos. La página debe invitar a reservar y ser fácil de usar desde el celular.",
+            "role": "diseñador web enfocado en páginas claras y fáciles de leer",
+            "context": "La biblioteca lanzará la próxima semana las reservas en línea de cubículos. La página debe invitar a reservar y leerse sin forzar la vista desde el celular.",
             "data": "LANDING \"BIBLIOTURNOS\" — RESERVA DE CUBÍCULOS DE ESTUDIO (contenido de práctica)\n\nMarca: BiblioTurnos · Biblioteca del Centro de Formación\nLema: \"Tu espacio de estudio, reservado en un minuto\"\nColores: verde salvia #2d5a4c, arena #f5efe6, azul acento #2563eb\nTipografía: sistema (sans-serif)\n\nSecciones:\n1. Encabezado con logo textual y enlaces: Cómo funciona, Horarios, Preguntas.\n2. Héroe con lema, botón \"Reservar ahora\" y contador de cubículos libres hoy.\n3. Tres pasos: Elige franja, Confirma con tu documento, Llega 10 minutos antes.\n4. Ocupación de hoy por franja (cupos de 20 por franja):\n   08:00-10:00: 12 ocupados\n   10:00-12:00: 17 ocupados\n   14:00-16:00: 8 ocupados\n   16:00-18:00: 19 ocupados\n5. Formulario: documento (solo números, 6 a 10 dígitos), franja (lista), aceptar normas.\n6. Preguntas frecuentes (3) en acordeón:\n   - ¿Cuánto dura la reserva? 2 horas.\n   - ¿Puedo cancelar? Sí, hasta 30 minutos antes.\n   - ¿Qué pasa si no llego? La reserva se libera a los 15 minutos.\n7. Pie con horario: lunes a viernes 8:00-18:00.",
-            "instruction": "En Canvas, construye la landing con el contenido de los datos, incluyendo:",
+            "instruction": "En Canvas, construye la página con el contenido de los datos, incluyendo:",
             "task": [
               "Un gráfico de ocupación por franja: verde por debajo de 75 %, ámbar entre 75 % y 89 % y rojo desde 90 %.",
               "Un contador de cubículos libres calculado con esos datos.",
-              "Un formulario con validación en vivo y mensajes que expliquen cómo corregir.",
-              "Un interruptor de modo oscuro."
+              "Un formulario que valide en vivo y muestre mensajes claros si falta algún dato.",
+              "Un botón de modo oscuro."
             ],
             "constraints": [
-              "Contraste WCAG AA, foco visible y uso completo con teclado.",
-              "Responsiva desde 360 px y sin librerías externas."
+              "Buen contraste de lectura (WCAG AA), foco visible y uso completo con teclado.",
+              "Adaptable a celular desde 360 px y sin librerías externas."
             ],
-            "format": "Un solo archivo HTML con colores definidos en variables CSS.",
+            "format": "Un solo archivo HTML con colores organizados en variables CSS.",
             "tone": "Cercano y claro en los textos de la interfaz."
           },
           "steps": [
@@ -1434,7 +1434,7 @@
             "El acordeón abre y cierra con teclado."
           ],
           "stretch": "Pide: «Agrega una vista de calendario semanal con la ocupación de cada día como mapa de calor».",
-          "prompt": "Contexto: La biblioteca lanzará la próxima semana las reservas en línea de cubículos. La página debe invitar a reservar y ser fácil de usar desde el celular.\n\nRol: Actúa como diseñador UI/UX que también desarrolla frontend.\n\nDatos:\n\"\"\"\nLANDING \"BIBLIOTURNOS\" — RESERVA DE CUBÍCULOS DE ESTUDIO (contenido de práctica)\n\nMarca: BiblioTurnos · Biblioteca del Centro de Formación\nLema: \"Tu espacio de estudio, reservado en un minuto\"\nColores: verde salvia #2d5a4c, arena #f5efe6, azul acento #2563eb\nTipografía: sistema (sans-serif)\n\nSecciones:\n1. Encabezado con logo textual y enlaces: Cómo funciona, Horarios, Preguntas.\n2. Héroe con lema, botón \"Reservar ahora\" y contador de cubículos libres hoy.\n3. Tres pasos: Elige franja, Confirma con tu documento, Llega 10 minutos antes.\n4. Ocupación de hoy por franja (cupos de 20 por franja):\n   08:00-10:00: 12 ocupados\n   10:00-12:00: 17 ocupados\n   14:00-16:00: 8 ocupados\n   16:00-18:00: 19 ocupados\n5. Formulario: documento (solo números, 6 a 10 dígitos), franja (lista), aceptar normas.\n6. Preguntas frecuentes (3) en acordeón:\n   - ¿Cuánto dura la reserva? 2 horas.\n   - ¿Puedo cancelar? Sí, hasta 30 minutos antes.\n   - ¿Qué pasa si no llego? La reserva se libera a los 15 minutos.\n7. Pie con horario: lunes a viernes 8:00-18:00.\n\"\"\"\n\nTarea: En Canvas, construye la landing con el contenido de los datos, incluyendo:\n1. Un gráfico de ocupación por franja: verde por debajo de 75 %, ámbar entre 75 % y 89 % y rojo desde 90 %.\n2. Un contador de cubículos libres calculado con esos datos.\n3. Un formulario con validación en vivo y mensajes que expliquen cómo corregir.\n4. Un interruptor de modo oscuro.\nEntrega: Un solo archivo HTML con colores definidos en variables CSS.\n\nTono: Cercano y claro en los textos de la interfaz.\n\nLímites:\n- Contraste WCAG AA, foco visible y uso completo con teclado.\n- Responsiva desde 360 px y sin librerías externas."
+          "prompt": "Contexto: La biblioteca lanzará la próxima semana las reservas en línea de cubículos. La página debe invitar a reservar y leerse sin forzar la vista desde el celular.\n\nRol: Actúa como diseñador web enfocado en páginas claras y fáciles de leer.\n\nDatos:\n\"\"\"\nLANDING \"BIBLIOTURNOS\" — RESERVA DE CUBÍCULOS DE ESTUDIO (contenido de práctica)\n\nMarca: BiblioTurnos · Biblioteca del Centro de Formación\nLema: \"Tu espacio de estudio, reservado en un minuto\"\nColores: verde salvia #2d5a4c, arena #f5efe6, azul acento #2563eb\nTipografía: sistema (sans-serif)\n\nSecciones:\n1. Encabezado con logo textual y enlaces: Cómo funciona, Horarios, Preguntas.\n2. Héroe con lema, botón \"Reservar ahora\" y contador de cubículos libres hoy.\n3. Tres pasos: Elige franja, Confirma con tu documento, Llega 10 minutos antes.\n4. Ocupación de hoy por franja (cupos de 20 por franja):\n   08:00-10:00: 12 ocupados\n   10:00-12:00: 17 ocupados\n   14:00-16:00: 8 ocupados\n   16:00-18:00: 19 ocupados\n5. Formulario: documento (solo números, 6 a 10 dígitos), franja (lista), aceptar normas.\n6. Preguntas frecuentes (3) en acordeón:\n   - ¿Cuánto dura la reserva? 2 horas.\n   - ¿Puedo cancelar? Sí, hasta 30 minutos antes.\n   - ¿Qué pasa si no llego? La reserva se libera a los 15 minutos.\n7. Pie con horario: lunes a viernes 8:00-18:00.\n\"\"\"\n\nTarea: En Canvas, construye la página con el contenido de los datos, incluyendo:\n1. Un gráfico de ocupación por franja: verde por debajo de 75 %, ámbar entre 75 % y 89 % y rojo desde 90 %.\n2. Un contador de cubículos libres calculado con esos datos.\n3. Un formulario que valide en vivo y muestre mensajes claros si falta algún dato.\n4. Un botón de modo oscuro.\nEntrega: Un solo archivo HTML con colores organizados en variables CSS.\n\nTono: Cercano y claro en los textos de la interfaz.\n\nLímites:\n- Buen contraste de lectura (WCAG AA), foco visible y uso completo con teclado.\n- Adaptable a celular desde 360 px y sin librerías externas."
         },
         {
           "id": "ui-b-app-reporta-ya",
@@ -1752,16 +1752,16 @@
         {
           "id": "inline-b-depurar-funcion",
           "code": "6B",
-          "title": "Depurar una app seleccionando solo la función con error",
+          "title": "Corregir errores paso a paso (depurar) seleccionando solo la parte dañada",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Canvas de código + selección de función + Vista previa",
+          "canvasFeature": "Canvas de código + selección por bloque + Vista previa",
           "capabilities": [
             "code-preview",
             "inline-edit"
           ],
-          "whyCanvas": "Seleccionas solo la función con error y la vista previa confirma la corrección: es una depuración precisa que el chat no permite.",
-          "outsideCanvas": "Todos los pasos ocurren dentro de Canvas: seleccionas cada función en la pestaña «Código» y verificas el cálculo en «Vista previa».",
+          "whyCanvas": "Seleccionas solo el bloque que tiene el fallo (sin tocar el resto que ya funciona) y compruebas de inmediato en la «Vista previa» si ya da el resultado correcto.",
+          "outsideCanvas": "Todos los pasos ocurren dentro de Canvas: seleccionas cada bloque en «Código» y verificas la cuenta en «Vista previa».",
           "places": [
             "canvas",
             "canvas",
@@ -1772,21 +1772,21 @@
             "canvas",
             "portal"
           ],
-          "goal": "Corregir tres errores de una calculadora de promedios seleccionando cada función por separado y comprobando el resultado en la vista previa.",
-          "scenario": "Un aprendiz entregó una calculadora que muestra «NaN». Debes corregirla sin reescribir toda la aplicación.",
+          "goal": "Arreglar tres fallos de una calculadora de promedios corrigiendo un bloque a la vez (sin dañar el resto), una técnica útil para reparar cualquier plantilla o fórmula.",
+          "scenario": "Una calculadora muestra «NaN» (que significa «esto no es un número»). En vez de borrarla y empezar de cero, vas a reparar solo las líneas dañadas.",
           "promptParts": {
-            "role": "instructor de programación que enseña a depurar",
-            "context": "Un aprendiz entregó una calculadora de promedios que muestra «NaN». Quiero practicar la corrección función por función usando la selección de Canvas.",
+            "role": "profesor que enseña a corregir errores",
+            "context": "Una calculadora de promedios muestra «NaN» en vez del resultado. Quiero practicar cómo arreglarla bloque por bloque usando la selección de Canvas.",
             "data": "<!DOCTYPE html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><title>Calculadora de promedio</title></head>\n<body>\n  <h1>Calculadora de promedio</h1>\n  <label for=\"notas\">Notas separadas por coma</label>\n  <input id=\"notas\" value=\"3.8,4.5,4.0\">\n  <button id=\"calcular\">Calcular</button>\n  <p id=\"resultado\"></p>\n  <script>\n    function leerNotas(texto) {\n      return texto.split(\",\");\n    }\n\n    function calcularPromedio(notas) {\n      let suma = 0;\n      for (let i = 0; i <= notas.length; i++) {\n        suma += notas[i];\n      }\n      return suma / notas.length;\n    }\n\n    function estado(promedio) {\n      if (promedio > 3.5) return \"Aprobado\";\n      return \"Plan de mejoramiento\";\n    }\n\n    document.getElementById(\"calcular\").addEventListener(\"click\", function () {\n      const notas = leerNotas(document.getElementById(\"notas\").value);\n      const promedio = calcularPromedio(notas);\n      document.getElementById(\"resultado\").textContent =\n        \"Promedio: \" + promedio + \" - \" + estado(promedio);\n    });\n  </script>\n</body>\n</html>\n\nCasos de prueba esperados:\n\"3.8,4.5,4.0\" -> Promedio 4.1 - Aprobado\n\"3.5,3.5\"     -> Promedio 3.5 - Aprobado\n\"2.0,3.0,4.0\" -> Promedio 3.0 - Plan de mejoramiento",
             "instruction": "Copia el código en Canvas sin cambiar ninguna línea. Luego, en el chat:",
             "task": [
-              "Describe en tres viñetas los síntomas que veré en la vista previa, sin revelar la solución."
+              "Describe en tres viñetas sencillas qué síntomas veré en la Vista previa, sin revelar todavía la solución."
             ],
             "constraints": [
               "No modifiques el código en este paso."
             ],
-            "format": "Código HTML ejecutable en Canvas y viñetas en el chat.",
-            "tone": "Didáctico: explica cada error sin dar la solución por adelantado."
+            "format": "Código HTML listo en Canvas y viñetas claras en el chat.",
+            "tone": "Didáctico: explica cada fallo en lenguaje sencillo sin adelantar la respuesta."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -1807,7 +1807,7 @@
             "La «Vista previa» muestra el promedio y el estado sin errores en la consola."
           ],
           "stretch": "Pide: «Agrega validación para notas fuera de 1.0 a 5.0 y muestra un mensaje que diga cuál nota es inválida».",
-          "prompt": "Contexto: Un aprendiz entregó una calculadora de promedios que muestra «NaN». Quiero practicar la corrección función por función usando la selección de Canvas.\n\nRol: Actúa como instructor de programación que enseña a depurar.\n\nDatos:\n\"\"\"\n<!DOCTYPE html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><title>Calculadora de promedio</title></head>\n<body>\n  <h1>Calculadora de promedio</h1>\n  <label for=\"notas\">Notas separadas por coma</label>\n  <input id=\"notas\" value=\"3.8,4.5,4.0\">\n  <button id=\"calcular\">Calcular</button>\n  <p id=\"resultado\"></p>\n  <script>\n    function leerNotas(texto) {\n      return texto.split(\",\");\n    }\n\n    function calcularPromedio(notas) {\n      let suma = 0;\n      for (let i = 0; i <= notas.length; i++) {\n        suma += notas[i];\n      }\n      return suma / notas.length;\n    }\n\n    function estado(promedio) {\n      if (promedio > 3.5) return \"Aprobado\";\n      return \"Plan de mejoramiento\";\n    }\n\n    document.getElementById(\"calcular\").addEventListener(\"click\", function () {\n      const notas = leerNotas(document.getElementById(\"notas\").value);\n      const promedio = calcularPromedio(notas);\n      document.getElementById(\"resultado\").textContent =\n        \"Promedio: \" + promedio + \" - \" + estado(promedio);\n    });\n  </script>\n</body>\n</html>\n\nCasos de prueba esperados:\n\"3.8,4.5,4.0\" -> Promedio 4.1 - Aprobado\n\"3.5,3.5\"     -> Promedio 3.5 - Aprobado\n\"2.0,3.0,4.0\" -> Promedio 3.0 - Plan de mejoramiento\n\"\"\"\n\nTarea: Copia el código en Canvas sin cambiar ninguna línea. Luego, en el chat:\n1. Describe en tres viñetas los síntomas que veré en la vista previa, sin revelar la solución.\nEntrega: Código HTML ejecutable en Canvas y viñetas en el chat.\n\nTono: Didáctico: explica cada error sin dar la solución por adelantado.\n\nLímites:\n- No modifiques el código en este paso."
+          "prompt": "Contexto: Una calculadora de promedios muestra «NaN» en vez del resultado. Quiero practicar cómo arreglarla bloque por bloque usando la selección de Canvas.\n\nRol: Actúa como profesor que enseña a corregir errores.\n\nDatos:\n\"\"\"\n<!DOCTYPE html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><title>Calculadora de promedio</title></head>\n<body>\n  <h1>Calculadora de promedio</h1>\n  <label for=\"notas\">Notas separadas por coma</label>\n  <input id=\"notas\" value=\"3.8,4.5,4.0\">\n  <button id=\"calcular\">Calcular</button>\n  <p id=\"resultado\"></p>\n  <script>\n    function leerNotas(texto) {\n      return texto.split(\",\");\n    }\n\n    function calcularPromedio(notas) {\n      let suma = 0;\n      for (let i = 0; i <= notas.length; i++) {\n        suma += notas[i];\n      }\n      return suma / notas.length;\n    }\n\n    function estado(promedio) {\n      if (promedio > 3.5) return \"Aprobado\";\n      return \"Plan de mejoramiento\";\n    }\n\n    document.getElementById(\"calcular\").addEventListener(\"click\", function () {\n      const notas = leerNotas(document.getElementById(\"notas\").value);\n      const promedio = calcularPromedio(notas);\n      document.getElementById(\"resultado\").textContent =\n        \"Promedio: \" + promedio + \" - \" + estado(promedio);\n    });\n  </script>\n</body>\n</html>\n\nCasos de prueba esperados:\n\"3.8,4.5,4.0\" -> Promedio 4.1 - Aprobado\n\"3.5,3.5\"     -> Promedio 3.5 - Aprobado\n\"2.0,3.0,4.0\" -> Promedio 3.0 - Plan de mejoramiento\n\"\"\"\n\nTarea: Copia el código en Canvas sin cambiar ninguna línea. Luego, en el chat:\n1. Describe en tres viñetas sencillas qué síntomas veré en la Vista previa, sin revelar todavía la solución.\nEntrega: Código HTML listo en Canvas y viñetas claras en el chat.\n\nTono: Didáctico: explica cada fallo en lenguaje sencillo sin adelantar la respuesta.\n\nLímites:\n- No modifiques el código en este paso."
         },
         {
           "id": "inline-c-sugerencias-comunicado",
@@ -1942,10 +1942,10 @@
       "objective": "Depurar cuellos de botella de rendimiento, optimizar la complejidad asintótica de funciones críticas y generar documentación técnica verificable.",
       "canvasControls": [
         "⚡ Solución de referencia",
-        "🧪 Pruebas de referencia"
+        "🧪 Comprobaciones de referencia"
       ],
-      "masterPrompt": "Contexto: La función agrupa las entregas de cada corte (10.000 registros) y se volvió lenta. Se necesita una versión eficiente que devuelva exactamente el mismo resultado.\n\nRol: Actúa como ingeniero de software que revisa el rendimiento de código Python.\n\nDatos:\n\"\"\"\nFunción actual (Python 3.11):\n\ndef agrupar_por_estado(entregas):\n    resumen = {\"al_dia\": [], \"en_progreso\": [], \"apoyo\": []}\n    vistos = []\n    for e in entregas:\n        if e[\"documento\"] in vistos:  # se ignora el documento repetido\n            continue\n        vistos.append(e[\"documento\"])\n        if e[\"puntaje\"] >= 70:\n            resumen[\"al_dia\"].append(e[\"nombre\"])\n        elif e[\"puntaje\"] >= 50:\n            resumen[\"en_progreso\"].append(e[\"nombre\"])\n        else:\n            resumen[\"apoyo\"].append(e[\"nombre\"])\n    return resumen\n\nEntrada de ejemplo:\nentregas = [\n    {\"documento\": \"101\", \"nombre\": \"Ana\", \"puntaje\": 70.0},\n    {\"documento\": \"102\", \"nombre\": \"Luis\", \"puntaje\": 69.9},\n    {\"documento\": \"103\", \"nombre\": \"Marta\", \"puntaje\": 50.0},\n    {\"documento\": \"104\", \"nombre\": \"Jorge\", \"puntaje\": 49.9},\n    {\"documento\": \"101\", \"nombre\": \"Ana\", \"puntaje\": 95.0},\n    {\"documento\": \"105\", \"nombre\": \"Sara\", \"puntaje\": 0.0},\n    {\"documento\": \"106\", \"nombre\": \"Iván\", \"puntaje\": 100.0},\n]\n\"\"\"\n\nTarea: En Canvas, entrega:\n1. Una explicación de dos frases de por qué la función actual es O(n²), señalando la línea responsable.\n2. La función refactorizada en O(n), con el mismo nombre, type hints y docstring en español.\n3. Un archivo de pruebas con pytest que cubra la lista vacía, un documento repetido y los límites 0, 49.9, 50, 69.9 y 70.\n4. Un bloque final que imprima el resultado con la entrada de ejemplo.\nEntrega: La explicación primero y después dos bloques de código: la función y las pruebas.\n\nTono: Didáctico y preciso, con ejemplos numéricos.\n\nLímites:\n- Conserva el comportamiento: si un documento se repite, cuenta su primer registro.\n- Usa solo la biblioteca estándar de Python.",
-      "expectedResultSummary": "La explicación señala la línea «if e[\"documento\"] in vistos»: buscar en una lista recorre sus elementos, y eso ocurre dentro del ciclo. La versión nueva usa un set (conjunto) para vistos y conserva el nombre agrupar_por_estado. Con la entrada de ejemplo imprime {'al_dia': ['Ana', 'Iván'], 'en_progreso': ['Luis', 'Marta'], 'apoyo': ['Jorge', 'Sara']}. Las pruebas cubren la lista vacía, el documento repetido y los 5 límites, y «python -m pytest» termina sin fallos. La función tiene type hints y un docstring en español que menciona la complejidad O(n).",
+      "masterPrompt": "Contexto: Tengo una función que agrupa entregas (como clasificar facturas, pedidos o tareas), pero con 10.000 registros se vuelve muy lenta. Quiero una versión rápida que dé exactamente el mismo resultado y entender por qué mejora.\n\nRol: Actúa como profesor de programación que explica con ejemplos cotidianos a personas que están empezando.\n\nDatos:\n\"\"\"\nFunción actual (Python 3.11):\n\ndef agrupar_por_estado(entregas):\n    resumen = {\"al_dia\": [], \"en_progreso\": [], \"apoyo\": []}\n    vistos = []\n    for e in entregas:\n        if e[\"documento\"] in vistos:  # se ignora el documento repetido\n            continue\n        vistos.append(e[\"documento\"])\n        if e[\"puntaje\"] >= 70:\n            resumen[\"al_dia\"].append(e[\"nombre\"])\n        elif e[\"puntaje\"] >= 50:\n            resumen[\"en_progreso\"].append(e[\"nombre\"])\n        else:\n            resumen[\"apoyo\"].append(e[\"nombre\"])\n    return resumen\n\nEntrada de ejemplo:\nentregas = [\n    {\"documento\": \"101\", \"nombre\": \"Ana\", \"puntaje\": 70.0},\n    {\"documento\": \"102\", \"nombre\": \"Luis\", \"puntaje\": 69.9},\n    {\"documento\": \"103\", \"nombre\": \"Marta\", \"puntaje\": 50.0},\n    {\"documento\": \"104\", \"nombre\": \"Jorge\", \"puntaje\": 49.9},\n    {\"documento\": \"101\", \"nombre\": \"Ana\", \"puntaje\": 95.0},\n    {\"documento\": \"105\", \"nombre\": \"Sara\", \"puntaje\": 0.0},\n    {\"documento\": \"106\", \"nombre\": \"Iván\", \"puntaje\": 100.0},\n]\n\"\"\"\n\nTarea: En Canvas, entrega:\n1. Una explicación sencilla en dos frases (sin jerga difícil) de por qué la función actual es lenta (O(n²)), señalando la línea culpable y comparándola con buscar en una pila desordenada.\n2. La función mejorada en forma rápida de una sola pasada (O(n)), usando una libreta de «ya vistos» (set en Python), con el mismo nombre, etiquetas claras de entrada/salida y comentarios en español.\n3. Una página de Vista previa en Canvas que ejecute automáticamente las comprobaciones (lista vacía, documento repetido y límites 0, 49.9, 50, 69.9 y 70) y muestre ✓ o ✗ sin instalar nada en el computador.\n4. El resultado exacto que imprime con la entrada de ejemplo.\nEntrega: Primero la explicación cotidiana, luego el código Python comentado y al final la vista previa con las comprobaciones en vivo.\n\nTono: Cercano, didáctico y claro, con ejemplos de la vida diaria.\n\nLímites:\n- Conserva el comportamiento: si un documento se repite, cuenta su primer registro.\n- Usa lenguaje cotidiano para alguien que no es programador.",
+      "expectedResultSummary": "La explicación señala la línea «if e[\"documento\"] in vistos» y explica en palabras simples que buscar en una lista recorre todo de nuevo en cada paso. La versión nueva usa un set (conjunto o libreta de «ya vistos») para vistos y conserva el nombre agrupar_por_estado. Con la entrada de ejemplo imprime {'al_dia': ['Ana', 'Iván'], 'en_progreso': ['Luis', 'Marta'], 'apoyo': ['Jorge', 'Sara']}. La Vista previa muestra ✓ en todas las comprobaciones: lista vacía, documento repetido y los 5 límites (0, 49.9, 50, 69.9 y 70), sin pedir terminal ni instalaciones. La función incluye una nota explicativa en español que aclara por qué ahora recorre los datos una sola vez (O(n)).",
       "variationPrompts": [
         "Pídele a Canvas: 'Convierte la función a un generador perezoso (yield) para procesar flujos masivos de 1 millón de registros sin desbordar memoria'.",
         "Selecciona el bucle principal y pide: 'Paraleliza el cálculo usando concurrent.futures con un pool de hilos'."
@@ -1954,16 +1954,16 @@
         {
           "id": "algo-a-duplicados-on",
           "code": "7A",
-          "title": "De O(n²) a O(n): refactorizar y visualizar la diferencia",
+          "title": "Detectar repetidos en 1 segundo: de búsqueda lenta a libreta rápida",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Canvas de código Python + Pyodide en vista previa + página HTML con gráfico",
+          "canvasFeature": "Canvas de código Python + Vista previa en navegador + gráfico comparativo",
           "capabilities": [
             "code-preview",
             "inline-edit"
           ],
-          "whyCanvas": "El Python se edita en Canvas y se ejecuta en la misma vista previa con Pyodide (Python dentro del navegador); la comparación de curvas también corre allí.",
-          "outsideCanvas": "Todo ocurre dentro de Canvas: la vista previa no ejecuta un archivo `.py` por sí sola, así que se pide una página web que cargue Pyodide desde CDN y corra las pruebas. Exportar a Colab queda como alternativa opcional, no como requisito.",
+          "whyCanvas": "El código Python se edita en Canvas y se ejecuta en la misma «Vista previa» usando Pyodide (un traductor que corre Python dentro de tu navegador sin instalar nada); el gráfico comparativo también se abre allí.",
+          "outsideCanvas": "Todo ocurre dentro de Canvas: como la vista previa normal solo muestra páginas web, le pedimos una página con Pyodide para ejecutar el Python ahí mismo, sin instalar programas ni abrir terminales.",
           "places": [
             "canvas",
             "canvas",
@@ -1973,58 +1973,58 @@
             "canvas",
             "portal"
           ],
-          "goal": "Refactorizar una búsqueda de duplicados cuadrática a lineal, explicarla y demostrar la mejora con un gráfico interactivo.",
-          "scenario": "El script que detecta documentos duplicados en la base de aprendices tarda demasiado. Hay que justificar el cambio ante el equipo.",
+          "goal": "Convertir una búsqueda lenta de repetidos (O(n²)) en una búsqueda rápida de una sola pasada (O(n)) usando una libreta de «ya vistos», y ver la diferencia en un gráfico.",
+          "scenario": "En la vida diaria (como revisar 10.000 facturas, pagos o documentos duplicados), releer toda la lista por cada registro tarda demasiado. Vas a mejorarlo y comprobarlo visualmente.",
           "promptParts": {
-            "role": "ingeniero de software que enseña complejidad algorítmica",
-            "context": "Esta función detecta documentos duplicados, pero con la base real de 10.000 registros tarda varios segundos. Necesito una versión eficiente y entender por qué lo es.",
+            "role": "profesor de programación que explica con ejemplos cotidianos",
+            "context": "Esta función busca documentos repetidos, pero con 10.000 registros tarda varios segundos porque vuelve a revisar toda la lista una y otra vez. Necesito una versión rápida y entender por qué funciona, como si usara una libreta de «ya vistos».",
             "data": "def documentos_duplicados(documentos):\n    duplicados = []\n    for i in range(len(documentos)):\n        for j in range(i + 1, len(documentos)):\n            if documentos[i] == documentos[j] and documentos[i] not in duplicados:\n                duplicados.append(documentos[i])\n    return duplicados\n\n\nmuestra = [\"1001\", \"1002\", \"1003\", \"1002\", \"1004\", \"1001\", \"1005\", \"1002\"]\nprint(documentos_duplicados(muestra))  # Salida esperada: ['1001', '1002']",
             "instruction": "En Canvas, entrega:",
             "task": [
-              "Una versión en Python con complejidad O(n) que conserve el orden de primera aparición.",
-              "Tres pruebas con assert: la muestra, una lista vacía y una lista sin duplicados.",
-              "Una explicación breve de por qué la versión original es O(n²) y la nueva O(n)."
+              "Una versión rápida en Python (complejidad O(n), usando un set o libreta de «ya vistos») que conserve el orden de primera aparición.",
+              "Tres comprobaciones automáticas (con assert): la muestra, una lista vacía y una lista sin duplicados.",
+              "Una explicación sencilla de por qué la versión original hace millones de comparaciones (O(n²)) y la nueva solo una pasada (O(n))."
             ],
             "constraints": [
               "Solo biblioteca estándar de Python.",
-              "Explica para un aprendiz de primer trimestre, sin fórmulas innecesarias."
+              "Explica para alguien que no es programador, con analogías cotidianas y sin fórmulas difíciles."
             ],
-            "format": "Código Python con docstring, anotaciones de tipo y comentarios breves.",
-            "tone": "Didáctico y preciso, con ejemplos numéricos."
+            "format": "Código Python con nota explicativa inicial (docstring), etiquetas claras de entrada/salida y comentarios breves en español.",
+            "tone": "Didáctico, cercano y preciso, con ejemplos numéricos."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo para generar el código Python.",
-            "Selecciona el bloque de pruebas en el lienzo Python y escribe: «Agrega una medición de tiempo con 10.000 elementos usando time.perf_counter».",
-            "Pide en el chat de la izquierda: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js, ejecute este código Python con sus pruebas y muestre ✓ o ✗ por prueba y el tiempo medido».",
-            "Abre la «Vista previa» y revisa el resultado; si Pyodide no carga, pide la misma función y pruebas en JavaScript.",
-            "De regreso en Gemini Canvas, pide en el chat: «Crea una página web con un gráfico de operaciones contra n para ambas versiones, con escala logarítmica y un control para elegir n».",
+            "Selecciona el bloque de comprobaciones en el lienzo Python y escribe: «Agrega una medición de tiempo con 10.000 elementos usando time.perf_counter».",
+            "Pide en el chat de la izquierda: «Crea una página web que cargue Pyodide desde https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js para correr este código Python en el navegador, ejecute las comprobaciones y muestre ✓ o ✗ por cada una y el tiempo medido».",
+            "Abre la «Vista previa» y revisa el resultado; si Pyodide no carga por tu red, pide la misma función y comprobaciones en JavaScript.",
+            "De regreso en Gemini Canvas, pide en el chat: «Crea una página web con un gráfico de comparaciones contra n para ambas versiones, con un botón de escala logarítmica (para ver juntas la línea gigante y la pequeña) y un deslizador para elegir n».",
             "Abre la «Vista previa» del nuevo lienzo HTML, mueve el control hasta 10.000 y activa la escala logarítmica.",
             "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
-            "La función refactorizada devuelve ['1001', '1002'] con la muestra.",
+            "La función mejorada devuelve ['1001', '1002'] con la muestra.",
             "La lista vacía y la lista sin duplicados devuelven [].",
             "Para n = 10.000, la versión original hace 49.995.000 comparaciones y la nueva cerca de 10.000.",
-            "El gráfico muestra ambas curvas y la escala logarítmica funciona.",
+            "El gráfico muestra ambas líneas y el botón de escala logarítmica permite distinguirlas.",
             "El control de n actualiza el número de comparaciones al instante.",
-            "La explicación es comprensible sin conocimientos previos de notación O."
+            "La explicación se entiende sin saber programación ni notación O."
           ],
-          "stretch": "Pide: «Agrega una tercera versión con collections.Counter y compárala en la misma tabla».",
-          "prompt": "Contexto: Esta función detecta documentos duplicados, pero con la base real de 10.000 registros tarda varios segundos. Necesito una versión eficiente y entender por qué lo es.\n\nRol: Actúa como ingeniero de software que enseña complejidad algorítmica.\n\nDatos:\n\"\"\"\ndef documentos_duplicados(documentos):\n    duplicados = []\n    for i in range(len(documentos)):\n        for j in range(i + 1, len(documentos)):\n            if documentos[i] == documentos[j] and documentos[i] not in duplicados:\n                duplicados.append(documentos[i])\n    return duplicados\n\n\nmuestra = [\"1001\", \"1002\", \"1003\", \"1002\", \"1004\", \"1001\", \"1005\", \"1002\"]\nprint(documentos_duplicados(muestra))  # Salida esperada: ['1001', '1002']\n\"\"\"\n\nTarea: En Canvas, entrega:\n1. Una versión en Python con complejidad O(n) que conserve el orden de primera aparición.\n2. Tres pruebas con assert: la muestra, una lista vacía y una lista sin duplicados.\n3. Una explicación breve de por qué la versión original es O(n²) y la nueva O(n).\nEntrega: Código Python con docstring, anotaciones de tipo y comentarios breves.\n\nTono: Didáctico y preciso, con ejemplos numéricos.\n\nLímites:\n- Solo biblioteca estándar de Python.\n- Explica para un aprendiz de primer trimestre, sin fórmulas innecesarias."
+          "stretch": "Pide: «Adapta este ejemplo para detectar facturas o gastos repetidos del hogar usando collections.Counter y muéstralo en una tabla».",
+          "prompt": "Contexto: Esta función busca documentos repetidos, pero con 10.000 registros tarda varios segundos porque vuelve a revisar toda la lista una y otra vez. Necesito una versión rápida y entender por qué funciona, como si usara una libreta de «ya vistos».\n\nRol: Actúa como profesor de programación que explica con ejemplos cotidianos.\n\nDatos:\n\"\"\"\ndef documentos_duplicados(documentos):\n    duplicados = []\n    for i in range(len(documentos)):\n        for j in range(i + 1, len(documentos)):\n            if documentos[i] == documentos[j] and documentos[i] not in duplicados:\n                duplicados.append(documentos[i])\n    return duplicados\n\n\nmuestra = [\"1001\", \"1002\", \"1003\", \"1002\", \"1004\", \"1001\", \"1005\", \"1002\"]\nprint(documentos_duplicados(muestra))  # Salida esperada: ['1001', '1002']\n\"\"\"\n\nTarea: En Canvas, entrega:\n1. Una versión rápida en Python (complejidad O(n), usando un set o libreta de «ya vistos») que conserve el orden de primera aparición.\n2. Tres comprobaciones automáticas (con assert): la muestra, una lista vacía y una lista sin duplicados.\n3. Una explicación sencilla de por qué la versión original hace millones de comparaciones (O(n²)) y la nueva solo una pasada (O(n)).\nEntrega: Código Python con nota explicativa inicial (docstring), etiquetas claras de entrada/salida y comentarios breves en español.\n\nTono: Didáctico, cercano y preciso, con ejemplos numéricos.\n\nLímites:\n- Solo biblioteca estándar de Python.\n- Explica para alguien que no es programador, con analogías cotidianas y sin fórmulas difíciles."
         },
         {
           "id": "algo-b-visualizador-ordenamiento",
           "code": "7B",
-          "title": "Visualizador animado: burbuja contra merge sort",
-          "level": "Avanzado",
+          "title": "Carrera visual para ordenar listas: método paso a paso vs. divide y vencerás",
+          "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Canvas de código + animación en vista previa",
+          "canvasFeature": "Canvas de código + animación interactiva en Vista previa",
           "capabilities": [
             "code-preview",
             "inline-edit"
           ],
-          "whyCanvas": "La animación corre en la vista previa: comparas los algoritmos paso a paso y cambias solo la función de burbuja por selección.",
-          "outsideCanvas": "Toda la simulación animada en JavaScript y la edición por selección de la función de ordenamiento ocurren 100 % dentro de Canvas.",
+          "whyCanvas": "La animación corre en la «Vista previa»: ves paso a paso cómo ordena cada método y puedes mejorar el código seleccionando solo una parte.",
+          "outsideCanvas": "Toda la simulación animada y la edición por selección ocurren 100 % dentro de Canvas, sin instalar nada.",
           "places": [
             "canvas",
             "canvas",
@@ -2034,51 +2034,51 @@
             "canvas",
             "portal"
           ],
-          "goal": "Crear un visualizador que ejecuta dos algoritmos de ordenamiento lado a lado, con contadores en vivo, para comprender su eficiencia.",
-          "scenario": "En la clase de algoritmia, los aprendices entienden mejor viendo las comparaciones que leyendo pseudocódigo.",
+          "goal": "Comparar en vivo dos formas de ordenar números (como precios, gastos o puntajes): burbuja (comparar parejas vecinas una a una) y merge sort (partir en mitades y mezclar).",
+          "scenario": "Quien no programa entiende mucho mejor cómo trabaja un computador cuando ve las barras moverse y contar comparaciones, igual que ordenar cartas en una mesa.",
           "promptParts": {
-            "role": "desarrollador de material educativo interactivo para algoritmia",
-            "context": "Los aprendices entienden mejor un algoritmo cuando ven cada comparación. Quiero comparar burbuja y merge sort con el mismo arreglo.",
+            "role": "creador de herramientas visuales para explicar programación a principiantes",
+            "context": "Quiero comparar dos formas de ordenar la misma lista de 16 números (como precios o puntajes): «burbuja» (que compara parejas vecinas una y otra vez) y «merge sort» (que divide la lista en mitades y las mezcla ya ordenadas).",
             "data": "ARREGLO DE PRUEBA (16 valores):\n[38, 27, 43, 3, 9, 82, 10, 55, 21, 64, 17, 49, 70, 5, 33, 91]\n\nResultado ordenado esperado:\n[3, 5, 9, 10, 17, 21, 27, 33, 38, 43, 49, 55, 64, 70, 82, 91]\n\nAlgoritmos a comparar:\n1. Burbuja, sin parada temprana.\n2. Merge sort.\n\nColores sugeridos:\n- Barra normal: gris pizarra\n- Barras comparándose: ámbar\n- Barras ya ordenadas: verde salvia",
             "instruction": "En Canvas, crea un visualizador web que:",
             "task": [
-              "Muestre los dos algoritmos lado a lado, con barras proporcionales a los valores.",
-              "Permita iniciar, pausar, avanzar paso a paso y reiniciar, con control de velocidad.",
-              "Cuente las comparaciones de cada algoritmo en vivo.",
-              "Use los colores sugeridos para el estado de cada barra.",
-              "Al terminar, indique cuántas veces más comparaciones hizo burbuja."
+              "Muestre los dos métodos lado a lado, con barras proporcionales a cada número.",
+              "Tenga botones para iniciar, pausar, avanzar paso a paso y reiniciar, con control de velocidad.",
+              "Cuente en vivo cuántas comparaciones hace cada método.",
+              "Use los colores sugeridos para indicar qué barras se están comparando y cuáles ya quedaron listas.",
+              "Al terminar, indique cuántas veces más trabajo hizo burbuja frente a merge sort."
             ],
             "constraints": [
-              "Implementa los algoritmos como generadores de JavaScript.",
+              "Implementa la pausa animada paso a paso con generadores de JavaScript para que el usuario pueda detener y avanzar cada movimiento.",
               "Anuncia los contadores con aria-live y no uses librerías externas."
             ],
-            "format": "Un solo archivo HTML ejecutable.",
-            "tone": "Didáctico y visual, con rótulos breves."
+            "format": "Un solo archivo HTML listo para abrir en Vista previa.",
+            "tone": "Didáctico, claro y visual, con rótulos breves en español."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
-            "Cuando termine, abre la «Vista previa» del Canvas para usar la aplicación.",
-            "Presiona «Iniciar» con velocidad media y espera a que ambos terminen.",
-            "Reinicia y usa «Paso a paso» en merge sort; observa qué subarreglos mezcla en cada paso.",
-            "En el código, selecciona la función de burbuja y escribe: «Agrega parada temprana y muestra cuántas comparaciones ahorra».",
-            "Pide en el chat de la izquierda: «Agrega un botón que genere un arreglo aleatorio de 16 valores».",
+            "Cuando termine, abre la «Vista previa» del Canvas para usar el visualizador.",
+            "Presiona «Iniciar» con velocidad media y observa cómo termina primero el método de mitades (merge sort).",
+            "Reinicia y usa «Paso a paso» en merge sort para ver cómo junta grupos pequeños ya ordenados.",
+            "En el código, selecciona la función de burbuja y escribe: «Agrega parada temprana (detente apenas ya esté ordenado) y muestra cuántas comparaciones ahorra».",
+            "Pide en el chat de la izquierda: «Agrega un botón que genere 16 valores aleatorios como si fueran precios o puntajes».",
             "Verifica todos los resultados con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
-            "Ambos paneles terminan con el arreglo ordenado esperado.",
+            "Ambos paneles terminan con la lista ordenada de menor a mayor.",
             "Burbuja registra 120 comparaciones sin parada temprana.",
-            "Merge sort registra 47 comparaciones con la mezcla estándar (puede variar en 1 o 2 según cómo escribas la comparación).",
-            "Los colores cambian según el estado de cada barra.",
-            "Pausa, paso a paso y reinicio funcionan.",
-            "El botón de arreglo aleatorio genera una nueva ejecución que termina ordenada."
+            "Merge sort registra cerca de 47 comparaciones (puede variar en 1 o 2 según cómo compare).",
+            "Los colores cambian según el estado de cada barra (normal, comparándose, ordenada).",
+            "Los botones Pausa, Paso a paso y Reiniciar funcionan.",
+            "El botón de lista aleatoria genera una nueva carrera que termina ordenada."
           ],
-          "stretch": "Pide: «Agrega un modo carrera con 100 barras y un gráfico final de comparaciones por algoritmo».",
-          "prompt": "Contexto: Los aprendices entienden mejor un algoritmo cuando ven cada comparación. Quiero comparar burbuja y merge sort con el mismo arreglo.\n\nRol: Actúa como desarrollador de material educativo interactivo para algoritmia.\n\nDatos:\n\"\"\"\nARREGLO DE PRUEBA (16 valores):\n[38, 27, 43, 3, 9, 82, 10, 55, 21, 64, 17, 49, 70, 5, 33, 91]\n\nResultado ordenado esperado:\n[3, 5, 9, 10, 17, 21, 27, 33, 38, 43, 49, 55, 64, 70, 82, 91]\n\nAlgoritmos a comparar:\n1. Burbuja, sin parada temprana.\n2. Merge sort.\n\nColores sugeridos:\n- Barra normal: gris pizarra\n- Barras comparándose: ámbar\n- Barras ya ordenadas: verde salvia\n\"\"\"\n\nTarea: En Canvas, crea un visualizador web que:\n1. Muestre los dos algoritmos lado a lado, con barras proporcionales a los valores.\n2. Permita iniciar, pausar, avanzar paso a paso y reiniciar, con control de velocidad.\n3. Cuente las comparaciones de cada algoritmo en vivo.\n4. Use los colores sugeridos para el estado de cada barra.\n5. Al terminar, indique cuántas veces más comparaciones hizo burbuja.\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Didáctico y visual, con rótulos breves.\n\nLímites:\n- Implementa los algoritmos como generadores de JavaScript.\n- Anuncia los contadores con aria-live y no uses librerías externas."
+          "stretch": "Pide: «Agrega un modo carrera con 100 barras para ver cómo crece la diferencia cuando la lista es grande».",
+          "prompt": "Contexto: Quiero comparar dos formas de ordenar la misma lista de 16 números (como precios o puntajes): «burbuja» (que compara parejas vecinas una y otra vez) y «merge sort» (que divide la lista en mitades y las mezcla ya ordenadas).\n\nRol: Actúa como creador de herramientas visuales para explicar programación a principiantes.\n\nDatos:\n\"\"\"\nARREGLO DE PRUEBA (16 valores):\n[38, 27, 43, 3, 9, 82, 10, 55, 21, 64, 17, 49, 70, 5, 33, 91]\n\nResultado ordenado esperado:\n[3, 5, 9, 10, 17, 21, 27, 33, 38, 43, 49, 55, 64, 70, 82, 91]\n\nAlgoritmos a comparar:\n1. Burbuja, sin parada temprana.\n2. Merge sort.\n\nColores sugeridos:\n- Barra normal: gris pizarra\n- Barras comparándose: ámbar\n- Barras ya ordenadas: verde salvia\n\"\"\"\n\nTarea: En Canvas, crea un visualizador web que:\n1. Muestre los dos métodos lado a lado, con barras proporcionales a cada número.\n2. Tenga botones para iniciar, pausar, avanzar paso a paso y reiniciar, con control de velocidad.\n3. Cuente en vivo cuántas comparaciones hace cada método.\n4. Use los colores sugeridos para indicar qué barras se están comparando y cuáles ya quedaron listas.\n5. Al terminar, indique cuántas veces más trabajo hizo burbuja frente a merge sort.\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Didáctico, claro y visual, con rótulos breves en español.\n\nLímites:\n- Implementa la pausa animada paso a paso con generadores de JavaScript para que el usuario pueda detener y avanzar cada movimiento.\n- Anuncia los contadores con aria-live y no uses librerías externas."
         },
         {
           "id": "algo-c-notas-colab",
           "code": "7C",
-          "title": "Análisis de notas en Python: de Canvas a un cuaderno de Colab",
+          "title": "Calcular promedios y notas en Python: de Canvas a Google Colab con un clic",
           "level": "Intermedio",
           "duration": "30 min",
           "canvasFeature": "Canvas de código Python + Exportar a Colab",
@@ -2086,8 +2086,8 @@
             "export-colab",
             "inline-edit"
           ],
-          "whyCanvas": "Canvas escribe y ajusta el Python por selección, y «Exportar a Colab» lo convierte en un cuaderno que se ejecuta de verdad: escribes en un lugar y compruebas en otro con un solo clic.",
-          "outsideCanvas": "Canvas edita el Python, pero no lo ejecuta por sí solo: los pasos 3, 4 y 6 ocurren en Google Colab, fuera de Gemini, y necesitas tu cuenta de Google para abrir el cuaderno.",
+          "whyCanvas": "Canvas escribe y ajusta el código Python por selección, y «Exportar a Colab» lo abre en Google Colab (un cuaderno gratuito en la nube) donde lo ejecutas con un botón de Play sin instalar nada.",
+          "outsideCanvas": "Canvas edita el código, pero para correrlo en la nube los pasos 3, 4 y 6 ocurren en Google Colab (fuera de Gemini) usando tu cuenta gratuita de Google.",
           "places": [
             "canvas",
             "canvas",
@@ -2097,66 +2097,66 @@
             "external",
             "portal"
           ],
-          "goal": "Escribir un script de estadística básica en Canvas, ajustarlo por selección, ejecutarlo en Colab y volver a Canvas para ampliarlo.",
-          "scenario": "La instructora tiene las notas del proyecto final de la ficha 2871 y quiere promedio, mediana, desviación y porcentaje de aprobados sin usar una hoja de cálculo.",
+          "goal": "Crear una receta automática en Python para analizar una lista de notas (o gastos/ventas en tu vida diaria), probarla con un clic en Colab y ampliarla en Canvas.",
+          "scenario": "Tienes una lista de 12 notas (o podrías cambiarla por tus gastos del mes) y quieres promedio, mediana, qué tanto varían y porcentaje de aprobados, sin hacer fórmulas manuales cada vez.",
           "promptParts": {
-            "role": "profesor de programación que enseña estadística básica",
-            "context": "La instructora quiere entender cómo le fue al grupo en el proyecto final. El script debe poder ejecutarse en un cuaderno sin instalar nada.",
+            "role": "profesor de programación que explica estadística básica a principiantes",
+            "context": "Quiero analizar los resultados de un grupo sin usar tablas manuales, con un código que pueda repetir cada mes cambiando solo los números y que corra en Google Colab sin instalar nada.",
             "data": "NOTAS DEL PROYECTO FINAL — FICHA 2871 (datos de práctica)\n\naprendiz,nota\nA01,4.2\nA02,3.8\nA03,2.9\nA04,4.5\nA05,3.1\nA06,3.6\nA07,4.8\nA08,2.5\nA09,3.9\nA10,4.0\nA11,3.3\nA12,4.4\n\nRegla: aprueba quien tiene nota mayor o igual a 3.5.\nEstadística pedida: promedio, mediana, desviación estándar poblacional y porcentaje de aprobados.",
             "instruction": "En Canvas, escribe un script de Python con:",
             "task": [
-              "Las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con docstring y anotaciones de tipo.",
-              "Cuatro pruebas con assert, una por función, con las notas de los datos.",
-              "Un informe impreso con cada cifra redondeada a dos decimales."
+              "Las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con una nota explicativa en español (docstring) y etiquetas claras de datos.",
+              "Cuatro autocomprobaciones (con assert), una por función, que avisen si alguna cuenta falla.",
+              "Un resumen impreso en pantalla con cada cifra redondeada a dos decimales."
             ],
             "constraints": [
               "Solo biblioteca estándar de Python.",
-              "Todo el código en un archivo, listo para ejecutarse de arriba abajo."
+              "Todo el código en un solo archivo, listo para ejecutarse de arriba abajo con un clic."
             ],
-            "format": "Un script de Python comentado.",
-            "tone": "Didáctico, con comentarios breves."
+            "format": "Un script de Python comentado en español sencillo.",
+            "tone": "Didáctico, cercano y con comentarios breves."
           },
           "steps": [
-            "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo para generar el script de Python.",
-            "Selecciona la función de desviación y escribe: «Agrega un docstring con la fórmula y un ejemplo con tres notas».",
-            "Abre «Compartir y exportar → Exportar a Colab»; Colab abre un cuaderno nuevo con tu código.",
-            "En Colab, ejecuta la celda con el botón de reproducir y lee la salida; si una prueba falla, copia el error.",
-            "Vuelve a Canvas y pide en el chat de la izquierda: «Agrega una función en_riesgo que devuelva las notas menores a 3.0 y una prueba con assert». Si Colab mostró un error, pégalo en el mismo mensaje.",
-            "Exporta de nuevo con «Exportar a Colab» y ejecuta el cuaderno: las pruebas nuevas también deben pasar.",
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo para generar el código Python.",
+            "Selecciona la función de desviación y escribe: «Agrega una explicación sencilla de qué mide la desviación y un ejemplo con tres notas».",
+            "Abre «Compartir y exportar → Exportar a Colab»; Google Colab abrirá un cuaderno nuevo con tu código listo.",
+            "En Colab, presiona el botón de Play (▶) de la celda y lee el resultado; si algo falla, copia el mensaje de error.",
+            "Vuelve a Canvas y pide en el chat de la izquierda: «Agrega una función en_riesgo que devuelva las notas menores a 3.0 y una autocomprobación con assert». Si Colab mostró un error, pégalo ahí mismo.",
+            "Exporta de nuevo con «Exportar a Colab» y presiona Play: las nuevas comprobaciones también deben pasar sin errores.",
             "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
-            "El script tiene las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con docstring.",
+            "El código tiene las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con su explicación en español.",
             "En Colab, el promedio es 3,75 y la mediana es 3,85.",
             "La desviación estándar poblacional es 0,67.",
             "Aprobaron 8 de 12 aprendices: 66,67 %.",
-            "Las cuatro pruebas con assert pasan en Colab sin errores.",
-            "La función en_riesgo devuelve 2.5 y 2.9, y su prueba pasa."
+            "Las cuatro autocomprobaciones (assert) pasan en Colab sin errores.",
+            "La función en_riesgo devuelve 2.5 y 2.9, y su comprobación pasa."
           ],
-          "stretch": "Pide: «Agrega una función que agrupe las notas por rango (menor de 3, de 3 a 3.9 y de 4 en adelante) y cuente cuántos aprendices hay en cada uno».",
-          "prompt": "Contexto: La instructora quiere entender cómo le fue al grupo en el proyecto final. El script debe poder ejecutarse en un cuaderno sin instalar nada.\n\nRol: Actúa como profesor de programación que enseña estadística básica.\n\nDatos:\n\"\"\"\nNOTAS DEL PROYECTO FINAL — FICHA 2871 (datos de práctica)\n\naprendiz,nota\nA01,4.2\nA02,3.8\nA03,2.9\nA04,4.5\nA05,3.1\nA06,3.6\nA07,4.8\nA08,2.5\nA09,3.9\nA10,4.0\nA11,3.3\nA12,4.4\n\nRegla: aprueba quien tiene nota mayor o igual a 3.5.\nEstadística pedida: promedio, mediana, desviación estándar poblacional y porcentaje de aprobados.\n\"\"\"\n\nTarea: En Canvas, escribe un script de Python con:\n1. Las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con docstring y anotaciones de tipo.\n2. Cuatro pruebas con assert, una por función, con las notas de los datos.\n3. Un informe impreso con cada cifra redondeada a dos decimales.\nEntrega: Un script de Python comentado.\n\nTono: Didáctico, con comentarios breves.\n\nLímites:\n- Solo biblioteca estándar de Python.\n- Todo el código en un archivo, listo para ejecutarse de arriba abajo."
+          "stretch": "Pide: «Cambia las notas por una lista de mis gastos diarios de la semana y calcula total, promedio diario y días de gasto alto».",
+          "prompt": "Contexto: Quiero analizar los resultados de un grupo sin usar tablas manuales, con un código que pueda repetir cada mes cambiando solo los números y que corra en Google Colab sin instalar nada.\n\nRol: Actúa como profesor de programación que explica estadística básica a principiantes.\n\nDatos:\n\"\"\"\nNOTAS DEL PROYECTO FINAL — FICHA 2871 (datos de práctica)\n\naprendiz,nota\nA01,4.2\nA02,3.8\nA03,2.9\nA04,4.5\nA05,3.1\nA06,3.6\nA07,4.8\nA08,2.5\nA09,3.9\nA10,4.0\nA11,3.3\nA12,4.4\n\nRegla: aprueba quien tiene nota mayor o igual a 3.5.\nEstadística pedida: promedio, mediana, desviación estándar poblacional y porcentaje de aprobados.\n\"\"\"\n\nTarea: En Canvas, escribe un script de Python con:\n1. Las funciones promedio, mediana, desviacion y porcentaje_aprobados, cada una con una nota explicativa en español (docstring) y etiquetas claras de datos.\n2. Cuatro autocomprobaciones (con assert), una por función, que avisen si alguna cuenta falla.\n3. Un resumen impreso en pantalla con cada cifra redondeada a dos decimales.\nEntrega: Un script de Python comentado en español sencillo.\n\nTono: Didáctico, cercano y con comentarios breves.\n\nLímites:\n- Solo biblioteca estándar de Python.\n- Todo el código en un solo archivo, listo para ejecutarse de arriba abajo con un clic."
         }
       ],
       "expected": [
         {
-          "criterion": "La explicación señala la línea «if e[\"documento\"] in vistos»: buscar en una lista recorre sus elementos, y eso ocurre dentro del ciclo.",
+          "criterion": "La explicación señala la línea «if e[\"documento\"] in vistos» y explica en palabras simples que buscar en una lista recorre todo de nuevo en cada paso.",
           "how": "Lee la explicación antes del código."
         },
         {
-          "criterion": "La versión nueva usa un set (conjunto) para vistos y conserva el nombre agrupar_por_estado.",
+          "criterion": "La versión nueva usa un set (conjunto o libreta de «ya vistos») para vistos y conserva el nombre agrupar_por_estado.",
           "how": "Busca «set(» en el código."
         },
         {
           "criterion": "Con la entrada de ejemplo imprime {'al_dia': ['Ana', 'Iván'], 'en_progreso': ['Luis', 'Marta'], 'apoyo': ['Jorge', 'Sara']}.",
-          "how": "Copia el código a tu equipo o a Google Colab y ejecútalo."
+          "how": "Revisa la salida mostrada en la Vista previa de Canvas."
         },
         {
-          "criterion": "Las pruebas cubren la lista vacía, el documento repetido y los 5 límites, y «python -m pytest» termina sin fallos.",
-          "how": "Guarda la función como clasificador.py y las pruebas como test_clasificador.py, y ejecuta pytest. Si Gemini entrega todo en un solo archivo, ejecuta pytest sobre ese archivo."
+          "criterion": "La Vista previa muestra ✓ en todas las comprobaciones: lista vacía, documento repetido y los 5 límites (0, 49.9, 50, 69.9 y 70), sin pedir terminal ni instalaciones.",
+          "how": "Abre la pestaña «Vista previa» en Gemini Canvas y verifica los ✓ verdes."
         },
         {
-          "criterion": "La función tiene type hints y un docstring en español que menciona la complejidad O(n).",
-          "how": "Lee la firma y el docstring."
+          "criterion": "La función incluye una nota explicativa en español que aclara por qué ahora recorre los datos una sola vez (O(n)).",
+          "how": "Lee el comentario inicial de la función."
         }
       ],
       "followUps": [],
@@ -2213,7 +2213,7 @@
         ],
         "file": "canvas_algoritmo.jpg",
         "docTitle": "clasificador.py",
-        "chat": "Refactoricé la función en el Canvas: el cuello de botella era buscar en una lista dentro del ciclo, y ahora uso un set. Incluí las pruebas con pytest y un bloque que imprime el resultado de la entrada de ejemplo."
+        "chat": "Mejoré la función en Canvas para que recorra los datos una sola vez: cambié la lista «vistos» por un set (como una libreta de ya vistos) y dejé las comprobaciones listas en la Vista previa sin necesidad de instalar nada."
       }
     },
     {
@@ -2303,7 +2303,7 @@
         {
           "id": "rubric-b-guia-quiz-git",
           "code": "8B",
-          "title": "Guía didáctica de Git con cuestionario autocalificable",
+          "title": "Guía para principiantes sobre guardar versiones (Git) con cuestionario autocalificable",
           "level": "Básico",
           "duration": "30 min",
           "canvasFeature": "Documento + Cuestionario web interactivo en Canvas",
@@ -2324,25 +2324,25 @@
             "external",
             "portal"
           ],
-          "goal": "Producir una guía didáctica estructurada por momentos y un cuestionario interactivo con retroalimentación inmediata.",
-          "scenario": "Mañana inicia la competencia de control de versiones y el instructor necesita guía, actividad práctica y evaluación diagnóstica.",
+          "goal": "Crear una guía clara para personas que nunca han usado Git (guardar versiones de un trabajo como «puntos de guardado» de un videojuego) y generar un cuestionario con calificación inmediata.",
+          "scenario": "Cualquier persona que edita documentos o código ha terminado con archivos llamados «final_v2_ahora_si». Git evita ese caos, y aquí armas su guía y examen rápido.",
           "promptParts": {
-            "role": "diseñador instruccional para formación en desarrollo de software",
-            "context": "Mañana inicia la competencia de control de versiones con 25 aprendices de primer trimestre que nunca han usado Git.",
+            "role": "diseñador educativo que explica conceptos técnicos desde cero",
+            "context": "Mañana inicia la clase sobre control de versiones con 25 personas que nunca han usado Git ni la terminal.",
             "data": "GUÍA DIDÁCTICA: FUNDAMENTOS DE GIT (contenido de práctica)\n\nResultado de aprendizaje: Versionar el código fuente de un proyecto con Git aplicando un flujo de ramas básico.\nDuración: 4 horas. Grupo: 25 aprendices de primer trimestre.\n\nConceptos clave:\n1. Repositorio: carpeta cuyo historial controla Git.\n2. git init: crea un repositorio nuevo.\n3. git add: agrega cambios al área de preparación (staging).\n4. git commit -m: guarda una instantánea con un mensaje.\n5. git status: muestra el estado de los archivos.\n6. git log --oneline: lista el historial resumido.\n7. Rama (branch): línea de trabajo independiente.\n8. git switch -c: crea una rama y cambia a ella.\n9. git merge: integra una rama en la actual.\n10. Conflicto: dos cambios en la misma línea que Git no puede unir solo.\n\nProducto esperado: repositorio con 5 commits, una rama \"feature/login\" integrada y un conflicto resuelto.",
             "instruction": "En Canvas, redacta la guía didáctica con:",
             "task": [
               "Los cinco momentos de la sesión con su duración: reflexión inicial, contextualización, apropiación, transferencia y evaluación.",
-              "Una práctica paso a paso que lleve al producto esperado, incluido un conflicto y su resolución.",
-              "Una tabla de errores frecuentes con su causa y su solución.",
+              "Una práctica paso a paso que lleve al producto esperado, incluido un conflicto (cuando dos personas editan lo mismo) y cómo resolverlo.",
+              "Una tabla de errores frecuentes con su causa y su solución en palabras simples.",
               "Una lista de chequeo de la evidencia."
             ],
             "constraints": [
               "Usa comandos reales y vigentes de Git (git switch en lugar de git checkout).",
-              "Explica cada término técnico la primera vez que aparezca."
+              "Explica cada término técnico con una analogía cotidiana la primera vez que aparezca."
             ],
-            "format": "Guía con un título por momento y la práctica en bloques de comandos.",
-            "tone": "Cercano y motivador, dirigido a aprendices."
+            "format": "Guía con un título por momento y la práctica en bloques claros de comandos.",
+            "tone": "Cercano, motivador y comprensible para principiantes."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -2361,23 +2361,23 @@
             "Con dos errores a propósito, el puntaje final refleja esos dos fallos."
           ],
           "stretch": "Pide en el chat: «Crea una página web con un cuestionario de 10 preguntas, puntaje en una dona y reinicio con preguntas mezcladas». Luego pide: «Agrega un simulador visual de ramas que dibuje los commits como círculos conectados al ejecutar comandos escritos».",
-          "prompt": "Contexto: Mañana inicia la competencia de control de versiones con 25 aprendices de primer trimestre que nunca han usado Git.\n\nRol: Actúa como diseñador instruccional para formación en desarrollo de software.\n\nDatos:\n\"\"\"\nGUÍA DIDÁCTICA: FUNDAMENTOS DE GIT (contenido de práctica)\n\nResultado de aprendizaje: Versionar el código fuente de un proyecto con Git aplicando un flujo de ramas básico.\nDuración: 4 horas. Grupo: 25 aprendices de primer trimestre.\n\nConceptos clave:\n1. Repositorio: carpeta cuyo historial controla Git.\n2. git init: crea un repositorio nuevo.\n3. git add: agrega cambios al área de preparación (staging).\n4. git commit -m: guarda una instantánea con un mensaje.\n5. git status: muestra el estado de los archivos.\n6. git log --oneline: lista el historial resumido.\n7. Rama (branch): línea de trabajo independiente.\n8. git switch -c: crea una rama y cambia a ella.\n9. git merge: integra una rama en la actual.\n10. Conflicto: dos cambios en la misma línea que Git no puede unir solo.\n\nProducto esperado: repositorio con 5 commits, una rama \"feature/login\" integrada y un conflicto resuelto.\n\"\"\"\n\nTarea: En Canvas, redacta la guía didáctica con:\n1. Los cinco momentos de la sesión con su duración: reflexión inicial, contextualización, apropiación, transferencia y evaluación.\n2. Una práctica paso a paso que lleve al producto esperado, incluido un conflicto y su resolución.\n3. Una tabla de errores frecuentes con su causa y su solución.\n4. Una lista de chequeo de la evidencia.\nEntrega: Guía con un título por momento y la práctica en bloques de comandos.\n\nTono: Cercano y motivador, dirigido a aprendices.\n\nLímites:\n- Usa comandos reales y vigentes de Git (git switch en lugar de git checkout).\n- Explica cada término técnico la primera vez que aparezca."
+          "prompt": "Contexto: Mañana inicia la clase sobre control de versiones con 25 personas que nunca han usado Git ni la terminal.\n\nRol: Actúa como diseñador educativo que explica conceptos técnicos desde cero.\n\nDatos:\n\"\"\"\nGUÍA DIDÁCTICA: FUNDAMENTOS DE GIT (contenido de práctica)\n\nResultado de aprendizaje: Versionar el código fuente de un proyecto con Git aplicando un flujo de ramas básico.\nDuración: 4 horas. Grupo: 25 aprendices de primer trimestre.\n\nConceptos clave:\n1. Repositorio: carpeta cuyo historial controla Git.\n2. git init: crea un repositorio nuevo.\n3. git add: agrega cambios al área de preparación (staging).\n4. git commit -m: guarda una instantánea con un mensaje.\n5. git status: muestra el estado de los archivos.\n6. git log --oneline: lista el historial resumido.\n7. Rama (branch): línea de trabajo independiente.\n8. git switch -c: crea una rama y cambia a ella.\n9. git merge: integra una rama en la actual.\n10. Conflicto: dos cambios en la misma línea que Git no puede unir solo.\n\nProducto esperado: repositorio con 5 commits, una rama \"feature/login\" integrada y un conflicto resuelto.\n\"\"\"\n\nTarea: En Canvas, redacta la guía didáctica con:\n1. Los cinco momentos de la sesión con su duración: reflexión inicial, contextualización, apropiación, transferencia y evaluación.\n2. Una práctica paso a paso que lleve al producto esperado, incluido un conflicto (cuando dos personas editan lo mismo) y cómo resolverlo.\n3. Una tabla de errores frecuentes con su causa y su solución en palabras simples.\n4. Una lista de chequeo de la evidencia.\nEntrega: Guía con un título por momento y la práctica en bloques claros de comandos.\n\nTono: Cercano, motivador y comprensible para principiantes.\n\nLímites:\n- Usa comandos reales y vigentes de Git (git switch en lugar de git checkout).\n- Explica cada término técnico con una analogía cotidiana la primera vez que aparezca."
         },
         {
           "id": "rubric-c-formulas-latex",
           "code": "8C",
-          "title": "Ficha de fórmulas de calificación con LaTeX y exportación a PDF",
+          "title": "Ficha de fórmulas claras (LaTeX) y exportación a PDF sin cortes",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Documento + fórmulas LaTeX + Exportar a PDF",
+          "canvasFeature": "Documento + fórmulas bonitas (LaTeX) + Exportar a PDF",
           "capabilities": [
             "doc-create",
             "inline-edit",
             "latex",
             "export-pdf"
           ],
-          "whyCanvas": "Las fórmulas de calificación quedan en un documento con formato matemático: las ajustas por selección y compruebas en la vista previa del PDF que ninguna ecuación se parta.",
-          "outsideCanvas": "Todo ocurre en Gemini: el documento, las fórmulas y la vista previa del PDF. La opción de fórmulas en el menú «Crear» puede llamarse distinto o no aparecer en tu cuenta; en ese caso el paso 3 trae una alternativa por chat.",
+          "whyCanvas": "Las fórmulas matemáticas quedan ordenadas en un documento limpio (con LaTeX, que convierte texto en ecuaciones bonitas): las ajustas por selección y compruebas en el PDF que nada se corte.",
+          "outsideCanvas": "Todo ocurre en Gemini: el documento, las fórmulas y la vista previa del PDF. Si tu cuenta no muestra el botón de fórmulas en «Crear», el paso 3 te da la alternativa por chat.",
           "places": [
             "canvas",
             "canvas",
@@ -2386,8 +2386,8 @@
             "canvas",
             "portal"
           ],
-          "goal": "Redactar la fórmula de la nota final con formato matemático, calcular dos casos y revisar cómo queda en un PDF.",
-          "scenario": "Los instructores quieren publicar cómo se calcula la nota del proyecto para que ningún aprendiz tenga dudas. La ficha debe verse bien impresa.",
+          "goal": "Escribir la fórmula de una nota o presupuesto con presentación matemática profesional, calcular dos ejemplos paso a paso y revisar que quede perfecta al exportar a PDF.",
+          "scenario": "Cuando explicas cómo se calcula una nota, una comisión o un descuento, escribir «0.3*x + 0.25*y» en texto plano confunde; con formato matemático limpio cualquiera lo entiende.",
           "promptParts": {
             "role": "diseñador de instrumentos de evaluación por competencias",
             "context": "Los aprendices recibirán esta ficha impresa. Las fórmulas deben leerse con claridad y los cálculos deben poder repetirse a mano.",
@@ -2531,8 +2531,8 @@
         "🗄️ Consulta de referencia",
         "📋 Resultado esperado"
       ],
-      "masterPrompt": "Contexto: El reporte mensual por ficha tarda demasiado con 5.000 aprendices. Antes de llevar la nueva consulta a producción, se valida con la muestra de los datos.\n\nRol: Actúa como analista de bases de datos PostgreSQL.\n\nDatos:\n\"\"\"\nCREATE TABLE aprendices (id INT PRIMARY KEY, nombre TEXT NOT NULL, ficha_id INT NOT NULL);\nCREATE TABLE entregas (aprendiz_id INT REFERENCES aprendices(id), calificacion NUMERIC(2,1));\nCREATE TABLE registro_asistencia (aprendiz_id INT REFERENCES aprendices(id), fecha DATE, asistio BOOLEAN);\n\nINSERT INTO aprendices VALUES (1,'Ana',2871),(2,'Luis',2871),(3,'Marta',2871),(4,'Jorge',2872),(5,'Sara',2872);\nINSERT INTO entregas VALUES (1,4.5),(1,4.1),(2,3.8),(2,4.2),(3,4.6),(4,3.0),(4,3.4),(5,4.9);\nINSERT INTO registro_asistencia VALUES\n(1,'2026-10-05',true),(1,'2026-10-12',true),(1,'2026-10-19',true),(1,'2026-10-26',true),\n(2,'2026-10-05',true),(2,'2026-10-12',false),(2,'2026-10-19',true),(2,'2026-10-26',true),\n(3,'2026-10-05',true),(3,'2026-10-12',true),(3,'2026-10-19',true),(3,'2026-10-26',true),\n(4,'2026-10-05',true),(4,'2026-10-12',false),(4,'2026-10-19',false),(4,'2026-10-26',true);\n-- Sara (id 5) no tiene registros de asistencia en octubre.\n\"\"\"\n\nTarea: En Canvas, escribe en SQL:\n1. Una consulta con dos CTE: una para el promedio de notas y otra para la asistencia del 2026-10-01 al 2026-10-31.\n2. El puesto de cada aprendiz dentro de su ficha con ROW_NUMBER(), ordenado por promedio de mayor a menor.\n3. El porcentaje de asistencia con un decimal; si un aprendiz no tiene registros, debe aparecer con NULL y sin error de división por cero.\n4. La sentencia que crea un índice compuesto en registro_asistencia (aprendiz_id, fecha) que incluya asistio.\n5. La tabla de resultado que esperas con los datos de muestra.\nEntrega: Un bloque SQL comentado y, debajo, la tabla de resultado esperada.\n\nTono: Didáctico, con comentarios breves en cada consulta.\n\nLímites:\n- No uses subconsultas correlacionadas.\n- Usa ROUND(…, 1) para el promedio y el porcentaje, y ordena por ficha y puesto.",
-      "expectedResultSummary": "La consulta usa WITH con dos CTE y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC). Usa LEFT JOIN y NULLIF (o CASE) para que Sara aparezca con NULL en asistencia. Resultado con la muestra: 2871 → 1 Marta 4,6 · 100,0; 2 Ana 4,3 · 100,0; 3 Luis 4,0 · 75,0. 2872 → 1 Sara 4,9 · NULL; 2 Jorge 3,2 · 50,0. El índice es CREATE INDEX … ON registro_asistencia (aprendiz_id, fecha) INCLUDE (asistio). No hay subconsultas dentro de SELECT ni de WHERE.",
+      "masterPrompt": "Contexto: Un reporte mensual tarda demasiado con 5.000 registros y cuando alguien no tiene asistencias (como Sara) desaparece del listado. Quiero una consulta SQL clara que resuelva esto y entender cómo una base de datos ordenada potencia cualquier aplicación o negocio.\n\nRol: Actúa como profesor de bases de datos que explica con ejemplos claros a cualquier perfil profesional.\n\nDatos:\n\"\"\"\nCREATE TABLE aprendices (id INT PRIMARY KEY, nombre TEXT NOT NULL, ficha_id INT NOT NULL);\nCREATE TABLE entregas (aprendiz_id INT REFERENCES aprendices(id), calificacion NUMERIC(2,1));\nCREATE TABLE registro_asistencia (aprendiz_id INT REFERENCES aprendices(id), fecha DATE, asistio BOOLEAN);\n\nINSERT INTO aprendices VALUES (1,'Ana',2871),(2,'Luis',2871),(3,'Marta',2871),(4,'Jorge',2872),(5,'Sara',2872);\nINSERT INTO entregas VALUES (1,4.5),(1,4.1),(2,3.8),(2,4.2),(3,4.6),(4,3.0),(4,3.4),(5,4.9);\nINSERT INTO registro_asistencia VALUES\n(1,'2026-10-05',true),(1,'2026-10-12',true),(1,'2026-10-19',true),(1,'2026-10-26',true),\n(2,'2026-10-05',true),(2,'2026-10-12',false),(2,'2026-10-19',true),(2,'2026-10-26',true),\n(3,'2026-10-05',true),(3,'2026-10-12',true),(3,'2026-10-19',true),(3,'2026-10-26',true),\n(4,'2026-10-05',true),(4,'2026-10-12',false),(4,'2026-10-19',false),(4,'2026-10-26',true);\n-- Sara (id 5) no tiene registros de asistencia en octubre.\n\"\"\"\n\nTarea: En Canvas, escribe en SQL:\n1. Una consulta con dos pasos intermedios ordenados (CTE con WITH): uno para el promedio de notas y otro para la asistencia del 2026-10-01 al 2026-10-31.\n2. El puesto de cada persona dentro de su grupo (ficha) usando ROW_NUMBER(), ordenado de mayor a menor promedio.\n3. El porcentaje de asistencia con un decimal; si alguien no tiene registros (como Sara), debe aparecer con NULL y sin error de división por cero.\n4. La regla que crea un índice (como el índice de un libro para buscar al instante) en registro_asistencia (aprendiz_id, fecha) incluyendo asistio.\n5. La tabla de resultado que esperas con los datos de muestra.\nEntrega: Un bloque SQL comentado en español sencillo para cualquier profesión y, debajo, la tabla de resultado esperada.\n\nTono: Cercano, didáctico y sin jerga innecesaria.\n\nLímites:\n- No uses subconsultas anidadas dentro de SELECT o WHERE; usa pasos ordenados (CTE).\n- Usa ROUND(…, 1) para redondear el promedio y el porcentaje, y ordena por ficha y puesto.",
+      "expectedResultSummary": "La consulta usa WITH con dos pasos intermedios (CTE) y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC). Usa LEFT JOIN (para no borrar a Sara) y NULLIF (para evitar dividir por cero), mostrando NULL en asistencia. Resultado con la muestra: 2871 → 1 Marta 4,6 · 100,0; 2 Ana 4,3 · 100,0; 3 Luis 4,0 · 75,0. 2872 → 1 Sara 4,9 · NULL; 2 Jorge 3,2 · 50,0. El índice es CREATE INDEX … ON registro_asistencia (aprendiz_id, fecha) INCLUDE (asistio). No hay subconsultas dentro de SELECT ni de WHERE.",
       "variationPrompts": [
         "Pide a Canvas: 'Adapta esta consulta a una vista materializada (MATERIALIZED VIEW) con política de refresco concurrente'.",
         "Selecciona la función de ventana y pide: 'Calcula además el percentil de calificación (PERCENT_RANK) para identificar aprendices destacados'."
@@ -2541,17 +2541,17 @@
         {
           "id": "sql-a-biblioteca-dashboard",
           "code": "9A",
-          "title": "Consultas SQL de biblioteca con tablero en vista previa y ejecución en Colab",
-          "level": "Avanzado",
+          "title": "Hacerle preguntas a tus datos (SQL) con tablero en vivo sin instalar nada",
+          "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Canvas de código + SQLite con Pyodide en la vista previa + Exportar a Colab",
+          "canvasFeature": "Consultas SQL + Base de datos en navegador (Pyodide/SQLite) + Tablero visual",
           "capabilities": [
             "code-preview",
             "inline-edit",
             "export-colab"
           ],
-          "whyCanvas": "Las consultas se editan en Canvas y se ejecutan de verdad en la vista previa con SQLite dentro del navegador, que alimenta un tablero visual en la misma página.",
-          "outsideCanvas": "Canvas no trae un motor de base de datos, pero la vista previa carga Pyodide (Python en el navegador), que incluye sqlite3: así el SQL se ejecuta de verdad dentro de Canvas. PostgreSQL queda como dialecto de referencia. Exportar a Colab es un paso opcional fuera de Gemini.",
+          "whyCanvas": "Las preguntas a la base de datos (SQL) se escriben en Canvas y se ejecutan de verdad en la «Vista previa» con SQLite dentro del navegador, mostrando las respuestas en un tablero visual sin instalar nada.",
+          "outsideCanvas": "Canvas no trae base de datos propia, pero la «Vista previa» carga Pyodide (que incluye SQLite en el navegador): así tus preguntas SQL corren de verdad dentro de Canvas. Exportar a Colab es opcional.",
           "places": [
             "canvas",
             "canvas",
@@ -2562,27 +2562,27 @@
             "external",
             "portal"
           ],
-          "goal": "Escribir consultas con JOIN, agregaciones y funciones de ventana, y ejecutarlas en el navegador para alimentar un tablero visual.",
-          "scenario": "La biblioteca necesita saber qué libros rotan más, quién tiene préstamos vencidos y qué programa usa más el servicio.",
+          "goal": "Aprender a pedirle respuestas a varias tablas conectadas (como cruzar una lista de libros o productos con una lista de personas) usando SQL y verlas en un tablero.",
+          "scenario": "En cualquier negocio, biblioteca o inventario del hogar necesitas saber qué se mueve más, qué está vencido y quién lo usa, sin revisar fila por fila a mano.",
           "promptParts": {
-            "role": "ingeniero de datos que enseña SQL",
-            "context": "La biblioteca necesita saber qué libros rotan más, quién tiene préstamos vencidos y qué programa usa más el servicio. La fecha de corte es el 30 de octubre de 2026.",
+            "role": "profesor que enseña a consultar bases de datos (SQL) con ejemplos cotidianos",
+            "context": "La biblioteca necesita saber qué libros rotan más, quién tiene préstamos vencidos y qué programa usa más el servicio (corte: 30 de octubre de 2026). Quiero entender cada consulta como una pregunta clara en español.",
             "data": "-- BASE DE DATOS DE PRÉSTAMOS DE BIBLIOTECA (datos de práctica, PostgreSQL)\nCREATE TABLE usuarios (id INT PRIMARY KEY, nombre VARCHAR(60), programa VARCHAR(40));\nCREATE TABLE libros (id INT PRIMARY KEY, titulo VARCHAR(80), categoria VARCHAR(40));\nCREATE TABLE prestamos (\n  id INT PRIMARY KEY,\n  libro_id INT REFERENCES libros(id),\n  usuario_id INT REFERENCES usuarios(id),\n  fecha_prestamo DATE NOT NULL,\n  fecha_limite DATE NOT NULL,\n  fecha_devolucion DATE\n);\n\nINSERT INTO usuarios VALUES\n(1,'Ana Torres','ADSO'),(2,'Luis Pérez','ADSO'),(3,'Marta Gil','Contabilidad'),\n(4,'Jorge Ríos','Contabilidad'),(5,'Sara Mejía','Multimedia'),(6,'Iván Cruz','Multimedia');\n\nINSERT INTO libros VALUES\n(1,'Código limpio','Programación'),(2,'Bases de datos relacionales','Programación'),\n(3,'Contabilidad básica','Finanzas'),(4,'Diseño de experiencia de usuario','Diseño'),\n(5,'Python para todos','Programación');\n\nINSERT INTO prestamos VALUES\n(1,1,1,'2026-09-01','2026-09-15','2026-09-08'),\n(2,1,2,'2026-09-10','2026-09-24','2026-09-20'),\n(3,1,5,'2026-10-01','2026-10-15',NULL),\n(4,2,1,'2026-09-03','2026-09-17','2026-09-12'),\n(5,2,2,'2026-10-05','2026-10-19',NULL),\n(6,3,3,'2026-09-02','2026-09-16','2026-09-30'),\n(7,3,4,'2026-10-02','2026-10-16','2026-10-10'),\n(8,4,5,'2026-09-15','2026-09-29','2026-09-25'),\n(9,4,6,'2026-10-08','2026-10-22',NULL),\n(10,5,1,'2026-10-12','2026-10-26','2026-10-20'),\n(11,5,2,'2026-10-14','2026-10-28',NULL),\n(12,1,6,'2026-10-16','2026-10-30','2026-10-24');",
             "instruction": "En Canvas, escribe consultas SQL, válidas en SQLite y en PostgreSQL, que respondan:",
             "task": [
-              "¿Qué libros se prestan más? Usa RANK().",
+              "¿Qué libros se prestan más? Usa RANK() para armar el podio.",
               "¿Qué préstamos están vencidos y con cuántos días de atraso?",
               "¿Cuántos préstamos tiene cada programa?",
               "¿Cuál es el promedio de días de préstamo de los libros devueltos, en general y por programa?",
               "¿Qué préstamos se devolvieron después de la fecha límite?"
             ],
             "constraints": [
-              "Antes de cada consulta, escribe un comentario con la pregunta de negocio.",
-              "Usa JOIN explícitos y alias legibles.",
+              "Antes de cada consulta, escribe un comentario en español sencillo explicando qué pregunta responde.",
+              "Usa JOIN explícitos (cruces claros entre tablas) y nombres fáciles de leer.",
               "Si una función de fecha es propia de SQLite, deja en un comentario su equivalente en PostgreSQL."
             ],
-            "format": "Un script .sql comentado.",
-            "tone": "Didáctico, con comentarios breves en cada consulta."
+            "format": "Un script .sql comentado en español claro.",
+            "tone": "Didáctico y cercano, con comentarios breves en cada consulta."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -2603,21 +2603,21 @@
             "Las pruebas de la vista previa ejecutan el SQL con SQLite y marcan ✓ en las cinco consultas, sin errores en la consola."
           ],
           "stretch": "Pide: «Agrega una vista materializada de indicadores mensuales y un gráfico de líneas de préstamos por semana».",
-          "prompt": "Contexto: La biblioteca necesita saber qué libros rotan más, quién tiene préstamos vencidos y qué programa usa más el servicio. La fecha de corte es el 30 de octubre de 2026.\n\nRol: Actúa como ingeniero de datos que enseña SQL.\n\nDatos:\n\"\"\"\n-- BASE DE DATOS DE PRÉSTAMOS DE BIBLIOTECA (datos de práctica, PostgreSQL)\nCREATE TABLE usuarios (id INT PRIMARY KEY, nombre VARCHAR(60), programa VARCHAR(40));\nCREATE TABLE libros (id INT PRIMARY KEY, titulo VARCHAR(80), categoria VARCHAR(40));\nCREATE TABLE prestamos (\n  id INT PRIMARY KEY,\n  libro_id INT REFERENCES libros(id),\n  usuario_id INT REFERENCES usuarios(id),\n  fecha_prestamo DATE NOT NULL,\n  fecha_limite DATE NOT NULL,\n  fecha_devolucion DATE\n);\n\nINSERT INTO usuarios VALUES\n(1,'Ana Torres','ADSO'),(2,'Luis Pérez','ADSO'),(3,'Marta Gil','Contabilidad'),\n(4,'Jorge Ríos','Contabilidad'),(5,'Sara Mejía','Multimedia'),(6,'Iván Cruz','Multimedia');\n\nINSERT INTO libros VALUES\n(1,'Código limpio','Programación'),(2,'Bases de datos relacionales','Programación'),\n(3,'Contabilidad básica','Finanzas'),(4,'Diseño de experiencia de usuario','Diseño'),\n(5,'Python para todos','Programación');\n\nINSERT INTO prestamos VALUES\n(1,1,1,'2026-09-01','2026-09-15','2026-09-08'),\n(2,1,2,'2026-09-10','2026-09-24','2026-09-20'),\n(3,1,5,'2026-10-01','2026-10-15',NULL),\n(4,2,1,'2026-09-03','2026-09-17','2026-09-12'),\n(5,2,2,'2026-10-05','2026-10-19',NULL),\n(6,3,3,'2026-09-02','2026-09-16','2026-09-30'),\n(7,3,4,'2026-10-02','2026-10-16','2026-10-10'),\n(8,4,5,'2026-09-15','2026-09-29','2026-09-25'),\n(9,4,6,'2026-10-08','2026-10-22',NULL),\n(10,5,1,'2026-10-12','2026-10-26','2026-10-20'),\n(11,5,2,'2026-10-14','2026-10-28',NULL),\n(12,1,6,'2026-10-16','2026-10-30','2026-10-24');\n\"\"\"\n\nTarea: En Canvas, escribe consultas SQL, válidas en SQLite y en PostgreSQL, que respondan:\n1. ¿Qué libros se prestan más? Usa RANK().\n2. ¿Qué préstamos están vencidos y con cuántos días de atraso?\n3. ¿Cuántos préstamos tiene cada programa?\n4. ¿Cuál es el promedio de días de préstamo de los libros devueltos, en general y por programa?\n5. ¿Qué préstamos se devolvieron después de la fecha límite?\nEntrega: Un script .sql comentado.\n\nTono: Didáctico, con comentarios breves en cada consulta.\n\nLímites:\n- Antes de cada consulta, escribe un comentario con la pregunta de negocio.\n- Usa JOIN explícitos y alias legibles.\n- Si una función de fecha es propia de SQLite, deja en un comentario su equivalente en PostgreSQL."
+          "prompt": "Contexto: La biblioteca necesita saber qué libros rotan más, quién tiene préstamos vencidos y qué programa usa más el servicio (corte: 30 de octubre de 2026). Quiero entender cada consulta como una pregunta clara en español.\n\nRol: Actúa como profesor que enseña a consultar bases de datos (SQL) con ejemplos cotidianos.\n\nDatos:\n\"\"\"\n-- BASE DE DATOS DE PRÉSTAMOS DE BIBLIOTECA (datos de práctica, PostgreSQL)\nCREATE TABLE usuarios (id INT PRIMARY KEY, nombre VARCHAR(60), programa VARCHAR(40));\nCREATE TABLE libros (id INT PRIMARY KEY, titulo VARCHAR(80), categoria VARCHAR(40));\nCREATE TABLE prestamos (\n  id INT PRIMARY KEY,\n  libro_id INT REFERENCES libros(id),\n  usuario_id INT REFERENCES usuarios(id),\n  fecha_prestamo DATE NOT NULL,\n  fecha_limite DATE NOT NULL,\n  fecha_devolucion DATE\n);\n\nINSERT INTO usuarios VALUES\n(1,'Ana Torres','ADSO'),(2,'Luis Pérez','ADSO'),(3,'Marta Gil','Contabilidad'),\n(4,'Jorge Ríos','Contabilidad'),(5,'Sara Mejía','Multimedia'),(6,'Iván Cruz','Multimedia');\n\nINSERT INTO libros VALUES\n(1,'Código limpio','Programación'),(2,'Bases de datos relacionales','Programación'),\n(3,'Contabilidad básica','Finanzas'),(4,'Diseño de experiencia de usuario','Diseño'),\n(5,'Python para todos','Programación');\n\nINSERT INTO prestamos VALUES\n(1,1,1,'2026-09-01','2026-09-15','2026-09-08'),\n(2,1,2,'2026-09-10','2026-09-24','2026-09-20'),\n(3,1,5,'2026-10-01','2026-10-15',NULL),\n(4,2,1,'2026-09-03','2026-09-17','2026-09-12'),\n(5,2,2,'2026-10-05','2026-10-19',NULL),\n(6,3,3,'2026-09-02','2026-09-16','2026-09-30'),\n(7,3,4,'2026-10-02','2026-10-16','2026-10-10'),\n(8,4,5,'2026-09-15','2026-09-29','2026-09-25'),\n(9,4,6,'2026-10-08','2026-10-22',NULL),\n(10,5,1,'2026-10-12','2026-10-26','2026-10-20'),\n(11,5,2,'2026-10-14','2026-10-28',NULL),\n(12,1,6,'2026-10-16','2026-10-30','2026-10-24');\n\"\"\"\n\nTarea: En Canvas, escribe consultas SQL, válidas en SQLite y en PostgreSQL, que respondan:\n1. ¿Qué libros se prestan más? Usa RANK() para armar el podio.\n2. ¿Qué préstamos están vencidos y con cuántos días de atraso?\n3. ¿Cuántos préstamos tiene cada programa?\n4. ¿Cuál es el promedio de días de préstamo de los libros devueltos, en general y por programa?\n5. ¿Qué préstamos se devolvieron después de la fecha límite?\nEntrega: Un script .sql comentado en español claro.\n\nTono: Didáctico y cercano, con comentarios breves en cada consulta.\n\nLímites:\n- Antes de cada consulta, escribe un comentario en español sencillo explicando qué pregunta responde.\n- Usa JOIN explícitos (cruces claros entre tablas) y nombres fáciles de leer.\n- Si una función de fecha es propia de SQLite, deja en un comentario su equivalente en PostgreSQL."
         },
         {
           "id": "sql-b-limpieza-asistencia",
           "code": "9B",
-          "title": "Pipeline de limpieza de asistencia con diagrama entidad-relación",
-          "level": "Avanzado",
+          "title": "Limpiar una tabla desordenada paso a paso (SQL) y ver el mapa de datos",
+          "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Canvas de código SQL + SQLite con Pyodide + Mermaid erDiagram + tablero de calidad",
+          "canvasFeature": "Canvas de código SQL + Limpieza en navegador (Pyodide) + Mapa de tablas",
           "capabilities": [
             "code-preview",
             "inline-edit"
           ],
-          "whyCanvas": "El pipeline se revisa por etapas con selección y se ejecuta de verdad en la vista previa con SQLite; el tablero de calidad muestra cuántas filas pasa cada regla.",
-          "outsideCanvas": "El script SQL se redacta, se revisa por etapas y se ejecuta con SQLite (Pyodide) dentro de Canvas. La función `fn_limpiar_asistencia` para PostgreSQL se muestra para copiarla, pero Canvas no la ejecuta: para probarla usarías un PostgreSQL propio.",
+          "whyCanvas": "El filtro de limpieza (pipeline) se revisa paso a paso con selección y corre de verdad en la «Vista previa» con SQLite, mostrando cuántas filas pasaron y cuántas tenían errores.",
+          "outsideCanvas": "Todo el guion SQL se redacta, revisa y ejecuta con SQLite (Pyodide) dentro de Canvas. El bloque opcional `fn_limpiar_asistencia` para PostgreSQL queda solo para copiarlo si algún día usas ese motor.",
           "places": [
             "canvas",
             "canvas",
@@ -2627,26 +2627,26 @@
             "canvas",
             "portal"
           ],
-          "goal": "Diseñar un pipeline ETL que limpia un archivo con errores reales, documentarlo con un diagrama entidad-relación y medir la calidad antes y después.",
-          "scenario": "El reporte de asistencia llega de varias sedes con formatos distintos y la coordinación no confía en los porcentajes.",
+          "goal": "Construir un filtro automático por etapas que limpia datos mal escritos (fechas, repetidos, vacíos) y separa lo válido de lo rechazado, igual que al depurar una lista de gastos o contactos.",
+          "scenario": "Cuando recibes archivos de varias personas o sedes (con fechas escritas distinto o filas repetidas), limpiarlos a mano toma horas y genera errores.",
           "promptParts": {
-            "role": "ingeniero de datos especializado en calidad de datos",
-            "context": "El reporte de asistencia llega de varias sedes con formatos distintos y la coordinación no confía en los porcentajes.",
+            "role": "profesor de datos que explica cómo limpiar listas desordenadas paso a paso",
+            "context": "El reporte de asistencia llega de varias sedes con formatos distintos, filas repetidas y fechas imposibles. Necesito un filtro automático que limpie todo y explique cada rechazo.",
             "data": "CONTENIDO DE asistencia_cruda (14 filas pegadas aquí, datos de práctica con errores a propósito)\ndocumento,nombre,fecha,estado\n1001, ana torres ,2026-10-01,P\n1001,Ana Torres,01/10/2026,presente\n1002,LUIS PÉREZ,2026-10-01,A\n1003,marta gil,2026/10/01,Presente\n1004,Jorge Ríos,2026-10-01,\n1005,Sara Mejía,2026-10-01,tarde\n1001,Ana Torres,2026-10-02,P\n1002,Luis Pérez,02-10-2026,P\n1003,Marta Gil,2026-10-02,ausente\n1004,jorge rios,2026-10-02,P\n1005,Sara Mejía,2026-10-02,P\n,Sin Documento,2026-10-02,P\n1006,Iván Cruz,2026-13-02,P\n1003,Marta Gil,2026-10-02,A\n\nTABLA MAESTRA aprendices (nombres oficiales):\n1001,Ana Torres | 1002,Luis Pérez | 1003,Marta Gil | 1004,Jorge Ríos | 1005,Sara Mejía | 1006,Iván Cruz\n\nREGLAS DE LIMPIEZA:\n1. Fechas válidas en formatos AAAA-MM-DD, AAAA/MM/DD, DD/MM/AAAA y DD-MM-AAAA; una fecha imposible se descarta.\n2. Filas sin documento se descartan.\n3. El nombre se toma de la tabla maestra.\n4. Estados: P, presente, Presente -> Presente | A, ausente -> Ausente | tarde -> Tarde | vacío -> Sin registro.\n5. Un mismo documento y fecha cuenta una sola vez (se conserva la primera fila).",
-            "instruction": "En Canvas, escribe en SQL, válido en SQLite y en PostgreSQL, un pipeline de limpieza por etapas:",
+            "instruction": "En Canvas, escribe en SQL, válido en SQLite y en PostgreSQL, un filtro de limpieza por etapas:",
             "task": [
-              "Carga del archivo crudo en una tabla de staging con todas las columnas como texto.",
-              "Limpieza según las reglas: fechas, nombres desde la tabla maestra y estados.",
-              "Deduplicación por documento y fecha con ROW_NUMBER().",
-              "Tabla final de asistencia y tabla de rechazos con su motivo.",
+              "Carga del archivo crudo en una tabla temporal (staging) con todas las columnas como texto.",
+              "Limpieza según las reglas: unificar fechas, corregir nombres desde la tabla maestra y normalizar estados.",
+              "Quitar repetidos por documento y fecha usando ROW_NUMBER().",
+              "Tabla final de asistencia limpia y tabla de rechazos con el motivo en español.",
               "Porcentaje de asistencia: Presente más Tarde sobre el total limpio."
             ],
             "constraints": [
               "Cada etapa debe poder ejecutarse de nuevo sin duplicar datos.",
-              "Un comentario por cada regla aplicada."
+              "Un comentario en español sencillo por cada regla aplicada."
             ],
-            "format": "Script .sql dividido por etapas.",
-            "tone": "Técnico y preciso, explicando por qué se rechaza cada fila."
+            "format": "Script .sql dividido por etapas claras.",
+            "tone": "Claro y didáctico, explicando en palabras simples por qué se rechaza cada fila."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
@@ -2667,13 +2667,13 @@
             "El diagrama entidad-relación muestra las tablas aprendices, asistencia y rechazos, con la relación por documento."
           ],
           "stretch": "Pide: «Agrega una regla para detectar aprendices con dos ausencias seguidas y muéstralos en una alerta del tablero».",
-          "prompt": "Contexto: El reporte de asistencia llega de varias sedes con formatos distintos y la coordinación no confía en los porcentajes.\n\nRol: Actúa como ingeniero de datos especializado en calidad de datos.\n\nDatos:\n\"\"\"\nCONTENIDO DE asistencia_cruda (14 filas pegadas aquí, datos de práctica con errores a propósito)\ndocumento,nombre,fecha,estado\n1001, ana torres ,2026-10-01,P\n1001,Ana Torres,01/10/2026,presente\n1002,LUIS PÉREZ,2026-10-01,A\n1003,marta gil,2026/10/01,Presente\n1004,Jorge Ríos,2026-10-01,\n1005,Sara Mejía,2026-10-01,tarde\n1001,Ana Torres,2026-10-02,P\n1002,Luis Pérez,02-10-2026,P\n1003,Marta Gil,2026-10-02,ausente\n1004,jorge rios,2026-10-02,P\n1005,Sara Mejía,2026-10-02,P\n,Sin Documento,2026-10-02,P\n1006,Iván Cruz,2026-13-02,P\n1003,Marta Gil,2026-10-02,A\n\nTABLA MAESTRA aprendices (nombres oficiales):\n1001,Ana Torres | 1002,Luis Pérez | 1003,Marta Gil | 1004,Jorge Ríos | 1005,Sara Mejía | 1006,Iván Cruz\n\nREGLAS DE LIMPIEZA:\n1. Fechas válidas en formatos AAAA-MM-DD, AAAA/MM/DD, DD/MM/AAAA y DD-MM-AAAA; una fecha imposible se descarta.\n2. Filas sin documento se descartan.\n3. El nombre se toma de la tabla maestra.\n4. Estados: P, presente, Presente -> Presente | A, ausente -> Ausente | tarde -> Tarde | vacío -> Sin registro.\n5. Un mismo documento y fecha cuenta una sola vez (se conserva la primera fila).\n\"\"\"\n\nTarea: En Canvas, escribe en SQL, válido en SQLite y en PostgreSQL, un pipeline de limpieza por etapas:\n1. Carga del archivo crudo en una tabla de staging con todas las columnas como texto.\n2. Limpieza según las reglas: fechas, nombres desde la tabla maestra y estados.\n3. Deduplicación por documento y fecha con ROW_NUMBER().\n4. Tabla final de asistencia y tabla de rechazos con su motivo.\n5. Porcentaje de asistencia: Presente más Tarde sobre el total limpio.\nEntrega: Script .sql dividido por etapas.\n\nTono: Técnico y preciso, explicando por qué se rechaza cada fila.\n\nLímites:\n- Cada etapa debe poder ejecutarse de nuevo sin duplicar datos.\n- Un comentario por cada regla aplicada."
+          "prompt": "Contexto: El reporte de asistencia llega de varias sedes con formatos distintos, filas repetidas y fechas imposibles. Necesito un filtro automático que limpie todo y explique cada rechazo.\n\nRol: Actúa como profesor de datos que explica cómo limpiar listas desordenadas paso a paso.\n\nDatos:\n\"\"\"\nCONTENIDO DE asistencia_cruda (14 filas pegadas aquí, datos de práctica con errores a propósito)\ndocumento,nombre,fecha,estado\n1001, ana torres ,2026-10-01,P\n1001,Ana Torres,01/10/2026,presente\n1002,LUIS PÉREZ,2026-10-01,A\n1003,marta gil,2026/10/01,Presente\n1004,Jorge Ríos,2026-10-01,\n1005,Sara Mejía,2026-10-01,tarde\n1001,Ana Torres,2026-10-02,P\n1002,Luis Pérez,02-10-2026,P\n1003,Marta Gil,2026-10-02,ausente\n1004,jorge rios,2026-10-02,P\n1005,Sara Mejía,2026-10-02,P\n,Sin Documento,2026-10-02,P\n1006,Iván Cruz,2026-13-02,P\n1003,Marta Gil,2026-10-02,A\n\nTABLA MAESTRA aprendices (nombres oficiales):\n1001,Ana Torres | 1002,Luis Pérez | 1003,Marta Gil | 1004,Jorge Ríos | 1005,Sara Mejía | 1006,Iván Cruz\n\nREGLAS DE LIMPIEZA:\n1. Fechas válidas en formatos AAAA-MM-DD, AAAA/MM/DD, DD/MM/AAAA y DD-MM-AAAA; una fecha imposible se descarta.\n2. Filas sin documento se descartan.\n3. El nombre se toma de la tabla maestra.\n4. Estados: P, presente, Presente -> Presente | A, ausente -> Ausente | tarde -> Tarde | vacío -> Sin registro.\n5. Un mismo documento y fecha cuenta una sola vez (se conserva la primera fila).\n\"\"\"\n\nTarea: En Canvas, escribe en SQL, válido en SQLite y en PostgreSQL, un filtro de limpieza por etapas:\n1. Carga del archivo crudo en una tabla temporal (staging) con todas las columnas como texto.\n2. Limpieza según las reglas: unificar fechas, corregir nombres desde la tabla maestra y normalizar estados.\n3. Quitar repetidos por documento y fecha usando ROW_NUMBER().\n4. Tabla final de asistencia limpia y tabla de rechazos con el motivo en español.\n5. Porcentaje de asistencia: Presente más Tarde sobre el total limpio.\nEntrega: Script .sql dividido por etapas claras.\n\nTono: Claro y didáctico, explicando en palabras simples por qué se rechaza cada fila.\n\nLímites:\n- Cada etapa debe poder ejecutarse de nuevo sin duplicar datos.\n- Un comentario en español sencillo por cada regla aplicada."
         },
         {
           "id": "sql-c-conciliacion-mesa-pdf",
           "code": "9C",
-          "title": "Conciliación SQL de certificación y reporte auditable en PDF",
-          "level": "Avanzado",
+          "title": "Cruzar listas sin perder a nadie (LEFT JOIN) y exportar el reporte en PDF",
+          "level": "Intermedio",
           "duration": "30 min",
           "canvasFeature": "Documento y código SQL + Vista previa + Edición por selección + Exportar a PDF",
           "capabilities": [
@@ -2682,7 +2682,7 @@
             "inline-edit",
             "export-pdf"
           ],
-          "whyCanvas": "En Canvas puedes combinar el script SQL de conciliación, un verificador interactivo en la vista previa y un informe ejecutivo listo para guardar con «Exportar a PDF».",
+          "whyCanvas": "En Canvas puedes unir la consulta SQL que cruza dos listas sin perder a nadie, probar un filtro interactivo en la «Vista previa» y guardar el reporte listo con «Exportar a PDF».",
           "outsideCanvas": "La consulta SQL, la simulación de resultados y la vista previa de impresión ocurren dentro de Gemini Canvas.",
           "places": [
             "canvas",
@@ -2692,24 +2692,24 @@
             "canvas",
             "portal"
           ],
-          "goal": "Escribir una consulta SQL que determine qué aprendices cumplen los requisitos de certificación sin excluir a quienes tienen cero entregas, y generar el acta en PDF.",
-          "scenario": "Antes del cierre de trimestre, registro académico necesita conciliar la tabla de aprendices matriculados contra las evidencias aprobadas para emitir el listado oficial de certificación.",
+          "goal": "Aprender a cruzar dos listas (personas vs. entregas o pagos) sin que desaparezca quien tiene cero registros, mostrando 0 en vez de vacío, y dejar el acta lista en PDF.",
+          "scenario": "En la vida diaria (como revisar quién ha pagado una cuota o quién entregó un requisito), si cruzas dos listas de la forma común, quien no ha entregado nada desaparece del listado.",
           "promptParts": {
-            "role": "ingeniero de datos y auditor de registro académico",
-            "context": "Se requiere una consulta SQL determinista y un reporte de conciliación que muestre tanto a los aprendices aptos como a quienes tienen entregas pendientes o cero registros.",
+            "role": "profesor de datos y auditoría que explica con ejemplos claros",
+            "context": "Necesito una consulta SQL y un reporte de conciliación que muestre tanto a quienes ya cumplieron como a quienes tienen entregas pendientes o cero registros (como Julián Mora).",
             "data": "AUDITORÍA SQL — CONCILIACIÓN DE CERTIFICADOS Y EVIDENCIAS (datos de práctica)\n\nCREATE TABLE aprendices_corte (id INT PRIMARY KEY, nombre TEXT, ficha INT);\nCREATE TABLE evidencias_entregadas (id_evidencia INT PRIMARY KEY, aprendiz_id INT, estado TEXT, puntaje NUMERIC(4,1));\n\nINSERT INTO aprendices_corte VALUES (1,'Laura Gómez',2871),(2,'Mateo Díaz',2871),(3,'Camila Vega',2871),(4,'Julián Mora',2872);\nINSERT INTO evidencias_entregadas VALUES\n  (101,1,'Aprobada',92.0),(102,1,'Aprobada',88.0),\n  (103,2,'Aprobada',75.0),(104,2,'Pendiente',40.0),\n  (105,3,'Aprobada',95.0),(106,3,'Aprobada',91.0);\n-- Julián Mora (id 4) no tiene evidencias registradas aún.\n\nRegla de certificación: apto si tiene al menos 2 evidencias con estado 'Aprobada' y promedio de puntaje mayor o igual a 85,0.",
             "instruction": "En Canvas, redacta el documento de conciliación SQL que contenga:",
             "task": [
-              "La consulta PostgreSQL con LEFT JOIN y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').",
-              "La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE para que Julián Mora aparezca con 0 aprobadas y promedio 0,0.",
-              "Un resumen ejecutivo de hallazgos para firma del comité."
+              "La consulta PostgreSQL con LEFT JOIN (cruce que conserva a todos los de la lista principal) y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').",
+              "La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE (para cambiar vacíos por cero) de modo que Julián Mora aparezca con 0 aprobadas y promedio 0,0.",
+              "Un resumen ejecutivo de hallazgos en lenguaje claro para firma del comité."
             ],
             "constraints": [
               "No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.",
-              "Usa COALESCE para evitar valores nulos en el conteo y en el promedio."
+              "Usa COALESCE para evitar valores vacíos (nulos) en el conteo y en el promedio."
             ],
-            "format": "Documento técnico con bloque SQL comentado, tabla de conciliación de 4 filas y resumen de cierre.",
-            "tone": "Riguroso, claro y auditable."
+            "format": "Documento claro con bloque SQL comentado en español, tabla de conciliación de 4 filas y resumen de cierre.",
+            "tone": "Claro, riguroso y fácil de entender incluso para quien no programa."
           },
           "steps": [
             "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera el documento de conciliación SQL.",
@@ -2727,21 +2727,21 @@
             "La vista previa del PDF conserva el bloque SQL y la tabla completa sin recortes."
           ],
           "stretch": "Pide: «Agrega una restricción CHECK y un índice único en evidencias_entregadas para impedir puntajes fuera del rango 0 a 100».",
-          "prompt": "Contexto: Se requiere una consulta SQL determinista y un reporte de conciliación que muestre tanto a los aprendices aptos como a quienes tienen entregas pendientes o cero registros.\n\nRol: Actúa como ingeniero de datos y auditor de registro académico.\n\nDatos:\n\"\"\"\nAUDITORÍA SQL — CONCILIACIÓN DE CERTIFICADOS Y EVIDENCIAS (datos de práctica)\n\nCREATE TABLE aprendices_corte (id INT PRIMARY KEY, nombre TEXT, ficha INT);\nCREATE TABLE evidencias_entregadas (id_evidencia INT PRIMARY KEY, aprendiz_id INT, estado TEXT, puntaje NUMERIC(4,1));\n\nINSERT INTO aprendices_corte VALUES (1,'Laura Gómez',2871),(2,'Mateo Díaz',2871),(3,'Camila Vega',2871),(4,'Julián Mora',2872);\nINSERT INTO evidencias_entregadas VALUES\n  (101,1,'Aprobada',92.0),(102,1,'Aprobada',88.0),\n  (103,2,'Aprobada',75.0),(104,2,'Pendiente',40.0),\n  (105,3,'Aprobada',95.0),(106,3,'Aprobada',91.0);\n-- Julián Mora (id 4) no tiene evidencias registradas aún.\n\nRegla de certificación: apto si tiene al menos 2 evidencias con estado 'Aprobada' y promedio de puntaje mayor o igual a 85,0.\n\"\"\"\n\nTarea: En Canvas, redacta el documento de conciliación SQL que contenga:\n1. La consulta PostgreSQL con LEFT JOIN y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').\n2. La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE para que Julián Mora aparezca con 0 aprobadas y promedio 0,0.\n3. Un resumen ejecutivo de hallazgos para firma del comité.\nEntrega: Documento técnico con bloque SQL comentado, tabla de conciliación de 4 filas y resumen de cierre.\n\nTono: Riguroso, claro y auditable.\n\nLímites:\n- No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.\n- Usa COALESCE para evitar valores nulos en el conteo y en el promedio."
+          "prompt": "Contexto: Necesito una consulta SQL y un reporte de conciliación que muestre tanto a quienes ya cumplieron como a quienes tienen entregas pendientes o cero registros (como Julián Mora).\n\nRol: Actúa como profesor de datos y auditoría que explica con ejemplos claros.\n\nDatos:\n\"\"\"\nAUDITORÍA SQL — CONCILIACIÓN DE CERTIFICADOS Y EVIDENCIAS (datos de práctica)\n\nCREATE TABLE aprendices_corte (id INT PRIMARY KEY, nombre TEXT, ficha INT);\nCREATE TABLE evidencias_entregadas (id_evidencia INT PRIMARY KEY, aprendiz_id INT, estado TEXT, puntaje NUMERIC(4,1));\n\nINSERT INTO aprendices_corte VALUES (1,'Laura Gómez',2871),(2,'Mateo Díaz',2871),(3,'Camila Vega',2871),(4,'Julián Mora',2872);\nINSERT INTO evidencias_entregadas VALUES\n  (101,1,'Aprobada',92.0),(102,1,'Aprobada',88.0),\n  (103,2,'Aprobada',75.0),(104,2,'Pendiente',40.0),\n  (105,3,'Aprobada',95.0),(106,3,'Aprobada',91.0);\n-- Julián Mora (id 4) no tiene evidencias registradas aún.\n\nRegla de certificación: apto si tiene al menos 2 evidencias con estado 'Aprobada' y promedio de puntaje mayor o igual a 85,0.\n\"\"\"\n\nTarea: En Canvas, redacta el documento de conciliación SQL que contenga:\n1. La consulta PostgreSQL con LEFT JOIN (cruce que conserva a todos los de la lista principal) y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').\n2. La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE (para cambiar vacíos por cero) de modo que Julián Mora aparezca con 0 aprobadas y promedio 0,0.\n3. Un resumen ejecutivo de hallazgos en lenguaje claro para firma del comité.\nEntrega: Documento claro con bloque SQL comentado en español, tabla de conciliación de 4 filas y resumen de cierre.\n\nTono: Claro, riguroso y fácil de entender incluso para quien no programa.\n\nLímites:\n- No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.\n- Usa COALESCE para evitar valores vacíos (nulos) en el conteo y en el promedio."
         }
       ],
       "expected": [
         {
-          "criterion": "La consulta usa WITH con dos CTE y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC).",
+          "criterion": "La consulta usa WITH con dos pasos intermedios (CTE) y ROW_NUMBER() OVER (PARTITION BY ficha_id ORDER BY promedio DESC).",
           "how": "Lee el bloque SQL."
         },
         {
-          "criterion": "Usa LEFT JOIN y NULLIF (o CASE) para que Sara aparezca con NULL en asistencia.",
+          "criterion": "Usa LEFT JOIN (para no borrar a Sara) y NULLIF (para evitar dividir por cero), mostrando NULL en asistencia.",
           "how": "Busca «LEFT JOIN» y «NULLIF» en el código."
         },
         {
           "criterion": "Resultado con la muestra: 2871 → 1 Marta 4,6 · 100,0; 2 Ana 4,3 · 100,0; 3 Luis 4,0 · 75,0. 2872 → 1 Sara 4,9 · NULL; 2 Jorge 3,2 · 50,0.",
-          "how": "Ejecuta el esquema y la consulta en PostgreSQL (local o en un editor en línea) y compara fila por fila."
+          "how": "Revisa la tabla de resultado generada en Canvas o pruébala en la Vista previa sin instalar nada."
         },
         {
           "criterion": "El índice es CREATE INDEX … ON registro_asistencia (aprendiz_id, fecha) INCLUDE (asistio).",
@@ -2749,7 +2749,7 @@
         },
         {
           "criterion": "No hay subconsultas dentro de SELECT ni de WHERE.",
-          "how": "Busca «(SELECT» en el código; solo debe aparecer dentro de las CTE."
+          "how": "Busca «(SELECT» en el código; solo debe aparecer dentro de los pasos WITH."
         }
       ],
       "followUps": [],
@@ -2846,7 +2846,7 @@
         ],
         "file": "canvas_sql.jpg",
         "docTitle": "Reporte_Mensual_Por_Ficha.sql",
-        "chat": "Escribí en el Canvas la consulta con dos CTE, el puesto por ficha con ROW_NUMBER(), el porcentaje de asistencia protegido con NULLIF, el índice compuesto y la tabla de resultado que debe dar la muestra."
+        "chat": "Escribí en Canvas la consulta SQL organizada en dos pasos claros (CTE), el ranking por grupo con ROW_NUMBER(), la protección con LEFT JOIN y NULLIF para no perder a Sara, el índice de búsqueda rápida y la tabla de resultado esperada."
       }
     },
     {
@@ -3543,8 +3543,8 @@
         {
           "id": "gem-a-tutor-socratico",
           "code": "12A",
-          "title": "Configuración y calibración de un Gem Tutor Socrático para coescritura en Canvas",
-          "level": "Avanzado",
+          "title": "Crear un asistente tutor (Gem) que te guía con preguntas sin hacer la tarea por ti",
+          "level": "Intermedio",
           "duration": "35 min",
           "canvasFeature": "Documento en Canvas + Nuevo Gem + coescritura con Canvas activo",
           "capabilities": [
@@ -3552,8 +3552,8 @@
             "inline-edit",
             "gems"
           ],
-          "whyCanvas": "Canvas sirve para redactar y pulir las instrucciones del Gem como documento; luego el Gem trabaja contigo dentro de Canvas.",
-          "outsideCanvas": "La redacción y el ajuste del System Prompt se hacen en Canvas; la creación en «Explorar Gems → Nuevo Gem» ocurre en el gestor de Gems de Gemini (fuera del lienzo) y luego vuelves a activar Canvas dentro del Gem.",
+          "whyCanvas": "Canvas sirve para redactar y pulir las reglas fijas de tu asistente (Gem) como un documento; luego ese asistente trabaja contigo dentro de Canvas.",
+          "outsideCanvas": "La redacción y ajuste de las reglas (System Prompt) se hacen en Canvas; crear el asistente en «Explorar Gems → Nuevo Gem» ocurre en Gemini y luego vuelves a activar Canvas dentro de él (o lo pruebas directo en un chat nuevo).",
           "places": [
             "canvas",
             "canvas",
@@ -3562,25 +3562,25 @@
             "canvas",
             "portal"
           ],
-          "goal": "Diseñar el System Prompt de un Gem especializado, ponerlo a prueba con preguntas trampa y utilizarlo como asistente de coescritura en un lienzo de Canvas.",
-          "scenario": "Los aprendices tienden a pedirle a la IA que resuelva los talleres de código por completo. El instructor necesita calibrar un Gem que actúe como tutor socrático en Canvas, guiando con preguntas reflexivas sin regalar la solución.",
+          "goal": "Diseñar las reglas fijas (System Prompt) de un asistente personalizado (Gem), probarlo con preguntas trampa y usarlo en Canvas para aprender mejor (como un tutor de programación, inglés o finanzas).",
+          "scenario": "Si le pides a una IA que haga todo por ti, no aprendes. Con un Gem calibrado con reglas claras, puedes tener un tutor personal disponible a cualquier hora que te guía paso a paso.",
           "promptParts": {
-            "role": "diseñador pedagógico de asistentes con Gems",
-            "context": "En el centro de formación se implementará un Gem institucional para que los aprendices de la ficha ADSO cuenten con un tutor permanente en Canvas. La coordinación académica exige que el Gem fomente el pensamiento crítico y respete estrictamente los lineamientos institucionales.",
+            "role": "diseñador pedagógico de asistentes personalizados (Gems)",
+            "context": "Se implementará un asistente (Gem) para que los aprendices cuenten con un tutor permanente en Canvas que fomente el pensamiento crítico y respete las reglas institucionales, sin regalar las respuestas hechas.",
             "data": "ESPECIFICACIÓN DE CALIBRACIÓN DEL GEM TUTOR SOCRÁTICO\nNombre del Gem: Tutor Socrático ADSO · Canvas Co-Writer\nObjetivo pedagógico: Acompañar al aprendiz en la resolución de problemas de programación orientada a objetos en Canvas mediante preguntas reflexivas, impidiendo que la IA genere el código de forma automática.\nGuardrails obligatorios de calibración:\n- Ante preguntas como \"¿Cuál es el código completo?\": Responder con preguntas sobre el modelo del dominio y la responsabilidad de cada clase.\n- Requisito léxico institucional: Utilizar siempre y de forma exclusiva el término institucional \"Portafolio de Evidencias\".\n- Estructura obligatoria de guía: Organizar las respuestas en Canvas con: 1) Pregunta socrática orientadora, 2) Pista técnica contextualizada, 3) Ejercicio de autocomprobación.\nCasos de prueba para validación:\n1. \"Escríbeme la clase Aprendiz en Python con todos sus atributos y métodos\" -> Debe devolver diagrama conceptual y dos preguntas de diseño.\n2. \"Corrige este error de sintaxis sin explicarme nada\" -> Debe señalar la línea exacta y preguntar por qué se produce el fallo.\n3. \"¿Cómo subo mi tarea al archivo final?\" -> Debe corregir la terminología a \"Portafolio de Evidencias\" e indicar la estructura requerida.",
             "instruction": "En Canvas, redacta la documentación de configuración completa del Gem y su System Prompt listo para despliegue con:",
             "task": [
-              "El System Prompt definitivo estructurado en Rol, Directrices Pedagógicas Socráticas, Guardrails Negativos y Ejemplos de Respuesta (Few-shot).",
-              "La matriz de evaluación de los 3 casos de calibración, detallando la respuesta no permitida frente a la respuesta socrática correcta.",
-              "El manual de uso en Canvas: cómo debe actuar el Gem cuando el aprendiz selecciona un bloque de código y pide ayuda.",
+              "El System Prompt definitivo (reglas fijas del asistente) estructurado en: Rol, Directrices Pedagógicas Socráticas (guiar con preguntas), Guardrails Negativos (límites que nunca debe cruzar) y Ejemplos de Respuesta (Few-shot).",
+              "La tabla de evaluación de los 3 casos de prueba, detallando la respuesta prohibida frente a la respuesta guía correcta.",
+              "El manual de uso en Canvas: cómo debe actuar el Gem cuando alguien selecciona una parte y pide ayuda.",
               "Una lista de verificación con 5 criterios que el comité pedagógico debe comprobar antes de autorizar el Gem."
             ],
             "constraints": [
               "Exige el uso obligatorio y exclusivo del término institucional «Portafolio de Evidencias» en todo el texto.",
               "El System Prompt no debe contener código de solución para los ejercicios, sino preguntas guía.",
-              "Redacta en español de Colombia con tono profesional y pedagógico."
+              "Redacta en español de Colombia claro, cercano y comprensible incluso para alguien que no es programador."
             ],
-            "format": "Documento técnico estructurado con secciones numeradas, bloques de código para el System Prompt y una tabla de calibración.",
+            "format": "Documento estructurado con secciones numeradas, bloques de código para las reglas del Gem (System Prompt) y una tabla de pruebas.",
             "tone": "Socrático y respetuoso: pregunta antes de responder."
           },
           "steps": [
@@ -3599,23 +3599,23 @@
             "Ante «Escríbeme la clase Aprendiz en Python», el Gem responde con preguntas y no entrega el código completo."
           ],
           "stretch": "Pide en el chat: «Genera una batería de 5 preguntas adversariales complejas para evaluar si el Gem rompe sus guardrails socráticos ante técnicas de jailbreak simuladas».",
-          "prompt": "Contexto: En el centro de formación se implementará un Gem institucional para que los aprendices de la ficha ADSO cuenten con un tutor permanente en Canvas. La coordinación académica exige que el Gem fomente el pensamiento crítico y respete estrictamente los lineamientos institucionales.\n\nRol: Actúa como diseñador pedagógico de asistentes con Gems.\n\nDatos:\n\"\"\"\nESPECIFICACIÓN DE CALIBRACIÓN DEL GEM TUTOR SOCRÁTICO\nNombre del Gem: Tutor Socrático ADSO · Canvas Co-Writer\nObjetivo pedagógico: Acompañar al aprendiz en la resolución de problemas de programación orientada a objetos en Canvas mediante preguntas reflexivas, impidiendo que la IA genere el código de forma automática.\nGuardrails obligatorios de calibración:\n- Ante preguntas como \"¿Cuál es el código completo?\": Responder con preguntas sobre el modelo del dominio y la responsabilidad de cada clase.\n- Requisito léxico institucional: Utilizar siempre y de forma exclusiva el término institucional \"Portafolio de Evidencias\".\n- Estructura obligatoria de guía: Organizar las respuestas en Canvas con: 1) Pregunta socrática orientadora, 2) Pista técnica contextualizada, 3) Ejercicio de autocomprobación.\nCasos de prueba para validación:\n1. \"Escríbeme la clase Aprendiz en Python con todos sus atributos y métodos\" -> Debe devolver diagrama conceptual y dos preguntas de diseño.\n2. \"Corrige este error de sintaxis sin explicarme nada\" -> Debe señalar la línea exacta y preguntar por qué se produce el fallo.\n3. \"¿Cómo subo mi tarea al archivo final?\" -> Debe corregir la terminología a \"Portafolio de Evidencias\" e indicar la estructura requerida.\n\"\"\"\n\nTarea: En Canvas, redacta la documentación de configuración completa del Gem y su System Prompt listo para despliegue con:\n1. El System Prompt definitivo estructurado en Rol, Directrices Pedagógicas Socráticas, Guardrails Negativos y Ejemplos de Respuesta (Few-shot).\n2. La matriz de evaluación de los 3 casos de calibración, detallando la respuesta no permitida frente a la respuesta socrática correcta.\n3. El manual de uso en Canvas: cómo debe actuar el Gem cuando el aprendiz selecciona un bloque de código y pide ayuda.\n4. Una lista de verificación con 5 criterios que el comité pedagógico debe comprobar antes de autorizar el Gem.\nEntrega: Documento técnico estructurado con secciones numeradas, bloques de código para el System Prompt y una tabla de calibración.\n\nTono: Socrático y respetuoso: pregunta antes de responder.\n\nLímites:\n- Exige el uso obligatorio y exclusivo del término institucional «Portafolio de Evidencias» en todo el texto.\n- El System Prompt no debe contener código de solución para los ejercicios, sino preguntas guía.\n- Redacta en español de Colombia con tono profesional y pedagógico."
+          "prompt": "Contexto: Se implementará un asistente (Gem) para que los aprendices cuenten con un tutor permanente en Canvas que fomente el pensamiento crítico y respete las reglas institucionales, sin regalar las respuestas hechas.\n\nRol: Actúa como diseñador pedagógico de asistentes personalizados (Gems).\n\nDatos:\n\"\"\"\nESPECIFICACIÓN DE CALIBRACIÓN DEL GEM TUTOR SOCRÁTICO\nNombre del Gem: Tutor Socrático ADSO · Canvas Co-Writer\nObjetivo pedagógico: Acompañar al aprendiz en la resolución de problemas de programación orientada a objetos en Canvas mediante preguntas reflexivas, impidiendo que la IA genere el código de forma automática.\nGuardrails obligatorios de calibración:\n- Ante preguntas como \"¿Cuál es el código completo?\": Responder con preguntas sobre el modelo del dominio y la responsabilidad de cada clase.\n- Requisito léxico institucional: Utilizar siempre y de forma exclusiva el término institucional \"Portafolio de Evidencias\".\n- Estructura obligatoria de guía: Organizar las respuestas en Canvas con: 1) Pregunta socrática orientadora, 2) Pista técnica contextualizada, 3) Ejercicio de autocomprobación.\nCasos de prueba para validación:\n1. \"Escríbeme la clase Aprendiz en Python con todos sus atributos y métodos\" -> Debe devolver diagrama conceptual y dos preguntas de diseño.\n2. \"Corrige este error de sintaxis sin explicarme nada\" -> Debe señalar la línea exacta y preguntar por qué se produce el fallo.\n3. \"¿Cómo subo mi tarea al archivo final?\" -> Debe corregir la terminología a \"Portafolio de Evidencias\" e indicar la estructura requerida.\n\"\"\"\n\nTarea: En Canvas, redacta la documentación de configuración completa del Gem y su System Prompt listo para despliegue con:\n1. El System Prompt definitivo (reglas fijas del asistente) estructurado en: Rol, Directrices Pedagógicas Socráticas (guiar con preguntas), Guardrails Negativos (límites que nunca debe cruzar) y Ejemplos de Respuesta (Few-shot).\n2. La tabla de evaluación de los 3 casos de prueba, detallando la respuesta prohibida frente a la respuesta guía correcta.\n3. El manual de uso en Canvas: cómo debe actuar el Gem cuando alguien selecciona una parte y pide ayuda.\n4. Una lista de verificación con 5 criterios que el comité pedagógico debe comprobar antes de autorizar el Gem.\nEntrega: Documento estructurado con secciones numeradas, bloques de código para las reglas del Gem (System Prompt) y una tabla de pruebas.\n\nTono: Socrático y respetuoso: pregunta antes de responder.\n\nLímites:\n- Exige el uso obligatorio y exclusivo del término institucional «Portafolio de Evidencias» en todo el texto.\n- El System Prompt no debe contener código de solución para los ejercicios, sino preguntas guía.\n- Redacta en español de Colombia claro, cercano y comprensible incluso para alguien que no es programador."
         },
         {
           "id": "gem-b-auditor-rubricas",
           "code": "12B",
-          "title": "Gem Auditor de Rúbricas y Calidad de Código en tiempo real",
-          "level": "Avanzado",
+          "title": "Asistente revisor (Gem) que califica con rúbrica sin dañar tu trabajo",
+          "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Documento en Canvas + Nuevo Gem + Auditoría de código en Canvas",
+          "canvasFeature": "Documento en Canvas + Nuevo Gem + Revisión de calidad en Canvas",
           "capabilities": [
             "doc-create",
             "inline-edit",
             "gems",
             "export-docs"
           ],
-          "whyCanvas": "El pliego del Gem se construye y verifica en un documento editable, y el Gem auditor revisa código abierto en Canvas.",
-          "outsideCanvas": "El pliego se redacta en Canvas, la configuración del Gem se guarda en «Explorar Gems → Nuevo Gem» (gestor de Gemini) y la exportación final abre Documentos de Google.",
+          "whyCanvas": "Las reglas del asistente evaluador (Gem) se redactan en un documento editable y luego ese Gem revisa código o trabajos abiertos en Canvas sin dañarlos.",
+          "outsideCanvas": "Las reglas se redactan en Canvas, el Gem se guarda en «Explorar Gems → Nuevo Gem» (o en un chat nuevo) y exportar a Documentos de Google es opcional.",
           "places": [
             "canvas",
             "canvas",
@@ -3624,26 +3624,26 @@
             "external",
             "portal"
           ],
-          "goal": "Crear y calibrar un Gem evaluador que audite el código generado en Canvas contra una rúbrica técnica de 4 criterios sin alterar la lógica de negocio.",
-          "scenario": "Al evaluar entregas de software, se requiere un asistente que revise que el código cumpla con separación de capas, pruebas con aserciones y contraste accesible, generando un dictamen estructurado.",
+          "goal": "Crear un asistente evaluador (Gem) que revise un código o proyecto con una lista de 4 criterios claros (rúbrica), califique con semáforo y te dé recomendaciones sin cambiar tu trabajo.",
+          "scenario": "Antes de entregar un trabajo, una cotización o una tarea, tener un revisor imparcial que califique según tus reglas fijas te ahorra errores y te da tranquilidad.",
           "promptParts": {
-            "role": "líder técnico de calidad de software",
-            "context": "La coordinación técnica necesita automatizar la auditoría preliminar de los proyectos formativos de desarrollo de software. Se diseñará un Gem que analice los archivos de código creados en Canvas y emita un informe técnico fundamentado.",
+            "role": "líder de calidad que diseña asistentes revisores claros y justos",
+            "context": "Se necesita un asistente (Gem) que analice archivos de código o entregas creadas en Canvas y emita un informe claro con calificación del 1 al 5, sin alterar lo que ya funciona.",
             "data": "ESPECIFICACIÓN DEL GEM AUDITOR DE RÚBRICAS TÉCNICAS\nNombre del Gem: Auditor Técnico de Calidad de Código ADSO\nPropósito: Evaluar artefactos de software construidos en Canvas contra una rúbrica formal de cuatro criterios.\nCriterios de evaluación y ponderación:\n1. Arquitectura y Modularidad (30 %): Separación de responsabilidades, archivos menores a 250 líneas y funciones atómicas menores a 40 líneas.\n2. Calidad de Pruebas Automatizadas (30 %): 100 % de funciones probadas con aserciones observables y cobertura de casos límite (entradas vacías o inválidas).\n3. Accesibilidad y Usabilidad (20 %): Contraste de color WCAG 2.2 nivel AA, etiquetas semánticas y navegación accesible.\n4. Seguridad y Buenas Prácticas (20 %): Cero secretos o llaves API expuestas, validación de entradas y manejo robusto de excepciones.\nGuardrails obligatorios:\n- El Gem nunca debe modificar la lógica de negocio ni inventar dependencias externas.\n- El dictamen debe emitirse con puntajes numéricos del 1 al 5 y un semáforo visual (Verde >= 4.0, Ámbar 3.0-3.9, Rojo < 3.0).\n- El dictamen termina con una recomendación de qué evidencia anexar al Portafolio de Evidencias.",
-            "instruction": "En Canvas, elabora el pliego de especificación y el System Prompt del Gem Auditor Técnico con:",
+            "instruction": "En Canvas, elabora el pliego de especificación y el System Prompt (reglas fijas) del Gem Auditor Técnico con:",
             "task": [
-              "El System Prompt del Gem con su matriz de evaluación de 4 criterios ponderados y escala del 1 al 5.",
-              "La plantilla estructurada del dictamen de auditoría en formato Markdown que el Gem debe completar al evaluar código.",
-              "El protocolo para auditar fragmentos seleccionados dentro de un Canvas de código sin alterar su funcionamiento.",
-              "Un ejemplo completo de auditoría simulada para una función de cálculo de promedios, mostrando fortalezas, debilidades y calificación final."
+              "El System Prompt del Gem con su tabla de evaluación de 4 criterios con pesos que sumen 100 % y escala del 1 al 5.",
+              "La plantilla del informe de revisión en formato Markdown que el Gem debe llenar al evaluar un trabajo.",
+              "Las instrucciones para revisar fragmentos seleccionados dentro de Canvas sin cambiar su funcionamiento.",
+              "Un ejemplo completo de revisión simulada para una función de cálculo de promedios, mostrando aciertos, mejoras y calificación final."
             ],
             "constraints": [
               "Los 4 criterios deben sumar exactamente 100 % en su ponderación.",
-              "Prohíbe que el Gem aplique refactorizaciones no solicitadas que rompan la compatibilidad del código auditado.",
+              "Prohíbe que el Gem cambie o reescriba por su cuenta el funcionamiento del código revisado.",
               "Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias»."
             ],
-            "format": "Documento técnico con tablas de ponderación, bloques de código para el System Prompt y plantilla de dictamen.",
-            "tone": "Técnico, objetivo y constructivo en cada hallazgo."
+            "format": "Documento claro con tablas de pesos, bloque de reglas (System Prompt) y plantilla de informe.",
+            "tone": "Claro, objetivo y constructivo en cada recomendación."
           },
           "steps": [
             "Activa Canvas en Gemini, pega el prompt y genera el pliego de especificación del Gem Auditor.",
@@ -3661,13 +3661,13 @@
             "Al auditar la calculadora del 6B, el Gem califica los 4 criterios con semáforo y no cambia la lógica del código."
           ],
           "stretch": "Pide en el chat: «Añade al System Prompt una regla para detectar código duplicado y calcular el índice de mantenibilidad según la complejidad ciclomática».",
-          "prompt": "Contexto: La coordinación técnica necesita automatizar la auditoría preliminar de los proyectos formativos de desarrollo de software. Se diseñará un Gem que analice los archivos de código creados en Canvas y emita un informe técnico fundamentado.\n\nRol: Actúa como líder técnico de calidad de software.\n\nDatos:\n\"\"\"\nESPECIFICACIÓN DEL GEM AUDITOR DE RÚBRICAS TÉCNICAS\nNombre del Gem: Auditor Técnico de Calidad de Código ADSO\nPropósito: Evaluar artefactos de software construidos en Canvas contra una rúbrica formal de cuatro criterios.\nCriterios de evaluación y ponderación:\n1. Arquitectura y Modularidad (30 %): Separación de responsabilidades, archivos menores a 250 líneas y funciones atómicas menores a 40 líneas.\n2. Calidad de Pruebas Automatizadas (30 %): 100 % de funciones probadas con aserciones observables y cobertura de casos límite (entradas vacías o inválidas).\n3. Accesibilidad y Usabilidad (20 %): Contraste de color WCAG 2.2 nivel AA, etiquetas semánticas y navegación accesible.\n4. Seguridad y Buenas Prácticas (20 %): Cero secretos o llaves API expuestas, validación de entradas y manejo robusto de excepciones.\nGuardrails obligatorios:\n- El Gem nunca debe modificar la lógica de negocio ni inventar dependencias externas.\n- El dictamen debe emitirse con puntajes numéricos del 1 al 5 y un semáforo visual (Verde >= 4.0, Ámbar 3.0-3.9, Rojo < 3.0).\n- El dictamen termina con una recomendación de qué evidencia anexar al Portafolio de Evidencias.\n\"\"\"\n\nTarea: En Canvas, elabora el pliego de especificación y el System Prompt del Gem Auditor Técnico con:\n1. El System Prompt del Gem con su matriz de evaluación de 4 criterios ponderados y escala del 1 al 5.\n2. La plantilla estructurada del dictamen de auditoría en formato Markdown que el Gem debe completar al evaluar código.\n3. El protocolo para auditar fragmentos seleccionados dentro de un Canvas de código sin alterar su funcionamiento.\n4. Un ejemplo completo de auditoría simulada para una función de cálculo de promedios, mostrando fortalezas, debilidades y calificación final.\nEntrega: Documento técnico con tablas de ponderación, bloques de código para el System Prompt y plantilla de dictamen.\n\nTono: Técnico, objetivo y constructivo en cada hallazgo.\n\nLímites:\n- Los 4 criterios deben sumar exactamente 100 % en su ponderación.\n- Prohíbe que el Gem aplique refactorizaciones no solicitadas que rompan la compatibilidad del código auditado.\n- Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias»."
+          "prompt": "Contexto: Se necesita un asistente (Gem) que analice archivos de código o entregas creadas en Canvas y emita un informe claro con calificación del 1 al 5, sin alterar lo que ya funciona.\n\nRol: Actúa como líder de calidad que diseña asistentes revisores claros y justos.\n\nDatos:\n\"\"\"\nESPECIFICACIÓN DEL GEM AUDITOR DE RÚBRICAS TÉCNICAS\nNombre del Gem: Auditor Técnico de Calidad de Código ADSO\nPropósito: Evaluar artefactos de software construidos en Canvas contra una rúbrica formal de cuatro criterios.\nCriterios de evaluación y ponderación:\n1. Arquitectura y Modularidad (30 %): Separación de responsabilidades, archivos menores a 250 líneas y funciones atómicas menores a 40 líneas.\n2. Calidad de Pruebas Automatizadas (30 %): 100 % de funciones probadas con aserciones observables y cobertura de casos límite (entradas vacías o inválidas).\n3. Accesibilidad y Usabilidad (20 %): Contraste de color WCAG 2.2 nivel AA, etiquetas semánticas y navegación accesible.\n4. Seguridad y Buenas Prácticas (20 %): Cero secretos o llaves API expuestas, validación de entradas y manejo robusto de excepciones.\nGuardrails obligatorios:\n- El Gem nunca debe modificar la lógica de negocio ni inventar dependencias externas.\n- El dictamen debe emitirse con puntajes numéricos del 1 al 5 y un semáforo visual (Verde >= 4.0, Ámbar 3.0-3.9, Rojo < 3.0).\n- El dictamen termina con una recomendación de qué evidencia anexar al Portafolio de Evidencias.\n\"\"\"\n\nTarea: En Canvas, elabora el pliego de especificación y el System Prompt (reglas fijas) del Gem Auditor Técnico con:\n1. El System Prompt del Gem con su tabla de evaluación de 4 criterios con pesos que sumen 100 % y escala del 1 al 5.\n2. La plantilla del informe de revisión en formato Markdown que el Gem debe llenar al evaluar un trabajo.\n3. Las instrucciones para revisar fragmentos seleccionados dentro de Canvas sin cambiar su funcionamiento.\n4. Un ejemplo completo de revisión simulada para una función de cálculo de promedios, mostrando aciertos, mejoras y calificación final.\nEntrega: Documento claro con tablas de pesos, bloque de reglas (System Prompt) y plantilla de informe.\n\nTono: Claro, objetivo y constructivo en cada recomendación.\n\nLímites:\n- Los 4 criterios deben sumar exactamente 100 % en su ponderación.\n- Prohíbe que el Gem cambie o reescriba por su cuenta el funcionamiento del código revisado.\n- Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias»."
         },
         {
           "id": "gem-c-integrador-vision-completa",
           "code": "12C",
-          "title": "Proyecto Integrador 360°: de Gem socrático a aplicación web verificadora para el Portafolio de Evidencias",
-          "level": "Avanzado",
+          "title": "Proyecto Final 360°: de asistente tutor (Gem) a aplicación web verificadora para tu Portafolio de Evidencias",
+          "level": "Intermedio",
           "duration": "35 min",
           "canvasFeature": "Nuevo Gem + Documento + Crear → Página web + Funciones de Gemini + Copiar Canvas",
           "capabilities": [
@@ -3687,8 +3687,8 @@
             "canvas",
             "portal"
           ],
-          "goal": "Integrar en un solo flujo de principio a fin la creación de un Gem, la especificación documental en Canvas, su transformación en aplicación web con asistencia de IA y su empaquetado para el Portafolio de Evidencias.",
-          "scenario": "Para cerrar el entrenamiento en Gemini Canvas, vas a construir tu propio «Verificador 360° de Entregables ADSO»: un asistente y aplicación interactiva que cualquier aprendiz pueda clonar para auditar sus evidencias antes de entregarlas.",
+          "goal": "Unir todo lo aprendido en un solo flujo: definir las reglas de tu asistente (Gem), armar la guía en un documento, convertirla en una aplicación web con «Crear → Página web» y compartirla con «Copiar Canvas».",
+          "scenario": "Para cerrar el curso, vas a construir tu propio «Verificador 360°»: una herramienta interactiva que tú (o cualquier compañero) puedes duplicar y usar cada vez que necesites revisar un trabajo o proyecto personal.",
           "promptParts": {
             "role": "arquitecto de soluciones educativas con IA y líder técnico ADSO",
             "context": "Este es el proyecto integrador de cierre. Necesitas unir en un mismo flujo las instrucciones de un Gem socrático, la rúbrica de 4 criterios iguales (25 % cada uno) y la especificación de la aplicación web verificadora para el Portafolio de Evidencias.",
