@@ -27,6 +27,9 @@ const {
   canvasMermaidFlow,
   buildCanvasChecklistHtml,
   buildCanvasFollowUpsHtml,
+  computeCalibratedSimulation,
+  simulateVariationForMode,
+  buildCanvasTransformPreviewHtml,
   exportCanvasPossibilities
 } = kit;
 
@@ -366,4 +369,77 @@ test("el banco JSON del repositorio está sincronizado con el módulo", () => {
   const file = path.join(__dirname, "..", "materiales", "gemini_canvas", "banco_prompts_canvas.json");
   const bank = JSON.parse(fs.readFileSync(file, "utf8"));
   assert.deepEqual(bank, exportCanvasPossibilities(bank), "ejecuta node scripts/export_canvas_possibilities.cjs");
+});
+
+test("computeCalibratedSimulation calibra longitud, tono y audiencia en los 12 modos y maneja entradas inválidas", () => {
+  const docShort = computeCalibratedSimulation("doc-editorial", { length: 1, tone: "formal", audience: "intro" });
+  assert.equal(docShort.lengthLevel, 1);
+  assert.equal(docShort.lengthLabel, "Síntesis (1/5)");
+  assert.equal(docShort.toneLabel, "Formal");
+  assert.equal(docShort.audienceLabel, "Introductorio");
+  assert.match(docShort.docSummaryText, /COP 196\.000\.000/);
+  assert.match(docShort.summaryHtml, /sim-calibration-live-banner/);
+
+  const sqlDetailed = computeCalibratedSimulation("sql-pipeline", { length: 5, tone: "analitico", audience: "expert" });
+  assert.equal(sqlDetailed.lengthLevel, 5);
+  assert.equal(sqlDetailed.toneLabel, "Analítico");
+  assert.equal(sqlDetailed.audienceLabel, "Especialista");
+  assert.match(sqlDetailed.docSummaryText, /9\. SQL & Pipelines/);
+
+  const fallback = computeCalibratedSimulation("modo-inexistente", { length: 99, tone: "otro", audience: "otra" });
+  assert.equal(fallback.lengthLevel, 3);
+  assert.equal(fallback.tone, "formal");
+  assert.equal(fallback.audience, "adso");
+
+  const defaultOpts = computeCalibratedSimulation("code-prototyping");
+  assert.equal(defaultOpts.lengthLevel, 3);
+});
+
+test("simulateVariationForMode entrega resultado determinista para los 12 modos y respaldo seguro", () => {
+  for (const id of MODES) {
+    const sim = simulateVariationForMode(id);
+    assert.equal(sim.modeId, id);
+    assert.ok(sim.promptCommand.length > 10);
+    assert.ok(sim.aiFollowUp.length > 20);
+    assert.match(sim.deltaHtml, /sim-variation-delta-card/);
+  }
+  const fallback = simulateVariationForMode("inexistente");
+  assert.match(fallback.deltaHtml, /Severidad/);
+});
+
+test("buildCanvasTransformPreviewHtml genera artefacto, infografía, cuestionario y resumen en audio", () => {
+  const art = buildCanvasTransformPreviewHtml("doc-editorial", "artifact");
+  assert.equal(art, CANVAS_POSSIBILITIES["doc-editorial"].interactiveHtml);
+
+  const info = buildCanvasTransformPreviewHtml("data-matrix", "infographic");
+  assert.match(info, /sim-transform-infographic/);
+  assert.match(info, /Dato verificado 1/);
+
+  const quiz = buildCanvasTransformPreviewHtml("sql-pipeline", "quiz");
+  assert.match(quiz, /sim-transform-quiz/);
+  assert.match(quiz, /data-sim-quiz-answer="correct"/);
+
+  const audio = buildCanvasTransformPreviewHtml("executive-report", "audio");
+  assert.match(audio, /sim-transform-audio/);
+  assert.match(audio, /Voz 1/);
+  assert.match(audio, /Voz 2/);
+
+  const invalidType = buildCanvasTransformPreviewHtml("inexistente", "desconocido");
+  assert.equal(invalidType, CANVAS_POSSIBILITIES["doc-editorial"].interactiveHtml);
+
+  kit.CANVAS_POSSIBILITIES["temp-empty-expected"] = {
+    name: "Temp",
+    docTitle: "Temp.txt",
+    interactiveHtml: "<p>ok</p>",
+    variationTip: "Tip",
+    expected: []
+  };
+  try {
+    const emptyQuiz = buildCanvasTransformPreviewHtml("temp-empty-expected", "quiz");
+    assert.match(emptyQuiz, /sim-transform-quiz/);
+    const emptyAudio = buildCanvasTransformPreviewHtml("temp-empty-expected", "audio");
+    assert.match(emptyAudio, /todas las cifras coincidan/);
+  } finally {
+    delete kit.CANVAS_POSSIBILITIES["temp-empty-expected"];
+  }
 });

@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "locale": "es-CO",
   "totalPossibilities": 12,
-  "totalExercises": 31,
+  "totalExercises": 36,
   "possibilities": [
     {
       "id": "doc-editorial",
@@ -826,6 +826,66 @@
           ],
           "stretch": "Pide: «Calcula el riesgo residual suponiendo que cada acción baja un punto la probabilidad y muestra ambos mapas lado a lado».",
           "prompt": "Contexto: El líder del proyecto presentará al comité de seguimiento qué riesgos atender primero y cómo hacerlo.\n\nRol: Actúa como gestor de proyectos de software con experiencia en gestión de riesgos.\n\nDatos:\n\"\"\"\nRIESGOS DEL PROYECTO \"APP DE CITAS DEL CENTRO\" (datos de práctica)\nEscala: probabilidad 1-5 e impacto 1-5. Nivel = probabilidad x impacto.\nCrítico >= 15 | Alto 8-14 | Medio 4-7 | Bajo <= 3\n\nid,riesgo,probabilidad,impacto\nR1,Rotación del líder técnico,2,5\nR2,Retraso en la entrega de requisitos,4,4\nR3,Falla del servidor de pruebas,3,3\nR4,Fuga de datos personales,2,5\nR5,Cambios de alcance sin control,4,3\nR6,Baja adopción por parte de usuarios,3,4\nR7,Dependencia de una API externa,3,5\nR8,Errores de estimación,5,3\nR9,Falta de pruebas automatizadas,4,5\nR10,Corte de energía en el centro,2,2\n\"\"\"\n\nTarea: En Canvas, construye la matriz de riesgos:\n1. Calcula el nivel de cada riesgo y clasifícalo con los umbrales de los datos.\n2. Ordena los riesgos de mayor a menor nivel.\n3. Asigna a cada riesgo una respuesta (evitar, mitigar, transferir o aceptar) y una acción concreta.\nEntrega: Tabla con las columnas id, riesgo, probabilidad, impacto, nivel, clasificación, respuesta y acción.\n\nTono: Técnico y objetivo, sin dramatizar los riesgos.\n\nLímites:\n- Usa exactamente los umbrales entregados.\n- Propón acciones realistas para un equipo de cinco personas."
+        },
+        {
+          "id": "matrix-c-sensibilidad-web",
+          "code": "3C",
+          "title": "De matriz de decisión a simulador web de sensibilidad presupuestal",
+          "level": "Avanzado",
+          "duration": "30 min",
+          "canvasFeature": "Documento + Crear → Página web + Seleccionar y preguntar + Compartir",
+          "capabilities": [
+            "doc-create",
+            "create-webpage",
+            "select-ask",
+            "share"
+          ],
+          "whyCanvas": "Primero validas las cuentas de la matriz en un documento y luego la conviertes con «Crear → Página web» en un simulador donde cambias los pesos con deslizadores y ves en vivo cómo cambia el ganador.",
+          "outsideCanvas": "Tanto la matriz documental como la página web interactiva y el ajuste con «Seleccionar y preguntar» ocurren dentro de Gemini Canvas.",
+          "places": [
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Verificar los puntajes base y de sensibilidad de tres alternativas de nube y transformar la matriz en una calculadora interactiva compartible.",
+          "scenario": "El comité técnico quiere saber si Nube Andina sigue ganando cuando la disponibilidad SLA pasa a ser el criterio más importante del contrato.",
+          "promptParts": {
+            "role": "analista financiero de infraestructura en la nube",
+            "context": "El comité evaluador necesita comparar el escenario base frente al escenario de alta criticidad en SLA sin rehacer las cuentas a mano.",
+            "data": "MATRIZ DE SENSIBILIDAD — SELECCIÓN DE PLATAFORMA EN LA NUBE (datos de práctica)\n\nCriterios y pesos iniciales:\n- Costo mensual predecible: 40 %\n- Disponibilidad SLA (99,9 %): 35 %\n- Soporte técnico en español: 25 %\n\nCalificaciones de 1 a 10 por alternativa:\nAlternativa | Costo | SLA | Soporte\nNube Andina | 9,0 | 8,0 | 8,0\nNube Pacífico | 7,5 | 9,5 | 9,0\nNube Orinoquía | 8,5 | 7,0 | 6,0\n\nFórmula: puntaje sobre 100 = (Costo × peso_costo + SLA × peso_sla + Soporte × peso_soporte) ÷ 10.\nUmbral de adjudicación: 84,0 puntos o más = Adjudicable; menos de 84,0 = En reserva.\nEscenario de sensibilidad: si el peso de Costo baja a 20 % y el de SLA sube a 55 % (Soporte sigue en 25 %), recalcula quién gana.",
+            "instruction": "En Canvas, redacta el informe de sensibilidad con:",
+            "task": [
+              "La tabla del escenario base (pesos 40 %, 35 %, 25 %) con el puntaje sobre 100 y el estado de cada alternativa.",
+              "La tabla del escenario de sensibilidad (pesos 20 %, 55 %, 25 %) con los nuevos puntajes y estados.",
+              "La conclusión comparativa que explique qué alternativa pasa al primer lugar y por cuántos puntos supera a la segunda."
+            ],
+            "constraints": [
+              "Muestra las operaciones completas de cada alternativa con un decimal.",
+              "Usa exclusivamente las calificaciones y umbrales de los datos."
+            ],
+            "format": "Documento técnico con dos tablas comparativas y conclusión ejecutiva.",
+            "tone": "Analítico, transparente y verificable."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera el informe con los dos escenarios.",
+            "Comprueba en el documento que en el escenario base gana Nube Andina (84,0) y en el de sensibilidad gana Nube Pacífico (89,8).",
+            "Abre el menú «Crear → Página web» para transformar el documento en una calculadora interactiva con deslizadores para los tres pesos.",
+            "En la «Vista previa», activa «Seleccionar y preguntar», señala la tarjeta de resultado y pide: «Muestra una alerta si los tres pesos no suman 100 %».",
+            "Usa «Compartir» en «Compartir y exportar» para generar el enlace de la calculadora para el comité.",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "En el escenario base (40/35/25), Nube Andina obtiene 84,0 (Adjudicable), Nube Pacífico 85,8 (Adjudicable) y Nube Orinoquía 73,5 (En reserva).",
+            "En el escenario de sensibilidad (20/55/25), Nube Pacífico sube a 89,8 (Adjudicable), Nube Andina queda en 82,0 (En reserva) y Nube Orinoquía en 70,5.",
+            "La diferencia entre Nube Pacífico y Nube Andina en el escenario de sensibilidad es de 7,8 puntos.",
+            "La página web creada con «Crear → Página web» recalcula los puntajes al mover los pesos.",
+            "Si los pesos no suman 100 %, la interfaz muestra el aviso solicitado con «Seleccionar y preguntar»."
+          ],
+          "stretch": "Pide: «Agrega un botón en la página web que encuentre automáticamente desde qué peso de SLA Nube Pacífico supera los 88,0 puntos».",
+          "prompt": "Contexto: El comité evaluador necesita comparar el escenario base frente al escenario de alta criticidad en SLA sin rehacer las cuentas a mano.\n\nRol: Actúa como analista financiero de infraestructura en la nube.\n\nDatos:\n\"\"\"\nMATRIZ DE SENSIBILIDAD — SELECCIÓN DE PLATAFORMA EN LA NUBE (datos de práctica)\n\nCriterios y pesos iniciales:\n- Costo mensual predecible: 40 %\n- Disponibilidad SLA (99,9 %): 35 %\n- Soporte técnico en español: 25 %\n\nCalificaciones de 1 a 10 por alternativa:\nAlternativa | Costo | SLA | Soporte\nNube Andina | 9,0 | 8,0 | 8,0\nNube Pacífico | 7,5 | 9,5 | 9,0\nNube Orinoquía | 8,5 | 7,0 | 6,0\n\nFórmula: puntaje sobre 100 = (Costo × peso_costo + SLA × peso_sla + Soporte × peso_soporte) ÷ 10.\nUmbral de adjudicación: 84,0 puntos o más = Adjudicable; menos de 84,0 = En reserva.\nEscenario de sensibilidad: si el peso de Costo baja a 20 % y el de SLA sube a 55 % (Soporte sigue en 25 %), recalcula quién gana.\n\"\"\"\n\nTarea: En Canvas, redacta el informe de sensibilidad con:\n1. La tabla del escenario base (pesos 40 %, 35 %, 25 %) con el puntaje sobre 100 y el estado de cada alternativa.\n2. La tabla del escenario de sensibilidad (pesos 20 %, 55 %, 25 %) con los nuevos puntajes y estados.\n3. La conclusión comparativa que explique qué alternativa pasa al primer lugar y por cuántos puntos supera a la segunda.\nEntrega: Documento técnico con dos tablas comparativas y conclusión ejecutiva.\n\nTono: Analítico, transparente y verificable.\n\nLímites:\n- Muestra las operaciones completas de cada alternativa con un decimal.\n- Usa exclusivamente las calificaciones y umbrales de los datos."
         }
       ],
       "expected": [
@@ -1085,6 +1145,66 @@
           ],
           "stretch": "Pide: «Agrega un diagrama de estados del token: emitido, vigente, expirado, renovado y revocado».",
           "prompt": "Contexto: El equipo explicará en la revisión técnica cómo funciona el inicio de sesión y cuándo estará listo.\n\nRol: Actúa como arquitecto de software que documenta flujos de autenticación.\n\nDatos:\n\"\"\"\nINICIO DE SESIÓN CON JWT Y PLAN DEL PROYECTO (datos de práctica)\n\nParticipantes: Usuario, App web, API de autenticación, Base de datos, API de citas\n\nFlujo:\n1. Usuario escribe correo y contraseña en la App web.\n2. App web envía POST /auth/login a la API de autenticación.\n3. API consulta el usuario en la Base de datos y compara el hash de la contraseña.\n4. Si es inválido: responde 401 y la App muestra \"Credenciales incorrectas\".\n5. Si es válido: firma un access token (15 min) y un refresh token (7 días) y responde 200.\n6. App web llama GET /citas a la API de citas con el header Authorization: Bearer <token>.\n7. API de citas valida la firma y la expiración; responde 200 con las citas.\n8. Si el access token expiró: responde 401, la App llama POST /auth/refresh y repite la petición.\n\nPlan del proyecto (año 2026; duraciones en días calendario):\nTarea,Inicio,Duración\nDiseño del flujo,2026-11-16,5 días\nEndpoint de login,2026-11-23,4 días\nMiddleware de validación,2026-11-27,3 días\nRefresh token,2026-12-02,3 días\nPruebas de seguridad,2026-12-07,4 días\nDespliegue (hito),2026-12-11,0 días\n\"\"\"\n\nTarea: En Canvas, crea una página web con dos diagramas Mermaid en pestañas:\n1. Secuencia: un «sequenceDiagram» con los cinco participantes en el orden de los datos, bloques «alt/else» para los dos caminos de error (credenciales inválidas y token vencido) y una «Note» con la vigencia de cada token.\n2. Cronograma: un «gantt» con «dateFormat YYYY-MM-DD», las seis tareas con sus fechas y el despliegue marcado como «milestone».\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Técnico y preciso, con términos estándar de autenticación.\n\nLímites:\n- Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js; si no carga, muestra un aviso y el código en un bloque de texto.\n- Los códigos HTTP y las fechas deben coincidir con los datos.\n- Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse."
+        },
+        {
+          "id": "flow-c-estados-mantenimiento",
+          "code": "4C",
+          "title": "Máquina de estados de mantenimiento y depuración en consola",
+          "level": "Intermedio",
+          "duration": "25 min",
+          "canvasFeature": "Vista previa + Consola y corrección de errores + Versiones + Edición por selección",
+          "capabilities": [
+            "code-preview",
+            "console-fix",
+            "versions",
+            "inline-edit"
+          ],
+          "whyCanvas": "En un Canvas de código puedes renderizar una máquina de estados Mermaid, inspeccionar la consola si una transición falla, corregirla por selección y comparar con «Versión anterior».",
+          "outsideCanvas": "Todo el ciclo de diagramación, prueba interactiva, depuración en consola y control de versiones ocurre dentro de Gemini Canvas.",
+          "places": [
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Modelar el ciclo de vida de una orden de mantenimiento con stateDiagram-v2, simular el estado activo en la página y verificar la recuperación ante errores de sintaxis.",
+          "scenario": "El área de infraestructura necesita documentar los 6 estados oficiales de una orden de mantenimiento y probar qué ocurre cuando una revisión técnica devuelve la orden a reparación.",
+          "promptParts": {
+            "role": "arquitecto de procesos y sistemas de soporte",
+            "context": "El equipo de mantenimiento requiere una página interactiva con el diagrama de estados oficial y un simulador de transiciones para capacitar a los técnicos nuevos.",
+            "data": "CICLO DE ESTADOS — ÓRDENES DE MANTENIMIENTO DE AMBIENTES (datos de práctica)\n\nEstados válidos:\n- Radicada (estado inicial después de [*])\n- EnDiagnostico\n- EsperandoRepuesto\n- EnReparacion\n- Verificada\n- Cerrada (estado final hacia [*])\n\nTransiciones permitidas:\n1. [*] → Radicada: instructor registra daño\n2. Radicada → EnDiagnostico: técnico asignado en menos de 4 h\n3. EnDiagnostico → EsperandoRepuesto: requiere pieza nueva\n4. EnDiagnostico → EnReparacion: ajuste directo en sitio\n5. EsperandoRepuesto → EnReparacion: almacén entrega repuesto\n6. EnReparacion → Verificada: prueba funcional aprobada\n7. Verificada → EnReparacion: falla persiste en revisión\n8. Verificada → Cerrada: acta firmada por instructor\n9. Cerrada → [*]",
+            "instruction": "En Canvas, crea una página HTML ejecutable que incluya:",
+            "task": [
+              "El diagrama Mermaid con sintaxis stateDiagram-v2 que represente los 6 estados y las 9 transiciones de los datos.",
+              "Un panel interactivo con botones para avanzar por las transiciones desde Radicada hasta Cerrada, incluyendo el bucle de retorno de Verificada a EnReparacion.",
+              "Un contador de pasos transcurridos y el historial de estados visitados en la sesión."
+            ],
+            "constraints": [
+              "Usa exactamente los nombres de estado y las 9 transiciones de los datos.",
+              "Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión."
+            ],
+            "format": "Un solo archivo HTML con CSS y JavaScript nativo.",
+            "tone": "Técnico, estructurado y didáctico."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera la página con el diagrama de estados.",
+            "Abre la «Vista previa» y prueba el recorrido corto (Radicada → EnDiagnostico → EnReparacion → Verificada → Cerrada); si aparece algún fallo de sintaxis, abre la consola o pulsa «Corregir error».",
+            "Vuelve a la pestaña de código, selecciona el bloque de transiciones y escribe: «Agrega una nota en el estado EsperandoRepuesto que indique SLA máximo de 72 horas».",
+            "Usa «Versión anterior» o «Mostrar cambios recientes» en la barra superior de Canvas para verificar que solo se agregó la nota sin alterar las 9 transiciones.",
+            "En la «Vista previa», prueba el camino con devolución (Verificada → EnReparacion → Verificada → Cerrada) y comprueba el historial.",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "El código Mermaid empieza con stateDiagram-v2 e incluye los 6 estados y las 9 transiciones.",
+            "Existe la transición de retorno Verificada --> EnReparacion cuando la falla persiste.",
+            "El estado EsperandoRepuesto muestra la nota del SLA máximo de 72 horas.",
+            "El simulador de botones permite recorrer tanto la ruta directa (4 pasos) como la ruta con repuesto y retrabajo.",
+            "«Versión anterior» permite comparar el diagrama antes y después de agregar la nota de SLA."
+          ],
+          "stretch": "Pide: «Agrega un botón que exporte el registro de transiciones probadas como una tabla Markdown lista para pegar en el informe».",
+          "prompt": "Contexto: El equipo de mantenimiento requiere una página interactiva con el diagrama de estados oficial y un simulador de transiciones para capacitar a los técnicos nuevos.\n\nRol: Actúa como arquitecto de procesos y sistemas de soporte.\n\nDatos:\n\"\"\"\nCICLO DE ESTADOS — ÓRDENES DE MANTENIMIENTO DE AMBIENTES (datos de práctica)\n\nEstados válidos:\n- Radicada (estado inicial después de [*])\n- EnDiagnostico\n- EsperandoRepuesto\n- EnReparacion\n- Verificada\n- Cerrada (estado final hacia [*])\n\nTransiciones permitidas:\n1. [*] → Radicada: instructor registra daño\n2. Radicada → EnDiagnostico: técnico asignado en menos de 4 h\n3. EnDiagnostico → EsperandoRepuesto: requiere pieza nueva\n4. EnDiagnostico → EnReparacion: ajuste directo en sitio\n5. EsperandoRepuesto → EnReparacion: almacén entrega repuesto\n6. EnReparacion → Verificada: prueba funcional aprobada\n7. Verificada → EnReparacion: falla persiste en revisión\n8. Verificada → Cerrada: acta firmada por instructor\n9. Cerrada → [*]\n\"\"\"\n\nTarea: En Canvas, crea una página HTML ejecutable que incluya:\n1. El diagrama Mermaid con sintaxis stateDiagram-v2 que represente los 6 estados y las 9 transiciones de los datos.\n2. Un panel interactivo con botones para avanzar por las transiciones desde Radicada hasta Cerrada, incluyendo el bucle de retorno de Verificada a EnReparacion.\n3. Un contador de pasos transcurridos y el historial de estados visitados en la sesión.\nEntrega: Un solo archivo HTML con CSS y JavaScript nativo.\n\nTono: Técnico, estructurado y didáctico.\n\nLímites:\n- Usa exactamente los nombres de estado y las 9 transiciones de los datos.\n- Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión."
         }
       ],
       "expected": [
@@ -2548,6 +2668,66 @@
           ],
           "stretch": "Pide: «Agrega una regla para detectar aprendices con dos ausencias seguidas y muéstralos en una alerta del tablero».",
           "prompt": "Contexto: El reporte de asistencia llega de varias sedes con formatos distintos y la coordinación no confía en los porcentajes.\n\nRol: Actúa como ingeniero de datos especializado en calidad de datos.\n\nDatos:\n\"\"\"\nCONTENIDO DE asistencia_cruda (14 filas pegadas aquí, datos de práctica con errores a propósito)\ndocumento,nombre,fecha,estado\n1001, ana torres ,2026-10-01,P\n1001,Ana Torres,01/10/2026,presente\n1002,LUIS PÉREZ,2026-10-01,A\n1003,marta gil,2026/10/01,Presente\n1004,Jorge Ríos,2026-10-01,\n1005,Sara Mejía,2026-10-01,tarde\n1001,Ana Torres,2026-10-02,P\n1002,Luis Pérez,02-10-2026,P\n1003,Marta Gil,2026-10-02,ausente\n1004,jorge rios,2026-10-02,P\n1005,Sara Mejía,2026-10-02,P\n,Sin Documento,2026-10-02,P\n1006,Iván Cruz,2026-13-02,P\n1003,Marta Gil,2026-10-02,A\n\nTABLA MAESTRA aprendices (nombres oficiales):\n1001,Ana Torres | 1002,Luis Pérez | 1003,Marta Gil | 1004,Jorge Ríos | 1005,Sara Mejía | 1006,Iván Cruz\n\nREGLAS DE LIMPIEZA:\n1. Fechas válidas en formatos AAAA-MM-DD, AAAA/MM/DD, DD/MM/AAAA y DD-MM-AAAA; una fecha imposible se descarta.\n2. Filas sin documento se descartan.\n3. El nombre se toma de la tabla maestra.\n4. Estados: P, presente, Presente -> Presente | A, ausente -> Ausente | tarde -> Tarde | vacío -> Sin registro.\n5. Un mismo documento y fecha cuenta una sola vez (se conserva la primera fila).\n\"\"\"\n\nTarea: En Canvas, escribe en SQL, válido en SQLite y en PostgreSQL, un pipeline de limpieza por etapas:\n1. Carga del archivo crudo en una tabla de staging con todas las columnas como texto.\n2. Limpieza según las reglas: fechas, nombres desde la tabla maestra y estados.\n3. Deduplicación por documento y fecha con ROW_NUMBER().\n4. Tabla final de asistencia y tabla de rechazos con su motivo.\n5. Porcentaje de asistencia: Presente más Tarde sobre el total limpio.\nEntrega: Script .sql dividido por etapas.\n\nTono: Técnico y preciso, explicando por qué se rechaza cada fila.\n\nLímites:\n- Cada etapa debe poder ejecutarse de nuevo sin duplicar datos.\n- Un comentario por cada regla aplicada."
+        },
+        {
+          "id": "sql-c-conciliacion-mesa-pdf",
+          "code": "9C",
+          "title": "Conciliación SQL de certificación y reporte auditable en PDF",
+          "level": "Avanzado",
+          "duration": "30 min",
+          "canvasFeature": "Documento y código SQL + Vista previa + Edición por selección + Exportar a PDF",
+          "capabilities": [
+            "doc-create",
+            "code-preview",
+            "inline-edit",
+            "export-pdf"
+          ],
+          "whyCanvas": "En Canvas puedes combinar el script SQL de conciliación, un verificador interactivo en la vista previa y un informe ejecutivo listo para guardar con «Exportar a PDF».",
+          "outsideCanvas": "La consulta SQL, la simulación de resultados y la vista previa de impresión ocurren dentro de Gemini Canvas.",
+          "places": [
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Escribir una consulta SQL que determine qué aprendices cumplen los requisitos de certificación sin excluir a quienes tienen cero entregas, y generar el acta en PDF.",
+          "scenario": "Antes del cierre de trimestre, registro académico necesita conciliar la tabla de aprendices matriculados contra las evidencias aprobadas para emitir el listado oficial de certificación.",
+          "promptParts": {
+            "role": "ingeniero de datos y auditor de registro académico",
+            "context": "Se requiere una consulta SQL determinista y un reporte de conciliación que muestre tanto a los aprendices aptos como a quienes tienen entregas pendientes o cero registros.",
+            "data": "AUDITORÍA SQL — CONCILIACIÓN DE CERTIFICADOS Y EVIDENCIAS (datos de práctica)\n\nCREATE TABLE aprendices_corte (id INT PRIMARY KEY, nombre TEXT, ficha INT);\nCREATE TABLE evidencias_entregadas (id_evidencia INT PRIMARY KEY, aprendiz_id INT, estado TEXT, puntaje NUMERIC(4,1));\n\nINSERT INTO aprendices_corte VALUES (1,'Laura Gómez',2871),(2,'Mateo Díaz',2871),(3,'Camila Vega',2871),(4,'Julián Mora',2872);\nINSERT INTO evidencias_entregadas VALUES\n  (101,1,'Aprobada',92.0),(102,1,'Aprobada',88.0),\n  (103,2,'Aprobada',75.0),(104,2,'Pendiente',40.0),\n  (105,3,'Aprobada',95.0),(106,3,'Aprobada',91.0);\n-- Julián Mora (id 4) no tiene evidencias registradas aún.\n\nRegla de certificación: apto si tiene al menos 2 evidencias con estado 'Aprobada' y promedio de puntaje mayor o igual a 85,0.",
+            "instruction": "En Canvas, redacta el documento de conciliación SQL que contenga:",
+            "task": [
+              "La consulta PostgreSQL con LEFT JOIN y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').",
+              "La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE para que Julián Mora aparezca con 0 aprobadas y promedio 0,0.",
+              "Un resumen ejecutivo de hallazgos para firma del comité."
+            ],
+            "constraints": [
+              "No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.",
+              "Usa COALESCE para evitar valores nulos en el conteo y en el promedio."
+            ],
+            "format": "Documento técnico con bloque SQL comentado, tabla de conciliación de 4 filas y resumen de cierre.",
+            "tone": "Riguroso, claro y auditable."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera el documento de conciliación SQL.",
+            "Verifica en la tabla generada que aparezcan los 4 aprendices: Laura Gómez (2 aprobadas, promedio 90,0, Apto) y Camila Vega (2 aprobadas, promedio 93,0, Apto).",
+            "Selecciona la consulta SQL en el lienzo y escribe: «Agrega una columna que indique cuántas evidencias aprobadas le faltan a cada aprendiz para llegar al mínimo de 2».",
+            "Pide en el chat: «Crea una vista previa interactiva donde pueda filtrar la tabla por Apto para certificar o Pendiente» y ábrela en «Vista previa».",
+            "Abre «Compartir y exportar → Exportar a PDF» para comprobar que la consulta y la tabla de 4 aprendices queden en una sola página.",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "La consulta usa LEFT JOIN entre aprendices_corte y evidencias_entregadas.",
+            "Laura Gómez (90,0) y Camila Vega (93,0) quedan con dictamen «Apto para certificar».",
+            "Mateo Díaz queda «Pendiente» (solo 1 evidencia aprobada con 75,0; la otra está Pendiente).",
+            "Julián Mora aparece en la tabla con 0 evidencias aprobadas, promedio 0,0 y le faltan 2 evidencias.",
+            "La vista previa del PDF conserva el bloque SQL y la tabla completa sin recortes."
+          ],
+          "stretch": "Pide: «Agrega una restricción CHECK y un índice único en evidencias_entregadas para impedir puntajes fuera del rango 0 a 100».",
+          "prompt": "Contexto: Se requiere una consulta SQL determinista y un reporte de conciliación que muestre tanto a los aprendices aptos como a quienes tienen entregas pendientes o cero registros.\n\nRol: Actúa como ingeniero de datos y auditor de registro académico.\n\nDatos:\n\"\"\"\nAUDITORÍA SQL — CONCILIACIÓN DE CERTIFICADOS Y EVIDENCIAS (datos de práctica)\n\nCREATE TABLE aprendices_corte (id INT PRIMARY KEY, nombre TEXT, ficha INT);\nCREATE TABLE evidencias_entregadas (id_evidencia INT PRIMARY KEY, aprendiz_id INT, estado TEXT, puntaje NUMERIC(4,1));\n\nINSERT INTO aprendices_corte VALUES (1,'Laura Gómez',2871),(2,'Mateo Díaz',2871),(3,'Camila Vega',2871),(4,'Julián Mora',2872);\nINSERT INTO evidencias_entregadas VALUES\n  (101,1,'Aprobada',92.0),(102,1,'Aprobada',88.0),\n  (103,2,'Aprobada',75.0),(104,2,'Pendiente',40.0),\n  (105,3,'Aprobada',95.0),(106,3,'Aprobada',91.0);\n-- Julián Mora (id 4) no tiene evidencias registradas aún.\n\nRegla de certificación: apto si tiene al menos 2 evidencias con estado 'Aprobada' y promedio de puntaje mayor o igual a 85,0.\n\"\"\"\n\nTarea: En Canvas, redacta el documento de conciliación SQL que contenga:\n1. La consulta PostgreSQL con LEFT JOIN y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').\n2. La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE para que Julián Mora aparezca con 0 aprobadas y promedio 0,0.\n3. Un resumen ejecutivo de hallazgos para firma del comité.\nEntrega: Documento técnico con bloque SQL comentado, tabla de conciliación de 4 filas y resumen de cierre.\n\nTono: Riguroso, claro y auditable.\n\nLímites:\n- No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.\n- Usa COALESCE para evitar valores nulos en el conteo y en el promedio."
         }
       ],
       "expected": [
@@ -2822,6 +3002,66 @@
           ],
           "stretch": "Pide: «Agrega una simulación de Monte Carlo que varíe los pesos ±5 puntos y muestre en qué porcentaje de casos gana cada proveedor».",
           "prompt": "Contexto: El comité de compras elegirá proveedor de nube. Los puntajes son cercanos y el comité preguntará qué pasa si la seguridad pesa más.\n\nRol: Actúa como consultor de arquitectura en la nube con experiencia en contratación pública.\n\nDatos:\n\"\"\"\nEVALUACIÓN DE PROVEEDORES DE NUBE PARA LA PLATAFORMA DE FORMACIÓN (datos de práctica)\nLos nombres se anonimizan como Proveedor A, B y C.\n\nCriterio,Peso,Proveedor A,Proveedor B,Proveedor C\nCosto anual,30%,4,5,3\nSoporte en español,15%,3,4,5\nSeguridad y certificaciones,25%,5,3,4\nFacilidad de administración,15%,4,4,3\nRegión de datos y latencia,15%,3,4,5\n\nEscala: 1 (muy deficiente) a 5 (excelente).\nCosto anual estimado (COP): A 96.000.000 | B 78.000.000 | C 110.000.000\nRequisito no negociable: los datos personales deben cumplir la Ley 1581 de 2012 de Colombia.\n\"\"\"\n\nTarea: En Canvas, redacta el dictamen técnico con:\n1. La metodología y la matriz ponderada con el cálculo de cada proveedor.\n2. Un análisis de sensibilidad con Seguridad en 35 % y Costo en 20 %, sin cambiar los demás pesos.\n3. El costo anual por punto de calidad de cada proveedor.\n4. La recomendación final con las condiciones contractuales mínimas para cumplir la Ley 1581 de 2012.\nEntrega: Documento con títulos numerados y tablas.\n\nTono: Formal e imparcial, sin favorecer a ningún proveedor.\n\nLímites:\n- Muestra cada cálculo.\n- No uses marcas comerciales reales."
+        },
+        {
+          "id": "report-c-deep-research-infografia",
+          "code": "10C",
+          "title": "De investigación con Deep Research a infografía y presentación directiva",
+          "level": "Avanzado",
+          "duration": "30 min",
+          "canvasFeature": "Deep Research + Sugerencias de edición + Crear → Infografía + Presentaciones de Google",
+          "capabilities": [
+            "deep-research",
+            "suggest-edits",
+            "create-infographic",
+            "create-slides"
+          ],
+          "whyCanvas": "Canvas recibe una síntesis de investigación profunda (Deep Research), permite depurar el estilo con «Sugerencias de edición» y la transforma en segundos con «Crear → Infografía» o en diapositivas para «Presentaciones de Google».",
+          "outsideCanvas": "Deep Research se inicia en el selector de herramientas de Gemini y la exportación final envía las diapositivas a Presentaciones de Google; la edición y la infografía ocurren en Canvas.",
+          "places": [
+            "gemini",
+            "canvas",
+            "canvas",
+            "canvas",
+            "external",
+            "portal"
+          ],
+          "goal": "Transformar un informe de hallazgos cuantitativos en una infografía ejecutiva y un guion de diapositivas sin perder ninguna cifra verificada.",
+          "scenario": "La dirección regional tiene 5 minutos en el comité trimestral para sustentar la inversión de COP 48.000.000 en memoria RAM y guías autónomas para las 3 sedes.",
+          "promptParts": {
+            "role": "consultor de planeación e infraestructura educativa",
+            "context": "A partir de los hallazgos del estudio en 3 sedes regionales, debes preparar en Canvas el documento base y su estructura visual para sustentar la inversión ante la dirección.",
+            "data": "SÍNTESIS DE INVESTIGACIÓN — MODERNIZACIÓN DE LABORATORIOS DE DESARROLLO 2026 (datos de práctica)\n\nHallazgos verificados en 3 sedes regionales (muestra de 420 aprendices y 18 instructores):\n1. Tiempo de compilación local: en equipos con 8 GB de RAM tarda 14 minutos por proyecto; con 32 GB baja a 3,5 minutos (reducción del 75 %).\n2. Conectividad y trabajo desconectado: el 35 % de las sesiones tuvo intermitencia de red, por lo que las guías HTML autónomas aumentaron las entregas puntuales del 68 % al 91 %.\n3. Adopción de pruebas automatizadas: las fichas con validación automática redujeron los defectos en entrega final de 12 a 3 por proyecto.\n\nMeta presupuestal: priorizar ampliación de RAM en 60 equipos (COP 48.000.000) y guías autónomas en las 3 sedes.",
+            "instruction": "En Canvas, redacta el informe ejecutivo de sustentación con:",
+            "task": [
+              "Un resumen de impacto con las 3 métricas comparativas (antes vs. después en compilación, entregas puntuales y defectos).",
+              "Una tabla de retorno técnico que vincule cada hallazgo con la inversión de COP 48.000.000 en los 60 equipos.",
+              "Un guion de 4 diapositivas ejecutivas (Título, Problema medido, Impacto verificado y Decisión presupuestal) listo para llevar a Presentaciones de Google."
+            ],
+            "constraints": [
+              "Conserva con exactitud las cifras de la muestra (420 aprendices, 18 instructores, 14 min a 3,5 min, 68 % a 91 %, 12 a 3 defectos).",
+              "No agregues rubros de gasto que no estén en los datos."
+            ],
+            "format": "Documento ejecutivo con tabla comparativa y estructura de 4 diapositivas.",
+            "tone": "Directivo, persuasivo con datos y conciso."
+          },
+          "steps": [
+            "En Gemini (con los hallazgos de Deep Research o pegando los datos del estudio), activa Canvas, pega el prompt y genera el informe de sustentación.",
+            "Selecciona el resumen de impacto y pulsa «Sugerencias de edición»; acepta las mejoras que hagan más directas las frases sin cambiar los porcentajes.",
+            "Abre el menú «Crear → Infografía» para que Canvas convierta las 3 métricas (75 % menos tiempo, 91 % entregas puntuales y 3 defectos) en una pieza visual.",
+            "Vuelve al documento del informe y pide en el chat: «Genera la presentación de 4 diapositivas a partir de este documento».",
+            "(Opcional) Usa «Exportar a Presentaciones de Google» para abrir las 4 diapositivas en tu cuenta de Drive.",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "El informe conserva la muestra exacta: 3 sedes, 420 aprendices y 18 instructores.",
+            "La reducción del tiempo de compilación de 14 min a 3,5 min aparece como 75 % de ahorro.",
+            "El aumento de entregas puntuales del 68 % al 91 % y la baja de 12 a 3 defectos están en la tabla.",
+            "La pieza generada con «Crear → Infografía» destaca los 3 indicadores y la meta de COP 48.000.000.",
+            "El guion de 4 diapositivas cubre Título, Problema, Impacto y Decisión sin inventar cifras."
+          ],
+          "stretch": "Pide: «Usa Crear → Resumen en audio sobre el informe para escuchar el diálogo ejecutivo de 2 minutos antes de entrar al comité».",
+          "prompt": "Contexto: A partir de los hallazgos del estudio en 3 sedes regionales, debes preparar en Canvas el documento base y su estructura visual para sustentar la inversión ante la dirección.\n\nRol: Actúa como consultor de planeación e infraestructura educativa.\n\nDatos:\n\"\"\"\nSÍNTESIS DE INVESTIGACIÓN — MODERNIZACIÓN DE LABORATORIOS DE DESARROLLO 2026 (datos de práctica)\n\nHallazgos verificados en 3 sedes regionales (muestra de 420 aprendices y 18 instructores):\n1. Tiempo de compilación local: en equipos con 8 GB de RAM tarda 14 minutos por proyecto; con 32 GB baja a 3,5 minutos (reducción del 75 %).\n2. Conectividad y trabajo desconectado: el 35 % de las sesiones tuvo intermitencia de red, por lo que las guías HTML autónomas aumentaron las entregas puntuales del 68 % al 91 %.\n3. Adopción de pruebas automatizadas: las fichas con validación automática redujeron los defectos en entrega final de 12 a 3 por proyecto.\n\nMeta presupuestal: priorizar ampliación de RAM en 60 equipos (COP 48.000.000) y guías autónomas en las 3 sedes.\n\"\"\"\n\nTarea: En Canvas, redacta el informe ejecutivo de sustentación con:\n1. Un resumen de impacto con las 3 métricas comparativas (antes vs. después en compilación, entregas puntuales y defectos).\n2. Una tabla de retorno técnico que vincule cada hallazgo con la inversión de COP 48.000.000 en los 60 equipos.\n3. Un guion de 4 diapositivas ejecutivas (Título, Problema medido, Impacto verificado y Decisión presupuestal) listo para llevar a Presentaciones de Google.\nEntrega: Documento ejecutivo con tabla comparativa y estructura de 4 diapositivas.\n\nTono: Directivo, persuasivo con datos y conciso.\n\nLímites:\n- Conserva con exactitud las cifras de la muestra (420 aprendices, 18 instructores, 14 min a 3,5 min, 68 % a 91 %, 12 a 3 defectos).\n- No agregues rubros de gasto que no estén en los datos."
         }
       ],
       "expected": [
@@ -3422,6 +3662,67 @@
           ],
           "stretch": "Pide en el chat: «Añade al System Prompt una regla para detectar código duplicado y calcular el índice de mantenibilidad según la complejidad ciclomática».",
           "prompt": "Contexto: La coordinación técnica necesita automatizar la auditoría preliminar de los proyectos formativos de desarrollo de software. Se diseñará un Gem que analice los archivos de código creados en Canvas y emita un informe técnico fundamentado.\n\nRol: Actúa como líder técnico de calidad de software.\n\nDatos:\n\"\"\"\nESPECIFICACIÓN DEL GEM AUDITOR DE RÚBRICAS TÉCNICAS\nNombre del Gem: Auditor Técnico de Calidad de Código ADSO\nPropósito: Evaluar artefactos de software construidos en Canvas contra una rúbrica formal de cuatro criterios.\nCriterios de evaluación y ponderación:\n1. Arquitectura y Modularidad (30 %): Separación de responsabilidades, archivos menores a 250 líneas y funciones atómicas menores a 40 líneas.\n2. Calidad de Pruebas Automatizadas (30 %): 100 % de funciones probadas con aserciones observables y cobertura de casos límite (entradas vacías o inválidas).\n3. Accesibilidad y Usabilidad (20 %): Contraste de color WCAG 2.2 nivel AA, etiquetas semánticas y navegación accesible.\n4. Seguridad y Buenas Prácticas (20 %): Cero secretos o llaves API expuestas, validación de entradas y manejo robusto de excepciones.\nGuardrails obligatorios:\n- El Gem nunca debe modificar la lógica de negocio ni inventar dependencias externas.\n- El dictamen debe emitirse con puntajes numéricos del 1 al 5 y un semáforo visual (Verde >= 4.0, Ámbar 3.0-3.9, Rojo < 3.0).\n- El dictamen termina con una recomendación de qué evidencia anexar al Portafolio de Evidencias.\n\"\"\"\n\nTarea: En Canvas, elabora el pliego de especificación y el System Prompt del Gem Auditor Técnico con:\n1. El System Prompt del Gem con su matriz de evaluación de 4 criterios ponderados y escala del 1 al 5.\n2. La plantilla estructurada del dictamen de auditoría en formato Markdown que el Gem debe completar al evaluar código.\n3. El protocolo para auditar fragmentos seleccionados dentro de un Canvas de código sin alterar su funcionamiento.\n4. Un ejemplo completo de auditoría simulada para una función de cálculo de promedios, mostrando fortalezas, debilidades y calificación final.\nEntrega: Documento técnico con tablas de ponderación, bloques de código para el System Prompt y plantilla de dictamen.\n\nTono: Técnico, objetivo y constructivo en cada hallazgo.\n\nLímites:\n- Los 4 criterios deben sumar exactamente 100 % en su ponderación.\n- Prohíbe que el Gem aplique refactorizaciones no solicitadas que rompan la compatibilidad del código auditado.\n- Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias»."
+        },
+        {
+          "id": "gem-c-integrador-vision-completa",
+          "code": "12C",
+          "title": "Proyecto Integrador 360°: de Gem socrático a aplicación web verificadora para el Portafolio de Evidencias",
+          "level": "Avanzado",
+          "duration": "35 min",
+          "canvasFeature": "Nuevo Gem + Documento + Crear → Página web + Funciones de Gemini + Copiar Canvas",
+          "capabilities": [
+            "gems",
+            "doc-create",
+            "create-webpage",
+            "gemini-in-app",
+            "copy-canvas"
+          ],
+          "whyCanvas": "Este ejercicio de cierre une todo el ecosistema de Gemini Canvas: diseñas las reglas del Gem, redactas el instrumento en un documento, lo conviertes con «Crear → Página web» en una aplicación con «Agregar funciones de Gemini» y entregas un enlace listo para «Copiar Canvas» en tu Portafolio de Evidencias.",
+          "outsideCanvas": "La configuración del Gem vive en «Explorar Gems → Nuevo Gem» (o en el mensaje inicial del chat si tu cuenta no habilita Gems), mientras que el documento, la página web con IA y la copia compartida ocurren en Canvas.",
+          "places": [
+            "canvas",
+            "gemini",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Integrar en un solo flujo de principio a fin la creación de un Gem, la especificación documental en Canvas, su transformación en aplicación web con asistencia de IA y su empaquetado para el Portafolio de Evidencias.",
+          "scenario": "Para cerrar el entrenamiento en Gemini Canvas, vas a construir tu propio «Verificador 360° de Entregables ADSO»: un asistente y aplicación interactiva que cualquier aprendiz pueda clonar para auditar sus evidencias antes de entregarlas.",
+          "promptParts": {
+            "role": "arquitecto de soluciones educativas con IA y líder técnico ADSO",
+            "context": "Este es el proyecto integrador de cierre. Necesitas unir en un mismo flujo las instrucciones de un Gem socrático, la rúbrica de 4 criterios iguales (25 % cada uno) y la especificación de la aplicación web verificadora para el Portafolio de Evidencias.",
+            "data": "PROYECTO INTEGRADOR 360° — ARQUITECTO DE EVIDENCIAS CON IA EN CANVAS (datos de práctica)\n\nMisión del asistente Gem «Mentor de Portafolio de Evidencias ADSO»:\n- Guiar de forma socrática al aprendiz para verificar su entregable antes de subirlo al Portafolio de Evidencias.\n- Exigir siempre 4 componentes observables: 1) Contexto y objetivo, 2) Arquitectura o modelo de datos, 3) Pruebas verificables con casos límite, 4) Lista de chequeo V.E.R.A.\n\nRúbrica de validación en la aplicación web interactiva:\n- Criterio 1: Problema y alcance claros (25 %)\n- Criterio 2: Datos y reglas sin ambigüedad (25 %)\n- Criterio 3: Verificación reproducible (25 %)\n- Criterio 4: Accesibilidad y redacción institucional es-CO (25 %)\n\nCaso de prueba para calibrar: entrega con puntajes 4,8 · 4,4 · 4,0 · 4,8 → promedio 4,50 (Lista para el Portafolio de Evidencias).",
+            "instruction": "En Canvas, redacta el documento maestro del Proyecto Integrador 360° con:",
+            "task": [
+              "El System Prompt completo del Gem «Mentor de Portafolio de Evidencias ADSO» con sus 4 componentes obligatorios y tono socrático.",
+              "La tabla de la rúbrica de validación con los 4 criterios de 25 % y el cálculo demostrado del caso de calibración (4,8 · 4,4 · 4,0 · 4,8 = 4,50).",
+              "La especificación funcional de la aplicación web verificadora donde el aprendiz ingresa sus 4 puntajes y recibe retroalimentación socrática antes de exportar a su Portafolio de Evidencias."
+            ],
+            "constraints": [
+              "Utiliza exclusivamente el término canónico «Portafolio de Evidencias» en todo el documento y en la aplicación.",
+              "Verifica que los 4 pesos sumen 100 % y que el promedio ponderado del caso de prueba sea exactamente 4,50."
+            ],
+            "format": "Documento maestro numerado en 3 secciones con bloque de System Prompt y tabla de calibración.",
+            "tone": "Profesional, integrador y motivador para el cierre del curso."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt integrador y genera el documento maestro.",
+            "Copia el System Prompt de la sección 1 y regístralo en «Explorar Gems → Nuevo Gem» (o úsalo como mensaje inicial de calibración) comprobando que el Gem responda con preguntas socráticas.",
+            "De regreso en el documento del Canvas, abre «Crear → Página web» para transformar la especificación en la aplicación interactiva «Verificador 360° de Portafolio de Evidencias».",
+            "En la aplicación web, usa «Agregar funciones de Gemini» (o pide un generador socrático determinista en JavaScript si tu cuenta no muestra el botón) para que al evaluar los 4 criterios formule 2 preguntas de mejora.",
+            "Prueba el caso de calibración (4,8 · 4,4 · 4,0 · 4,8 → 4,50) en la «Vista previa» y genera el enlace compartido para que otro aprendiz pueda usar «Copiar Canvas».",
+            "Marca la lista «Verifica tu resultado» para completar los 36 ejercicios y desbloquear tu Visión Completa 360° de Gemini Canvas."
+          ],
+          "expected": [
+            "El documento incluye el System Prompt del Gem «Mentor de Portafolio de Evidencias ADSO» y usa únicamente el término «Portafolio de Evidencias».",
+            "Al probar el Gem con una entrega incompleta, el Gem formula preguntas socráticas sobre los 4 componentes en lugar de redactar la tarea.",
+            "En la aplicación creada con «Crear → Página web», los puntajes 4,8, 4,4, 4,0 y 4,8 (25 % cada uno) dan exactamente 4,50.",
+            "El botón con funciones de Gemini (o su generador socrático) entrega preguntas de reflexión personalizadas según el criterio más bajo (4,0 en Verificación reproducible).",
+            "El artefacto queda listo para compartir y duplicarse con «Copiar Canvas» sin alterar tu versión maestra."
+          ],
+          "stretch": "Pide: «Agrega en la aplicación un botón que genere el resumen en Markdown con el sello V.E.R.A. listo para pegar en la portada del Portafolio de Evidencias».",
+          "prompt": "Contexto: Este es el proyecto integrador de cierre. Necesitas unir en un mismo flujo las instrucciones de un Gem socrático, la rúbrica de 4 criterios iguales (25 % cada uno) y la especificación de la aplicación web verificadora para el Portafolio de Evidencias.\n\nRol: Actúa como arquitecto de soluciones educativas con IA y líder técnico ADSO.\n\nDatos:\n\"\"\"\nPROYECTO INTEGRADOR 360° — ARQUITECTO DE EVIDENCIAS CON IA EN CANVAS (datos de práctica)\n\nMisión del asistente Gem «Mentor de Portafolio de Evidencias ADSO»:\n- Guiar de forma socrática al aprendiz para verificar su entregable antes de subirlo al Portafolio de Evidencias.\n- Exigir siempre 4 componentes observables: 1) Contexto y objetivo, 2) Arquitectura o modelo de datos, 3) Pruebas verificables con casos límite, 4) Lista de chequeo V.E.R.A.\n\nRúbrica de validación en la aplicación web interactiva:\n- Criterio 1: Problema y alcance claros (25 %)\n- Criterio 2: Datos y reglas sin ambigüedad (25 %)\n- Criterio 3: Verificación reproducible (25 %)\n- Criterio 4: Accesibilidad y redacción institucional es-CO (25 %)\n\nCaso de prueba para calibrar: entrega con puntajes 4,8 · 4,4 · 4,0 · 4,8 → promedio 4,50 (Lista para el Portafolio de Evidencias).\n\"\"\"\n\nTarea: En Canvas, redacta el documento maestro del Proyecto Integrador 360° con:\n1. El System Prompt completo del Gem «Mentor de Portafolio de Evidencias ADSO» con sus 4 componentes obligatorios y tono socrático.\n2. La tabla de la rúbrica de validación con los 4 criterios de 25 % y el cálculo demostrado del caso de calibración (4,8 · 4,4 · 4,0 · 4,8 = 4,50).\n3. La especificación funcional de la aplicación web verificadora donde el aprendiz ingresa sus 4 puntajes y recibe retroalimentación socrática antes de exportar a su Portafolio de Evidencias.\nEntrega: Documento maestro numerado en 3 secciones con bloque de System Prompt y tabla de calibración.\n\nTono: Profesional, integrador y motivador para el cierre del curso.\n\nLímites:\n- Utiliza exclusivamente el término canónico «Portafolio de Evidencias» en todo el documento y en la aplicación.\n- Verifica que los 4 pesos sumen 100 % y que el promedio ponderado del caso de prueba sea exactamente 4,50."
         }
       ]
     }

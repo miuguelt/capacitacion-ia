@@ -2267,6 +2267,334 @@ CANVAS_EXERCISES["multimodal-vision"].push({
   previewSvg: canvasSvgBars("Gráfico de barras con la cantidad de cada insumo del laboratorio: conectores 35, switch 2 y etiquetas 0 están bajo el mínimo", "Cantidad por insumo", ["UTP", "RJ45", "Router", "Switch", "Cinta", "Etiq."], [6, 35, 4, 2, 9, 0], 1)
 });
 
+const IN_SENSIBILIDAD_MATRIZ = `MATRIZ DE SENSIBILIDAD — SELECCIÓN DE PLATAFORMA EN LA NUBE (datos de práctica)
+
+Criterios y pesos iniciales:
+- Costo mensual predecible: 40 %
+- Disponibilidad SLA (99,9 %): 35 %
+- Soporte técnico en español: 25 %
+
+Calificaciones de 1 a 10 por alternativa:
+Alternativa | Costo | SLA | Soporte
+Nube Andina | 9,0 | 8,0 | 8,0
+Nube Pacífico | 7,5 | 9,5 | 9,0
+Nube Orinoquía | 8,5 | 7,0 | 6,0
+
+Fórmula: puntaje sobre 100 = (Costo × peso_costo + SLA × peso_sla + Soporte × peso_soporte) ÷ 10.
+Umbral de adjudicación: 84,0 puntos o más = Adjudicable; menos de 84,0 = En reserva.
+Escenario de sensibilidad: si el peso de Costo baja a 20 % y el de SLA sube a 55 % (Soporte sigue en 25 %), recalcula quién gana.`;
+
+const IN_ESTADOS_MANTENIMIENTO = `CICLO DE ESTADOS — ÓRDENES DE MANTENIMIENTO DE AMBIENTES (datos de práctica)
+
+Estados válidos:
+- Radicada (estado inicial después de [*])
+- EnDiagnostico
+- EsperandoRepuesto
+- EnReparacion
+- Verificada
+- Cerrada (estado final hacia [*])
+
+Transiciones permitidas:
+1. [*] → Radicada: instructor registra daño
+2. Radicada → EnDiagnostico: técnico asignado en menos de 4 h
+3. EnDiagnostico → EsperandoRepuesto: requiere pieza nueva
+4. EnDiagnostico → EnReparacion: ajuste directo en sitio
+5. EsperandoRepuesto → EnReparacion: almacén entrega repuesto
+6. EnReparacion → Verificada: prueba funcional aprobada
+7. Verificada → EnReparacion: falla persiste en revisión
+8. Verificada → Cerrada: acta firmada por instructor
+9. Cerrada → [*]`;
+
+const IN_CONCILIACION_SQL = `AUDITORÍA SQL — CONCILIACIÓN DE CERTIFICADOS Y EVIDENCIAS (datos de práctica)
+
+CREATE TABLE aprendices_corte (id INT PRIMARY KEY, nombre TEXT, ficha INT);
+CREATE TABLE evidencias_entregadas (id_evidencia INT PRIMARY KEY, aprendiz_id INT, estado TEXT, puntaje NUMERIC(4,1));
+
+INSERT INTO aprendices_corte VALUES (1,'Laura Gómez',2871),(2,'Mateo Díaz',2871),(3,'Camila Vega',2871),(4,'Julián Mora',2872);
+INSERT INTO evidencias_entregadas VALUES
+  (101,1,'Aprobada',92.0),(102,1,'Aprobada',88.0),
+  (103,2,'Aprobada',75.0),(104,2,'Pendiente',40.0),
+  (105,3,'Aprobada',95.0),(106,3,'Aprobada',91.0);
+-- Julián Mora (id 4) no tiene evidencias registradas aún.
+
+Regla de certificación: apto si tiene al menos 2 evidencias con estado 'Aprobada' y promedio de puntaje mayor o igual a 85,0.`;
+
+const IN_DEEP_RESEARCH_SINTESIS = `SÍNTESIS DE INVESTIGACIÓN — MODERNIZACIÓN DE LABORATORIOS DE DESARROLLO 2026 (datos de práctica)
+
+Hallazgos verificados en 3 sedes regionales (muestra de 420 aprendices y 18 instructores):
+1. Tiempo de compilación local: en equipos con 8 GB de RAM tarda 14 minutos por proyecto; con 32 GB baja a 3,5 minutos (reducción del 75 %).
+2. Conectividad y trabajo desconectado: el 35 % de las sesiones tuvo intermitencia de red, por lo que las guías HTML autónomas aumentaron las entregas puntuales del 68 % al 91 %.
+3. Adopción de pruebas automatizadas: las fichas con validación automática redujeron los defectos en entrega final de 12 a 3 por proyecto.
+
+Meta presupuestal: priorizar ampliación de RAM en 60 equipos (COP 48.000.000) y guías autónomas en las 3 sedes.`;
+
+const IN_INTEGRADOR_360 = `PROYECTO INTEGRADOR 360° — ARQUITECTO DE EVIDENCIAS CON IA EN CANVAS (datos de práctica)
+
+Misión del asistente Gem «Mentor de Portafolio de Evidencias ADSO»:
+- Guiar de forma socrática al aprendiz para verificar su entregable antes de subirlo al Portafolio de Evidencias.
+- Exigir siempre 4 componentes observables: 1) Contexto y objetivo, 2) Arquitectura o modelo de datos, 3) Pruebas verificables con casos límite, 4) Lista de chequeo V.E.R.A.
+
+Rúbrica de validación en la aplicación web interactiva:
+- Criterio 1: Problema y alcance claros (25 %)
+- Criterio 2: Datos y reglas sin ambigüedad (25 %)
+- Criterio 3: Verificación reproducible (25 %)
+- Criterio 4: Accesibilidad y redacción institucional es-CO (25 %)
+
+Caso de prueba para calibrar: entrega con puntajes 4,8 · 4,4 · 4,0 · 4,8 → promedio 4,50 (Lista para el Portafolio de Evidencias).`;
+
+// 3C: de matriz de decisión a simulador web de sensibilidad
+CANVAS_EXERCISES["data-matrix"].push({
+  id: "matrix-c-sensibilidad-web",
+  code: "3C",
+  capabilities: ["doc-create", "create-webpage", "select-ask", "share"],
+  whyCanvas: "Primero validas las cuentas de la matriz en un documento y luego la conviertes con «Crear → Página web» en un simulador donde cambias los pesos con deslizadores y ves en vivo cómo cambia el ganador.",
+  outsideCanvas: "Tanto la matriz documental como la página web interactiva y el ajuste con «Seleccionar y preguntar» ocurren dentro de Gemini Canvas.",
+  title: "De matriz de decisión a simulador web de sensibilidad presupuestal",
+  level: "Avanzado",
+  duration: "30 min",
+  canvasFeature: "Documento + Crear → Página web + Seleccionar y preguntar + Compartir",
+  goal: "Verificar los puntajes base y de sensibilidad de tres alternativas de nube y transformar la matriz en una calculadora interactiva compartible.",
+  scenario: "El comité técnico quiere saber si Nube Andina sigue ganando cuando la disponibilidad SLA pasa a ser el criterio más importante del contrato.",
+  promptParts: {
+    role: "analista financiero de infraestructura en la nube",
+    context: "El comité evaluador necesita comparar el escenario base frente al escenario de alta criticidad en SLA sin rehacer las cuentas a mano.",
+    data: IN_SENSIBILIDAD_MATRIZ,
+    instruction: "En Canvas, redacta el informe de sensibilidad con:",
+    task: [
+      "La tabla del escenario base (pesos 40 %, 35 %, 25 %) con el puntaje sobre 100 y el estado de cada alternativa.",
+      "La tabla del escenario de sensibilidad (pesos 20 %, 55 %, 25 %) con los nuevos puntajes y estados.",
+      "La conclusión comparativa que explique qué alternativa pasa al primer lugar y por cuántos puntos supera a la segunda."
+    ],
+    constraints: [
+      "Muestra las operaciones completas de cada alternativa con un decimal.",
+      "Usa exclusivamente las calificaciones y umbrales de los datos."
+    ],
+    format: "Documento técnico con dos tablas comparativas y conclusión ejecutiva.",
+    tone: "Analítico, transparente y verificable."
+  },
+  places: ["canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
+  steps: [
+    "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera el informe con los dos escenarios.",
+    "Comprueba en el documento que en el escenario base gana Nube Andina (84,0) y en el de sensibilidad gana Nube Pacífico (89,8).",
+    "Abre el menú «Crear → Página web» para transformar el documento en una calculadora interactiva con deslizadores para los tres pesos.",
+    "En la «Vista previa», activa «Seleccionar y preguntar», señala la tarjeta de resultado y pide: «Muestra una alerta si los tres pesos no suman 100 %».",
+    "Usa «Compartir» en «Compartir y exportar» para generar el enlace de la calculadora para el comité.",
+    "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+  ],
+  expected: [
+    "En el escenario base (40/35/25), Nube Andina obtiene 84,0 (Adjudicable), Nube Pacífico 85,8 (Adjudicable) y Nube Orinoquía 73,5 (En reserva).",
+    "En el escenario de sensibilidad (20/55/25), Nube Pacífico sube a 89,8 (Adjudicable), Nube Andina queda en 82,0 (En reserva) y Nube Orinoquía en 70,5.",
+    "La diferencia entre Nube Pacífico y Nube Andina en el escenario de sensibilidad es de 7,8 puntos.",
+    "La página web creada con «Crear → Página web» recalcula los puntajes al mover los pesos.",
+    "Si los pesos no suman 100 %, la interfaz muestra el aviso solicitado con «Seleccionar y preguntar»."
+  ],
+  stretch: "Pide: «Agrega un botón en la página web que encuentre automáticamente desde qué peso de SLA Nube Pacífico supera los 88,0 puntos».",
+  previewSvg: canvasSvgBars("Comparativa de puntajes en el escenario de sensibilidad: Nube Pacífico 89,8, Nube Andina 82,0 y Nube Orinoquía 70,5", "Escenario sensibilidad SLA (pts)", ["Pacífico", "Andina", "Orinoquía"], [89.8, 82.0, 70.5], 0)
+});
+
+// 4C: máquina de estados y reparación con consola
+CANVAS_EXERCISES["flowchart-diagram"].push({
+  id: "flow-c-estados-mantenimiento",
+  code: "4C",
+  capabilities: ["code-preview", "console-fix", "versions", "inline-edit"],
+  whyCanvas: "En un Canvas de código puedes renderizar una máquina de estados Mermaid, inspeccionar la consola si una transición falla, corregirla por selección y comparar con «Versión anterior».",
+  outsideCanvas: "Todo el ciclo de diagramación, prueba interactiva, depuración en consola y control de versiones ocurre dentro de Gemini Canvas.",
+  title: "Máquina de estados de mantenimiento y depuración en consola",
+  level: "Intermedio",
+  duration: "25 min",
+  canvasFeature: "Vista previa + Consola y corrección de errores + Versiones + Edición por selección",
+  goal: "Modelar el ciclo de vida de una orden de mantenimiento con stateDiagram-v2, simular el estado activo en la página y verificar la recuperación ante errores de sintaxis.",
+  scenario: "El área de infraestructura necesita documentar los 6 estados oficiales de una orden de mantenimiento y probar qué ocurre cuando una revisión técnica devuelve la orden a reparación.",
+  promptParts: {
+    role: "arquitecto de procesos y sistemas de soporte",
+    context: "El equipo de mantenimiento requiere una página interactiva con el diagrama de estados oficial y un simulador de transiciones para capacitar a los técnicos nuevos.",
+    data: IN_ESTADOS_MANTENIMIENTO,
+    instruction: "En Canvas, crea una página HTML ejecutable que incluya:",
+    task: [
+      "El diagrama Mermaid con sintaxis stateDiagram-v2 que represente los 6 estados y las 9 transiciones de los datos.",
+      "Un panel interactivo con botones para avanzar por las transiciones desde Radicada hasta Cerrada, incluyendo el bucle de retorno de Verificada a EnReparacion.",
+      "Un contador de pasos transcurridos y el historial de estados visitados en la sesión."
+    ],
+    constraints: [
+      "Usa exactamente los nombres de estado y las 9 transiciones de los datos.",
+      "Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión."
+    ],
+    format: "Un solo archivo HTML con CSS y JavaScript nativo.",
+    tone: "Técnico, estructurado y didáctico."
+  },
+  places: ["canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
+  steps: [
+    "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera la página con el diagrama de estados.",
+    "Abre la «Vista previa» y prueba el recorrido corto (Radicada → EnDiagnostico → EnReparacion → Verificada → Cerrada); si aparece algún fallo de sintaxis, abre la consola o pulsa «Corregir error».",
+    "Vuelve a la pestaña de código, selecciona el bloque de transiciones y escribe: «Agrega una nota en el estado EsperandoRepuesto que indique SLA máximo de 72 horas».",
+    "Usa «Versión anterior» o «Mostrar cambios recientes» en la barra superior de Canvas para verificar que solo se agregó la nota sin alterar las 9 transiciones.",
+    "En la «Vista previa», prueba el camino con devolución (Verificada → EnReparacion → Verificada → Cerrada) y comprueba el historial.",
+    "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+  ],
+  expected: [
+    "El código Mermaid empieza con stateDiagram-v2 e incluye los 6 estados y las 9 transiciones.",
+    "Existe la transición de retorno Verificada --> EnReparacion cuando la falla persiste.",
+    "El estado EsperandoRepuesto muestra la nota del SLA máximo de 72 horas.",
+    "El simulador de botones permite recorrer tanto la ruta directa (4 pasos) como la ruta con repuesto y retrabajo.",
+    "«Versión anterior» permite comparar el diagrama antes y después de agregar la nota de SLA."
+  ],
+  stretch: "Pide: «Agrega un botón que exporte el registro de transiciones probadas como una tabla Markdown lista para pegar en el informe».",
+  previewSvg: canvasSvgFlow("Diagrama de estados desde Radicada pasando por Diagnóstico, Reparación y Verificada hasta Cerrada", "Estados de mantenimiento", [
+    { name: "Solicitud", steps: ["Radicada", "EnDiagnostico", "¿Repuesto?"] },
+    { name: "Ejecución", steps: ["EnReparacion", "Verificada", "Cerrada"] }
+  ])
+});
+
+// 9C: conciliación SQL y exportación a PDF
+CANVAS_EXERCISES["sql-pipeline"].push({
+  id: "sql-c-conciliacion-mesa-pdf",
+  code: "9C",
+  capabilities: ["doc-create", "code-preview", "inline-edit", "export-pdf"],
+  whyCanvas: "En Canvas puedes combinar el script SQL de conciliación, un verificador interactivo en la vista previa y un informe ejecutivo listo para guardar con «Exportar a PDF».",
+  outsideCanvas: "La consulta SQL, la simulación de resultados y la vista previa de impresión ocurren dentro de Gemini Canvas.",
+  title: "Conciliación SQL de certificación y reporte auditable en PDF",
+  level: "Avanzado",
+  duration: "30 min",
+  canvasFeature: "Documento y código SQL + Vista previa + Edición por selección + Exportar a PDF",
+  goal: "Escribir una consulta SQL que determine qué aprendices cumplen los requisitos de certificación sin excluir a quienes tienen cero entregas, y generar el acta en PDF.",
+  scenario: "Antes del cierre de trimestre, registro académico necesita conciliar la tabla de aprendices matriculados contra las evidencias aprobadas para emitir el listado oficial de certificación.",
+  promptParts: {
+    role: "ingeniero de datos y auditor de registro académico",
+    context: "Se requiere una consulta SQL determinista y un reporte de conciliación que muestre tanto a los aprendices aptos como a quienes tienen entregas pendientes o cero registros.",
+    data: IN_CONCILIACION_SQL,
+    instruction: "En Canvas, redacta el documento de conciliación SQL que contenga:",
+    task: [
+      "La consulta PostgreSQL con LEFT JOIN y COUNT(*) FILTER (WHERE estado = 'Aprobada') que calcule para los 4 aprendices: total de evidencias aprobadas, promedio de puntaje en aprobadas y dictamen ('Apto para certificar' o 'Pendiente').",
+      "La tabla exacta de resultados para los 4 aprendices de la muestra, usando COALESCE para que Julián Mora aparezca con 0 aprobadas y promedio 0,0.",
+      "Un resumen ejecutivo de hallazgos para firma del comité."
+    ],
+    constraints: [
+      "No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.",
+      "Usa COALESCE para evitar valores nulos en el conteo y en el promedio."
+    ],
+    format: "Documento técnico con bloque SQL comentado, tabla de conciliación de 4 filas y resumen de cierre.",
+    tone: "Riguroso, claro y auditable."
+  },
+  places: ["canvas", "canvas", "canvas", "canvas", "canvas", "portal"],
+  steps: [
+    "Activa Canvas en la barra del chat de Gemini, pega el prompt y genera el documento de conciliación SQL.",
+    "Verifica en la tabla generada que aparezcan los 4 aprendices: Laura Gómez (2 aprobadas, promedio 90,0, Apto) y Camila Vega (2 aprobadas, promedio 93,0, Apto).",
+    "Selecciona la consulta SQL en el lienzo y escribe: «Agrega una columna que indique cuántas evidencias aprobadas le faltan a cada aprendiz para llegar al mínimo de 2».",
+    "Pide en el chat: «Crea una vista previa interactiva donde pueda filtrar la tabla por Apto para certificar o Pendiente» y ábrela en «Vista previa».",
+    "Abre «Compartir y exportar → Exportar a PDF» para comprobar que la consulta y la tabla de 4 aprendices queden en una sola página.",
+    "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+  ],
+  expected: [
+    "La consulta usa LEFT JOIN entre aprendices_corte y evidencias_entregadas.",
+    "Laura Gómez (90,0) y Camila Vega (93,0) quedan con dictamen «Apto para certificar».",
+    "Mateo Díaz queda «Pendiente» (solo 1 evidencia aprobada con 75,0; la otra está Pendiente).",
+    "Julián Mora aparece en la tabla con 0 evidencias aprobadas, promedio 0,0 y le faltan 2 evidencias.",
+    "La vista previa del PDF conserva el bloque SQL y la tabla completa sin recortes."
+  ],
+  stretch: "Pide: «Agrega una restricción CHECK y un índice único en evidencias_entregadas para impedir puntajes fuera del rango 0 a 100».",
+  previewSvg: canvasSvgBars("Promedio de puntaje en evidencias aprobadas: Camila 93,0, Laura 90,0, Mateo 75,0 y Julián 0,0", "Promedio en aprobadas por aprendiz", ["Camila", "Laura", "Mateo", "Julián"], [93, 90, 75, 1], 0)
+});
+
+// 10C: de Deep Research a infografía y presentación
+CANVAS_EXERCISES["executive-report"].push({
+  id: "report-c-deep-research-infografia",
+  code: "10C",
+  capabilities: ["deep-research", "suggest-edits", "create-infographic", "create-slides"],
+  whyCanvas: "Canvas recibe una síntesis de investigación profunda (Deep Research), permite depurar el estilo con «Sugerencias de edición» y la transforma en segundos con «Crear → Infografía» o en diapositivas para «Presentaciones de Google».",
+  outsideCanvas: "Deep Research se inicia en el selector de herramientas de Gemini y la exportación final envía las diapositivas a Presentaciones de Google; la edición y la infografía ocurren en Canvas.",
+  title: "De investigación con Deep Research a infografía y presentación directiva",
+  level: "Avanzado",
+  duration: "30 min",
+  canvasFeature: "Deep Research + Sugerencias de edición + Crear → Infografía + Presentaciones de Google",
+  goal: "Transformar un informe de hallazgos cuantitativos en una infografía ejecutiva y un guion de diapositivas sin perder ninguna cifra verificada.",
+  scenario: "La dirección regional tiene 5 minutos en el comité trimestral para sustentar la inversión de COP 48.000.000 en memoria RAM y guías autónomas para las 3 sedes.",
+  promptParts: {
+    role: "consultor de planeación e infraestructura educativa",
+    context: "A partir de los hallazgos del estudio en 3 sedes regionales, debes preparar en Canvas el documento base y su estructura visual para sustentar la inversión ante la dirección.",
+    data: IN_DEEP_RESEARCH_SINTESIS,
+    instruction: "En Canvas, redacta el informe ejecutivo de sustentación con:",
+    task: [
+      "Un resumen de impacto con las 3 métricas comparativas (antes vs. después en compilación, entregas puntuales y defectos).",
+      "Una tabla de retorno técnico que vincule cada hallazgo con la inversión de COP 48.000.000 en los 60 equipos.",
+      "Un guion de 4 diapositivas ejecutivas (Título, Problema medido, Impacto verificado y Decisión presupuestal) listo para llevar a Presentaciones de Google."
+    ],
+    constraints: [
+      "Conserva con exactitud las cifras de la muestra (420 aprendices, 18 instructores, 14 min a 3,5 min, 68 % a 91 %, 12 a 3 defectos).",
+      "No agregues rubros de gasto que no estén en los datos."
+    ],
+    format: "Documento ejecutivo con tabla comparativa y estructura de 4 diapositivas.",
+    tone: "Directivo, persuasivo con datos y conciso."
+  },
+  places: ["gemini", "canvas", "canvas", "canvas", "external", "portal"],
+  steps: [
+    "En Gemini (con los hallazgos de Deep Research o pegando los datos del estudio), activa Canvas, pega el prompt y genera el informe de sustentación.",
+    "Selecciona el resumen de impacto y pulsa «Sugerencias de edición»; acepta las mejoras que hagan más directas las frases sin cambiar los porcentajes.",
+    "Abre el menú «Crear → Infografía» para que Canvas convierta las 3 métricas (75 % menos tiempo, 91 % entregas puntuales y 3 defectos) en una pieza visual.",
+    "Vuelve al documento del informe y pide en el chat: «Genera la presentación de 4 diapositivas a partir de este documento».",
+    "(Opcional) Usa «Exportar a Presentaciones de Google» para abrir las 4 diapositivas en tu cuenta de Drive.",
+    "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+  ],
+  expected: [
+    "El informe conserva la muestra exacta: 3 sedes, 420 aprendices y 18 instructores.",
+    "La reducción del tiempo de compilación de 14 min a 3,5 min aparece como 75 % de ahorro.",
+    "El aumento de entregas puntuales del 68 % al 91 % y la baja de 12 a 3 defectos están en la tabla.",
+    "La pieza generada con «Crear → Infografía» destaca los 3 indicadores y la meta de COP 48.000.000.",
+    "El guion de 4 diapositivas cubre Título, Problema, Impacto y Decisión sin inventar cifras."
+  ],
+  stretch: "Pide: «Usa Crear → Resumen en audio sobre el informe para escuchar el diálogo ejecutivo de 2 minutos antes de entrar al comité».",
+  previewSvg: canvasSvgDonut("Distribución del impacto en entregas puntuales: 91 por ciento a tiempo con guías autónomas", "Entregas a tiempo con guías", [{ name: "Puntuales", value: 91, cls: "cx-p" }, { name: "Pendientes", value: 9, cls: "cx-w" }], "91 %")
+});
+
+// 12C: proyecto integrador de visión completa 360°
+CANVAS_EXERCISES["gem-studio"].push({
+  id: "gem-c-integrador-vision-completa",
+  code: "12C",
+  capabilities: ["gems", "doc-create", "create-webpage", "gemini-in-app", "copy-canvas"],
+  whyCanvas: "Este ejercicio de cierre une todo el ecosistema de Gemini Canvas: diseñas las reglas del Gem, redactas el instrumento en un documento, lo conviertes con «Crear → Página web» en una aplicación con «Agregar funciones de Gemini» y entregas un enlace listo para «Copiar Canvas» en tu Portafolio de Evidencias.",
+  outsideCanvas: "La configuración del Gem vive en «Explorar Gems → Nuevo Gem» (o en el mensaje inicial del chat si tu cuenta no habilita Gems), mientras que el documento, la página web con IA y la copia compartida ocurren en Canvas.",
+  title: "Proyecto Integrador 360°: de Gem socrático a aplicación web verificadora para el Portafolio de Evidencias",
+  level: "Avanzado",
+  duration: "35 min",
+  canvasFeature: "Nuevo Gem + Documento + Crear → Página web + Funciones de Gemini + Copiar Canvas",
+  goal: "Integrar en un solo flujo de principio a fin la creación de un Gem, la especificación documental en Canvas, su transformación en aplicación web con asistencia de IA y su empaquetado para el Portafolio de Evidencias.",
+  scenario: "Para cerrar el entrenamiento en Gemini Canvas, vas a construir tu propio «Verificador 360° de Entregables ADSO»: un asistente y aplicación interactiva que cualquier aprendiz pueda clonar para auditar sus evidencias antes de entregarlas.",
+  promptParts: {
+    role: "arquitecto de soluciones educativas con IA y líder técnico ADSO",
+    context: "Este es el proyecto integrador de cierre. Necesitas unir en un mismo flujo las instrucciones de un Gem socrático, la rúbrica de 4 criterios iguales (25 % cada uno) y la especificación de la aplicación web verificadora para el Portafolio de Evidencias.",
+    data: IN_INTEGRADOR_360,
+    instruction: "En Canvas, redacta el documento maestro del Proyecto Integrador 360° con:",
+    task: [
+      "El System Prompt completo del Gem «Mentor de Portafolio de Evidencias ADSO» con sus 4 componentes obligatorios y tono socrático.",
+      "La tabla de la rúbrica de validación con los 4 criterios de 25 % y el cálculo demostrado del caso de calibración (4,8 · 4,4 · 4,0 · 4,8 = 4,50).",
+      "La especificación funcional de la aplicación web verificadora donde el aprendiz ingresa sus 4 puntajes y recibe retroalimentación socrática antes de exportar a su Portafolio de Evidencias."
+    ],
+    constraints: [
+      "Utiliza exclusivamente el término canónico «Portafolio de Evidencias» en todo el documento y en la aplicación.",
+      "Verifica que los 4 pesos sumen 100 % y que el promedio ponderado del caso de prueba sea exactamente 4,50."
+    ],
+    format: "Documento maestro numerado en 3 secciones con bloque de System Prompt y tabla de calibración.",
+    tone: "Profesional, integrador y motivador para el cierre del curso."
+  },
+  places: ["canvas", "gemini", "canvas", "canvas", "canvas", "portal"],
+  steps: [
+    "Activa Canvas en la barra del chat de Gemini, pega el prompt integrador y genera el documento maestro.",
+    "Copia el System Prompt de la sección 1 y regístralo en «Explorar Gems → Nuevo Gem» (o úsalo como mensaje inicial de calibración) comprobando que el Gem responda con preguntas socráticas.",
+    "De regreso en el documento del Canvas, abre «Crear → Página web» para transformar la especificación en la aplicación interactiva «Verificador 360° de Portafolio de Evidencias».",
+    "En la aplicación web, usa «Agregar funciones de Gemini» (o pide un generador socrático determinista en JavaScript si tu cuenta no muestra el botón) para que al evaluar los 4 criterios formule 2 preguntas de mejora.",
+    "Prueba el caso de calibración (4,8 · 4,4 · 4,0 · 4,8 → 4,50) en la «Vista previa» y genera el enlace compartido para que otro aprendiz pueda usar «Copiar Canvas».",
+    "Marca la lista «Verifica tu resultado» para completar los 36 ejercicios y desbloquear tu Visión Completa 360° de Gemini Canvas."
+  ],
+  expected: [
+    "El documento incluye el System Prompt del Gem «Mentor de Portafolio de Evidencias ADSO» y usa únicamente el término «Portafolio de Evidencias».",
+    "Al probar el Gem con una entrega incompleta, el Gem formula preguntas socráticas sobre los 4 componentes en lugar de redactar la tarea.",
+    "En la aplicación creada con «Crear → Página web», los puntajes 4,8, 4,4, 4,0 y 4,8 (25 % cada uno) dan exactamente 4,50.",
+    "El botón con funciones de Gemini (o su generador socrático) entrega preguntas de reflexión personalizadas según el criterio más bajo (4,0 en Verificación reproducible).",
+    "El artefacto queda listo para compartir y duplicarse con «Copiar Canvas» sin alterar tu versión maestra."
+  ],
+  stretch: "Pide: «Agrega en la aplicación un botón que genere el resumen en Markdown con el sello V.E.R.A. listo para pegar en la portada del Portafolio de Evidencias».",
+  previewSvg: canvasSvgRadar("Radar 360 grados del proyecto integrador con 4 criterios calibrados en 4,8, 4,4, 4,0 y 4,8", "Proyecto Integrador 360°", ["Alcance", "Datos", "Verificación", "Accesibilidad"], [{ name: "Meta", values: [4.0, 4.0, 4.0, 4.0], cls: "cx-m" }, { name: "Calibración", values: [4.8, 4.4, 4.0, 4.8], cls: "cx-p" }], 5)
+});
+
 // --- Prompt estructurado con método CRTT+L (Contexto, Rol, Tarea, Tono y Límites) ---
 function composeCanvasPrompt(parts) {
   return [

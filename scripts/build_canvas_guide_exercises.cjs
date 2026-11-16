@@ -23,8 +23,9 @@ function formatStepWithPlace(step, placeKey) {
 
 function renderExercise(ex, index) {
   const places = Array.isArray(ex.places) ? ex.places : [];
+  const letter = ["A", "B", "C"][index] || "A";
   return [
-    `#### Ejercicio ${index === 0 ? "A" : "B"} (${ex.code || ex.id}): ${ex.title}`,
+    `#### Ejercicio ${letter} (${ex.code || ex.id}): ${ex.title}`,
     "",
     `- **Nivel:** ${ex.level} · **Duración:** ${ex.duration} · **Función de Canvas:** ${ex.canvasFeature}`,
     `- **Qué vas a lograr:** ${ex.goal}`,

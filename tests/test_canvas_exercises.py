@@ -26,8 +26,8 @@ MODES = [
     "gem-studio",
 ]
 
-# Siete modos suman una parte C con funciones que las partes A y B no practican.
-MODES_WITH_PART_C = ["doc-editorial", "code-prototyping", "visual-mockup", "inline-prompting", "algorithm-refactor", "rubric-curriculum", "multimodal-vision"]
+# Los 12 modos cuentan con las partes A, B y C (36 ejercicios en total).
+MODES_WITH_PART_C = list(MODES)
 
 
 def _html():
@@ -83,7 +83,7 @@ def test_exercises_css_present():
 
 def test_json_bank_matches_js_exercises():
     data = json.loads((BASE_DIR / "materiales" / "gemini_canvas" / "banco_prompts_canvas.json").read_text(encoding="utf-8"))
-    assert data["totalExercises"] == 31
+    assert data["totalExercises"] == 36
     js_ex = _js_exercises()
     by_id = {p["id"]: p for p in data["possibilities"]}
     for mode in MODES:
@@ -246,6 +246,33 @@ def test_immersive_mode_includes_exercises_and_guided_compass():
     assert "computeLearnerGuideState(" in app
     assert "resolveImmersiveFocus(" in app
     assert "getSpecializedLabForMode(" in app
+
+
+def test_simulator_live_enhancements_and_360_vision():
+    html = _html()
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    poss = (BASE_DIR / "js" / "canvas-possibilities.js").read_text(encoding="utf-8")
+    cov = (BASE_DIR / "js" / "canvas-coverage.js").read_text(encoding="utf-8")
+    for elem_id in [
+        "btn-sim-apply-variation",
+        "btn-sim-copy-variation",
+        "sim-calibration-live-slot",
+        "sim-transform-toolbar",
+        "sim-variation-live-slot",
+    ]:
+        assert f'id="{elem_id}"' in html, f"Falta #{elem_id} en index.html"
+    for transform_key in ["artifact", "infographic", "quiz", "audio"]:
+        assert f'data-sim-transform="{transform_key}"' in html
+    assert "computeCalibratedSimulation(" in poss and "computeCalibratedSimulation(" in app
+    assert "simulateVariationForMode(" in poss and "simulateVariationForMode(" in app
+    assert "buildCanvasTransformPreviewHtml(" in poss and "buildCanvasTransformPreviewHtml(" in app
+    assert "buildCompleteVisionSummaryHtml(" in cov
+    assert "CANVAS_VISION_STAGES" in cov
+    for clean_id in ["immersive-mode-select", "btn-immersive-toggle-tools", "dia3-immersive-bar", "btn-dia3-hud-exit"]:
+        assert f'id="{clean_id}"' in html, f"Falta #{clean_id} en index.html"
+    assert "show-immersive-tools" in app
+
+
 
 
 

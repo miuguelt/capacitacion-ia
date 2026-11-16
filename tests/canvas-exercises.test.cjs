@@ -35,18 +35,18 @@ const allExercises = () => MODES.flatMap(mode => CANVAS_EXERCISES[mode] || []);
 // La instrucción se dirige a Gemini y nombra Canvas como lugar de trabajo; activar Canvas es un paso del aprendiz.
 const CANVAS_INSTRUCTION = /^(En Canvas, |Copia (el|la) \S+ en Canvas sin cambiar )/;
 
-// Siete modos suman una parte C con funciones que las partes A y B no practican.
-const MODES_WITH_PART_C = ["doc-editorial", "code-prototyping", "visual-mockup", "inline-prompting", "algorithm-refactor", "rubric-curriculum", "multimodal-vision"];
+// Los 12 modos cuentan con las partes A, B y C (36 ejercicios en total).
+const MODES_WITH_PART_C = [...MODES];
 
-test("cada modo tiene las partes A y B, y siete modos suman una parte C", () => {
+test("cada modo tiene las partes A, B y C (36 ejercicios en total)", () => {
   assert.deepEqual(Object.keys(CANVAS_EXERCISES).sort(), [...MODES].sort());
   for (const mode of MODES) {
     const expected = MODES_WITH_PART_C.includes(mode) ? 3 : 2;
     assert.equal(CANVAS_EXERCISES[mode].length, expected, `${mode} debe tener ${expected} ejercicios`);
   }
-  assert.equal(allExercises().length, 31);
+  assert.equal(allExercises().length, 36);
   const codes = allExercises().map(ex => ex.code);
-  assert.equal(new Set(codes).size, 31, "los códigos de ejercicio no se repiten");
+  assert.equal(new Set(codes).size, 36, "los códigos de ejercicio no se repiten");
   MODES.forEach((mode, i) => CANVAS_EXERCISES[mode].forEach((ex, j) => assert.equal(ex.code, `${i + 1}${"ABC"[j]}`, `${ex.id}: código según su posición`)));
 });
 

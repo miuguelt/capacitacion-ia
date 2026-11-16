@@ -383,18 +383,236 @@ function initCanvasLab() {
   const insightsContentEl = document.getElementById("sim-insights-content");
   const promptVariationEl = document.getElementById("sim-prompt-variation");
   const followUpsEl = document.getElementById("sim-followups");
+  const calibrationLiveSlotEl = document.getElementById("sim-calibration-live-slot");
+  const variationLiveSlotEl = document.getElementById("sim-variation-live-slot");
+  const btnApplyVariation = document.getElementById("btn-sim-apply-variation");
+  const btnCopyVariation = document.getElementById("btn-sim-copy-variation");
+  const transformBtns = document.querySelectorAll("[data-sim-transform]");
   const viewModeBtns = document.querySelectorAll(".view-mode-btn");
   const viewPanels = {
     image: document.getElementById("panel-image-view"),
     interactive: document.getElementById("panel-interactive-view"),
     insights: document.getElementById("panel-insights-view")
   };
+  let currentSimulatorMode = "doc-editorial";
+  let currentTransformType = "artifact";
+  let isVariationApplied = false;
 
   if (!tabs.length || !userPromptEl) return;
+
+  function wireSimulatorInteractiveControls(modeId) {
+    if (!interactiveContentEl) return;
+
+    // Modo 3: Sensibilidad de Matriz
+    interactiveContentEl.querySelectorAll("[data-sim-matrix-scenario]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-matrix-scenario]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const sc = btn.getAttribute("data-sim-matrix-scenario");
+        const statusEl = document.getElementById("demo-matrix-live-status");
+        if (statusEl) {
+          statusEl.innerHTML = sc === "variation"
+            ? "<strong>Variación activa (Soporte B = 9):</strong> Proveedor A = <strong>88,0 (Recomendado)</strong> · Proveedor B sube a <strong>85,0 (Recomendado)</strong> · Diferencia reducida a 3,0 puntos."
+            : "Fórmula: suma de (calificación × peso) ÷ 10. Se recomienda el Proveedor A, que supera al Proveedor B por 6,0 puntos.";
+        }
+      });
+    });
+
+    // Modo 4: Recorrido de Flujograma
+    interactiveContentEl.querySelectorAll("[data-sim-flow-path]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-flow-path]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const pathKey = btn.getAttribute("data-sim-flow-path");
+        const activeNodes = pathKey === "no"
+          ? ["P1", "P2", "D1", "P4", "P5", "P6", "P7", "P8"]
+          : ["P1", "P2", "D1", "P3", "P7", "P8"];
+        const traceEl = document.getElementById("demo-flow-trace-output");
+        if (traceEl) {
+          traceEl.textContent = pathKey === "no"
+            ? "Ruta activa: Escalado a Nivel 2 (P1 → P2 → D1 [No] → P4 → P5 → P6 → P7 → P8 · 8 nodos visitados)."
+            : "Ruta activa: Resuelto en Nivel 1 (P1 → P2 → D1 [Sí] → P3 → P7 → P8 · 6 nodos visitados).";
+        }
+        interactiveContentEl.querySelectorAll("[data-flow-node]").forEach(badge => {
+          const nid = badge.getAttribute("data-flow-node");
+          badge.style.opacity = activeNodes.includes(nid) ? "1" : "0.35";
+        });
+      });
+    });
+
+    // Modo 6: Edición por Selección e Historial
+    interactiveContentEl.querySelectorAll("[data-sim-inline-view]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-inline-view]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const view = btn.getAttribute("data-sim-inline-view");
+        const col1 = document.getElementById("demo-inline-col-v1");
+        const col2 = document.getElementById("demo-inline-col-v2");
+        const noteEl = document.getElementById("demo-inline-live-note");
+        if (col1) col1.style.display = view === "v2" ? "none" : "";
+        if (col2) col2.style.display = view === "v1" ? "none" : "";
+        if (noteEl) {
+          noteEl.textContent = view === "v1"
+            ? "Versión 1 (Original): el punto 3 tiene una sola oración punitiva antes de usar la edición por selección."
+            : view === "v2"
+              ? "Versión 2 (Editada): solo el punto 3 cambió a 2 viñetas claras conservando los dos días hábiles."
+              : "Mostrando comparativa: los puntos 1, 2 y 4 permanecen intactos; solo cambia el Punto 3.";
+        }
+      });
+    });
+
+    // Modo 7: Lotes de prueba en Python O(n)
+    interactiveContentEl.querySelectorAll("[data-sim-algo-case]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-algo-case]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const caseKey = btn.getAttribute("data-sim-algo-case");
+        const outEl = document.getElementById("demo-algo-live-output");
+        if (!outEl || typeof canvasClassifyDeliveries !== "function") return;
+        if (caseKey === "empty") {
+          outEl.innerHTML = `<strong>Salida con lista vacía []:</strong><br><code>{'al_dia': [], 'en_progreso': [], 'apoyo': []}</code>`;
+        } else if (caseKey === "boundaries") {
+          const bRes = canvasClassifyDeliveries([
+            { documento: "1", nombre: "N0", puntaje: 0.0 },
+            { documento: "2", nombre: "N49_9", puntaje: 49.9 },
+            { documento: "3", nombre: "N50", puntaje: 50.0 },
+            { documento: "4", nombre: "N69_9", puntaje: 69.9 },
+            { documento: "5", nombre: "N70", puntaje: 70.0 }
+          ]);
+          outEl.innerHTML = `<strong>Salida con los 5 límites exactos:</strong><br><code>{'al_dia': ['${bRes.al_dia.join("', '")}'], 'en_progreso': ['${bRes.en_progreso.join("', '")}'], 'apoyo': ['${bRes.apoyo.join("', '")}']}</code>`;
+        } else {
+          outEl.innerHTML = `<strong>Salida esperada con la entrada de ejemplo:</strong><br><code>{'al_dia': ['Ana', 'Iván'], 'en_progreso': ['Luis', 'Marta'], 'apoyo': ['Jorge', 'Sara']}</code>`;
+        }
+      });
+    });
+
+    // Modo 8: Calibración de Rúbrica
+    interactiveContentEl.querySelectorAll("[data-sim-rubric-case]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-rubric-case]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const rKey = btn.getAttribute("data-sim-rubric-case");
+        const calcEl = document.getElementById("demo-rubric-live-calc");
+        if (!calcEl) return;
+        const map = {
+          calibration: "<strong>Caso para calibrar:</strong> 4,8 × 0,30 + 3,5 × 0,35 + 4,0 × 0,35 = 1,44 + 1,225 + 1,40 = 4,065 ≈ 4,1 (Bueno)",
+          excellent: "<strong>Caso sobresaliente:</strong> 5,0 × 0,30 + 4,6 × 0,35 + 4,8 × 0,35 = 1,50 + 1,61 + 1,68 = 4,790 ≈ 4,8 (Excelente)",
+          support: "<strong>Caso con refuerzo:</strong> 2,5 × 0,30 + 2,8 × 0,35 + 3,0 × 0,35 = 0,75 + 0,98 + 1,05 = 2,780 ≈ 2,8 (Requiere refuerzo)"
+        };
+        calcEl.innerHTML = map[rKey] || map.calibration;
+      });
+    });
+
+    // Modo 9: Simulador de JOIN y NULLIF en SQL
+    interactiveContentEl.querySelectorAll("[data-sim-sql-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-sql-mode]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const sKey = btn.getAttribute("data-sim-sql-mode");
+        const fbEl = document.getElementById("demo-sql-live-feedback");
+        if (!fbEl) return;
+        if (sKey === "inner-join") {
+          fbEl.textContent = "⚠️ Con INNER JOIN: Sara desaparece del reporte (quedan solo 4 filas) porque no tiene registros en registro_asistencia.";
+        } else if (sKey === "no-nullif") {
+          fbEl.textContent = "❌ Sin NULLIF: la consulta lanza ERROR: division by zero al calcular el porcentaje de Sara (total = 0).";
+        } else {
+          fbEl.textContent = "Estado: LEFT JOIN conserva a Sara (puesto 1 en ficha 2872 con promedio 4,9) y NULLIF devuelve NULL sin fallar.";
+        }
+      });
+    });
+
+    // Modo 10: Simulador de Decisión del Comité
+    interactiveContentEl.querySelectorAll("[data-sim-report-state]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        interactiveContentEl.querySelectorAll("[data-sim-report-state]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const stKey = btn.getAttribute("data-sim-report-state");
+        const decEl = document.getElementById("demo-report-live-decision");
+        if (!decEl || typeof canvasReportDecision !== "function") return;
+        if (stKey === "remediated") {
+          decEl.innerHTML = `<strong>Decisión tras subsanar INF-1 (VERDE):</strong> ${canvasReportDecision([{ risk: { color: "VERDE" } }, { risk: { color: "ÁMBAR" } }])}`;
+        } else {
+          decEl.innerHTML = `<strong>Decisión:</strong> ${canvasReportDecision([{ risk: { color: "ROJO" } }])}`;
+        }
+      });
+    });
+
+    // Cuestionario interactivo en vivo (Vista Cuestionario)
+    interactiveContentEl.querySelectorAll("[data-sim-quiz-answer]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const fb = btn.getAttribute("data-sim-quiz-feedback");
+        const fbEl = document.getElementById("sim-quiz-live-feedback");
+        if (fbEl && fb) fbEl.textContent = fb;
+      });
+    });
+  }
+
+  function renderInteractiveTransform(modeId, transformType) {
+    currentTransformType = transformType || "artifact";
+    transformBtns.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-sim-transform") === currentTransformType);
+    });
+    if (interactiveContentEl) {
+      interactiveContentEl.innerHTML = typeof buildCanvasTransformPreviewHtml === "function"
+        ? buildCanvasTransformPreviewHtml(modeId, currentTransformType)
+        : (CANVAS_POSSIBILITIES[modeId] ? CANVAS_POSSIBILITIES[modeId].interactiveHtml : "");
+      wireSimulatorInteractiveControls(modeId);
+    }
+    if (typeof window.refreshCanvasCalibration === "function") {
+      window.refreshCanvasCalibration();
+    }
+  }
+
+  transformBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tType = btn.getAttribute("data-sim-transform");
+      renderInteractiveTransform(currentSimulatorMode, tType);
+    });
+  });
+
+  if (btnApplyVariation) {
+    btnApplyVariation.addEventListener("click", () => {
+      if (typeof simulateVariationForMode !== "function") return;
+      const data = CANVAS_POSSIBILITIES[currentSimulatorMode];
+      const sim = simulateVariationForMode(currentSimulatorMode);
+      isVariationApplied = !isVariationApplied;
+      if (isVariationApplied) {
+        if (variationLiveSlotEl) variationLiveSlotEl.innerHTML = sim.deltaHtml;
+        if (aiResponseEl) aiResponseEl.textContent = sim.aiFollowUp;
+        btnApplyVariation.textContent = "↺ Restaurar estado original";
+        const interactiveTabBtn = document.querySelector('.view-mode-btn[data-mode="interactive"]');
+        if (interactiveTabBtn && !interactiveTabBtn.classList.contains("active")) {
+          interactiveTabBtn.click();
+        }
+        showCanvasToast("⚡ Variación simulada en el lienzo interactivo.");
+      } else {
+        if (variationLiveSlotEl) variationLiveSlotEl.innerHTML = "";
+        if (aiResponseEl && data) aiResponseEl.textContent = data.aiResponse;
+        btnApplyVariation.textContent = "⚡ Simular variación en el lienzo";
+        showCanvasToast("↺ Lienzo restaurado al estado original del prompt.");
+      }
+    });
+  }
+
+  if (btnCopyVariation) {
+    btnCopyVariation.addEventListener("click", () => {
+      if (typeof simulateVariationForMode !== "function") return;
+      const sim = simulateVariationForMode(currentSimulatorMode);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(sim.promptCommand).then(() => {
+          showCanvasToast("📋 Instrucción de variación copiada al portapapeles.");
+        });
+      }
+    });
+  }
 
   function loadPossibility(id) {
     const data = CANVAS_POSSIBILITIES[id];
     if (!data) return;
+    currentSimulatorMode = id;
+    isVariationApplied = false;
+    if (variationLiveSlotEl) variationLiveSlotEl.innerHTML = "";
+    if (btnApplyVariation) btnApplyVariation.textContent = "⚡ Simular variación en el lienzo";
 
     // Actualizar chat
     userPromptEl.textContent = data.userPrompt;
@@ -433,9 +651,10 @@ function initCanvasLab() {
       imgCaptionEl.textContent = data.imageCaption;
     }
 
-    // Actualizar contenido interactivo
-    if (interactiveContentEl) {
-      interactiveContentEl.innerHTML = data.interactiveHtml;
+    // Actualizar contenido interactivo y controles en vivo
+    renderInteractiveTransform(id, "artifact");
+    if (calibrationLiveSlotEl && typeof window.refreshCanvasCalibration === "function") {
+      window.refreshCanvasCalibration();
     }
 
     // Actualizar lista de verificación y claves de éxito
@@ -639,6 +858,15 @@ function initCanvasLab() {
     if (typeof window.refreshCanvasSubnavProgress === "function") {
       window.refreshCanvasSubnavProgress();
     }
+    const covEl = document.getElementById("canvas-coverage-content");
+    if (covEl && typeof buildCoverageTableHtml === "function") {
+      covEl.innerHTML = buildCoverageTableHtml(
+        CANVAS_EXERCISES,
+        CANVAS_CAPABILITIES,
+        typeof CANVAS_EXTRA_CAPABILITIES !== "undefined" ? CANVAS_EXTRA_CAPABILITIES : [],
+        done
+      );
+    }
   }
 
   const exerciseIndexListEl = document.getElementById("canvas-exercise-index-list");
@@ -649,6 +877,15 @@ function initCanvasLab() {
     writeCanvasStore("canvas_exercises_completed_v1", done);
     if (typeof window.refreshCanvasSubnavProgress === "function") {
       window.refreshCanvasSubnavProgress();
+    }
+    const covEl = document.getElementById("canvas-coverage-content");
+    if (covEl && typeof buildCoverageTableHtml === "function") {
+      covEl.innerHTML = buildCoverageTableHtml(
+        CANVAS_EXERCISES,
+        CANVAS_CAPABILITIES,
+        typeof CANVAS_EXTRA_CAPABILITIES !== "undefined" ? CANVAS_EXTRA_CAPABILITIES : [],
+        done
+      );
     }
     const total = Object.values(CANVAS_EXERCISES).reduce((n, list) => n + list.length, 0);
     if (exerciseIndexCountEl) exerciseIndexCountEl.textContent = `(${done.length}/${total} completados)`;
@@ -875,8 +1112,12 @@ function initCanvasLab() {
       } else {
         const canvasSec = document.getElementById("gemini-canvas");
         const simMod = document.getElementById("canvas-simulator-module");
+        const dia3Sec = document.getElementById("dia-3");
         if ((canvasSec && canvasSec.classList.contains("is-immersive")) || (simMod && simMod.classList.contains("is-fullscreen"))) {
           toggleFullscreen({ forceState: false });
+        } else if (dia3Sec && dia3Sec.classList.contains("is-immersive")) {
+          const exitDia3 = document.getElementById("btn-dia3-hud-exit");
+          if (exitDia3) exitDia3.click();
         }
       }
     }
@@ -893,7 +1134,27 @@ function initCanvasLab() {
   const exModule = document.getElementById("canvas-exercises-module");
   const focusBtns = document.querySelectorAll("[data-immersive-focus]");
   const stationBtns = document.querySelectorAll("[data-guide-target]");
+  const immersiveModeSelectEl = document.getElementById("immersive-mode-select");
+  const btnImmersiveToggleTools = document.getElementById("btn-immersive-toggle-tools");
   let currentImmersiveFocus = "all";
+
+  if (immersiveModeSelectEl) {
+    immersiveModeSelectEl.addEventListener("change", () => {
+      const nextMode = immersiveModeSelectEl.value;
+      if (nextMode && CANVAS_POSSIBILITIES[nextMode]) {
+        selectMode(nextMode);
+        history.replaceState(null, "", buildCanvasRoute(nextMode));
+      }
+    });
+  }
+
+  if (btnImmersiveToggleTools && canvasPageSection) {
+    btnImmersiveToggleTools.addEventListener("click", () => {
+      const shown = canvasPageSection.classList.toggle("show-immersive-tools");
+      btnImmersiveToggleTools.classList.toggle("active", shown);
+      btnImmersiveToggleTools.setAttribute("aria-pressed", String(shown));
+    });
+  }
 
   function syncImmersiveButtons(isFull) {
     [btnFullscreen, btnExercisesFullscreen, btnHudImmersive, btnMmFullscreen, btnGemFullscreen].forEach(btn => {
@@ -933,7 +1194,16 @@ function initCanvasLab() {
 
     simModule.classList.toggle("is-fullscreen", isFull);
     if (exModule) exModule.classList.toggle("is-fullscreen", isFull);
-    if (canvasPageSection) canvasPageSection.classList.toggle("is-immersive", isFull);
+    if (canvasPageSection) {
+      canvasPageSection.classList.toggle("is-immersive", isFull);
+      if (!isFull) {
+        canvasPageSection.classList.remove("show-immersive-tools");
+        if (btnImmersiveToggleTools) {
+          btnImmersiveToggleTools.classList.remove("active");
+          btnImmersiveToggleTools.setAttribute("aria-pressed", "false");
+        }
+      }
+    }
     syncImmersiveButtons(isFull);
     document.body.style.overflow = isFull ? "hidden" : "";
 
@@ -948,18 +1218,18 @@ function initCanvasLab() {
       if (scrollEl) requestAnimationFrame(() => scrollEl.scrollIntoView({ behavior: "smooth", block: "start" }));
     }
     showCanvasToast(isFull
-      ? "⛶ Modo inmersivo activo: simuladores y ejercicios prácticos integrados."
+      ? "⛶ Modo inmersivo limpio activado: enfocado en lo esencial (pulsa Esc para salir)."
       : "Restaurada vista normal de la guía.");
   }
 
   if (btnFullscreen) {
-    btnFullscreen.addEventListener("click", () => toggleFullscreen({ targetSection: "simulator", scrollTargetId: "canvas-simulator-module" }));
+    btnFullscreen.addEventListener("click", () => toggleFullscreen({ focusMode: "simulator", targetSection: "simulator", scrollTargetId: "canvas-simulator-module" }));
   }
   if (btnExercisesFullscreen) {
-    btnExercisesFullscreen.addEventListener("click", () => toggleFullscreen({ targetSection: "exercises", scrollTargetId: "canvas-exercises-module" }));
+    btnExercisesFullscreen.addEventListener("click", () => toggleFullscreen({ focusMode: "exercises", targetSection: "exercises", scrollTargetId: "canvas-exercises-module" }));
   }
   if (btnHudImmersive) {
-    btnHudImmersive.addEventListener("click", () => toggleFullscreen());
+    btnHudImmersive.addEventListener("click", () => toggleFullscreen({ focusMode: currentImmersiveFocus === "all" ? "simulator" : currentImmersiveFocus }));
   }
   if (btnMmFullscreen) {
     btnMmFullscreen.addEventListener("click", () => {
@@ -1042,6 +1312,7 @@ function initCanvasLab() {
     const completedCount = readCanvasCompleted().length;
     const totalCount = exerciseSequence.length;
     if (hudModeBadgeEl) hudModeBadgeEl.textContent = guideState.modeBadge;
+    if (immersiveModeSelectEl) immersiveModeSelectEl.value = currentExerciseMode;
     if (hudTitleEl) hudTitleEl.textContent = `${CANVAS_POSSIBILITIES[currentExerciseMode].name} · Parte ${guideState.letter} (${ex.code})`;
     if (hudProgressEl) hudProgressEl.textContent = `${completedCount}/${totalCount} completados`;
     if (stationExBadgeEl) stationExBadgeEl.textContent = `Parte ${guideState.letter} (${ex.code})`;
@@ -1413,7 +1684,8 @@ function initCanvasLab() {
     coverageContentEl.innerHTML = buildCoverageTableHtml(
       CANVAS_EXERCISES,
       CANVAS_CAPABILITIES,
-      typeof CANVAS_EXTRA_CAPABILITIES !== "undefined" ? CANVAS_EXTRA_CAPABILITIES : []
+      typeof CANVAS_EXTRA_CAPABILITIES !== "undefined" ? CANVAS_EXTRA_CAPABILITIES : [],
+      readCanvasCompleted()
     );
   }
   if (typeof initCanvasSubnav === "function") {
@@ -2050,36 +2322,61 @@ function initCanvasCalibrationBar() {
   const label = document.getElementById("canvas-length-label");
   const tonePills = document.querySelectorAll("#canvas-tone-group .calibration-pill");
   const audPills = document.querySelectorAll("#canvas-audience-group .calibration-pill");
+  const liveSlot = document.getElementById("sim-calibration-live-slot");
 
   if (!slider || !label) return;
 
-  const lengthLabels = {
-    "1": "Síntesis (1/5)",
-    "2": "Conciso (2/5)",
-    "3": "Estándar (3/5)",
-    "4": "Detallado (4/5)",
-    "5": "Exhaustivo (5/5)"
-  };
+  function getActiveModeId() {
+    const activeTab = document.querySelector(".canvas-tab.active[data-possibility]");
+    return (activeTab && activeTab.getAttribute("data-possibility")) || "doc-editorial";
+  }
 
-  function updateLength(val) {
-    label.textContent = lengthLabels[val] || `Nivel ${val}/5`;
-    const summary = document.getElementById("doc-executive-summary");
-    const variants = CANVAS_POSSIBILITIES["doc-editorial"].lengthVariants;
-    if (summary) {
-      summary.innerHTML = `<strong>1. Resumen ejecutivo (${lengthLabels[val]})</strong>
-        <p style="margin:0.25rem 0 0 0; font-size:0.86rem; color:var(--text-main);">${variants[Number(val) - 1]}</p>`;
+  function getActiveTone() {
+    const active = document.querySelector("#canvas-tone-group .calibration-pill.active");
+    return (active && active.getAttribute("data-tone")) || "formal";
+  }
+
+  function getActiveAudience() {
+    const active = document.querySelector("#canvas-audience-group .calibration-pill.active");
+    return (active && active.getAttribute("data-audience")) || "adso";
+  }
+
+  function applyCalibrationState(triggerToastMsg) {
+    const modeId = getActiveModeId();
+    const lengthVal = Number(slider.value) || 3;
+    const toneVal = getActiveTone();
+    const audVal = getActiveAudience();
+    if (typeof computeCalibratedSimulation === "function") {
+      const cal = computeCalibratedSimulation(modeId, { length: lengthVal, tone: toneVal, audience: audVal });
+      label.textContent = cal.lengthLabel;
+      if (liveSlot) {
+        liveSlot.innerHTML = cal.summaryHtml;
+      }
+      const summary = document.getElementById("doc-executive-summary");
+      if (summary && modeId === "doc-editorial") {
+        summary.innerHTML = `<strong>1. Resumen ejecutivo (${cal.lengthLabel} · Tono ${cal.toneLabel})</strong>
+          <p style="margin:0.25rem 0 0 0; font-size:0.86rem; color:var(--text-main);">${cal.docSummaryText}</p>`;
+      }
+    }
+    if (triggerToastMsg) {
+      const interactiveTabBtn = document.querySelector('.view-mode-btn[data-mode="interactive"]');
+      if (interactiveTabBtn && !interactiveTabBtn.classList.contains("active")) {
+        interactiveTabBtn.click();
+      }
     }
   }
 
-  slider.addEventListener("input", e => {
-    updateLength(e.target.value);
+  window.refreshCanvasCalibration = () => applyCalibrationState(false);
+
+  slider.addEventListener("input", () => {
+    applyCalibrationState(true);
   });
 
   tonePills.forEach(pill => {
     pill.addEventListener("click", () => {
       tonePills.forEach(p => p.classList.remove("active"));
       pill.classList.add("active");
-      showCanvasToast(`🎭 Tono de Canvas calibrado: ${pill.textContent}`);
+      applyCalibrationState(true);
     });
   });
 
@@ -2087,9 +2384,11 @@ function initCanvasCalibrationBar() {
     pill.addEventListener("click", () => {
       audPills.forEach(p => p.classList.remove("active"));
       pill.classList.add("active");
-      showCanvasToast(`🎯 Audiencia de Canvas calibrada: ${pill.textContent}`);
+      applyCalibrationState(true);
     });
   });
+
+  applyCalibrationState(false);
 }
 
 // 10. Simulador de Visión Multimodal (De Boceto a Canvas en Vivo)
@@ -2577,12 +2876,18 @@ function initDia3Module() {
 
   // Modo inmersivo del Día 3 (Ejemplos + Laboratorio + Ejercicios)
   const dia3Section = document.getElementById("dia-3");
+  const dia3ImmersiveBar = document.getElementById("dia3-immersive-bar");
   const btnDia3Full = document.getElementById("btn-toggle-dia3-fullscreen");
   const btnDia3ExFull = document.getElementById("btn-toggle-dia3-ex-fullscreen");
+  const btnDia3HudExit = document.getElementById("btn-dia3-hud-exit");
+  const dia3StationBtns = document.querySelectorAll("[data-dia3-immersive-target]");
 
-  function toggleDia3Immersive(scrollTargetId) {
+  function toggleDia3Immersive(scrollTargetId, forceState) {
     if (!dia3Section) return;
-    const isFull = dia3Section.classList.toggle("is-immersive");
+    const currentlyFull = dia3Section.classList.contains("is-immersive");
+    const isFull = typeof forceState === "boolean" ? forceState : !currentlyFull;
+    dia3Section.classList.toggle("is-immersive", isFull);
+    if (dia3ImmersiveBar) dia3ImmersiveBar.hidden = !isFull;
     [btnDia3Full, btnDia3ExFull].forEach(btn => {
       if (!btn) return;
       btn.innerHTML = isFull ? "✕ Salir de Modo Inmersivo" : "⛶ Modo Inmersivo";
@@ -2591,6 +2896,7 @@ function initDia3Module() {
     });
     document.body.style.overflow = isFull ? "hidden" : "";
     if (scrollTargetId) {
+      dia3StationBtns.forEach(b => b.classList.toggle("is-active", b.getAttribute("data-dia3-immersive-target") === scrollTargetId));
       const targetEl = document.getElementById(scrollTargetId);
       if (targetEl) requestAnimationFrame(() => targetEl.scrollIntoView({ behavior: "smooth", block: "start" }));
     }
@@ -2598,6 +2904,15 @@ function initDia3Module() {
 
   if (btnDia3Full) btnDia3Full.addEventListener("click", () => toggleDia3Immersive("dia3-examples-module"));
   if (btnDia3ExFull) btnDia3ExFull.addEventListener("click", () => toggleDia3Immersive("dia3-exercises-module"));
+  if (btnDia3HudExit) btnDia3HudExit.addEventListener("click", () => toggleDia3Immersive(null, false));
+  dia3StationBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-dia3-immersive-target");
+      dia3StationBtns.forEach(b => b.classList.toggle("is-active", b === btn));
+      const el = targetId ? document.getElementById(targetId) : null;
+      if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: "smooth", block: "start" }));
+    });
+  });
 
   exampleSelectBtns.forEach(btn => {
     btn.addEventListener("click", () => {

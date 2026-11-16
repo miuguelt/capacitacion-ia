@@ -410,11 +410,11 @@ function createHubDomHarness(options = {}) {
 // TIER 1: COBERTURA DE CARACTERÍSTICAS NUCLEARES (HAPPY PATHS)
 // =========================================================================
 
-test("TC-1.1.1: collateAllProjects unifica los 35 proyectos sin duplicados de ID", () => {
+test("TC-1.1.1: collateAllProjects unifica los 40 proyectos sin duplicados de ID", () => {
   const all = collateAllProjects(CANVAS_EXERCISES, DEFAULT_DAILY_PROJECTS);
-  assert.equal(all.length, 35, "Debe contener exactamente 35 proyectos");
+  assert.equal(all.length, 40, "Debe contener exactamente 40 proyectos");
   const uniqueIds = new Set(all.map(p => p.id));
-  assert.equal(uniqueIds.size, 35, "Todos los 35 IDs deben ser únicos");
+  assert.equal(uniqueIds.size, 40, "Todos los 40 IDs deben ser únicos");
 });
 
 test("TC-1.1.2: collateAllProjects normaliza metadatos obligatorios en todos los proyectos", () => {
@@ -442,9 +442,9 @@ test("TC-1.1.3: collateAllProjects asigna estado por-iniciar por defecto", () =>
 
 test("TC-1.1.4: collateAllProjects genera deep links correctos", () => {
   const all = collateAllProjects(CANVAS_EXERCISES);
-  const canvasRoutes = all.slice(0, 31).map(p => p.route);
-  assert.ok(canvasRoutes.every(r => /^#gemini-canvas\/[a-z-]+\/[ab]$/.test(r)));
-  const dailyRoutes = all.slice(31).map(p => p.route);
+  const canvasRoutes = all.slice(0, 36).map(p => p.route);
+  assert.ok(canvasRoutes.every(r => /^#gemini-canvas\/[a-z-]+\/[abc]$/.test(r)));
+  const dailyRoutes = all.slice(36).map(p => p.route);
   assert.deepEqual(dailyRoutes, ["#dia-1", "#dia-2", "#dia-3", "#dia-4"]);
 });
 
@@ -502,7 +502,7 @@ test("TC-1.3.1: sortProjects en modo official respeta la secuencia curricular", 
   const all = collateAllProjects(CANVAS_EXERCISES);
   const res = sortProjects(all, "official");
   assert.equal(res[0].id, "doc-a-informe-desercion");
-  assert.equal(res[34].id, "dia-4-prototipo-demo-day");
+  assert.equal(res[39].id, "dia-4-prototipo-demo-day");
 });
 
 test("TC-1.3.2: sortProjects en modo duration-asc ordena ascendentemente", () => {
@@ -534,7 +534,7 @@ test("TC-1.3.5: sortProjects preserva elementos omitidos en customOrder al final
   const all = collateAllProjects(CANVAS_EXERCISES);
   const custom = [all[10].id, all[20].id];
   const res = sortProjects(all, "custom", custom);
-  assert.equal(res.length, 35);
+  assert.equal(res.length, 40);
   assert.equal(res[0].id, all[10].id);
   assert.equal(res[1].id, all[20].id);
 });
@@ -581,7 +581,7 @@ test("TC-1.5.2: buildKanbanBoardHtml muestra contadores en títulos de columna",
   const all = collateAllProjects(CANVAS_EXERCISES);
   const statusMap = { [all[0].id]: "en-desarrollo", [all[1].id]: "completado" };
   const html = buildKanbanBoardHtml(all, statusMap);
-  assert.ok(html.includes("Por Iniciar (33)"));
+  assert.ok(html.includes("Por Iniciar (38)"));
   assert.ok(html.includes("En Desarrollo (1)"));
   assert.ok(html.includes("Completado (1)"));
 });
@@ -658,11 +658,11 @@ test("TC-1.7.2: buildCompactListHtml genera thead con columnas descriptivas", ()
   assert.ok(html.includes("<th scope=\"col\">Acción</th>"));
 });
 
-test("TC-1.7.3: buildCompactListHtml renderiza 35 filas interactivas", () => {
+test("TC-1.7.3: buildCompactListHtml renderiza 40 filas interactivas", () => {
   const all = collateAllProjects(CANVAS_EXERCISES);
   const html = buildCompactListHtml(all, {});
   const rowCount = (html.match(/<tr data-project-id=/g) || []).length;
-  assert.equal(rowCount, 35);
+  assert.equal(rowCount, 40);
 });
 
 test("TC-1.7.4: buildCompactListHtml incluye controles de teclado en cada fila", () => {
@@ -744,7 +744,7 @@ test("TC-1.9.5: Botón reset notifica en contador de resultados", () => {
   const harness = createHubDomHarness();
   initProjectsHub(harness.root, { storage: harness.storage, canvasExercises: CANVAS_EXERCISES });
   harness.triggerReset();
-  assert.equal(harness.resultsCount.textContent, "Mostrando 35 de 35 proyectos");
+  assert.equal(harness.resultsCount.textContent, "Mostrando 40 de 40 proyectos");
 });
 
 test("TC-1.10.1: Movimiento ascendente con botón ▲ desplaza proyecto", () => {
@@ -782,7 +782,7 @@ test("TC-1.10.4: Re-renderizado tras movimiento por teclado conserva coherencia 
   const firstCard = harness.viewContainer.querySelectorAll(".projects-kanban-card")[0];
   firstCard.querySelector('[data-move-pos="down"]').click();
   const cards = harness.viewContainer.querySelectorAll(".projects-kanban-card");
-  assert.equal(cards.length, 35);
+  assert.equal(cards.length, 40);
 });
 
 test("TC-1.10.5: Botones ▲ ▼ cuentan con etiquetas ARIA descriptivas", () => {
@@ -818,7 +818,7 @@ test("TC-1.11.3: initProjectsHub buscador filtra reactivamente en vivo", () => {
   harness.triggerSearch("deserción");
   const visible = harness.viewContainer.querySelectorAll(".projects-kanban-card");
   assert.equal(visible.length, 1);
-  assert.equal(harness.resultsCount.textContent, "Mostrando 1 de 35 proyectos");
+  assert.equal(harness.resultsCount.textContent, "Mostrando 1 de 40 proyectos");
 });
 
 test("TC-1.11.4: initProjectsHub asigna clases en dragstart y dragover", () => {
@@ -853,7 +853,7 @@ test("TC-2.1.1: collateAllProjects tolera canvasExercises nulo o vacío", () => 
 
 test("TC-2.1.2: collateAllProjects tolera dailyProjects nulo", () => {
   const res = collateAllProjects(CANVAS_EXERCISES, null);
-  assert.equal(res.length, 31);
+  assert.equal(res.length, 36);
 });
 
 test("TC-2.1.3: collateAllProjects con ambos parámetros nulos devuelve []", () => {
@@ -877,7 +877,7 @@ test("TC-2.1.5: collateAllProjects preserva caracteres especiales en títulos", 
 
 test("TC-2.2.1: filterProjects con búsqueda vacía o espacios retorna todos", () => {
   const all = collateAllProjects(CANVAS_EXERCISES);
-  assert.equal(filterProjects(all, { search: "   " }).length, 35);
+  assert.equal(filterProjects(all, { search: "   " }).length, 40);
 });
 
 test("TC-2.2.2: filterProjects maneja diacríticos complejos y mayúsculas", () => {
@@ -897,7 +897,7 @@ test("TC-2.2.3: filterProjects inmune a caracteres regex especiales", () => {
 test("TC-2.2.4: filterProjects con comodines 'all' u 'todos' no restringe", () => {
   const all = collateAllProjects(CANVAS_EXERCISES);
   const res = filterProjects(all, { area: "all", level: "todos", duration: "todas" });
-  assert.equal(res.length, 35);
+  assert.equal(res.length, 40);
 });
 
 test("TC-2.2.5: filterProjects sin coincidencias retorna arreglo vacío", () => {
@@ -922,7 +922,7 @@ test("TC-2.3.3: sortProjects modo custom con longitud incompleta antepone conoci
   const all = collateAllProjects(CANVAS_EXERCISES);
   const res = sortProjects(all, "custom", ["dia-4-prototipo-demo-day"]);
   assert.equal(res[0].id, "dia-4-prototipo-demo-day");
-  assert.equal(res.length, 35);
+  assert.equal(res.length, 40);
 });
 
 test("TC-2.3.4: sortProjects modo custom tolera IDs inexistentes", () => {
@@ -986,11 +986,11 @@ test("TC-2.5.4: buildKanbanBoardHtml tolera proyectos con campos nulos", () => {
   assert.ok(!html.includes("undefined"));
 });
 
-test("TC-2.5.5: buildKanbanBoardHtml maneja desbalance (35 en una sola columna)", () => {
+test("TC-2.5.5: buildKanbanBoardHtml maneja desbalance (40 en una sola columna)", () => {
   const all = collateAllProjects(CANVAS_EXERCISES);
   const statusMap = Object.fromEntries(all.map(p => [p.id, "completado"]));
   const html = buildKanbanBoardHtml(all, statusMap);
-  assert.ok(html.includes("Completado (35)"));
+  assert.ok(html.includes("Completado (40)"));
   assert.ok(html.includes("Por Iniciar (0)"));
 });
 
@@ -1104,7 +1104,7 @@ test("TC-2.9.3: Clics consecutivos en botón reset mantienen estabilidad", () =>
   const harness = createHubDomHarness();
   const api = initProjectsHub(harness.root, { storage: harness.storage, canvasExercises: CANVAS_EXERCISES });
   for (let i = 0; i < 5; i++) harness.triggerReset();
-  assert.equal(api.getOrder().length, 35);
+  assert.equal(api.getOrder().length, 40);
 });
 
 test("TC-2.9.4: Botón reset mantiene filtros activos", () => {
@@ -1113,7 +1113,7 @@ test("TC-2.9.4: Botón reset mantiene filtros activos", () => {
   harness.triggerFilter(harness.filterArea, "Redacción");
   harness.triggerReset();
   const visible = harness.viewContainer.querySelectorAll(".projects-kanban-card");
-  assert.equal(visible.length, 11);
+  assert.equal(visible.length, 12);
 });
 
 test("TC-2.9.5: Botón reset no sobreescribe statusMap", () => {
@@ -1218,9 +1218,11 @@ test("TC-3.1: Búsqueda 'sql' + Área 'Datos & SQL' + Nivel 'Avanzado' + Orden d
   const all = collateAllProjects(CANVAS_EXERCISES);
   const filtered = filterProjects(all, { search: "sql", area: "Datos & SQL", level: "Avanzado" });
   const sorted = sortProjects(filtered, "duration-asc");
-  assert.equal(sorted.length, 2);
-  assert.equal(sorted[0].id, "sql-a-biblioteca-dashboard");
-  assert.equal(sorted[1].id, "sql-b-limpieza-asistencia");
+  assert.equal(sorted.length, 4);
+  assert.equal(sorted[0].id, "matrix-c-sensibilidad-web");
+  assert.equal(sorted[1].id, "sql-c-conciliacion-mesa-pdf");
+  assert.equal(sorted[2].id, "sql-a-biblioteca-dashboard");
+  assert.equal(sorted[3].id, "sql-b-limpieza-asistencia");
 });
 
 test("TC-3.2: Búsqueda 'canvas' + Duración short + Orden official", () => {
@@ -1247,7 +1249,7 @@ test("TC-3.4: Búsqueda acentuada 'automatización' + Botón ▲ en Lista + Camb
   harness.triggerViewChange("list");
   harness.triggerSearch("automatización");
   const rows = harness.viewContainer.querySelectorAll("tr[data-project-id]");
-  assert.equal(rows.length, 3);
+  assert.equal(rows.length, 4);
   const select = rows[0].querySelector("[data-status-select]");
   select.value = "en-desarrollo";
   select.dispatchEvent(createMockEvent("change", { target: select, bubbles: true }));
@@ -1262,7 +1264,7 @@ test("TC-3.5: Filtro Nivel 'Intermedio' + Reordenamiento + Botón reset", () => 
   card.querySelector('[data-move-pos="down"]').click();
   harness.triggerReset();
   const visible = harness.viewContainer.querySelectorAll(".projects-kanban-card");
-  assert.equal(visible.length, 17);
+  assert.equal(visible.length, 18);
 });
 
 test("TC-3.6: Filtro Duración 'long' + Drag entre columnas en Kanban", () => {
@@ -1280,9 +1282,9 @@ test("TC-3.7: Búsqueda sin coincidencias + Limpieza reactiva", () => {
   const harness = createHubDomHarness();
   initProjectsHub(harness.root, { storage: harness.storage, canvasExercises: CANVAS_EXERCISES });
   harness.triggerSearch("sin_coincidencias_xyz");
-  assert.equal(harness.resultsCount.textContent, "Mostrando 0 de 35 proyectos");
+  assert.equal(harness.resultsCount.textContent, "Mostrando 0 de 40 proyectos");
   harness.triggerSearch("");
-  assert.equal(harness.resultsCount.textContent, "Mostrando 35 de 35 proyectos");
+  assert.equal(harness.resultsCount.textContent, "Mostrando 40 de 40 proyectos");
 });
 
 // =========================================================================
@@ -1292,7 +1294,7 @@ test("TC-3.7: Búsqueda sin coincidencias + Limpieza reactiva", () => {
 test("TC-4.1: Escenario 1 - Flujo Completo de Aprendiz en Tablero Kanban", () => {
   const harness = createHubDomHarness();
   const api = initProjectsHub(harness.root, { storage: harness.storage, canvasExercises: CANVAS_EXERCISES });
-  assert.equal(api.getProjects().length, 35);
+  assert.equal(api.getProjects().length, 40);
   harness.triggerFilter(harness.filterArea, "Web & Código");
   assert.equal(harness.viewContainer.querySelectorAll(".projects-kanban-card").length, 8);
   const burndown = harness.viewContainer.querySelector('[data-project-id="code-b-kanban-burndown"]');
@@ -1300,7 +1302,7 @@ test("TC-4.1: Escenario 1 - Flujo Completo de Aprendiz en Tablero Kanban", () =>
   harness.triggerDragDrop(burndown, devCol);
   assert.equal(api.getStatusMap()["code-b-kanban-burndown"], "en-desarrollo");
   harness.triggerFilter(harness.filterArea, "all");
-  assert.equal(harness.viewContainer.querySelectorAll(".projects-kanban-card").length, 35);
+  assert.equal(harness.viewContainer.querySelectorAll(".projects-kanban-card").length, 40);
   const stored = JSON.parse(harness.storage.getItem("projects_hub_status_map"));
   assert.equal(stored["code-b-kanban-burndown"], "en-desarrollo");
 });
@@ -1451,7 +1453,7 @@ test("TC-BRANCH-10: collateAllProjects con dailyProjects que cubren description,
 test("TC-BRANCH-11: filterProjects con projects no arreglo y con filters nulo", () => {
   assert.deepEqual(filterProjects(null, {}), []);
   const all = collateAllProjects(CANVAS_EXERCISES);
-  assert.equal(filterProjects(all, null).length, 35);
+  assert.equal(filterProjects(all, null).length, 40);
 });
 
 test("TC-BRANCH-12: filterProjects con tags nulo y sortProjects con level desconocido o sin duración", () => {
@@ -1490,7 +1492,7 @@ test("TC-BRANCH-14: initProjectsHub con options vacías, storage descalibrado y 
   globalThis.CANVAS_EXERCISES = CANVAS_EXERCISES;
   const api = initProjectsHub(container, { storage });
   assert.ok(api);
-  assert.equal(api.getOrder().length, 35);
+  assert.equal(api.getOrder().length, 40);
   assert.deepEqual(api.getStatusMap(), {});
   delete globalThis.CANVAS_EXERCISES;
 });

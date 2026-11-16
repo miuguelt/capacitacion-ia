@@ -24,7 +24,7 @@ function collateAllProjects(canvasExercises, dailyProjects) {
   for (const [mode, list] of Object.entries(exercises)) {
     if (Array.isArray(list)) list.forEach((ex, idx) => {
       const area = ex.id === "inline-b-depurar-funcion" ? "Web & Código" : (MODE_AREAS[mode] || "Redacción");
-      result.push({ id: ex.id, title: ex.title, description: ex.goal || ex.description || "", goal: ex.goal || "", area, level: ex.level || "Intermedio", duration: ex.duration || "30 min", durationMin: parseInt(ex.duration, 10) || 30, canvasFeature: ex.canvasFeature || "", technology: Array.isArray(ex.capabilities) ? ex.capabilities.slice(0, 3).join(", ") : "", tags: Array.isArray(ex.capabilities) ? [...ex.capabilities] : [], route: `#gemini-canvas/${mode}/${idx === 0 ? "a" : "b"}`, previewSvg: ex.previewSvg || "", status: "por-iniciar" });
+      result.push({ id: ex.id, title: ex.title, description: ex.goal || ex.description || "", goal: ex.goal || "", area, level: ex.level || "Intermedio", duration: ex.duration || "30 min", durationMin: parseInt(ex.duration, 10) || 30, canvasFeature: ex.canvasFeature || "", technology: Array.isArray(ex.capabilities) ? ex.capabilities.slice(0, 3).join(", ") : "", tags: Array.isArray(ex.capabilities) ? [...ex.capabilities] : [], route: `#gemini-canvas/${mode}/${["a", "b", "c"][idx] || "a"}`, previewSvg: ex.previewSvg || "", status: "por-iniciar" });
     });
   }
   const dailies = Array.isArray(dailyProjects) ? dailyProjects : (dailyProjects === null ? [] : DEFAULT_DAILY_PROJECTS);

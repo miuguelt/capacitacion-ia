@@ -1796,6 +1796,46 @@ body.instructor-mode .instructor-guide-card {
   display: none !important;
 }
 
+/* Enfoque limpio en Modo Inmersivo: ocultar barras y encabezados redundantes por defecto */
+.immersive-mode-select {
+  display: none;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+#gemini-canvas.is-immersive .immersive-mode-select {
+  display: inline-block;
+}
+
+#gemini-canvas.is-immersive #immersive-hud-title {
+  display: none;
+}
+
+#gemini-canvas:not(.is-immersive) #btn-immersive-toggle-tools {
+  display: none;
+}
+
+#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module > div:first-child,
+#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-calibration-toolbar,
+#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module .canvas-category-filter-bar,
+#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module .canvas-tab-bar,
+#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module .canvas-split-toolbar {
+  display: none !important;
+}
+
+#gemini-canvas.is-immersive #canvas-exercises-module .canvas-exercises-intro,
+#gemini-canvas.is-immersive #canvas-exercises-module #btn-toggle-exercises-fullscreen,
+#gemini-canvas.is-immersive #canvas-exercises-module .canvas-exercises-notice,
+#gemini-canvas.is-immersive #canvas-exercises-module #canvas-exercise-index {
+  display: none !important;
+}
+
 #gemini-canvas.is-immersive #canvas-simulator-module.is-fullscreen,
 #gemini-canvas.is-immersive #canvas-exercises-module.is-fullscreen {
   position: relative;
@@ -1803,13 +1843,28 @@ body.instructor-mode .instructor-guide-card {
   z-index: auto;
   height: auto;
   overflow: visible;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
 
-#dia-3.is-immersive > *:not(#dia3-examples-module):not(#dia3-security-lab):not(#dia3-exercises-module) {
+#dia-3.is-immersive > *:not(#dia3-immersive-bar):not(#dia3-examples-module):not(#dia3-security-lab):not(#dia3-exercises-module) {
+  display: none !important;
+}
+
+#dia-3.is-immersive #dia3-immersive-bar {
+  display: flex !important;
+  position: sticky;
+  top: 0;
+  z-index: 1520;
+  box-shadow: var(--shadow-md);
+}
+
+#dia-3.is-immersive #dia3-examples-module .canvas-exercises-intro,
+#dia-3.is-immersive #dia3-exercises-module .canvas-exercises-intro,
+#dia-3.is-immersive #btn-toggle-dia3-fullscreen,
+#dia-3.is-immersive #btn-toggle-dia3-ex-fullscreen {
   display: none !important;
 }
 
@@ -1999,6 +2054,198 @@ body.instructor-mode .instructor-guide-card {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+}
+
+/* Controles de Calibración en Vivo, Variaciones en 1 Clic y Transformaciones de Canvas */
+.sim-variation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.sim-variation-delta-card {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-primary-light);
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-primary-subtle);
+  font-size: 0.82rem;
+  color: var(--text-main);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.sim-calibration-live-banner {
+  margin-bottom: 0.65rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: var(--bg-subtle);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.sim-calibration-live-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.sim-calibration-live-text {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-main);
+}
+
+.sim-transform-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+}
+
+.sim-transform-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-inline-end: 0.25rem;
+}
+
+.sim-transform-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 0.5rem;
+}
+
+.sim-infographic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.65rem;
+}
+
+.sim-infographic-kpi {
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--color-primary);
+  background: var(--bg-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-inline-size: 0;
+}
+
+.sim-infographic-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+/* Panel de Visión Completa 360° de Gemini Canvas */
+.canvas-vision-360-panel {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: var(--bg-subtle);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.canvas-vision-mastery-banner {
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-subtle);
+  border: 1px solid var(--color-primary-light);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  margin-bottom: 0.9rem;
+}
+
+.canvas-vision-stages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0.85rem;
+}
+
+.canvas-vision-stage-card {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-inline-size: 0;
+}
+
+.vision-stage-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.vision-stage-head h4 {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-main);
+}
+
+.vision-stage-badge {
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.canvas-vision-stage-card p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.vision-stage-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.vision-cap-chip {
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+}
+
+.vision-cap-chip.is-practiced {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
 }
 
 /* Overlay interactivo en la tarjeta de imagen */

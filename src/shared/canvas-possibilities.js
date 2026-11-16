@@ -501,12 +501,17 @@ Estados: Recomendado si el puntaje es 85 o más; Admisible con observaciones ent
           <h4 style="margin:0; color:var(--color-primary);">📋 Matriz ponderada: internet dedicado para el campus</h4>
           <span class="badge badge-info">Pesos: 100 %</span>
         </div>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🧪 Simular sensibilidad en C3 (Soporte de Proveedor B):</strong>
+          <button type="button" class="calibration-pill active" data-sim-matrix-scenario="base">Escenario Base (Soporte B = 7 → 82,0)</button>
+          <button type="button" class="calibration-pill" data-sim-matrix-scenario="variation">Variación (Soporte B sube a 9 → 85,0 Recomendado)</button>
+        </div>
         ${canvasTable(["Criterio", "Peso", ...MATRIX.providers.map(p => p.name)], [
           ...MATRIX.criteria.map((c, i) => [c, `${MATRIX.weights[i]} %`, ...MATRIX.providers.map(p => fmtScore(p.scores[i]))]),
           ["<strong>Puntaje sobre 100</strong>", "", ...MATRIX.providers.map(p => `<strong>${p.totalText}</strong>`)],
           ["<strong>Estado</strong>", "", ...MATRIX.providers.map(p => canvasStatusBadge(p.status))]
         ], ' style="font-size:0.8rem;"')}
-        <p style="font-size:0.82rem; margin:0.6rem 0 0 0;">Fórmula: suma de (calificación × peso) ÷ 10. Se recomienda el Proveedor A, que supera al Proveedor B por ${canvasFormatNumber(PA.total - PB.total, 1)} puntos.</p>
+        <p id="demo-matrix-live-status" style="font-size:0.82rem; margin:0.6rem 0 0 0;">Fórmula: suma de (calificación × peso) ÷ 10. Se recomienda el Proveedor A, que supera al Proveedor B por ${canvasFormatNumber(PA.total - PB.total, 1)} puntos.</p>
       </div>`,
   imageSpec: {
     blocks: [
@@ -583,8 +588,14 @@ ${FLOW.edges.map(([a, b, label]) => `${a} → ${b}${label ? ` (respuesta «${lab
   interactiveHtml: `
       <div class="flowchart-rendered-box">
         <h4 style="margin:0 0 0.6rem 0; color:var(--color-primary);">🔀 Flujo de la mesa de ayuda por responsable</h4>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🧭 Trazar camino en D1:</strong>
+          <button type="button" class="calibration-pill active" data-sim-flow-path="yes">Ruta Sí (≤ 15 min): P1 → P2 → D1 → P3 → P7 → P8</button>
+          <button type="button" class="calibration-pill" data-sim-flow-path="no">Ruta No (&gt; 15 min): P1 → P2 → D1 → P4 → P5 → P6 → P7 → P8</button>
+        </div>
+        <p id="demo-flow-trace-output" style="font-size:0.8rem; margin:0 0 0.55rem 0; color:var(--color-primary); font-weight:600;">Ruta activa: Resuelto en Nivel 1 (P1 → P2 → D1 [Sí] → P3 → P7 → P8 · 6 nodos visitados).</p>
         <div style="display:grid; gap:0.5rem;">
-          ${FLOW.lanes.map(l => `<div style="border:1px solid var(--border-light); border-radius:6px; padding:0.5rem 0.65rem;"><strong style="font-size:0.82rem;">${l.name}</strong><div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.35rem;">${l.nodes.map(n => `<span class="badge ${n.shape === "decision" ? "badge-warning" : "badge-info"}">${n.id} · ${n.label}</span>`).join("")}</div></div>`).join("")}
+          ${FLOW.lanes.map(l => `<div style="border:1px solid var(--border-light); border-radius:6px; padding:0.5rem 0.65rem;"><strong style="font-size:0.82rem;">${l.name}</strong><div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.35rem;">${l.nodes.map(n => `<span class="badge ${n.shape === "decision" ? "badge-warning" : "badge-info"}" data-flow-node="${n.id}">${n.id} · ${n.label}</span>`).join("")}</div></div>`).join("")}
         </div>
         <pre style="margin:0.75rem 0 0 0; padding:0.75rem; border-radius:6px; background:#1e1e1e; color:#d4d4d4; font-size:0.76rem; overflow-x:auto; white-space:pre;"><code>${FLOW_MERMAID}</code></pre>
       </div>`,
@@ -753,13 +764,20 @@ const INLINE_PROMPTING = {
   interactiveHtml: `
       <div class="inline-diff-comparison">
         <h4 style="margin:0 0 0.5rem 0; color:var(--color-primary);">✂️ Punto 3 del acta: antes y después</h4>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🕒 Historial de versiones del Punto 3:</strong>
+          <button type="button" class="calibration-pill active" data-sim-inline-view="compare">🔄 Comparar lado a lado</button>
+          <button type="button" class="calibration-pill" data-sim-inline-view="v1">Versión 1 (Original transcrito)</button>
+          <button type="button" class="calibration-pill" data-sim-inline-view="v2">Versión 2 (Editado por selección)</button>
+        </div>
+        <p id="demo-inline-live-note" style="font-size:0.8rem; margin:0 0 0.5rem 0; color:var(--color-primary); font-weight:600;">Mostrando comparativa: los puntos 1, 2 y 4 permanecen intactos; solo cambia el Punto 3.</p>
         <div class="comparison-grid" style="margin-top:0.5rem;">
-          <div class="comparison-col col-bad">
+          <div class="comparison-col col-bad" id="demo-inline-col-v1">
             <div class="col-title">❌ Antes (texto seleccionado)</div>
             <p style="font-size:0.83rem; margin:0;">${ACTA_POINT_3}</p>
             <small style="display:block; margin-top:0.5rem; opacity:0.8;">Problema: tono punitivo y una sola oración que mezcla condición, soporte y plazo.</small>
           </div>
-          <div class="comparison-col col-good">
+          <div class="comparison-col col-good" id="demo-inline-col-v2">
             <div class="col-title">✓ Después (referencia del paso 2)</div>
             <ul style="font-size:0.82rem; margin:0.2rem 0 0 1rem; padding:0;">
               ${ACTA_REWRITE.map(t => `<li>${t}</li>`).join("")}
@@ -898,9 +916,15 @@ ${DELIVERIES.map(d => `    {"documento": "${d.documento}", "nombre": "${d.nombre
           <h4 style="margin:0; color:var(--color-primary);">⚡ agrupar_por_estado(): de O(n²) a O(n)</h4>
           <span class="badge badge-success">Mismo resultado</span>
         </div>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🧪 Ejecutar lote de prueba en vivo:</strong>
+          <button type="button" class="calibration-pill active" data-sim-algo-case="sample">Muestra (7 entregas, doc 101 repetido)</button>
+          <button type="button" class="calibration-pill" data-sim-algo-case="empty">Lista vacía []</button>
+          <button type="button" class="calibration-pill" data-sim-algo-case="boundaries">Fronteras (0 · 49,9 · 50,0 · 69,9 · 70,0)</button>
+        </div>
         <p style="font-size:0.84rem; margin:0 0 0.6rem 0;"><strong>Causa:</strong> <code>if e["documento"] in vistos</code> busca en una lista; con 10.000 entregas son hasta 10.000 comparaciones por cada entrega. Un <code>set</code> responde en tiempo constante.</p>
         <pre style="background:#1e1e1e; color:#d4d4d4; padding:0.85rem; border-radius:6px; font-size:0.76rem; overflow-x:auto; white-space:pre; margin:0 0 0.6rem 0;"><code>${ALGO_REFERENCE}</code></pre>
-        <p style="font-size:0.84rem; margin:0;"><strong>Salida esperada con la entrada de ejemplo:</strong><br><code>${DELIVERIES_OUTPUT}</code></p>
+        <p id="demo-algo-live-output" style="font-size:0.84rem; margin:0;"><strong>Salida esperada con la entrada de ejemplo:</strong><br><code>${DELIVERIES_OUTPUT}</code></p>
       </div>`,
   imageSpec: {
     blocks: [
@@ -1001,8 +1025,14 @@ Caso para calibrar: un aprendiz obtiene ${RUBRIC.sample.map((g, i) => `${canvasF
           <h4 style="margin:0; color:var(--color-primary);">📋 Rúbrica analítica: backend con arquitectura y pruebas</h4>
           <span class="badge badge-info">Pesos: 100 %</span>
         </div>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🧮 Probar calibración de notas (30 % · 35 % · 35 %):</strong>
+          <button type="button" class="calibration-pill active" data-sim-rubric-case="calibration">Caso del prompt (4,8 · 3,5 · 4,0 → 4,1 Bueno)</button>
+          <button type="button" class="calibration-pill" data-sim-rubric-case="excellent">Caso sobresaliente (5,0 · 4,6 · 4,8 → 4,8 Excelente)</button>
+          <button type="button" class="calibration-pill" data-sim-rubric-case="support">Caso con refuerzo (2,5 · 2,8 · 3,0 → 2,8 Requiere refuerzo)</button>
+        </div>
         ${canvasTable(["Criterio", "Peso", ...RUBRIC_LEVELS], RUBRIC.criteria.map(([c, w], i) => [`<strong>${c}</strong>`, `${w} %`, ...RUBRIC_DESCRIPTORS[i]]), ' style="font-size:0.76rem;"')}
-        <p style="font-size:0.84rem; margin:0.75rem 0 0 0;"><strong>Caso para calibrar:</strong> ${RUBRIC_OPERATION}</p>
+        <p id="demo-rubric-live-calc" style="font-size:0.84rem; margin:0.75rem 0 0 0;"><strong>Caso para calibrar:</strong> ${RUBRIC_OPERATION}</p>
       </div>`,
   imageSpec: {
     blocks: [
@@ -1111,6 +1141,13 @@ ${[1, 2, 3, 4].map(id => SQL_DATA.attendance.filter(r => r.aprendiz_id === id).m
           <h4 style="margin:0; color:var(--color-primary);">🗄️ Reporte mensual por ficha</h4>
           <span class="badge badge-success">5 filas esperadas</span>
         </div>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🔍 Simular efecto de JOIN y NULLIF:</strong>
+          <button type="button" class="calibration-pill active" data-sim-sql-mode="left-nullif">✓ LEFT JOIN + NULLIF (5 filas, Sara = NULL)</button>
+          <button type="button" class="calibration-pill" data-sim-sql-mode="inner-join">⚠️ INNER JOIN (Oculta a Sara: 4 filas)</button>
+          <button type="button" class="calibration-pill" data-sim-sql-mode="no-nullif">❌ Sin NULLIF (Error división por cero)</button>
+        </div>
+        <p id="demo-sql-live-feedback" style="font-size:0.8rem; margin:0 0 0.55rem 0; color:var(--color-primary); font-weight:600;">Estado: LEFT JOIN conserva a Sara (puesto 1 en ficha 2872 con promedio 4,9) y NULLIF devuelve NULL sin fallar.</p>
         <pre style="background:#1e1e1e; color:#d4d4d4; padding:0.85rem; border-radius:6px; font-size:0.76rem; overflow-x:auto; white-space:pre; margin:0 0 0.75rem 0;"><code>${SQL_REFERENCE}</code></pre>
         ${canvasTable(["ficha_id", "puesto", "nombre", "promedio", "pct_asistencia"], SQL_RESULT_ROWS, ' style="font-size:0.8rem;"')}
       </div>`,
@@ -1192,13 +1229,18 @@ Plazo de subsanación: 10 días hábiles desde la notificación.`,
           <h4 style="margin:0; color:var(--color-primary);">DICTAMEN TÉCNICO · CONTRATO CT-2026-014</h4>
           <small style="color:var(--text-muted);">Plataforma de gestión académica · Corte: 30 de octubre de 2026 · Avance certificado: 94 % · Pagos: 80 % desembolsado, 20 % pendiente</small>
         </div>
+        <div class="sim-live-control-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem; margin-bottom:0.65rem; padding:0.5rem 0.7rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+          <strong style="font-size:0.78rem; color:var(--text-main);">🚦 Simular regla de decisión del comité:</strong>
+          <button type="button" class="calibration-pill active" data-sim-report-state="initial">Corte inicial (INF-1 = 6 ROJO → Pago retenido)</button>
+          <button type="button" class="calibration-pill" data-sim-report-state="remediated">Tras subsanar JWT (INF-1 = 1 VERDE → Pago aprobado)</button>
+        </div>
         <div style="background:var(--bg-subtle); padding:0.75rem; border-radius:6px; margin-bottom:0.75rem; font-size:0.83rem;">
           <strong>Síntesis:</strong>
           <p style="margin:0.25rem 0 0 0;">La interventoría certifica un avance del 94 %. Los informes reportan tres hallazgos: uno ROJO por la falta de expiración de los tokens JWT [INF-1, p. 12], uno ÁMBAR por la bitácora sin índices [INF-2, p. 31] y uno VERDE por el aviso de privacidad pendiente [INF-3, p. 7].</p>
         </div>
         <h5 style="margin:0.5rem 0 0.35rem 0; font-size:0.85rem;">Matriz de riesgos</h5>
         ${canvasTable(["Hallazgo", "Fuente", "Impacto", "Probabilidad", "Puntaje", "Semáforo"], FINDINGS.map(f => [f.factor, f.ref, f.impact, f.probability, String(f.risk.score), canvasStatusBadge(f.risk.color)]), ' style="font-size:0.76rem;"')}
-        <p style="font-size:0.84rem; margin:0.75rem 0 0 0;"><strong>Decisión:</strong> ${REPORT_DECISION}</p>
+        <p id="demo-report-live-decision" style="font-size:0.84rem; margin:0.75rem 0 0 0;"><strong>Decisión:</strong> ${REPORT_DECISION}</p>
       </div>`,
   imageSpec: {
     blocks: [
@@ -1419,6 +1461,240 @@ Object.values(CANVAS_POSSIBILITIES).forEach(p => {
   p.imageSpec.chat = p.aiResponse;
 });
 
+// --- Simulación determinista de Calibración (Longitud, Tono y Audiencia) en los 12 modos ---
+const CALIBRATION_LENGTH_LABELS = {
+  1: "Síntesis (1/5)",
+  2: "Conciso (2/5)",
+  3: "Estándar (3/5)",
+  4: "Detallado (4/5)",
+  5: "Exhaustivo (5/5)"
+};
+
+const CALIBRATION_TONE_META = {
+  formal: { label: "Formal", rule: "Redacción institucional imparcial, tercera persona y precisión normativa." },
+  pedagogico: { label: "Asertivo", rule: "Orientación formativa directa, pasos accionables y lenguaje claro para el equipo." },
+  analitico: { label: "Analítico", rule: "Énfasis en métricas verificables, umbrales cuantitativos y trazabilidad de causas." }
+};
+
+const CALIBRATION_AUDIENCE_META = {
+  intro: { label: "Introductorio", rule: "Explica cada sigla o fórmula antes de usarla; ideal para primer trimestre." },
+  adso: { label: "Técnico ADSO", rule: "Nivel tecnólogo: conserva contratos técnicos, SQL, código y criterios observables." },
+  expert: { label: "Especialista", rule: "Enfoque de comité evaluador o arquitectura: prioriza invariantes, SLA y auditoría." }
+};
+
+function computeCalibratedSimulation(modeId, options) {
+  const opts = options || {};
+  const modeData = CANVAS_POSSIBILITIES[modeId] || CANVAS_POSSIBILITIES["doc-editorial"];
+  const rawLen = Number(opts.length);
+  const lengthLevel = Number.isInteger(rawLen) && rawLen >= 1 && rawLen <= 5 ? rawLen : 3;
+  const toneKey = CALIBRATION_TONE_META[opts.tone] ? opts.tone : "formal";
+  const audienceKey = CALIBRATION_AUDIENCE_META[opts.audience] ? opts.audience : "adso";
+
+  const lengthLabel = CALIBRATION_LENGTH_LABELS[lengthLevel];
+  const toneMeta = CALIBRATION_TONE_META[toneKey];
+  const audienceMeta = CALIBRATION_AUDIENCE_META[audienceKey];
+
+  const lengthScopeByLevel = {
+    1: "Resumen de 1 párrafo o vista mínima de indicadores clave.",
+    2: "Versión compacta centrada en conclusiones y tabla principal.",
+    3: "Extensión equilibrada con todas las secciones del prompt CRTT+L.",
+    4: "Incluye desglose intermedio de operaciones y notas de validación.",
+    5: "Cobertura completa con trazabilidad fila por fila, supuestos y controles."
+  };
+
+  const docSummaryText = modeId === "doc-editorial" && Array.isArray(modeData.lengthVariants)
+    ? modeData.lengthVariants[lengthLevel - 1]
+    : `${modeData.name}: ${lengthScopeByLevel[lengthLevel]}`;
+
+  const promptDirective = `Calibración activa en Canvas → Longitud: ${lengthLabel} | Tono: ${toneMeta.label} (${toneMeta.rule}) | Audiencia: ${audienceMeta.label} (${audienceMeta.rule})`;
+
+  const e = canvasKit.escapeCanvasHtml;
+  const summaryHtml = `<div class="sim-calibration-live-banner" data-calibrated-mode="${e(modeId)}" data-calibrated-length="${lengthLevel}" data-calibrated-tone="${e(toneKey)}" data-calibrated-audience="${e(audienceKey)}">
+    <div class="sim-calibration-live-head">
+      <span class="badge badge-info">🎛️ Calibración en Vivo: ${e(lengthLabel)}</span>
+      <span class="badge badge-success">🎭 Tono ${e(toneMeta.label)}</span>
+      <span class="badge badge-warning">🎯 Audiencia ${e(audienceMeta.label)}</span>
+    </div>
+    <p class="sim-calibration-live-text"><strong>Efecto en el lienzo:</strong> ${e(docSummaryText)} <em>${e(toneMeta.rule)} ${e(audienceMeta.rule)}</em></p>
+  </div>`;
+
+  return {
+    modeId,
+    lengthLevel,
+    lengthLabel,
+    tone: toneKey,
+    toneLabel: toneMeta.label,
+    audience: audienceKey,
+    audienceLabel: audienceMeta.label,
+    promptDirective,
+    docSummaryText,
+    summaryHtml
+  };
+}
+
+// --- Simulación determinista de la Variación Rápida en 1 clic por modo ---
+const MODE_VARIATION_SIMULATIONS = {
+  "doc-editorial": {
+    promptCommand: "Convierte la garantía en un acuerdo de nivel de servicio con tiempos de respuesta por severidad",
+    aiFollowUp: "Actualicé la sección 4 del documento en Canvas: ahora incluye una tabla de acuerdo de nivel de servicio (SLA) con severidad Crítica (≤ 24 h hábiles), Alta (≤ 48 h hábiles) y Media (≤ 5 días hábiles), manteniendo los 36 meses en sitio.",
+    deltaHtml: `<strong>⚡ Variación aplicada en Sección 4 (Acuerdo de Nivel de Servicio - SLA):</strong>` +
+      canvasTable(["Severidad", "Condición", "Tiempo máximo de respuesta", "Cobertura"], [
+        ["Crítica", "Equipo no enciende o falla de GPU/SSD", "24 horas hábiles", "36 meses en sitio"],
+        ["Alta", "Degradación de red o pantalla", "48 horas hábiles", "36 meses en sitio"],
+        ["Media", "Ajuste de periféricos o gabinete", "5 días hábiles", "36 meses en sitio"]
+      ], ' style="font-size:0.78rem; margin-top:0.4rem;"')
+  },
+  "code-prototyping": {
+    promptCommand: "Agrega un aprendiz con asistencia 80 y evidencias 90 al arreglo y comprueba que los KPI se recalculen",
+    aiFollowUp: "Agregué el séptimo registro (asistencia 80 %, evidencias 90 % → En progreso) al arreglo en JavaScript. Los KPI se recalcularon automáticamente a 82,1 % de asistencia y 84,6 % de evidencias.",
+    deltaHtml: `<strong>⚡ Variación aplicada (7 aprendices en el arreglo):</strong><p style="margin:0.25rem 0 0; font-size:0.82rem;">Nuevo registro: <code>Simón Herrera · Asistencia 80 % · Evidencias 90 % → En progreso</code>. Nuevos KPI calculados: <strong>Asistencia promedio = 82,1 %</strong> · <strong>Evidencias promedio = 84,6 %</strong> (3 Al día, 2 En progreso, 2 Requiere apoyo).</p>`
+  },
+  "data-matrix": {
+    promptCommand: "El Proveedor B mejora su soporte en sitio a 9. Recalcula su puntaje y dime si cambia la recomendación",
+    aiFollowUp: "Recalculé la columna del Proveedor B con C3 = 9: su aporte en soporte sube de 10,5 a 13,5 y su puntaje total pasa de 82,0 a 85,0 (Recomendado). El Proveedor A sigue primero con 88,0 (3,0 puntos de ventaja).",
+    deltaHtml: `<strong>⚡ Variación aplicada en C3 (Soporte en sitio de Proveedor B = 9):</strong><p style="margin:0.25rem 0 0; font-size:0.82rem;">Operación Proveedor B: <code>(8×25 + 8,5×20 + 9×15 + 9×25 + 8×15) ÷ 10 = 85,0 → Recomendado</code>. Proveedor A conserva el primer lugar con <strong>88,0</strong> (ventaja de 3,0 puntos).</p>`
+  },
+  "flowchart-diagram": {
+    promptCommand: "Agrega un paso P9 de Nivel 2 que notifique al usuario antes de P7 y muéstrame solo las líneas que cambiaron",
+    aiFollowUp: "Agregué el nodo P9 dentro del carril de Soporte especializado Nivel 2 y actualicé la conexión P6 --> P9 --> P7 sin modificar la ruta de Nivel 1.",
+    deltaHtml: `<strong>⚡ Variación aplicada en Mermaid (Diferencial de líneas):</strong><pre style="margin:0.35rem 0 0; padding:0.5rem; background:#1e1e1e; color:#86efac; border-radius:4px; font-size:0.75rem;"><code>+ P9["Notifica al usuario el cambio realizado"]\n- P6 --> P7\n+ P6 --> P9\n+ P9 --> P7</code></pre>`
+  },
+  "visual-mockup": {
+    promptCommand: "Agrega un modo oscuro con fondo #121816 y recalcula la tabla de contraste para los mismos pares",
+    aiFollowUp: "Añadí la sección de Modo Oscuro Suave (#121816) y recalculé con la fórmula de WCAG 2.2: el texto claro #F8FAF9 sobre #121816 alcanza 16,45:1 (AAA).",
+    deltaHtml: `<strong>⚡ Variación aplicada ( Contraste en Modo Oscuro #121816 ):</strong><p style="margin:0.25rem 0 0; font-size:0.82rem;"><code>#F8FAF9 sobre #121816 = 16,45:1 (AAA)</code> · <code>#6EE7B7 sobre #121816 = 11,20:1 (AAA)</code> · <code>#FBBF24 sobre #121816 = 10,85:1 (AAA)</code>.</p>`
+  },
+  "inline-prompting": {
+    promptCommand: "Conviértelo en una tabla de dos columnas: responsable y compromiso, sin cambiar las fechas",
+    aiFollowUp: "Seleccioné únicamente el punto 4 del acta y lo convertí en tabla de dos columnas conservando intacto el 7 de noviembre y los puntos 1, 2 y 3.",
+    deltaHtml: `<strong>⚡ Variación aplicada al Punto 4 (Tabla por selección inline):</strong>` +
+      canvasTable(["Responsable", "Compromiso y fecha"], [
+        ["Instructor", "Publica la rúbrica el 7 de noviembre"],
+        ["Aprendices", "Confirman su asistencia en la plataforma del curso"]
+      ], ' style="font-size:0.78rem; margin-top:0.4rem;"')
+  },
+  "algorithm-refactor": {
+    promptCommand: "Agrega una prueba con 10.000 entregas generadas y compara el tiempo de las dos versiones con timeit",
+    aiFollowUp: "Añadí la prueba parametrizada de volumen con 10.000 registros (5.000 documentos únicos repetidos 2 veces): ambas funciones devuelven el mismo diccionario y la versión con set evita el recorrido cuadrático.",
+    deltaHtml: `<strong>⚡ Variación aplicada (Prueba de volumen 10.000 registros):</strong><pre style="margin:0.35rem 0 0; padding:0.5rem; background:#1e1e1e; color:#d4d4d4; border-radius:4px; font-size:0.75rem;"><code>def test_volumen_diez_mil():\n    lote = [entrega(str(i % 5000), 75.0) for i in range(10000)]\n    res = agrupar_por_estado(lote)\n    assert len(res["al_dia"]) == 5000</code></pre>`
+  },
+  "rubric-curriculum": {
+    promptCommand: "Convierte la rúbrica en una lista de chequeo de autoevaluación con 9 afirmaciones de sí o no para el aprendiz",
+    aiFollowUp: "Generé las 9 afirmaciones observables (3 por criterio) para que el aprendiz verifique su repositorio antes de entregarlo.",
+    deltaHtml: `<strong>⚡ Variación aplicada (Autoevaluación de 9 puntos observables):</strong><ul style="margin:0.3rem 0 0 1.1rem; font-size:0.8rem;"><li>C1 (1-3): ¿Dominio sin imports de framework/ORM? ¿Capas separadas? ¿Puertos definidos?</li><li>C2 (4-6): ¿Pruebas para cada función? ¿Casos de error cubiertos? ¿Suite con 0 fallos?</li><li>C3 (7-9): ¿Respuestas con type/title/status/detail? ¿Códigos HTTP exactos? ¿Sin trazas internas?</li></ul>`
+  },
+  "sql-pipeline": {
+    promptCommand: "Convierte la consulta en una vista materializada y dime con qué sentencia se refresca sin bloquear las lecturas",
+    aiFollowUp: "Envolví la consulta en CREATE MATERIALIZED VIEW mv_reporte_mensual_ficha y añadí el índice único sobre (ficha_id, puesto) para habilitar REFRESH MATERIALIZED VIEW CONCURRENTLY.",
+    deltaHtml: `<strong>⚡ Variación aplicada (Vista Materializada Concurrente):</strong><pre style="margin:0.35rem 0 0; padding:0.5rem; background:#1e1e1e; color:#d4d4d4; border-radius:4px; font-size:0.75rem;"><code>CREATE MATERIALIZED VIEW mv_reporte_mensual_ficha AS ...;\nCREATE UNIQUE INDEX idx_mv_reporte_pk ON mv_reporte_mensual_ficha (ficha_id, puesto);\nREFRESH MATERIALIZED VIEW CONCURRENTLY mv_reporte_mensual_ficha;</code></pre>`
+  },
+  "executive-report": {
+    promptCommand: "Redacta un correo de cinco líneas para el director con la decisión y el plazo, citando las tres fuentes",
+    aiFollowUp: "Redacté el correo ejecutivo de 5 líneas citando [INF-1, p. 12], [INF-2, p. 31] y [INF-3, p. 7], informando la retención del 20 % final y el plazo de 10 días hábiles.",
+    deltaHtml: `<strong>⚡ Variación aplicada (Correo ejecutivo de 5 líneas con fuentes):</strong><p style="margin:0.25rem 0 0; font-size:0.8rem;">Asunto: Decisión pago final CT-2026-014 (Avance 94 %)<br>1. La interventoría certifica 94 % de avance al 30 de octubre de 2026.<br>2. Se detectó un riesgo ROJO en tokens JWT sin expiración [INF-1, p. 12].<br>3. Se registran hallazgos en bitácora ÁMBAR [INF-2, p. 31] y aviso VERDE [INF-3, p. 7].<br>4. Por regla del comité, se retiene el pago final del 20 %.<br>5. El contratista dispone de 10 días hábiles para subsanar.</p>`
+  },
+  "multimodal-vision": {
+    promptCommand: "Agrega un campo selector para elegir la sede de formación y haz que el botón se deshabilite hasta que la contraseña sea Segura",
+    aiFollowUp: "Añadí el selector accesible de sede (Centro Industrial, Comercio y Servicios, Agroindustrial) y vinculé el estado disabled del botón al umbral de contraseña Segura (≥ 80 %).",
+    deltaHtml: `<strong>⚡ Variación aplicada (Selector de Sede + Compuerta de Contraseña Segura):</strong><p style="margin:0.25rem 0 0; font-size:0.82rem;">Nuevo campo <code>&lt;select id="sede-formacion" required&gt;</code> y validación reactiva: el botón <em>Completar Registro Formativo</em> permanece en <code>disabled</code> hasta que el medidor marque <strong>Segura</strong>.</p>`
+  },
+  "gem-studio": {
+    promptCommand: "Añade una regla al System Prompt para que cuando el usuario pida ayuda con bases de datos relacionales, exija siempre diagramas entidad-relación en Mermaid",
+    aiFollowUp: "Actualicé el System Prompt con el Guardrail #5: ante cualquier consulta de modelado SQL o relacional, el Gem exige primero el diagrama erDiagram en Mermaid y formula dos preguntas sobre claves foráneas.",
+    deltaHtml: `<strong>⚡ Variación aplicada (Guardrail #5 en System Prompt del Gem):</strong><p style="margin:0.25rem 0 0; font-size:0.82rem;"><code>5. Modelado Relacional: cuando el aprendiz consulte sobre tablas o SQL, pídele primero el bloque erDiagram en Mermaid y verifica cardinalidades antes de revisar consultas.</code></p>`
+  }
+};
+
+function simulateVariationForMode(modeId) {
+  const modeData = CANVAS_POSSIBILITIES[modeId] || CANVAS_POSSIBILITIES["doc-editorial"];
+  const sim = MODE_VARIATION_SIMULATIONS[modeId] || MODE_VARIATION_SIMULATIONS["doc-editorial"];
+  return {
+    modeId,
+    tip: modeData.variationTip,
+    promptCommand: sim.promptCommand,
+    aiFollowUp: sim.aiFollowUp,
+    deltaHtml: `<div class="sim-variation-delta-card" data-variation-mode="${canvasKit.escapeCanvasHtml(modeId)}">${sim.deltaHtml}</div>`
+  };
+}
+
+// --- Simulador de Transformaciones del menú «Crear» de Gemini Canvas ---
+function buildCanvasTransformPreviewHtml(modeId, transformType) {
+  const modeData = CANVAS_POSSIBILITIES[modeId] || CANVAS_POSSIBILITIES["doc-editorial"];
+  const e = canvasKit.escapeCanvasHtml;
+  const type = ["artifact", "infographic", "quiz", "audio"].includes(transformType) ? transformType : "artifact";
+
+  if (type === "artifact") {
+    return modeData.interactiveHtml;
+  }
+
+  if (type === "infographic") {
+    const items = modeData.expected.slice(0, 4).map((item, idx) => `
+      <div class="sim-infographic-kpi">
+        <span class="sim-infographic-num">Dato verificado ${idx + 1}</span>
+        <strong>${e(item.criterion)}</strong>
+        <small>Comprobación: ${e(item.how)}</small>
+      </div>`).join("");
+    return `<div class="sim-transform-infographic" data-transform-view="infographic" data-transform-mode="${e(modeId)}">
+      <div class="sim-transform-head">
+        <span class="badge badge-info">📊 Vista Infografía generada desde el lienzo</span>
+        <strong>${e(modeData.name)} · ${e(modeData.docTitle)}</strong>
+      </div>
+      <p style="font-size:0.83rem; margin:0.4rem 0 0.75rem 0; color:var(--text-muted);">Síntesis visual construida automáticamente con las cifras y reglas del artefacto activo en Canvas:</p>
+      <div class="sim-infographic-grid">${items}</div>
+    </div>`;
+  }
+
+  if (type === "quiz") {
+    const firstCrit = modeData.expected[0] ? modeData.expected[0].criterion : "";
+    const secondCrit = modeData.expected[1] ? modeData.expected[1].criterion : "";
+    return `<div class="sim-transform-quiz" data-transform-view="quiz" data-transform-mode="${e(modeId)}">
+      <div class="sim-transform-head">
+        <span class="badge badge-warning">❓ Cuestionario interactivo de verificación (V.E.R.A.)</span>
+        <strong>Autoevaluación de ${e(modeData.name)}</strong>
+      </div>
+      <div class="sim-quiz-question-card" style="margin-top:0.65rem; padding:0.75rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+        <p style="margin:0 0 0.5rem 0; font-size:0.84rem;"><strong>Pregunta 1:</strong> ¿Cuál de estas afirmaciones corresponde exactamente a los datos del prompt en <em>${e(modeData.docTitle)}</em>?</p>
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <button type="button" class="canvas-bridge-part-btn" data-sim-quiz-answer="correct" data-sim-quiz-feedback="✓ ¡Correcto! Esa cifra y condición salen directamente de los datos del prompt.">A) ${e(firstCrit)}</button>
+          <button type="button" class="canvas-bridge-part-btn" data-sim-quiz-answer="wrong" data-sim-quiz-feedback="⚠️ Incorrecto. Recuerda que en Canvas nunca damos por válido un dato inventado o sin respaldo en el bloque de Datos.">B) Se permite omitir las restricciones y estimar valores aproximados sin verificar.</button>
+        </div>
+      </div>
+      <div class="sim-quiz-question-card" style="margin-top:0.65rem; padding:0.75rem; background:var(--bg-subtle); border-radius:6px; border:1px solid var(--border-light);">
+        <p style="margin:0 0 0.5rem 0; font-size:0.84rem;"><strong>Pregunta 2:</strong> ¿Qué segundo criterio debes comprobar antes de dar por terminado este artefacto?</p>
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <button type="button" class="canvas-bridge-part-btn" data-sim-quiz-answer="correct" data-sim-quiz-feedback="✓ ¡Exacto! Así aplicas el protocolo V.E.R.A. sobre el entregable.">A) ${e(secondCrit)}</button>
+          <button type="button" class="canvas-bridge-part-btn" data-sim-quiz-answer="wrong" data-sim-quiz-feedback="⚠️ Incorrecto. Siempre debes cotejar la salida contra la lista de verificación.">B) Aceptar la primera versión sin revisar la lista de chequeo.</button>
+        </div>
+      </div>
+      <p id="sim-quiz-live-feedback" style="margin:0.65rem 0 0 0; font-size:0.83rem; font-weight:600; color:var(--color-primary);" aria-live="polite">Selecciona una opción para comprobar tu respuesta.</p>
+    </div>`;
+  }
+
+  return `<div class="sim-transform-audio" data-transform-view="audio" data-transform-mode="${e(modeId)}">
+    <div class="sim-transform-head">
+      <span class="badge badge-success">🎙️ Resumen en Audio (Guion dialogado a 2 voces)</span>
+      <strong>${e(modeData.docTitle)}</strong>
+    </div>
+    <div style="display:grid; gap:0.55rem; margin-top:0.65rem; font-size:0.83rem;">
+      <div style="padding:0.65rem 0.8rem; background:var(--bg-subtle); border-left:3px solid var(--color-primary); border-radius:4px;">
+        <strong>🗣️ Voz 1 (Coordinación Académica):</strong> «Hoy revisamos <em>${e(modeData.name)}</em> en el archivo <code>${e(modeData.docTitle)}</code>. ¿Cuál es el punto clave que no puede fallar?»
+      </div>
+      <div style="padding:0.65rem 0.8rem; background:var(--bg-subtle); border-left:3px solid #0284c7; border-radius:4px;">
+        <strong>🗣️ Voz 2 (Analista de Canvas):</strong> «Lo fundamental es verificar que ${e(modeData.expected[0] ? modeData.expected[0].criterion.toLowerCase() : "todas las cifras coincidan")} y que ${e(modeData.expected[1] ? modeData.expected[1].criterion.toLowerCase() : "se cumplan las restricciones")}.»
+      </div>
+      <div style="padding:0.65rem 0.8rem; background:var(--bg-subtle); border-left:3px solid var(--color-primary); border-radius:4px;">
+        <strong>🗣️ Voz 1 (Coordinación Académica):</strong> «Excelente. Y si necesitamos iterar en caliente dentro del lienzo, podemos aplicar: <em>${e(modeData.variationTip)}</em>.»
+      </div>
+    </div>
+  </div>`;
+}
+
+if (typeof globalThis !== "undefined") {
+  globalThis.computeCalibratedSimulation = computeCalibratedSimulation;
+  globalThis.simulateVariationForMode = simulateVariationForMode;
+  globalThis.buildCanvasTransformPreviewHtml = buildCanvasTransformPreviewHtml;
+}
+
 // Actualiza la sección «possibilities» del banco JSON sin perder los campos que solo viven allí.
 function exportCanvasPossibilities(bank) {
   const previous = new Map((bank.possibilities || []).map(p => [p.id, p]));
@@ -1514,6 +1790,9 @@ if (typeof module !== "undefined" && module.exports) {
     canvasMermaidFlow,
     buildCanvasChecklistHtml,
     buildCanvasFollowUpsHtml,
+    computeCalibratedSimulation,
+    simulateVariationForMode,
+    buildCanvasTransformPreviewHtml,
     exportCanvasPossibilities
   };
 }

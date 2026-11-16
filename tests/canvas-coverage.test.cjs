@@ -60,9 +60,9 @@ test("summarizeStepPlaces y buildExerciseScopeTag distinguen ejercicios 100 % Ca
     assert.match(geminiScope, /Combina chat\/Gems y Canvas/);
 });
 
-test("Los 31 ejercicios declaran places alineados con steps, outsideCanvas claro y cubren las 25 capacidades", () => {
+test("Los 36 ejercicios declaran places alineados con steps, outsideCanvas claro y cubren las 25 capacidades", () => {
     const allExercises = Object.values(exercisesMod.CANVAS_EXERCISES).flat();
-    assert.equal(allExercises.length, 31);
+    assert.equal(allExercises.length, 36);
 
     for (const ex of allExercises) {
         assert.ok(Array.isArray(ex.places), `${ex.id} debe incluir arreglo places`);
@@ -171,4 +171,31 @@ test("buildCoverageMatrix y buildCoverageTableHtml cubren índices >= 3 y entrad
 
     const htmlBrokenList = coverage.buildCoverageTableHtml({ broken: null }, {}, null);
     assert.match(htmlBrokenList, /en los 0 ejercicios/);
+});
+
+test("CANVAS_VISION_STAGES y buildCompleteVisionSummaryHtml cubren las 25 capacidades en 4 etapas y calculan el dominio 360", () => {
+    assert.equal(coverage.CANVAS_VISION_STAGES.length, 4);
+    const stageCaps = coverage.CANVAS_VISION_STAGES.flatMap((s) => s.capabilityIds);
+    assert.deepEqual([...stageCaps].sort(), Object.keys(exercisesMod.CANVAS_CAPABILITIES).sort());
+
+    const partialHtml = coverage.buildCompleteVisionSummaryHtml(
+        exercisesMod.CANVAS_EXERCISES,
+        exercisesMod.CANVAS_CAPABILITIES,
+        ["doc-a-informe-desercion"]
+    );
+    assert.match(partialHtml, /data-vision-mastery="progress"/);
+    assert.match(partialHtml, /1 de 36 ejercicios completados/);
+    assert.match(partialHtml, /is-practiced/);
+
+    const allIds = Object.values(exercisesMod.CANVAS_EXERCISES).flat().map((ex) => ex.id);
+    const completeHtml = coverage.buildCompleteVisionSummaryHtml(
+        exercisesMod.CANVAS_EXERCISES,
+        exercisesMod.CANVAS_CAPABILITIES,
+        allIds
+    );
+    assert.match(completeHtml, /data-vision-mastery="complete"/);
+    assert.match(completeHtml, /¡Visión Completa 360° alcanzada!/);
+
+    const nullHtml = coverage.buildCompleteVisionSummaryHtml(null, null, null);
+    assert.match(nullHtml, /0 de 0 ejercicios completados/);
 });
