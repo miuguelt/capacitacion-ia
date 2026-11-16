@@ -176,7 +176,7 @@ body {
 }
 
 .role-btn.instructor-active {
-  background-color: #b45309;
+  background-color: var(--color-instructor);
   color: var(--text-inverse);
 }
 
@@ -4106,7 +4106,7 @@ body.instructor-mode .instructor-guide-card {
 
 [data-theme="dark"] .canvas-outside-callout {
   background: #2e1a05;
-  border-color: #b45309;
+  border-color: var(--color-instructor);
 }
 
 .canvas-outside-callout h5 {
@@ -5073,7 +5073,7 @@ body.instructor-mode .instructor-guide-card {
 
 .chip-status.en-desarrollo {
   background: rgba(234, 179, 8, 0.15);
-  color: #b45309;
+  color: var(--color-instructor);
   border: 1px solid rgba(234, 179, 8, 0.35);
 }
 
@@ -5503,3 +5503,118 @@ body.instructor-mode .instructor-guide-card {
 }
 :where(dd, blockquote) { margin-inline: 0; }
 /* devbrain-prose-contract:end */
+
+/* ==========================================
+   Módulo de Productividad con IA
+   ========================================== */
+.prod-station {
+  margin-top: 2rem;
+}
+
+.prod-station ul {
+  margin: 0 0 0 1rem;
+  padding: 0;
+  line-height: 1.6;
+}
+
+.prod-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.prod-savings-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--color-primary);
+  background: var(--bg-subtle);
+  border-radius: 6px;
+}
+
+.prod-savings-result strong {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+.prod-savings-result[data-verdict="perdida"] {
+  border-left-color: var(--color-instructor);
+}
+
+.prod-savings-msg[data-state="invalid"] {
+  color: var(--color-instructor);
+  font-weight: 600;
+}
+
+.prod-vera {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+}
+
+.prod-vera-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+#prod-vera-status[data-state="ready"] {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.prod-kit-item {
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.5rem 0;
+}
+
+.prod-kit-item summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* text-layout-exception: los prompts conservan sus saltos de línea; el texto completo queda visible y se puede copiar. */
+.prod-kit-item pre,
+.prod-prompt {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.table-responsive {
+  inline-size: 100%;
+  overflow-x: auto;
+}
+
+.prod-no-ai-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.prod-no-ai-table th,
+.prod-no-ai-table td {
+  text-align: start;
+  vertical-align: top;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+@media print {
+  body.printing-kit * {
+    visibility: hidden;
+  }
+
+  body.printing-kit #prod-kit-list,
+  body.printing-kit #prod-kit-list * {
+    visibility: visible;
+  }
+
+  body.printing-kit #prod-kit-list {
+    position: absolute;
+    inset: 0;
+  }
+}

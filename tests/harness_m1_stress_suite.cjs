@@ -114,7 +114,7 @@ runTest("1.2 Structural completeness and field integrity for all 12 modes", () =
   }
 });
 
-runTest("1.3 PromptParts R-C-I-R-F and embedded data constraints", () => {
+runTest("1.3 PromptParts CRTT+L and embedded data constraints", () => {
   for (const modeId of EXPECTED_MODES) {
     const p = CANVAS_POSSIBILITIES[modeId];
     const parts = p.promptParts;
@@ -244,7 +244,7 @@ runTest("2.3 Structural completeness of each exercise", () => {
   }
 });
 
-runTest("2.4 PromptParts R-C-I-R-F and prompt composition for all 24 exercises", () => {
+runTest("2.4 PromptParts CRTT+L and prompt composition for all 24 exercises", () => {
   for (const modeId of EXPECTED_MODES) {
     for (const ex of CANVAS_EXERCISES[modeId]) {
       const parts = ex.promptParts;

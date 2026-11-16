@@ -1,12 +1,12 @@
-# Project: Gemini Canvas Lab Upgrade (12 Modos, Modo Split, R-C-I-R-F)
+# Project: Gemini Canvas Lab Upgrade (12 Modos, Modo Split, CRTT+L)
 
 ## Architecture
 El módulo de Gemini Canvas Lab (`#gemini-canvas`) es una aplicación web SPA offline-first (`file://`), reactiva y modular, integrada en `index.html` (con réplica exacta en `src/index.html`).
 
 ### Capas del Sistema:
 1. **Capa de Datos y Especificaciones**:
-   - `js/canvas-possibilities.js` (espejos en `src/shared/` y `src/js/`): Catálogo canónico de posibilidades del Canvas con promptParts (R-C-I-R-F), imágenes de referencia, expected criteria (5+), quickActions, followUps y vistas interactivas.
-   - `js/canvas-exercises.js` (espejos en `src/shared/` y `src/js/`): Banco de ejercicios prácticos A y B (2 por modo) y parte C en siete modos (31 en total) con prompts R-C-I-R-F autosuficientes, pasos nativos de réplica, criterios observables y generadores SVG vectoriales puros.
+   - `js/canvas-possibilities.js` (espejos en `src/shared/` y `src/js/`): Catálogo canónico de posibilidades del Canvas con promptParts (CRTT+L), imágenes de referencia, expected criteria (5+), quickActions, followUps y vistas interactivas.
+   - `js/canvas-exercises.js` (espejos en `src/shared/` y `src/js/`): Banco de ejercicios prácticos A y B (2 por modo) y parte C en siete modos (31 en total) con prompts CRTT+L autosuficientes, pasos nativos de réplica, criterios observables y generadores SVG vectoriales puros.
    - `materiales/gemini_canvas/banco_prompts_canvas.json`: Dataset estructurado de posibilidades y ejercicios exportado automáticamente.
 2. **Capa de Interfaz y Experiencia de Usuario**:
    - `index.html` / `src/index.html`: Botonera de 12 modos `.canvas-tab-bar`, simulador split `.canvas-split-container` con delimitación explícita de **Salida 1: Lienzo Principal** y **Salida 2: Interacción y Refinamiento**, toolbar de calibración reactiva y contenedor de ejercicios.
@@ -21,10 +21,10 @@ El módulo de Gemini Canvas Lab (`#gemini-canvas`) es una aplicación web SPA of
 ## Feature Inventory
 | # | Feature | Description | Milestone | Source |
 |---|---------|-------------|-----------|--------|
-| F1 | Modo 11: Visión Multimodal en posibilidades | Definición canónica de `multimodal-vision` en `canvas-possibilities.js` con prompt R-C-I-R-F, formulario reactivo HTML5 con validación de correo institucional y medidor de contraseña | M1 | ORIGINAL_REQUEST §R2 |
-| F2 | Modo 12: Gem Studio para Canvas en posibilidades | Definición canónica de `gem-studio` en `canvas-possibilities.js` con prompt R-C-I-R-F, System Prompt socrático, consola de prueba interactiva y criterios | M1 | ORIGINAL_REQUEST §R2 |
-| F3 | Ejercicios 11.A y 11.B en canvas-exercises | `mm-a-boceto-formulario` y `mm-b-pizarra-flujograma` con prompts R-C-I-R-F, datos embebidos y generadores SVG | M1 | ORIGINAL_REQUEST §R2 |
-| F4 | Ejercicios 12.A y 12.B en canvas-exercises | `gem-a-tutor-socratico` y `gem-b-auditor-rubricas` con prompts R-C-I-R-F, datos embebidos y generadores SVG | M1 | ORIGINAL_REQUEST §R2 |
+| F1 | Modo 11: Visión Multimodal en posibilidades | Definición canónica de `multimodal-vision` en `canvas-possibilities.js` con prompt CRTT+L, formulario reactivo HTML5 con validación de correo institucional y medidor de contraseña | M1 | ORIGINAL_REQUEST §R2 |
+| F2 | Modo 12: Gem Studio para Canvas en posibilidades | Definición canónica de `gem-studio` en `canvas-possibilities.js` con prompt CRTT+L, System Prompt socrático, consola de prueba interactiva y criterios | M1 | ORIGINAL_REQUEST §R2 |
+| F3 | Ejercicios 11.A y 11.B en canvas-exercises | `mm-a-boceto-formulario` y `mm-b-pizarra-flujograma` con prompts CRTT+L, datos embebidos y generadores SVG | M1 | ORIGINAL_REQUEST §R2 |
+| F4 | Ejercicios 12.A y 12.B en canvas-exercises | `gem-a-tutor-socratico` y `gem-b-auditor-rubricas` con prompts CRTT+L, datos embebidos y generadores SVG | M1 | ORIGINAL_REQUEST §R2 |
 | F5 | Erradicación de funciones no nativas en ejercicios | Reemplazar "Crear → Infografía", "Crear → Cuestionario" y "Crear → Resumen en audio" en ejercicios doc-a, doc-b, rubric-b y report-a por acciones nativas de Gemini Canvas | M1 | ORIGINAL_REQUEST §R4 |
 | F6 | Generación de activo gráfico Modo 12 | Imagen `canvas_gem_studio.jpg` (> 50 KB) en `assets/images/canvas/` y espejo en `src/` | M1 | ORIGINAL_REQUEST §R2 |
 | F7 | Sincronización de dataset banco_prompts_canvas.json | Exportar las 12 posibilidades y 24 ejercicios mediante `scripts/export_canvas_possibilities.cjs` | M1 | ORIGINAL_REQUEST §R2 |
@@ -36,14 +36,14 @@ El módulo de Gemini Canvas Lab (`#gemini-canvas`) es una aplicación web SPA of
 | F13 | Actualización de suites de prueba Node.js | Ajustar MODES a 12 y ejercicios a 24 en `canvas-possibilities.test.cjs` y `canvas-exercises.test.cjs` manteniendo 100 % cobertura | M3 | ORIGINAL_REQUEST §R2, §R5 |
 | F14 | Compuerta negativa anti-funciones experimentales | Incorporar en `canvas-exercises.test.cjs` validación negativa estricta que prohíba "Infografía" y "Resumen en audio" | M3 | ORIGINAL_REQUEST §R4 |
 | F15 | Actualización de suites de prueba Pytest | Ajustar MODES (12) y conteos en `test_canvas_exercises.py` y `test_canvas_module.py`, añadiendo prueba del Modo Split | M3 | ORIGINAL_REQUEST §R3, §R5 |
-| F16 | Verificación final y auditoría forense | Comprobación integral de ejecución sin errores (`pytest` 100%, `node:test` 100%), es-CO, cero 'dossier', coherencia matemática | M4 | ORIGINAL_REQUEST §R5 |
+| F16 | Verificación final y auditoría forense | Comprobación integral de ejecución sin errores (`pytest` 100%, `node:test` 100%), es-CO, cero extranjerismos prohibidos, coherencia matemática | M4 | ORIGINAL_REQUEST §R5 |
 
 ---
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | Capa de Datos, Prompts R-C-I-R-F y Erradicación No Nativa | F1, F2, F3, F4, F5, F6, F7, F8 (`canvas-possibilities.js`, `canvas-exercises.js`, `canvas_gem_studio.jpg`, `banco_prompts_canvas.json`, réplicas `src/`) | none | DONE |
+| M1 | Capa de Datos, Prompts CRTT+L y Erradicación No Nativa | F1, F2, F3, F4, F5, F6, F7, F8 (`canvas-possibilities.js`, `canvas-exercises.js`, `canvas_gem_studio.jpg`, `banco_prompts_canvas.json`, réplicas `src/`) | none | DONE |
 | M2 | Capa UI, Botonera de 12 Modos y Modo Split de 2 Salidas | F9, F10, F11, F12 (`index.html`, `src/index.html`, `css/styles.css`, `src/css/styles.css`, `js/app.js`) | M1 | DONE |
 | M3 | Sincronización y Blindaje de Suites de Prueba (Dual Track) | F13, F14, F15 (`tests/test_canvas_*.py`, `tests/canvas-*.test.cjs`) | M1, M2 | DONE |
 | M4 | Verificación E2E, Endurecimiento Adversarial y Auditoría Forense | F16 (Verificación integral, Challenger stress tests, Forensic Auditor CLEAN) | M3 | DONE |
@@ -80,7 +80,7 @@ El módulo de Gemini Canvas Lab (`#gemini-canvas`) es una aplicación web SPA of
   - `steps.length >= 4`
   - `expected.length >= 4`
   - Cero menciones de `"Infografía"`, `"Resumen en audio"` o `"Crear →"`.
-  - Cero menciones de `"dossier"` (usar `"Portafolio de Evidencias"`).
+  - Usar siempre el término canónico `"Portafolio de Evidencias"`.
 
 ### 3. Modo Split de 2 Salidas en `index.html` ↔ `tests/test_canvas_module.py`
 - Selector contenedor: `.canvas-split-container` (CSS Grid responsivo).

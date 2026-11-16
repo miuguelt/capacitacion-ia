@@ -60,7 +60,7 @@ test('1.1 Exactamente 12 modos en CANVAS_POSSIBILITIES en orden canónico', () =
   assert.deepStrictEqual(keys, CANONICAL_MODES, 'El orden o claves de modos no coinciden con la secuencia canónica');
 });
 
-test('1.2 Cada modo posee todos los campos requeridos, R-C-I-R-F y límites de datos', () => {
+test('1.2 Cada modo posee todos los campos requeridos, CRTT+L y límites de datos', () => {
   for (const [id, mode] of Object.entries(CANVAS_POSSIBILITIES)) {
     assert.ok(typeof mode.name === 'string' && mode.name.trim().length > 0, `${id}: falta name`);
     assert.ok(typeof mode.docTitle === 'string' && mode.docTitle.trim().length > 0, `${id}: falta docTitle`);
@@ -70,7 +70,7 @@ test('1.2 Cada modo posee todos los campos requeridos, R-C-I-R-F y límites de d
     assert.ok(typeof mode.insightsHtml === 'string' && mode.insightsHtml.trim().length > 0, `${id}: falta insightsHtml`);
     assert.ok(typeof mode.variationTip === 'string' && mode.variationTip.trim().length > 0, `${id}: falta variationTip`);
     
-    // R-C-I-R-F prompt parts
+    // CRTT+L prompt parts
     assert.ok(mode.promptParts, `${id}: falta promptParts`);
     assert.ok(mode.promptParts.role && mode.promptParts.role.trim().length > 0, `${id}: falta role`);
     assert.ok(mode.promptParts.context && mode.promptParts.context.trim().length > 0, `${id}: falta context`);
@@ -120,7 +120,7 @@ test('1.3 Exactamente 24 ejercicios en CANVAS_EXERCISES (2 por modo: A y B)', ()
   assert.strictEqual(allExercisesList.length, 24, `Se esperaban 24 ejercicios en total, encontrados ${allExercisesList.length}`);
 });
 
-test('1.4 Cada ejercicio tiene R-C-I-R-F, pasos nativos, criterios observables y SVG válido', () => {
+test('1.4 Cada ejercicio tiene CRTT+L, pasos nativos, criterios observables y SVG válido', () => {
   const ids = new Set();
   const INSTRUCTION_REGEX = /^(En Canvas, |Copia (el|la) \S+ en Canvas sin cambiar )/;
 
@@ -133,7 +133,7 @@ test('1.4 Cada ejercicio tiene R-C-I-R-F, pasos nativos, criterios observables y
     assert.ok(ex.goal && ex.goal.length > 0, `${ex.id}: sin goal`);
     assert.ok(ex.scenario && ex.scenario.length > 0, `${ex.id}: sin scenario`);
 
-    // R-C-I-R-F
+    // CRTT+L
     assert.ok(ex.promptParts, `${ex.id}: sin promptParts`);
     assert.ok(ex.promptParts.role, `${ex.id}: sin role`);
     assert.ok(ex.promptParts.context, `${ex.id}: sin context`);

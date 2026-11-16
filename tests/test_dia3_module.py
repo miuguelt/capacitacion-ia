@@ -1,7 +1,7 @@
 """
 Pruebas de integración del módulo interactivo del Día 3 (Agentes, Código & APIs):
 marcado de arquitectura, ejemplos con vista previa en vivo, laboratorio de seguridad
-determinista (sin setTimeout), 6 ejercicios R-C-I-R-F, carga de scripts y réplica src/.
+determinista (sin setTimeout), 6 ejercicios CRTT+L, carga de scripts y réplica src/.
 """
 
 import json

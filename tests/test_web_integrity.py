@@ -63,7 +63,7 @@ def test_command_palette_elements_exist():
     assert ".command-item" in css_text, "styles.css debe incluir estilos para los items de comando"
 
 def test_prompt_health_meter_elements_exist():
-    """Valida la barra interactiva de salud heurística del prompt R-C-I-R-F."""
+    """Valida la barra interactiva de salud heurística del prompt CRTT+L."""
     index_file = BASE_DIR / "index.html"
     html = index_file.read_text(encoding="utf-8")
     js_file = BASE_DIR / "js" / "app.js"

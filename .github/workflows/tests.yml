@@ -31,7 +31,8 @@ jobs:
           --test-coverage-include="js/canvas-subnav.js"
           --test-coverage-include="js/canvas-column-dnd.js"
           --test-coverage-include="js/projects-hub.js"
+          --test-coverage-include="js/productivity-module.js"
           --test-coverage-functions=100 --test-coverage-lines=100 --test-coverage-branches=100
-          tests/canvas-exercises.test.cjs tests/canvas-possibilities.test.cjs tests/dia3-module.test.cjs tests/canvas-nav.test.cjs tests/canvas-coverage.test.cjs tests/canvas-subnav.test.cjs tests/canvas-column-dnd.test.cjs tests/projects-hub.test.cjs
+          tests/canvas-exercises.test.cjs tests/canvas-possibilities.test.cjs tests/dia3-module.test.cjs tests/canvas-nav.test.cjs tests/canvas-coverage.test.cjs tests/canvas-subnav.test.cjs tests/canvas-column-dnd.test.cjs tests/projects-hub.test.cjs tests/productivity-module.test.cjs
       - name: Integridad del portal y materiales
         run: python -m pytest -q tests

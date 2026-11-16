@@ -138,7 +138,7 @@ def create_gem_studio_image(out_path):
 
     # Master Prompt Card
     draw.rounded_rectangle([20, 295, 390, 480], radius=8, fill="#1e293b", outline="#475569", width=1)
-    draw.text((32, 305), "PROMPT MAESTRO DEL INSTRUCTOR (R-C-I-R-F)", fill="#94a3b8", font=font_badge)
+    draw.text((32, 305), "PROMPT MAESTRO DEL INSTRUCTOR (CRTT+L)", fill="#94a3b8", font=font_badge)
     p_txt = "Actúa como arquitecto de IA y diseñador de Gems.\n\nContexto: La coordinación académica requiere configurar\nun Gem coescritor pedagógico dentro de Canvas.\n\nInstrucción: En Canvas, redacta la ficha técnica y el\nSystem Prompt completo listo para copiar, con matriz\nde calibración de 3 casos, protocolo de coescritura y\nlista de verificación sin extranjerismos."
     draw.text((32, 330), p_txt, fill="#e2e8f0", font=font_small)
 

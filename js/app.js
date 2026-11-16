@@ -1819,8 +1819,8 @@ function initCommandPalette() {
       category: "Navegación",
       icon: "📄",
       title: "Ir a Día 1: Modelos & Documentos Técnicos",
-      desc: "Fundamentos, tokenización, R-C-I-R-F y constructor interactivo de prompts.",
-      keywords: ["dia 1", "modelos", "documentos", "prompts", "rcirf", "tokenizacion"],
+      desc: "Fundamentos, tokenización, CRTT+L y constructor interactivo de prompts.",
+      keywords: ["dia 1", "modelos", "documentos", "prompts", "crttl", "tokenizacion"],
       action: () => window.switchPage && window.switchPage("dia-1")
     },
     {
@@ -1936,9 +1936,9 @@ function initCommandPalette() {
     {
       category: "Día 3: Agentes & Web",
       icon: "🏋️",
-      title: "Practicar los 6 Ejercicios Guiados R-C-I-R-F del Día 3",
+      title: "Practicar los 6 Ejercicios Guiados CRTT+L del Día 3",
       desc: "2 ejercicios por bloque (Agentes y Archivos, Web de 3 Archivos, Seguridad y APIs) con vista previa SVG.",
-      keywords: ["ejercicios", "dia 3", "practica", "rcirf", "agentes", "svg"],
+      keywords: ["ejercicios", "dia 3", "practica", "crttl", "agentes", "svg"],
       action: () => {
         if (window.switchPage) window.switchPage("dia-3");
         const el = document.getElementById("dia3-exercises-module");
@@ -1956,7 +1956,7 @@ function initCommandPalette() {
     {
       category: "Navegación",
       icon: "📚",
-      title: "Ir a Banco Maestro de Prompts R-C-I-R-F",
+      title: "Ir a Banco Maestro de Prompts CRTT+L",
       desc: "Colección curada de 8+ prompts profesionales listos para el aula.",
       keywords: ["banco", "prompts", "plantillas", "copiar", "ejemplos", "biblioteca"],
       action: () => window.switchPage && window.switchPage("prompts")
@@ -2679,10 +2679,8 @@ Prohíbe marcas propietarias únicas en licitaciones y exige siempre estándares
     appendUserMessage(text);
     userInput.value = "";
 
-    setTimeout(() => {
-      const reply = generateAssistantResponse(text);
-      appendAssistantMessage(reply);
-    }, 450);
+    // Respuesta determinista e inmediata: sin retardos que simulen procesamiento.
+    appendAssistantMessage(generateAssistantResponse(text));
   }
 
   if (btnSend) btnSend.addEventListener("click", handleSend);
@@ -2761,7 +2759,7 @@ Prohíbe marcas propietarias únicas en licitaciones y exige siempre estándares
   }
 }
 
-// 12. Módulo Interactivo del Día 3: Ejemplos en Vivo, Laboratorio de Seguridad y 6 Ejercicios R-C-I-R-F
+// 12. Módulo Interactivo del Día 3: Ejemplos en Vivo, Laboratorio de Seguridad y 6 Ejercicios CRTT+L
 function initDia3Module() {
   if (typeof DIA3_EXAMPLES === "undefined" || typeof DIA3_EXERCISES === "undefined") return;
 
@@ -3101,3 +3099,82 @@ function initDia3Module() {
 
   renderDia3Exercise();
 }
+
+// ==========================================
+// 13. Módulo de Productividad con IA: estaciones, calculadora, V.E.R.A. y kit de bolsillo
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof PRODUCTIVITY_STATIONS === "undefined") return;
+
+  document.querySelectorAll(".prod-station-slot").forEach(slot => {
+    const station = getStationByDay(slot.dataset.prodDay);
+    if (station) slot.innerHTML = buildStationHtml(station);
+  });
+
+  const form = document.getElementById("prod-savings-form");
+  const output = document.getElementById("prod-savings-output");
+  if (form && output) {
+    const readForm = () => ({
+      minutesBefore: document.getElementById("prod-min-before").value,
+      minutesAfter: document.getElementById("prod-min-after").value,
+      timesPerWeek: document.getElementById("prod-times-week").value
+    });
+    const render = () => { output.innerHTML = buildSavingsResultHtml(computeTimeSavings(readForm())); };
+    form.addEventListener("submit", event => { event.preventDefault(); render(); });
+    // El evento reset ocurre antes de limpiar los campos; se calcula con entradas vacías.
+    form.addEventListener("reset", () => { output.innerHTML = buildSavingsResultHtml(computeTimeSavings({})); });
+    render();
+  }
+
+  const vera = document.getElementById("prod-vera-checklist");
+  const veraStatus = document.getElementById("prod-vera-status");
+  if (vera && veraStatus) {
+    VERA_CHECKLIST.forEach(item => {
+      const label = document.createElement("label");
+      label.className = "prod-vera-item";
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      box.value = item.key;
+      label.append(box, ` ${item.key} · ${item.label}: ${item.question}`);
+      vera.appendChild(label);
+    });
+    const messages = {
+      empty: "Aún no has revisado la respuesta. No la uses todavía.",
+      partial: "Revisión incompleta: termina las verificaciones pendientes.",
+      ready: "Revisión V.E.R.A. completa: puedes usar la respuesta bajo tu responsabilidad."
+    };
+    const update = () => {
+      const marks = {};
+      vera.querySelectorAll("input[type=checkbox]").forEach(b => { marks[b.value] = b.checked; });
+      const r = evaluateVeraChecklist(marks);
+      veraStatus.textContent = messages[r.state];
+      veraStatus.dataset.state = r.state;
+    };
+    vera.addEventListener("change", update);
+    update();
+  }
+
+  const kitFilter = document.getElementById("prod-kit-filter");
+  const kitList = document.getElementById("prod-kit-list");
+  if (kitFilter && kitList) {
+    const renderKit = () => { kitList.innerHTML = buildPocketKitHtml(filterPocketKit(kitFilter.value)); };
+    kitFilter.addEventListener("change", renderKit);
+    renderKit();
+    const printBtn = document.getElementById("btn-prod-kit-print");
+    if (printBtn) {
+      printBtn.addEventListener("click", () => {
+        kitList.querySelectorAll("details").forEach(d => { d.open = true; });
+        document.body.classList.add("printing-kit");
+        window.addEventListener("afterprint", () => document.body.classList.remove("printing-kit"), { once: true });
+        window.print();
+      });
+    }
+  }
+
+  const noAi = document.getElementById("prod-no-ai-body");
+  if (noAi) {
+    noAi.innerHTML = NO_AI_MATRIX.map(row =>
+      `<tr><td>${escapeProdHtml(row.situation)}</td><td>${escapeProdHtml(row.risk)}</td><td>${escapeProdHtml(row.alternative)}</td></tr>`
+    ).join("");
+  }
+});

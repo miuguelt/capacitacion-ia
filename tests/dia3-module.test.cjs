@@ -43,7 +43,7 @@ test("los bloques y ejemplos del Día 3 existen en el orden canónico", () => {
   ]);
 });
 
-test("cada ejercicio del Día 3 sigue la fórmula R-C-I-R-F, incluye datos y vista previa SVG", () => {
+test("cada ejercicio del Día 3 sigue el método CRTT+L, incluye datos y vista previa SVG", () => {
   const all = DIA3_BLOCKS.flatMap(b => DIA3_EXERCISES[b.id]);
   assert.equal(all.length, 6);
   const ids = new Set();

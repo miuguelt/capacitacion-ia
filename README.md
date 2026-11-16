@@ -41,7 +41,7 @@ La aplicación es una SPA moderna, accesible y ligera construida sin dependencia
   * **Simulador de Visión Multimodal:** Conversión en directo de bocetos dibujados a mano (cuaderno o tablero) en aplicaciones web funcionales con validación reactiva o flujogramas.
   * **Barra de Calibración Reactiva de Canvas:** Control de longitud de 5 niveles, ajuste de tono (formal, directo, académico, persuasivo) y calibración de audiencia (técnica vs ejecutiva).
 * **Visualizadores de Resultados Esperados en Todos los Días:** Tarjetas interactivas con comparativas lado a lado entre el "Estándar de Oro" profesional y el "Antipatrón Deficiente", permitiendo que el aprendiz evalúe de inmediato la calidad de sus resultados.
-* **Constructor Interactivo de Prompts R-C-I-R-F:** Herramienta en vivo donde el usuario redacta Rol, Contexto, Instrucción, Restricciones y Formato para generar un prompt profesional listo para copiar.
+* **Constructor Interactivo de Prompts CRTT+L:** Herramienta en vivo donde el usuario redacta Contexto, Rol, Tarea, Tono y Límites para generar un prompt profesional listo para copiar.
 * **Banco de Materiales Completo:** Todos los scripts de prueba (`.py` y `.ps1`), datasets (`.json`), plantillas web, guías de gobernanza y rúbricas de evaluación organizados en la carpeta `materiales/`.
 
 ---

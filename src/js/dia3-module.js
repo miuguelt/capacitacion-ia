@@ -1,7 +1,7 @@
 // Módulo interactivo del Día 3: IA Agéntica, Construcción Web en 3 Archivos,
 // Propiedad Intelectual, Licencias y Seguridad de APIs.
 // Incluye funciones deterministas de clasificación, KPIs, auditoría estática de código,
-// cálculo de presupuesto de tokens, 4 ejemplos con vista previa en vivo y 6 ejercicios R-C-I-R-F.
+// cálculo de presupuesto de tokens, 4 ejemplos con vista previa en vivo y 6 ejercicios CRTT+L.
 
 let dia3Kit = globalThis;
 if (typeof module !== "undefined" && module.exports) {
@@ -1004,7 +1004,7 @@ function buildDia3ExampleHtml(exampleId, activeTab) {
     bodyHtml = `
       <div class="dia3-prompt-pane">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-          <span style="font-size:0.82rem; font-weight:700; color:var(--color-primary);">Prompt R-C-I-R-F que construye este ejemplo</span>
+          <span style="font-size:0.82rem; font-weight:700; color:var(--color-primary);">Prompt CRTT+L que construye este ejemplo</span>
           <button type="button" class="canvas-exercise-copy is-primary" data-dia3-copy-prompt="${e(ex.id)}">📋 Copiar prompt</button>
         </div>
         <pre class="canvas-exercise-code" style="white-space:pre-wrap;"><code>${e(ex.prompt)}</code></pre>

@@ -1,6 +1,6 @@
 # Banco Canónico de Prompts y Resultados Esperados — Día 1: Productividad y Documentos
 
-Este documento contiene las plantillas canónicas de ingeniería de instrucciones basadas en el **Método Canónico CRTT+L** (Contexto, Rol, Tarea, Tono y Límites — adaptado con la estructura mnemotécnica R-C-I-R-F):
+Este documento contiene las plantillas canónicas de ingeniería de instrucciones basadas en el **Método Canónico CRTT+L** (Contexto, Rol, Tarea, Tono y Límites — adaptado con la estructura mnemotécnica CRTT+L):
 * **Contexto (C):** Establece el escenario, los antecedentes, el público y la fuente documental cerrada.
 * **Rol (R):** Define la identidad técnica o institucional y el marco de especialidad del modelo.
 * **Tarea (T / Instrucción):** Declara la acción operativa principal con verbos directos y fases observables.
@@ -13,7 +13,7 @@ Para cada caso se incluye el **Prompt Profesional**, el **Resultado Esperado Obs
 
 ## 1. Posibilidad 1: Extracción de Actas, Tareas y Compromisos de Reunión
 
-### A. Prompt Profesional Canónico (CRTT+L / R-C-I-R-F)
+### A. Prompt Profesional Canónico (CRTT+L)
 ```markdown
 Actúa como secretario técnico y relator de comités académicos.
 

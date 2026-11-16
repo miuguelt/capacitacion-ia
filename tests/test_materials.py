@@ -31,7 +31,9 @@ def test_dia1_files_exist():
     
     assert caso.exists() and caso.stat().st_size > 50, "El caso de estudio debe tener contenido"
     assert prompts.exists() and prompts.stat().st_size > 100, "El banco de prompts debe tener contenido"
-    assert "R-C-I-R-F" in prompts.read_text(encoding="utf-8"), "El banco de prompts debe mencionar la fórmula R-C-I-R-F"
+    texto = prompts.read_text(encoding="utf-8")
+    assert "CRTT+L" in texto, "El banco de prompts debe enseñar el método CRTT+L"
+    assert "R-C-I-R-F" not in texto, "El banco de prompts no debe enseñar marcos no canónicos"
 
 def test_dia2_files_exist():
     d2 = MATERIALES_DIR / "dia2_multimedia"

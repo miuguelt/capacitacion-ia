@@ -83,5 +83,26 @@
       "hours": 10,
       "deliverableId": "evidencia-dia-4"
     }
-  ]
+  ],
+  "productivity": {
+    "module": "js/productivity-module.js",
+    "promptMethod": "CRTT+L",
+    "reviewProtocol": "V.E.R.A.",
+    "stations": [
+      "prod-dia-1-correo-actas",
+      "prod-dia-2-presentacion-express",
+      "prod-dia-3-hojas-calculo",
+      "prod-dia-4-sistema-personal"
+    ],
+    "tools": [
+      "Calculadora de tiempo ahorrado",
+      "Lista V.E.R.A. interactiva",
+      "Kit de bolsillo de 15 prompts CRTT+L",
+      "Matriz ¿Cuándo no usar IA?"
+    ],
+    "materials": [
+      "materiales/dia1_prompting/bandeja_correos_practica.md",
+      "materiales/dia4_agentes_integrador/biblioteca_personal_prompts.md"
+    ]
+  }
 }
