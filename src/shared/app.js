@@ -504,11 +504,16 @@ function initCanvasLab() {
       ? `🔁 Repasar Parte A de este modo →`
       : `🧪 Practicar ahora: Parte ${nextLetter} (${escapeCanvasHtml(nextEx.code)}) →`;
 
+    const labInfo = typeof getSpecializedLabForMode === "function" ? getSpecializedLabForMode(id) : null;
+    const labBtnHtml = labInfo
+      ? `<button type="button" class="canvas-bridge-part-btn" data-bridge-lab="${escapeCanvasHtml(labInfo.targetId)}">${escapeCanvasHtml(labInfo.label)} →</button>`
+      : "";
+
     simBridgeEl.innerHTML = `
       <div class="canvas-sim-bridge-info">
         <span class="canvas-sim-bridge-tag">Paso siguiente · Del ejemplo a tu práctica</span>
         <p class="canvas-sim-bridge-text">Ya viste cómo funciona <strong>${escapeCanvasHtml(data.name)}</strong> en el simulador. Completa los ejercicios de este modo (${stats.done} de ${stats.total} hechos):</p>
-        <div class="canvas-sim-bridge-parts">${partBtns}</div>
+        <div class="canvas-sim-bridge-parts">${partBtns}${labBtnHtml}</div>
       </div>
       <div class="canvas-sim-bridge-cta">
         <button type="button" class="canvas-mode-pager-btn is-primary" data-bridge-mode="${escapeCanvasHtml(id)}" data-bridge-index="${stats.nextIndex}">${ctaLabel}</button>
@@ -521,6 +526,16 @@ function initCanvasLab() {
         const targetIdx = Number(btn.getAttribute("data-bridge-index"));
         if (modeTransitionBannerEl) modeTransitionBannerEl.hidden = true;
         openCanvasRoute(targetMode, targetIdx);
+      });
+    });
+
+    simBridgeEl.querySelectorAll("[data-bridge-lab]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const labTargetId = btn.getAttribute("data-bridge-lab");
+        applyImmersiveFocus(currentImmersiveFocus, "labs");
+        setActiveGuidedStation("labs");
+        const labEl = document.getElementById(labTargetId);
+        if (labEl) requestAnimationFrame(() => labEl.scrollIntoView({ behavior: "smooth", block: "start" }));
       });
     });
   }
@@ -599,6 +614,7 @@ function initCanvasLab() {
       updateCanvasTabBadges();
     }
     if (exerciseDoneEl) exerciseDoneEl.hidden = !complete || !exerciseNextStep();
+    if (typeof updateLearnerGuideHud === "function") updateLearnerGuideHud();
   }
 
   // Preferencias por navegador: modo visitado y ejercicios completados. Sin almacenamiento, todo sigue funcionando.
@@ -677,6 +693,8 @@ function initCanvasLab() {
         if (targetMode && CANVAS_POSSIBILITIES[targetMode]) {
           selectMode(targetMode);
         }
+        applyImmersiveFocus(currentImmersiveFocus, "simulator");
+        setActiveGuidedStation("simulator");
         const simEl = document.getElementById("canvas-simulator-module");
         if (simEl) requestAnimationFrame(() => simEl.scrollIntoView({ behavior: "smooth", block: "start" }));
       });
@@ -693,6 +711,7 @@ function initCanvasLab() {
         stepperItems[2].classList.toggle("is-current", doneSteps > 0 && !allStepsDone);
         stepperItems[3].classList.toggle("is-current", allStepsDone);
       }
+      if (typeof updateLearnerGuideHud === "function") updateLearnerGuideHud();
     };
     stepChecks.forEach(sc => {
       sc.addEventListener("change", () => {
@@ -854,32 +873,220 @@ function initCanvasLab() {
       if (openModalEl) {
         closeModal(openModalEl);
       } else {
+        const canvasSec = document.getElementById("gemini-canvas");
         const simMod = document.getElementById("canvas-simulator-module");
-        if (simMod && simMod.classList.contains("is-fullscreen")) {
-          toggleFullscreen();
+        if ((canvasSec && canvasSec.classList.contains("is-immersive")) || (simMod && simMod.classList.contains("is-fullscreen"))) {
+          toggleFullscreen({ forceState: false });
         }
       }
     }
   });
 
-  // --- Modo Inmersivo / Pantalla Completa ---
+  // --- Modo Inmersivo Unificado (Simulador + Ejercicios Prácticos + Laboratorios) y Ruta Guiada ---
+  const canvasPageSection = document.getElementById("gemini-canvas");
   const btnFullscreen = document.getElementById("btn-toggle-canvas-fullscreen");
+  const btnExercisesFullscreen = document.getElementById("btn-toggle-exercises-fullscreen");
+  const btnHudImmersive = document.getElementById("btn-hud-toggle-immersive");
+  const btnMmFullscreen = document.getElementById("btn-toggle-mm-fullscreen");
+  const btnGemFullscreen = document.getElementById("btn-toggle-gem-fullscreen");
   const simModule = document.getElementById("canvas-simulator-module");
+  const exModule = document.getElementById("canvas-exercises-module");
+  const focusBtns = document.querySelectorAll("[data-immersive-focus]");
+  const stationBtns = document.querySelectorAll("[data-guide-target]");
+  let currentImmersiveFocus = "all";
 
-  function toggleFullscreen() {
-    if (!simModule) return;
-    const isFull = simModule.classList.toggle("is-fullscreen");
-    if (btnFullscreen) {
-      btnFullscreen.innerHTML = isFull ? "✕ Salir de Modo Inmersivo" : "⛶ Modo Inmersivo";
-      btnFullscreen.style.background = isFull ? "var(--color-primary)" : "";
-      btnFullscreen.style.color = isFull ? "#ffffff" : "";
+  function syncImmersiveButtons(isFull) {
+    [btnFullscreen, btnExercisesFullscreen, btnHudImmersive, btnMmFullscreen, btnGemFullscreen].forEach(btn => {
+      if (!btn) return;
+      btn.innerHTML = isFull ? "✕ Salir de Modo Inmersivo" : "⛶ Modo Inmersivo";
+      btn.style.background = isFull ? "var(--color-primary)" : "";
+      btn.style.color = isFull ? "#ffffff" : "";
+    });
+  }
+
+  function setActiveGuidedStation(sectionName) {
+    stationBtns.forEach(btn => {
+      const active = btn.getAttribute("data-guide-target") === sectionName;
+      btn.classList.toggle("is-active", active);
+    });
+  }
+
+  function applyImmersiveFocus(requestedFocus, targetSection) {
+    const resolved = typeof resolveImmersiveFocus === "function"
+      ? resolveImmersiveFocus(requestedFocus, targetSection)
+      : (requestedFocus || "all");
+    currentImmersiveFocus = resolved;
+    if (canvasPageSection) {
+      canvasPageSection.setAttribute("data-immersive-focus", resolved);
     }
+    focusBtns.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-immersive-focus") === resolved);
+    });
+  }
+
+  function toggleFullscreen(options) {
+    const opts = options && typeof options === "object" && !("target" in options) ? options : {};
+    if (!simModule) return;
+    const currentlyFull = simModule.classList.contains("is-fullscreen") ||
+      Boolean(canvasPageSection && canvasPageSection.classList.contains("is-immersive"));
+    const isFull = typeof opts.forceState === "boolean" ? opts.forceState : !currentlyFull;
+
+    simModule.classList.toggle("is-fullscreen", isFull);
+    if (exModule) exModule.classList.toggle("is-fullscreen", isFull);
+    if (canvasPageSection) canvasPageSection.classList.toggle("is-immersive", isFull);
+    syncImmersiveButtons(isFull);
     document.body.style.overflow = isFull ? "hidden" : "";
-    showCanvasToast(isFull ? "⛶ Modo inmersivo activado: vista de lienzo completa." : "Restaurada vista normal del simulador.");
+
+    if (opts.focusMode || opts.targetSection) {
+      applyImmersiveFocus(opts.focusMode || currentImmersiveFocus, opts.targetSection);
+    }
+    if (opts.targetSection) {
+      setActiveGuidedStation(opts.targetSection);
+    }
+    if (opts.scrollTargetId) {
+      const scrollEl = document.getElementById(opts.scrollTargetId);
+      if (scrollEl) requestAnimationFrame(() => scrollEl.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+    showCanvasToast(isFull
+      ? "⛶ Modo inmersivo activo: simuladores y ejercicios prácticos integrados."
+      : "Restaurada vista normal de la guía.");
   }
 
   if (btnFullscreen) {
-    btnFullscreen.addEventListener("click", toggleFullscreen);
+    btnFullscreen.addEventListener("click", () => toggleFullscreen({ targetSection: "simulator", scrollTargetId: "canvas-simulator-module" }));
+  }
+  if (btnExercisesFullscreen) {
+    btnExercisesFullscreen.addEventListener("click", () => toggleFullscreen({ targetSection: "exercises", scrollTargetId: "canvas-exercises-module" }));
+  }
+  if (btnHudImmersive) {
+    btnHudImmersive.addEventListener("click", () => toggleFullscreen());
+  }
+  if (btnMmFullscreen) {
+    btnMmFullscreen.addEventListener("click", () => {
+      if (currentExerciseMode !== "multimodal-vision") selectMode("multimodal-vision");
+      toggleFullscreen({ forceState: true, targetSection: "labs", scrollTargetId: "multimodal-simulator-module" });
+    });
+  }
+  if (btnGemFullscreen) {
+    btnGemFullscreen.addEventListener("click", () => {
+      if (currentExerciseMode !== "gem-studio") selectMode("gem-studio");
+      toggleFullscreen({ forceState: true, targetSection: "labs", scrollTargetId: "gem-studio-module" });
+    });
+  }
+
+  focusBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const focusVal = btn.getAttribute("data-immersive-focus");
+      applyImmersiveFocus(focusVal);
+      if (focusVal === "simulator") setActiveGuidedStation("simulator");
+      if (focusVal === "exercises") setActiveGuidedStation("exercises");
+    });
+  });
+
+  stationBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetSec = btn.getAttribute("data-guide-target");
+      applyImmersiveFocus(currentImmersiveFocus, targetSec);
+      setActiveGuidedStation(targetSec);
+      if (targetSec === "simulator" && simModule) {
+        requestAnimationFrame(() => simModule.scrollIntoView({ behavior: "smooth", block: "start" }));
+      } else if (targetSec === "exercises" && exModule) {
+        requestAnimationFrame(() => exModule.scrollIntoView({ behavior: "smooth", block: "start" }));
+      } else if (targetSec === "labs") {
+        const labInfo = typeof getSpecializedLabForMode === "function" ? getSpecializedLabForMode(currentExerciseMode) : null;
+        const labEl = document.getElementById(labInfo ? labInfo.targetId : "canvas-advanced-labs-anchor");
+        if (labEl) requestAnimationFrame(() => labEl.scrollIntoView({ behavior: "smooth", block: "start" }));
+      }
+    });
+  });
+
+  // --- Brújula del Aprendiz y Barra de Ruta Guiada (HUD) ---
+  const hudModeBadgeEl = document.getElementById("immersive-hud-mode-badge");
+  const hudTitleEl = document.getElementById("immersive-hud-title");
+  const hudProgressEl = document.getElementById("immersive-hud-progress");
+  const stationExBadgeEl = document.getElementById("guide-station-ex-badge");
+  const stationLabBtnEl = document.getElementById("btn-guide-station-lab");
+  const compassPhaseEl = document.getElementById("canvas-compass-phase");
+  const compassTextEl = document.getElementById("canvas-compass-text");
+  const compassCtaEl = document.getElementById("canvas-compass-cta");
+
+  function updateLearnerGuideHud() {
+    if (typeof computeLearnerGuideState !== "function" || typeof CANVAS_EXERCISES === "undefined") return;
+    const modeKeys = Object.keys(CANVAS_POSSIBILITIES);
+    const modeIndex = Math.max(0, modeKeys.indexOf(currentExerciseMode));
+    const list = CANVAS_EXERCISES[currentExerciseMode] || [];
+    const ex = list[currentExerciseIndex] || list[0];
+    if (!ex) return;
+
+    const card = exercisesContentEl ? exercisesContentEl.querySelector(".canvas-exercise-card") : null;
+    const stepChecks = card ? Array.from(card.querySelectorAll(".canvas-step-done")) : [];
+    const critChecks = card ? Array.from(card.querySelectorAll(".canvas-exercise-check")) : [];
+    const stepsDone = stepChecks.filter(c => c.checked).length;
+    const checksDone = critChecks.filter(c => c.checked).length;
+
+    const guideState = computeLearnerGuideState({
+      mode: currentExerciseMode,
+      modeIndex,
+      totalModes: modeKeys.length,
+      modeName: CANVAS_POSSIBILITIES[currentExerciseMode].name,
+      exerciseIndex: currentExerciseIndex,
+      totalExercisesInMode: list.length,
+      exerciseCode: ex.code,
+      exerciseTitle: ex.title,
+      stepsDone,
+      stepsTotal: stepChecks.length || (ex.steps ? ex.steps.length : 0),
+      checksDone,
+      checksTotal: critChecks.length || (ex.criteria ? ex.criteria.length : 0)
+    });
+
+    const completedCount = readCanvasCompleted().length;
+    const totalCount = exerciseSequence.length;
+    if (hudModeBadgeEl) hudModeBadgeEl.textContent = guideState.modeBadge;
+    if (hudTitleEl) hudTitleEl.textContent = `${CANVAS_POSSIBILITIES[currentExerciseMode].name} · Parte ${guideState.letter} (${ex.code})`;
+    if (hudProgressEl) hudProgressEl.textContent = `${completedCount}/${totalCount} completados`;
+    if (stationExBadgeEl) stationExBadgeEl.textContent = `Parte ${guideState.letter} (${ex.code})`;
+
+    if (stationLabBtnEl) {
+      if (guideState.specializedLab) {
+        stationLabBtnEl.hidden = false;
+        stationLabBtnEl.textContent = guideState.specializedLab.label;
+      } else {
+        stationLabBtnEl.hidden = true;
+      }
+    }
+
+    if (compassPhaseEl) compassPhaseEl.textContent = `Fase ${guideState.phaseIndex} de ${guideState.totalPhases}`;
+    if (compassTextEl) compassTextEl.textContent = guideState.headline;
+    if (compassCtaEl) {
+      compassCtaEl.textContent = guideState.ctaLabel;
+      compassCtaEl.dataset.compassAction = guideState.ctaTarget;
+    }
+  }
+
+  if (compassCtaEl) {
+    compassCtaEl.addEventListener("click", () => {
+      const action = compassCtaEl.dataset.compassAction;
+      const list = CANVAS_EXERCISES[currentExerciseMode] || [];
+      const ex = list[currentExerciseIndex] || list[0];
+      if (action === "copy-and-practice" && ex) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(canvasCopyText(ex, "prompt")).then(() => {
+            showCanvasToast(`📋 Prompt de ${ex.code} copiado. Sigue los pasos en el ejercicio.`);
+          });
+        }
+        applyImmersiveFocus(currentImmersiveFocus, "exercises");
+        setActiveGuidedStation("exercises");
+        if (exModule) requestAnimationFrame(() => exModule.scrollIntoView({ behavior: "smooth", block: "start" }));
+      } else if (action === "focus-steps" || action === "focus-checklist") {
+        applyImmersiveFocus(currentImmersiveFocus, "exercises");
+        setActiveGuidedStation("exercises");
+        const selector = action === "focus-checklist" ? ".canvas-exercise-checklist" : ".canvas-exercise-steps";
+        const target = (exercisesContentEl && exercisesContentEl.querySelector(selector)) || exModule;
+        if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "smooth", block: "start" }));
+      } else if (action === "next-exercise") {
+        goToStep(exerciseNextStep());
+      }
+    });
   }
 
   // --- Lightbox de Alta Resolución ---
@@ -1178,6 +1385,10 @@ function initCanvasLab() {
       currentExerciseIndex = exercise;
       renderCanvasExercises(mode);
     }
+    const targetSection = hasExercise ? "exercises" : "simulator";
+    applyImmersiveFocus(currentImmersiveFocus, targetSection);
+    setActiveGuidedStation(targetSection);
+    updateLearnerGuideHud();
     const target = document.getElementById(hasExercise ? "canvas-exercises-module" : "canvas-simulator-module");
     if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "smooth", block: "start" }));
     const route = buildCanvasRoute(mode, hasExercise ? exercise : undefined);
@@ -2009,6 +2220,31 @@ function initMultimodalSimulator() {
   btnCaseFlow.addEventListener("click", () => loadCase("flow"));
 
   loadCase("form");
+
+  const mmBridgeEl = document.getElementById("mm-sim-bridge");
+  if (mmBridgeEl && typeof CANVAS_EXERCISES !== "undefined" && CANVAS_EXERCISES["multimodal-vision"]) {
+    const mmList = CANVAS_EXERCISES["multimodal-vision"];
+    mmBridgeEl.innerHTML = `
+      <div class="canvas-sim-bridge-info">
+        <span class="canvas-sim-bridge-tag">Puente del Laboratorio · Modo 11: Visión Multimodal</span>
+        <p class="canvas-sim-bridge-text">Aplica lo que experimentaste con los bocetos manuscritos y pizarras en los 3 ejercicios prácticos de Visión Multimodal:</p>
+        <div class="canvas-sim-bridge-parts">
+          ${mmList.map((ex, i) => `<button type="button" class="canvas-bridge-part-btn" data-mm-go-exercise="${i}">🧪 Parte ${"ABC"[i] || "A"} (${ex.code}): ${ex.title}</button>`).join("")}
+        </div>
+      </div>
+      <div class="canvas-sim-bridge-cta">
+        <button type="button" class="canvas-mode-pager-btn is-primary" data-mm-go-exercise="0">🧪 Ir a Ejercicio 11A →</button>
+      </div>
+    `;
+    mmBridgeEl.querySelectorAll("[data-mm-go-exercise]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.getAttribute("data-mm-go-exercise")) || 0;
+        if (typeof window.openCanvasRoute === "function") {
+          window.openCanvasRoute("multimodal-vision", idx);
+        }
+      });
+    });
+  }
 }
 
 window.validateInstitutionalEmail = function(val) {
@@ -2199,6 +2435,31 @@ Prohíbe marcas propietarias únicas en licitaciones y exige siempre estándares
   }
 
   applyPreset("socratic");
+
+  const gemBridgeEl = document.getElementById("gem-sim-bridge");
+  if (gemBridgeEl && typeof CANVAS_EXERCISES !== "undefined" && CANVAS_EXERCISES["gem-studio"]) {
+    const gemList = CANVAS_EXERCISES["gem-studio"];
+    gemBridgeEl.innerHTML = `
+      <div class="canvas-sim-bridge-info">
+        <span class="canvas-sim-bridge-tag">Puente del Laboratorio · Modo 12: Gems para Canvas</span>
+        <p class="canvas-sim-bridge-text">Ahora que probaste las plantillas oficiales y los límites del System Prompt, completa los ejercicios prácticos de diseño y calibración de Gems:</p>
+        <div class="canvas-sim-bridge-parts">
+          ${gemList.map((ex, i) => `<button type="button" class="canvas-bridge-part-btn" data-gem-go-exercise="${i}">🧪 Parte ${"ABC"[i] || "A"} (${ex.code}): ${ex.title}</button>`).join("")}
+        </div>
+      </div>
+      <div class="canvas-sim-bridge-cta">
+        <button type="button" class="canvas-mode-pager-btn is-primary" data-gem-go-exercise="0">🧪 Ir a Ejercicio 12A →</button>
+      </div>
+    `;
+    gemBridgeEl.querySelectorAll("[data-gem-go-exercise]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.getAttribute("data-gem-go-exercise")) || 0;
+        if (typeof window.openCanvasRoute === "function") {
+          window.openCanvasRoute("gem-studio", idx);
+        }
+      });
+    });
+  }
 }
 
 // 12. Módulo Interactivo del Día 3: Ejemplos en Vivo, Laboratorio de Seguridad y 6 Ejercicios R-C-I-R-F
@@ -2278,7 +2539,65 @@ function initDia3Module() {
       btn.setAttribute("aria-selected", String(active));
     });
     wireExampleInnerControls();
+    renderDia3Bridge();
   }
+
+  const dia3BridgeMap = {
+    "diagnostico-pc": { block: "agentes-archivos", index: 0, label: "Bloque 1 · Ejercicio A (Inventario de Hardware)" },
+    "clasificador-200": { block: "agentes-archivos", index: 1, label: "Bloque 1 · Ejercicio B (Clasificador con Dry-Run)" },
+    "panel-3-archivos": { block: "web-tres-archivos", index: 0, label: "Bloque 2 · Ejercicio A (Tablero Web en 3 Archivos)" },
+    "pasarela-bff-segura": { block: "propiedad-apis", index: 0, label: "Bloque 3 · Ejercicio A (Auditoría y Pasarela BFF)" }
+  };
+
+  function renderDia3Bridge() {
+    const bridgeEl = document.getElementById("dia3-sim-bridge");
+    if (!bridgeEl) return;
+    const mapping = dia3BridgeMap[currentExampleId] || dia3BridgeMap["diagnostico-pc"];
+    const exData = DIA3_EXAMPLES[currentExampleId];
+    bridgeEl.innerHTML = `
+      <div class="canvas-sim-bridge-info">
+        <span class="canvas-sim-bridge-tag">Paso siguiente en el Día 3 · Del ejemplo resuelto a tu ejercicio</span>
+        <p class="canvas-sim-bridge-text">Ya exploraste <strong>${exData ? exData.title : currentExampleId}</strong>. Pasa directamente al ejercicio práctico correspondiente para construir y verificar tu entregable:</p>
+      </div>
+      <div class="canvas-sim-bridge-cta">
+        <button type="button" class="canvas-mode-pager-btn is-primary" id="btn-dia3-bridge-go">🧪 Practicar ${mapping.label} →</button>
+      </div>
+    `;
+    const goBtn = document.getElementById("btn-dia3-bridge-go");
+    if (goBtn) {
+      goBtn.addEventListener("click", () => {
+        currentBlock = mapping.block;
+        currentExIndex = mapping.index;
+        renderDia3Exercise();
+        const exMod = document.getElementById("dia3-exercises-module");
+        if (exMod) requestAnimationFrame(() => exMod.scrollIntoView({ behavior: "smooth", block: "start" }));
+      });
+    }
+  }
+
+  // Modo inmersivo del Día 3 (Ejemplos + Laboratorio + Ejercicios)
+  const dia3Section = document.getElementById("dia-3");
+  const btnDia3Full = document.getElementById("btn-toggle-dia3-fullscreen");
+  const btnDia3ExFull = document.getElementById("btn-toggle-dia3-ex-fullscreen");
+
+  function toggleDia3Immersive(scrollTargetId) {
+    if (!dia3Section) return;
+    const isFull = dia3Section.classList.toggle("is-immersive");
+    [btnDia3Full, btnDia3ExFull].forEach(btn => {
+      if (!btn) return;
+      btn.innerHTML = isFull ? "✕ Salir de Modo Inmersivo" : "⛶ Modo Inmersivo";
+      btn.style.background = isFull ? "var(--color-primary)" : "";
+      btn.style.color = isFull ? "#ffffff" : "";
+    });
+    document.body.style.overflow = isFull ? "hidden" : "";
+    if (scrollTargetId) {
+      const targetEl = document.getElementById(scrollTargetId);
+      if (targetEl) requestAnimationFrame(() => targetEl.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+  }
+
+  if (btnDia3Full) btnDia3Full.addEventListener("click", () => toggleDia3Immersive("dia3-examples-module"));
+  if (btnDia3ExFull) btnDia3ExFull.addEventListener("click", () => toggleDia3Immersive("dia3-exercises-module"));
 
   exampleSelectBtns.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -2395,9 +2714,40 @@ function initDia3Module() {
       btn.setAttribute("aria-selected", String(active));
     });
 
-    exContainer.innerHTML = buildCanvasExerciseHtml(exercise, currentExIndex);
+    exContainer.innerHTML = buildCanvasExerciseHtml(exercise, currentExIndex, currentBlock);
     const card = exContainer.querySelector(".canvas-exercise-card");
     if (!card) return;
+    const goSimBtn = card.querySelector("[data-go-simulator]");
+    if (goSimBtn) {
+      goSimBtn.addEventListener("click", () => {
+        const blockToExample = {
+          "agentes-archivos": currentExIndex === 1 ? "clasificador-200" : "diagnostico-pc",
+          "web-tres-archivos": "panel-3-archivos",
+          "propiedad-apis": "pasarela-bff-segura"
+        };
+        currentExampleId = blockToExample[currentBlock] || "diagnostico-pc";
+        renderExample();
+        const exMod = document.getElementById("dia3-examples-module");
+        if (exMod) requestAnimationFrame(() => exMod.scrollIntoView({ behavior: "smooth", block: "start" }));
+      });
+    }
+    const stepperItems = card.querySelectorAll(".canvas-exercise-stepper .stepper-item");
+    const stepChecks = card.querySelectorAll(".canvas-step-done");
+    stepChecks.forEach(sc => {
+      sc.addEventListener("change", () => {
+        const li = sc.closest(".canvas-exercise-step");
+        if (li) li.classList.toggle("is-step-done", sc.checked);
+        const doneSteps = Array.from(stepChecks).filter(c => c.checked).length;
+        const allStepsDone = stepChecks.length > 0 && doneSteps === stepChecks.length;
+        if (stepperItems.length >= 4) {
+          stepperItems[1].classList.toggle("is-done", doneSteps > 0);
+          stepperItems[1].classList.toggle("is-current", doneSteps === 0);
+          stepperItems[2].classList.toggle("is-done", allStepsDone);
+          stepperItems[2].classList.toggle("is-current", doneSteps > 0 && !allStepsDone);
+          stepperItems[3].classList.toggle("is-current", allStepsDone);
+        }
+      });
+    });
     card.querySelectorAll("[data-copy]").forEach(btn => {
       btn.addEventListener("click", () => {
         if (navigator.clipboard) {

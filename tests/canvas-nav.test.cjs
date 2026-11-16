@@ -90,7 +90,15 @@ test("serializeChecks y parseChecks conservan casillas marcadas a medias", () =>
   assert.deepEqual(parseChecks(null, 2), [false, false]);
 });
 
-const { modeExerciseProgress, isModeTransition } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
+const {
+  modeExerciseProgress,
+  isModeTransition,
+  SPECIALIZED_MODE_LABS,
+  getSpecializedLabForMode,
+  IMMERSIVE_FOCUS_MODES,
+  resolveImmersiveFocus,
+  computeLearnerGuideState
+} = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
 
 test("modeExerciseProgress calcula completados, total y siguiente pendiente por modo", () => {
   assert.deepEqual(modeExerciseProgress("doc-editorial", BANK, []), {
@@ -121,4 +129,174 @@ test("canvas-nav maneja entradas nulas o modos ausentes en el banco", () => {
   assert.deepEqual(modeExerciseProgress("doc-editorial", BANK, null), {
     done: 0, total: 2, nextIndex: 0, allDone: false
   });
+});
+
+test("getSpecializedLabForMode devuelve laboratorio especializado para modos 11 y 12 o null", () => {
+  assert.ok(SPECIALIZED_MODE_LABS["multimodal-vision"]);
+  assert.ok(SPECIALIZED_MODE_LABS["gem-studio"]);
+  const mmLab = getSpecializedLabForMode("multimodal-vision");
+  assert.equal(mmLab.labId, "multimodal-simulator-module");
+  assert.equal(mmLab.cases.length, 2);
+  const gemLab = getSpecializedLabForMode("gem-studio");
+  assert.equal(gemLab.labId, "gem-studio-module");
+  assert.equal(gemLab.cases.length, 2);
+  assert.equal(getSpecializedLabForMode("doc-editorial"), null);
+  assert.equal(getSpecializedLabForMode(null), null);
+  assert.equal(getSpecializedLabForMode(""), null);
+});
+
+test("resolveImmersiveFocus conmuta automáticamente la vista cuando el aprendiz salta entre simulador, ejercicios y laboratorios", () => {
+  assert.deepEqual(IMMERSIVE_FOCUS_MODES, ["all", "split", "simulator", "exercises"]);
+  assert.equal(resolveImmersiveFocus("all", "exercises"), "all");
+  assert.equal(resolveImmersiveFocus("split", "exercises"), "split");
+  assert.equal(resolveImmersiveFocus("simulator", "exercises"), "exercises");
+  assert.equal(resolveImmersiveFocus("exercises", "simulator"), "simulator");
+  assert.equal(resolveImmersiveFocus("simulator", "labs"), "all");
+  assert.equal(resolveImmersiveFocus("exercises", "labs"), "all");
+  assert.equal(resolveImmersiveFocus("split", "labs"), "all");
+  assert.equal(resolveImmersiveFocus("invalido", null), "all");
+  assert.equal(resolveImmersiveFocus("simulator", null), "simulator");
+  assert.equal(resolveImmersiveFocus("exercises", "otro"), "exercises");
+});
+
+test("computeLearnerGuideState orienta las 4 fases del aprendizaje (explorar, iterar, verificar y avanzar)", () => {
+  // Caso 0: sin parámetros o sin ejercicio
+  const emptyState = computeLearnerGuideState(null);
+  assert.equal(emptyState.phase, "1-explore");
+  assert.equal(emptyState.phaseNumber, 1);
+  assert.equal(emptyState.ctaAction, "go-exercises");
+  assert.equal(emptyState.labInfo, null);
+
+  // Fase 1: Inicio de ejercicio (0 pasos y 0 criterios marcados)
+  const phase1 = computeLearnerGuideState({
+    mode: "doc-editorial",
+    modeName: "1. Redacción & Documentos",
+    exerciseIndex: 0,
+    exercise: { code: "1A", title: "Informe ejecutivo" },
+    stepsDone: 0,
+    stepsTotal: 4,
+    checksDone: 0,
+    checksTotal: 5,
+    modeStats: { done: 0, total: 3 },
+    nextStep: { mode: "doc-editorial", exercise: 1, id: "d-b" }
+  });
+  assert.equal(phase1.phase, "1-explore");
+  assert.equal(phase1.phaseNumber, 1);
+  assert.equal(phase1.totalPhases, 4);
+  assert.match(phase1.headline, /1A/);
+  assert.equal(phase1.ctaAction, "copy-prompt");
+
+  // Fase 2: Iterando pasos en Canvas (algunos pasos hechos, pero no todos)
+  const phase2 = computeLearnerGuideState({
+    mode: "multimodal-vision",
+    modeName: "11. Visión Multimodal",
+    exerciseIndex: 0,
+    exercise: { code: "11A", title: "Boceto de formulario" },
+    stepsDone: 2,
+    stepsTotal: 4,
+    checksDone: 1,
+    checksTotal: 4,
+    modeStats: { done: 0, total: 3 },
+    nextStep: { mode: "multimodal-vision", exercise: 1, id: "mm-b" }
+  });
+  assert.equal(phase2.phase, "2-iterate");
+  assert.equal(phase2.phaseNumber, 2);
+  assert.match(phase2.headline, /Paso 3 de 4/);
+  assert.equal(phase2.ctaAction, "focus-steps");
+  assert.ok(phase2.labInfo);
+  assert.equal(phase2.labInfo.labId, "multimodal-simulator-module");
+
+  // Fase 3: Todos los pasos completados, faltan criterios de verificación
+  const phase3 = computeLearnerGuideState({
+    mode: "code-prototyping",
+    modeName: "2. Código & Web en Vivo",
+    exerciseIndex: 1,
+    exercise: { code: "2B", title: "Tablero web" },
+    stepsDone: 4,
+    stepsTotal: 4,
+    checksDone: 2,
+    checksTotal: 4,
+    modeStats: { done: 1, total: 3 },
+    nextStep: { mode: "code-prototyping", exercise: 2, id: "c-c" }
+  });
+  assert.equal(phase3.phase, "3-verify");
+  assert.equal(phase3.phaseNumber, 3);
+  assert.match(phase3.headline, /2\/4/);
+  assert.equal(phase3.ctaAction, "focus-checks");
+
+  // Fase 4a: Ejercicio completado, siguiente ejercicio es del mismo modo
+  const phase4SameMode = computeLearnerGuideState({
+    mode: "doc-editorial",
+    modeName: "1. Redacción & Documentos",
+    exerciseIndex: 0,
+    exercise: { code: "1A", title: "Informe ejecutivo" },
+    stepsDone: 4,
+    stepsTotal: 4,
+    checksDone: 4,
+    checksTotal: 4,
+    modeStats: { done: 1, total: 3 },
+    nextStep: { mode: "doc-editorial", exercise: 1, id: "d-b" }
+  });
+  assert.equal(phase4SameMode.phase, "4-advance");
+  assert.equal(phase4SameMode.phaseNumber, 4);
+  assert.equal(phase4SameMode.ctaAction, "next-exercise");
+  assert.match(phase4SameMode.ctaLabel, /Parte B/);
+
+  // Fase 4b: Ejercicio completado, siguiente ejercicio cambia de modo
+  const phase4NewMode = computeLearnerGuideState({
+    mode: "doc-editorial",
+    modeName: "1. Redacción & Documentos",
+    exerciseIndex: 2,
+    exercise: { code: "1C", title: "Recorrido interfaz" },
+    stepsDone: 4,
+    stepsTotal: 4,
+    checksDone: 4,
+    checksTotal: 4,
+    modeStats: { done: 3, total: 3 },
+    nextStep: { mode: "code-prototyping", exercise: 0, id: "c-a" }
+  });
+  assert.equal(phase4NewMode.phase, "4-advance");
+  assert.equal(phase4NewMode.ctaAction, "next-mode");
+  assert.match(phase4NewMode.ctaLabel, /Siguiente modo/);
+
+  // Fase 4c: Último ejercicio completado (nextStep es null) y ramas fallback de índice/título
+  const phase4CourseDone = computeLearnerGuideState({
+    mode: "gem-studio",
+    modeName: "12. Gems para Canvas",
+    exerciseIndex: 5,
+    exercise: {},
+    stepsDone: 4,
+    stepsTotal: 4,
+    checksDone: 4,
+    checksTotal: 4,
+    modeStats: { done: 2, total: 2 },
+    nextStep: null
+  });
+  assert.equal(phase4CourseDone.phase, "4-advance");
+  assert.equal(phase4CourseDone.ctaAction, "open-projects-hub");
+  assert.match(phase4CourseDone.ctaLabel, /Hub de Proyectos/);
+
+  // Fase 4a con índice fuera de ABC en nextStep y Fase 2 iniciada solo con checksDone > 0
+  const phase4FallbackLetter = computeLearnerGuideState({
+    mode: "doc-editorial",
+    exerciseIndex: 0,
+    exercise: { code: "1A", title: "Informe" },
+    stepsDone: 0,
+    stepsTotal: 4,
+    checksDone: 4,
+    checksTotal: 4,
+    nextStep: { mode: "doc-editorial", exercise: 9 }
+  });
+  assert.match(phase4FallbackLetter.ctaLabel, /Parte B/);
+
+  const phase2OnlyChecks = computeLearnerGuideState({
+    mode: "doc-editorial",
+    exerciseIndex: 0,
+    exercise: { code: "1A", title: "Informe" },
+    stepsDone: 0,
+    stepsTotal: 4,
+    checksDone: 1,
+    checksTotal: 4
+  });
+  assert.equal(phase2OnlyChecks.phase, "2-iterate");
 });

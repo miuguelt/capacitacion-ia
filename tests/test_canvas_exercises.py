@@ -221,3 +221,31 @@ def test_projects_hub_markup_and_integration():
     assert 'data-hub-reset-order' in html
 
 
+def test_immersive_mode_includes_exercises_and_guided_compass():
+    html = _html()
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    css = (BASE_DIR / "css" / "styles.css").read_text(encoding="utf-8")
+    for required_id in [
+        "canvas-immersive-hud",
+        "canvas-learner-compass",
+        "btn-toggle-exercises-fullscreen",
+        "btn-hud-toggle-immersive",
+        "btn-toggle-mm-fullscreen",
+        "btn-toggle-gem-fullscreen",
+        "mm-sim-bridge",
+        "gem-sim-bridge",
+        "btn-toggle-dia3-fullscreen",
+        "btn-toggle-dia3-ex-fullscreen",
+        "dia3-sim-bridge",
+    ]:
+        assert f'id="{required_id}"' in html, f"Falta #{required_id} en index.html"
+    for focus_mode in ["all", "split", "simulator", "exercises"]:
+        assert f'data-immersive-focus="{focus_mode}"' in html
+    assert "#gemini-canvas.is-immersive" in css
+    assert "#canvas-exercises-module.is-fullscreen" in css
+    assert "computeLearnerGuideState(" in app
+    assert "resolveImmersiveFocus(" in app
+    assert "getSpecializedLabForMode(" in app
+
+
+

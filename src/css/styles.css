@@ -1759,7 +1759,8 @@ body.instructor-mode .instructor-guide-card {
   color: #ffffff;
 }
 
-#canvas-simulator-module.is-fullscreen {
+#canvas-simulator-module.is-fullscreen,
+#canvas-exercises-module.is-fullscreen {
   position: fixed;
   inset: 0;
   z-index: 1500;
@@ -1770,6 +1771,234 @@ body.instructor-mode .instructor-guide-card {
   padding: 1.5rem;
   background: var(--bg-app);
   box-shadow: none;
+}
+
+/* Modo Inmersivo Unificado (Simuladores + Ejercicios Prácticos + Laboratorios) */
+#gemini-canvas.is-immersive,
+#dia-3.is-immersive {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  margin: 0;
+  border-radius: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  background: var(--bg-app);
+  box-sizing: border-box;
+  display: block;
+}
+
+#gemini-canvas.is-immersive > .hero-card,
+#gemini-canvas.is-immersive > .canvas-quick-nav,
+#gemini-canvas.is-immersive > #canvas-fundamentals-anchor,
+#gemini-canvas.is-immersive > #canvas-coverage-module {
+  display: none !important;
+}
+
+#gemini-canvas.is-immersive #canvas-simulator-module.is-fullscreen,
+#gemini-canvas.is-immersive #canvas-exercises-module.is-fullscreen {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  height: auto;
+  overflow: visible;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+#dia-3.is-immersive > *:not(#dia3-examples-module):not(#dia3-security-lab):not(#dia3-exercises-module) {
+  display: none !important;
+}
+
+/* Disposiciones de enfoque en la ruta guiada e inmersiva */
+#gemini-canvas[data-immersive-focus="simulator"] #canvas-exercises-module,
+#gemini-canvas[data-immersive-focus="simulator"] #canvas-advanced-labs-anchor {
+  display: none !important;
+}
+
+#gemini-canvas[data-immersive-focus="exercises"] #canvas-simulator-module,
+#gemini-canvas[data-immersive-focus="exercises"] #canvas-advanced-labs-anchor {
+  display: none !important;
+}
+
+@media (min-width: 1200px) {
+  #gemini-canvas[data-immersive-focus="split"] #canvas-simulator-module,
+  #gemini-canvas[data-immersive-focus="split"] #canvas-exercises-module {
+    display: inline-block;
+    vertical-align: top;
+    inline-size: calc(50% - 0.65rem);
+    box-sizing: border-box;
+  }
+
+  #gemini-canvas[data-immersive-focus="split"] #canvas-simulator-module {
+    margin-inline-end: 1rem;
+  }
+}
+
+/* Barra de Ruta Guiada e Inmersiva y Brújula del Aprendiz */
+.canvas-immersive-hud {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+#gemini-canvas.is-immersive .canvas-immersive-hud {
+  position: sticky;
+  top: 0;
+  z-index: 1520;
+  box-shadow: var(--shadow-md);
+}
+
+.canvas-immersive-hud-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.immersive-hud-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
+.immersive-hud-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.immersive-hud-progress {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+}
+
+.immersive-stations-bar,
+.immersive-focus-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.guided-station-btn,
+.immersive-focus-btn {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.38rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.guided-station-btn:hover,
+.immersive-focus-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.guided-station-btn.is-active,
+.immersive-focus-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.guided-station-btn[hidden] {
+  display: none !important;
+}
+
+.guided-station-pill {
+  background: rgba(255, 255, 255, 0.22);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+}
+
+.guided-station-btn:not(.is-active) .guided-station-pill {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary-dark);
+}
+
+.canvas-learner-compass {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-subtle);
+  border: 1px solid var(--color-primary-light);
+}
+
+.compass-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1 1 22rem;
+  min-inline-size: 0;
+}
+
+.compass-phase-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-primary-dark);
+  color: #ffffff;
+  font-size: 0.73rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.compass-headline {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+}
+
+.compass-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* Overlay interactivo en la tarjeta de imagen */
