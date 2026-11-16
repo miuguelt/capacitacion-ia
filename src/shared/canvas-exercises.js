@@ -260,7 +260,7 @@ CANVAS_EXERCISES["doc-editorial"] = [
       "La página web muestra tarjetas KPI y un gráfico con la caída de 9,0 % a 3,6 %.",
       "Después de «Ajustar longitud → Más corto», el informe en Canvas conserva la tabla completa."
     ],
-    stretch: "Selecciona la tabla del informe y pide: «Agrega una columna que diga si el trimestre cumplió la meta de bajar al menos un punto». Así practicas editar una tabla sin regenerar el resto.",
+    stretch: "Selecciona la tabla del informe y pide: «Agrega una columna que diga si el trimestre cumplió la meta de bajar al menos un punto». En tu vida diaria, usa este mismo flujo para redactar una carta formal, un reclamo o un resumen de gastos del hogar.",
     previewSvg: canvasSvgBars("Gráfico de barras con la tasa de deserción por trimestre de 2025: 9,0; 7,8; 5,5 y 3,6 por ciento", "Tasa de deserción 2025 (%)", ["T1", "T2", "T3", "T4"], [9.0, 7.8, 5.5, 3.6], 3)
   },
   {
@@ -520,7 +520,7 @@ CANVAS_EXERCISES["data-matrix"] = [
       "La vista previa muestra barras apiladas por mes y tarjetas KPI.",
       "El botón copia la tabla en CSV sin errores en la consola."
     ],
-    stretch: "Pide: «Agrega un filtro por trimestre y una línea de tendencia sobre el total mensual».",
+    stretch: "Pide: «Agrega un filtro por trimestre y una línea de tendencia sobre el total mensual». En tu vida diaria, repite este tablero para comparar tus gastos fijos del año o decidir compras (como elegir arriendo, celular o moto).",
     previewSvg: canvasSvgBars("Gráfico de barras con el total mensual de ventas 2025 en miles de pesos; diciembre es el pico con 14.100", "Total mensual 2025 (miles COP)", ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], [8100, 7650, 8700, 9050, 9600, 9350, 10000, 10600, 10100, 11100, 11900, 14100], 11)
   },
   {
@@ -1575,7 +1575,7 @@ CANVAS_EXERCISES["executive-report"] = [
       "Si hiciste el paso opcional de Deep Research, al menos una decisión cita una buena práctica encontrada.",
       "La infografía y la presentación muestran las mismas cifras del informe."
     ],
-    stretch: "Abre en Canvas el informe de Deep Research desde «Crear» y usa «Crear → Página web» para comparar tus seis meses con los referentes del sector.",
+    stretch: "Abre en Canvas el informe de Deep Research desde «Crear» y usa «Crear → Página web» para comparar tus seis meses con los referentes del sector. En tu vida diaria, úsalo para comparar 3 cotizaciones de un servicio o reparación del hogar.",
     previewSvg: canvasSvgLine("Gráfico de líneas del tiempo promedio de solución en horas de mayo a octubre: 18, 16, 22, 14, 12 y 10", "Tiempo promedio de solución (h)", ["May", "Jun", "Jul", "Ago", "Sep", "Oct"], [
       { name: "Horas", values: [18, 16, 22, 14, 12, 10], cls: "cx-a" }
     ])
@@ -2263,7 +2263,7 @@ CANVAS_EXERCISES["multimodal-vision"].push({
     "Con 60 conectores RJ45 el total baja a 21 y ese insumo queda en «Completo».",
     "La lista de compra para copiar tiene una línea por cada insumo por comprar."
   ],
-  stretch: "Pide: «Agrega un precio por unidad en cada fila y calcula el costo total de la compra».",
+  stretch: "Pide: «Agrega un precio por unidad en cada fila y calcula el costo total de la compra». En tu vida diaria, tómale foto a la lista del mercado o a tu alacena y convierte eso en tu lista de compras automática.",
   previewSvg: canvasSvgBars("Gráfico de barras con la cantidad de cada insumo del laboratorio: conectores 35, switch 2 y etiquetas 0 están bajo el mínimo", "Cantidad por insumo", ["UTP", "RJ45", "Router", "Switch", "Cinta", "Etiq."], [6, 35, 4, 2, 9, 0], 1)
 });
 
