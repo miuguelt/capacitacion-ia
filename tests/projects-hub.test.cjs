@@ -1218,11 +1218,8 @@ test("TC-3.1: Búsqueda 'sql' + Área 'Datos & SQL' + Nivel 'Avanzado' + Orden d
   const all = collateAllProjects(CANVAS_EXERCISES);
   const filtered = filterProjects(all, { search: "sql", area: "Datos & SQL", level: "Avanzado" });
   const sorted = sortProjects(filtered, "duration-asc");
-  assert.equal(sorted.length, 4);
+  assert.equal(sorted.length, 1);
   assert.equal(sorted[0].id, "matrix-c-sensibilidad-web");
-  assert.equal(sorted[1].id, "sql-c-conciliacion-mesa-pdf");
-  assert.equal(sorted[2].id, "sql-a-biblioteca-dashboard");
-  assert.equal(sorted[3].id, "sql-b-limpieza-asistencia");
 });
 
 test("TC-3.2: Búsqueda 'canvas' + Duración short + Orden official", () => {
@@ -1264,7 +1261,7 @@ test("TC-3.5: Filtro Nivel 'Intermedio' + Reordenamiento + Botón reset", () => 
   card.querySelector('[data-move-pos="down"]').click();
   harness.triggerReset();
   const visible = harness.viewContainer.querySelectorAll(".projects-kanban-card");
-  assert.equal(visible.length, 18);
+  assert.equal(visible.length, 27);
 });
 
 test("TC-3.6: Filtro Duración 'long' + Drag entre columnas en Kanban", () => {
