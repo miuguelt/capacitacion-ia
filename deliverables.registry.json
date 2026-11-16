@@ -14,7 +14,8 @@
         "El prompt utiliza los cinco pilares del método CRTT+L: Contexto, Rol, Tarea, Tono y Límites.",
         "La tabla de compromisos extrae responsables y fechas sin inventar datos.",
         "La libreta de NotebookLM responde 5 preguntas con referencia de página exacta.",
-        "Responde los 3 correos de la bandeja de práctica en máximo 6 líneas y registra los minutos sin IA y con IA."
+        "Responde los 3 correos de la bandeja de práctica en máximo 6 líneas y registra los minutos sin IA y con IA.",
+        "Resuelve una tarea de correo o documento con la IA de la suite ofimática autorizada (Gemini en Workspace o Copilot en Microsoft 365)."
       ],
       "productivityStation": "prod-dia-1-correo-actas"
     },
@@ -51,7 +52,8 @@
         "Se generó el reporte HTML con el resumen de conteo y tablas.",
         "El Panel de Instructores carga datos en una gráfica Chart.js y permite filtrar por texto.",
         "Aplica buenas prácticas de licenciamiento y no expone claves de API en el código.",
-        "Obtiene con IA una fórmula y una tabla dinámica sobre mesa_ayuda_2026.csv y contrasta un resultado con un conteo manual."
+        "Obtiene con IA una fórmula y una tabla dinámica sobre mesa_ayuda_2026.csv y contrasta un resultado con un conteo manual.",
+        "Crea una skill con SKILL.md válido en el constructor y la prueba con un caso del material de práctica."
       ],
       "productivityStation": "prod-dia-3-hojas-calculo"
     },

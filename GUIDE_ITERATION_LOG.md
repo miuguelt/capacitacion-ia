@@ -7,3 +7,9 @@
 - Materiales nuevos: `bandeja_correos_practica.md` (Día 1) y `biblioteca_personal_prompts.md` (Día 4).
 - Pruebas: `tests/productivity-module.test.cjs` con 100 % de funciones, líneas y ramas; incluidas en el flujo de CI.
 - Se crearon los artefactos de gobernanza faltantes y la ADR-0001.
+
+## 2026-11-16 · Agent Skills e IA en suites ofimáticas
+- Día 3: módulo de Agent Skills (`js/skills-module.js`) con comparación prompt/Gem/skill/agente, constructor y validador de SKILL.md (cuatro estados), tres skills de ejemplo y lista de seguridad.
+- Materiales: `guia_agent_skills.md` y `materiales/dia3_agentes_web/skills/` (los SKILL.md se generan desde el módulo y una prueba verifica que coincidan).
+- Día 1: tabla de IA en Google Workspace (Gemini) y Microsoft 365 (Copilot) con prompts CRTT+L por tarea.
+- Se corrigieron fallas previas de CI: cobertura de ramas al 100 % y harness alineados con el banco de 36 ejercicios.

@@ -263,6 +263,48 @@ const NO_AI_MATRIX = [
   { situation: "Contraseñas, claves de API o información interna clasificada", risk: "Filtración de credenciales o secretos.", alternative: "Nunca pegues secretos en un chat; usa los canales seguros de la entidad." }
 ];
 
+// --- 4b. IA integrada en las suites ofimáticas ---
+// Las funciones disponibles dependen de la licencia de la entidad; solo se describen usos generales.
+
+const OFFICE_AI_TASKS = [
+  {
+    task: "Correo",
+    workspace: "Gemini en Gmail: resumir hilos y redactar respuestas desde el panel lateral.",
+    microsoft: "Copilot en Outlook: resumir conversaciones y crear borradores.",
+    prompt: { contexto: "Este hilo trata sobre la reserva del auditorio.", rol: "Asistente administrativo.", tarea: "Resume acuerdos y redacta una respuesta de 5 líneas.", tono: "Cordial e institucional.", limites: "No confirmes fechas que no estén en el hilo." }
+  },
+  {
+    task: "Documentos",
+    workspace: "Gemini en Docs: redactar, reescribir y resumir documentos.",
+    microsoft: "Copilot en Word: redactar a partir de otros archivos y resumir.",
+    prompt: { contexto: "Este documento es el reglamento del aprendiz.", rol: "Divulgador institucional.", tarea: "Resume en 10 viñetas los deberes del aprendiz.", tono: "Claro y respetuoso.", limites: "Cita el artículo de cada viñeta; no agregues normas." }
+  },
+  {
+    task: "Hojas de cálculo",
+    workspace: "Gemini en Sheets: crear tablas, fórmulas y resúmenes de datos.",
+    microsoft: "Copilot en Excel: sugerir fórmulas, gráficos y análisis.",
+    prompt: { contexto: "La hoja tiene las columnas Seccion, Abiertos_o_Casos y Resueltos.", rol: "Analista de datos.", tarea: "Agrega una columna con el porcentaje de casos resueltos.", tono: "Paso a paso.", limites: "No modifiques las columnas originales." }
+  },
+  {
+    task: "Presentaciones",
+    workspace: "Gemini en Slides: generar imágenes y redactar diapositivas.",
+    microsoft: "Copilot en PowerPoint: crear una presentación a partir de un documento.",
+    prompt: { contexto: "Tengo el informe trimestral del área en un documento.", rol: "Asesor de presentaciones.", tarea: "Crea 5 diapositivas con notas del orador.", tono: "Ejecutivo.", limites: "Máximo 3 viñetas por diapositiva; usa solo datos del informe." }
+  },
+  {
+    task: "Reuniones",
+    workspace: "Gemini en Meet: tomar notas y resumir la reunión (según licencia).",
+    microsoft: "Copilot en Teams: resumir reuniones y listar tareas.",
+    prompt: { contexto: "Esta es la transcripción del comité de hoy.", rol: "Secretario técnico.", tarea: "Lista compromisos con responsable y fecha.", tono: "Institucional.", limites: "Marca [Pendiente] lo que no tenga fecha; no atribuyas frases a nadie." }
+  }
+];
+
+function buildOfficeAiTableHtml(rows) {
+  const e = escapeProdHtml;
+  const body = rows.map(r => `<tr><th scope="row">${e(r.task)}</th><td>${e(r.workspace)}</td><td>${e(r.microsoft)}</td><td><pre class="prod-prompt">${e(composeCrttlPrompt(r.prompt))}</pre></td></tr>`).join("");
+  return `<table class="prod-no-ai-table"><thead><tr><th scope="col">Tarea</th><th scope="col">Google Workspace</th><th scope="col">Microsoft 365</th><th scope="col">Prompt CRTT+L de ejemplo</th></tr></thead><tbody>${body}</tbody></table>`;
+}
+
 // --- 5. Constructores de HTML (escapado incluido) ---
 
 function escapeProdHtml(value) {
@@ -336,6 +378,8 @@ if (typeof module !== "undefined" && module.exports) {
     PRODUCTIVITY_STATIONS,
     POCKET_KIT,
     NO_AI_MATRIX,
+    OFFICE_AI_TASKS,
+    buildOfficeAiTableHtml,
     validateCrttlParts,
     composeCrttlPrompt,
     evaluateVeraChecklist,

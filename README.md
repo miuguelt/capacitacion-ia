@@ -42,6 +42,9 @@ La aplicación es una SPA moderna, accesible y ligera construida sin dependencia
   * **Barra de Calibración Reactiva de Canvas:** Control de longitud de 5 niveles, ajuste de tono (formal, directo, académico, persuasivo) y calibración de audiencia (técnica vs ejecutiva).
 * **Visualizadores de Resultados Esperados en Todos los Días:** Tarjetas interactivas con comparativas lado a lado entre el "Estándar de Oro" profesional y el "Antipatrón Deficiente", permitiendo que el aprendiz evalúe de inmediato la calidad de sus resultados.
 * **Constructor Interactivo de Prompts CRTT+L:** Herramienta en vivo donde el usuario redacta Contexto, Rol, Tarea, Tono y Límites para generar un prompt profesional listo para copiar.
+* **Módulo de Agent Skills (Día 3):** Comparación entre prompt, Gem, skill y agente; constructor y validador de `SKILL.md`; tres skills de ejemplo y lista de seguridad.
+* **IA en suites ofimáticas (Día 1):** Usos de Gemini en Google Workspace y Copilot en Microsoft 365 con prompts CRTT+L por tarea.
+* **Estaciones de productividad:** Una por día, más calculadora de tiempo ahorrado, revisión V.E.R.A. y kit de bolsillo imprimible.
 * **Banco de Materiales Completo:** Todos los scripts de prueba (`.py` y `.ps1`), datasets (`.json`), plantillas web, guías de gobernanza y rúbricas de evaluación organizados en la carpeta `materiales/`.
 
 ---

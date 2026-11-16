@@ -175,3 +175,16 @@ test("ninguna superficie publicada enseña el marco R-C-I-R-F", () => {
     assert.ok(!/R-C-I-R-F|rcirf/i.test(content), `${rel} menciona un marco no canónico`);
   }
 });
+
+test("la tabla de IA ofimática cubre 5 tareas con prompts CRTT+L válidos para ambas suites", () => {
+  assert.deepEqual(P.OFFICE_AI_TASKS.map(t => t.task), ["Correo", "Documentos", "Hojas de cálculo", "Presentaciones", "Reuniones"]);
+  for (const row of P.OFFICE_AI_TASKS) {
+    assert.equal(P.validateCrttlParts(row.prompt).state, "valid", row.task);
+    assert.match(row.workspace, /Gemini/);
+    assert.match(row.microsoft, /Copilot/);
+  }
+  const html = P.buildOfficeAiTableHtml([...P.OFFICE_AI_TASKS, { task: "<x>", workspace: "w", microsoft: "m", prompt: {} }]);
+  assert.equal((html.match(/<tr>/g) || []).length, 7);
+  assert.match(html, /&lt;x&gt;/);
+  assert.match(html, /Microsoft 365/);
+});

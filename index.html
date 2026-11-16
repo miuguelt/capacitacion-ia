@@ -307,11 +307,20 @@
               <p>Integración en correo electrónico y procesamiento de documentos extensos (PDFs, manuales y reglamentos) con anclaje a fuentes verificadas.</p>
               <ul class="topic-list">
                 <li>Redacción asistida en Outlook / Gemini para correos institucionales.</li>
+                <li>IA integrada en Google Workspace (Gemini) y Microsoft 365 (Copilot) para correo, documentos, hojas, presentaciones y reuniones.</li>
                 <li>Configuración de Google NotebookLM para auditoría curricular y normativa.</li>
                 <li>Extracción de citas exactas por número de página.</li>
                 <li>Generación automática de guías de estudio y síntesis de audio.</li>
               </ul>
             </div>
+          </div>
+
+          <!-- IA en las suites ofimáticas: datos en js/productivity-module.js -->
+          <div class="tool-container" id="office-ai-module">
+            <h3>🗂️ IA dentro de tus herramientas de oficina</h3>
+            <p>Gemini en Google Workspace y Copilot en Microsoft 365 trabajan dentro del correo, los documentos y las hojas de cálculo. Usa el mismo método CRTT+L en ambos.</p>
+            <p class="office-ai-note"><strong>Antes de empezar:</strong> estas funciones dependen de la licencia de tu entidad. Usa solo cuentas institucionales autorizadas y no pegues datos personales sensibles.</p>
+            <div class="table-responsive" id="office-ai-table"></div>
           </div>
 
           <!-- Constructor Interactivo CRTT+L -->
@@ -1606,6 +1615,7 @@ Notas tomadas por Julián:
                 <li>Diferencia entre chat conversacional y agente con permisos de ejecución y herramientas locales.</li>
                 <li>Script guiado de diagnóstico: CPU, RAM, almacenamiento y cuellos de botella en salas de cómputo.</li>
                 <li>Reto de clasificación masiva: ordenar por tipo, evitar sobrescrituras y generar un reporte HTML.</li>
+                <li>Agent Skills: empaquetar un procedimiento repetible en una carpeta con SKILL.md.</li>
               </ul>
             </div>
 
@@ -1622,6 +1632,69 @@ Notas tomadas por Julián:
                 <li><strong>Consumo de APIs comerciales:</strong> Prohibición de quemar claves (`API Keys`) en el código y control de presupuesto.</li>
               </ul>
             </div>
+          </div>
+
+          <!-- Módulo de Agent Skills: lógica en js/skills-module.js -->
+          <div class="tool-container" id="skills-module">
+            <h3>🧩 Agent Skills: enseña a tu agente un procedimiento</h3>
+            <p>Una skill es una carpeta con un archivo <code>SKILL.md</code> y, si hace falta, plantillas, datos o scripts. El agente lee primero solo el nombre y la descripción de cada skill; cuando la tarea coincide, carga las instrucciones completas. Así puedes reutilizar un procedimiento sin volver a escribir el prompt.</p>
+            <h4>¿Prompt, Gem, skill o agente?</h4>
+            <div class="table-responsive" id="skills-comparison"></div>
+
+            <h4>Constructor de SKILL.md</h4>
+            <form id="skill-builder-form" novalidate>
+              <div class="form-group">
+                <label for="skill-name">Nombre (minúsculas y guiones)</label>
+                <input type="text" id="skill-name" maxlength="80" placeholder="acta-de-comite" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="skill-description">Descripción: qué hace y cuándo usarla</label>
+                <textarea id="skill-description" rows="2" placeholder="Convierte notas de reunión en un acta. Úsala cuando recibas notas de comité."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="skill-contexto">Contexto</label>
+                <textarea id="skill-contexto" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="skill-rol">Rol</label>
+                <input type="text" id="skill-rol">
+              </div>
+              <div class="form-group">
+                <label for="skill-tarea">Tarea (obligatoria)</label>
+                <textarea id="skill-tarea" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="skill-tono">Tono</label>
+                <input type="text" id="skill-tono">
+              </div>
+              <div class="form-group">
+                <label for="skill-limites">Límites</label>
+                <textarea id="skill-limites" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="skill-resources">Recursos (uno por línea)</label>
+                <textarea id="skill-resources" rows="2"></textarea>
+              </div>
+              <div class="prod-actions">
+                <button type="submit" class="btn btn-primary" id="btn-skill-validate">Validar y generar</button>
+                <button type="button" class="btn btn-secondary" id="btn-skill-example">Cargar ejemplo</button>
+                <button type="reset" class="btn btn-secondary" id="btn-skill-reset">Reiniciar</button>
+              </div>
+            </form>
+            <div id="skill-builder-status" aria-live="polite"></div>
+            <div class="prompt-box">
+              <div class="prompt-header">
+                <span>SKILL.MD GENERADO</span>
+                <button type="button" class="copy-btn" data-copy-target="skill-md-output">Copiar SKILL.md</button>
+              </div>
+              <div class="prompt-content prod-prompt" id="skill-md-output"></div>
+            </div>
+
+            <h4>Skills de ejemplo para el aula</h4>
+            <div id="skills-examples"></div>
+
+            <h4>Antes de instalar una skill ajena</h4>
+            <ul id="skills-security-list"></ul>
           </div>
 
           <!-- MAPA CONCEPTUAL Y ARQUITECTURA VISUAL DEL DÍA 3 -->
@@ -2277,6 +2350,26 @@ Requisitos:
 
             <div class="material-card">
               <div>
+                <h4>🧩 Insumo Día 3: Guía práctica de Agent Skills</h4>
+                <p>Estructura del SKILL.md, reglas de validación, práctica de 45 minutos y lista de seguridad.</p>
+              </div>
+              <a href="materiales/dia3_agentes_web/guia_agent_skills.md" download class="material-link">
+                📥 Descargar guia_agent_skills.md
+              </a>
+            </div>
+
+            <div class="material-card">
+              <div>
+                <h4>🧩 Insumo Día 3: Skill de ejemplo «acta-de-comite»</h4>
+                <p>SKILL.md listo para guardar en una carpeta con el mismo nombre y probar con tu agente.</p>
+              </div>
+              <a href="materiales/dia3_agentes_web/skills/acta-de-comite/SKILL.md" download class="material-link">
+                📥 Descargar SKILL.md
+              </a>
+            </div>
+
+            <div class="material-card">
+              <div>
                 <h4>📑 Guía Día 1: Banco Canónico de Prompts</h4>
                 <p>Plantillas probadas para actas, análisis normativo y redacción de correos institucionales.</p>
               </div>
@@ -2397,6 +2490,7 @@ Requisitos:
   <script src="js/canvas-possibilities.js"></script>
   <script src="js/dia3-module.js"></script>
   <script src="js/productivity-module.js"></script>
+  <script src="js/skills-module.js"></script>
   <script src="js/projects-hub.js"></script>
   <script src="js/app.js"></script>
 </body>

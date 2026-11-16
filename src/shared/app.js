@@ -3178,3 +3178,57 @@ document.addEventListener("DOMContentLoaded", () => {
     ).join("");
   }
 });
+
+// ==========================================
+// 14. IA en suites ofimáticas y módulo de Agent Skills
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  const officeTable = document.getElementById("office-ai-table");
+  if (officeTable && typeof OFFICE_AI_TASKS !== "undefined") {
+    officeTable.innerHTML = buildOfficeAiTableHtml(OFFICE_AI_TASKS);
+  }
+
+  if (typeof SKILL_EXAMPLES === "undefined") return;
+
+  const comparison = document.getElementById("skills-comparison");
+  if (comparison) comparison.innerHTML = buildSkillComparisonHtml(SKILL_COMPARISON);
+
+  const examples = document.getElementById("skills-examples");
+  if (examples) examples.innerHTML = buildSkillExamplesHtml(SKILL_EXAMPLES);
+
+  const security = document.getElementById("skills-security-list");
+  if (security) {
+    security.innerHTML = SKILL_SECURITY_CHECKLIST.map(item => `<li>${escapeSkillHtml(item)}</li>`).join("");
+  }
+
+  const form = document.getElementById("skill-builder-form");
+  const status = document.getElementById("skill-builder-status");
+  const output = document.getElementById("skill-md-output");
+  if (!form || !status || !output) return;
+
+  const fields = ["name", "description", "contexto", "rol", "tarea", "tono", "limites", "resources"];
+  const readParts = () => {
+    const parts = {};
+    fields.forEach(f => { parts[f] = document.getElementById(`skill-${f}`).value; });
+    return parts;
+  };
+  const render = parts => {
+    const result = evaluateSkill(parts);
+    status.innerHTML = buildSkillResultHtml(result);
+    // Solo se ofrece el SKILL.md para copiar cuando es válido.
+    output.textContent = result.state === "valid" ? composeSkillMd(parts) : "";
+  };
+
+  form.addEventListener("submit", event => { event.preventDefault(); render(readParts()); });
+  // El evento reset ocurre antes de limpiar los campos; se muestra el estado vacío.
+  form.addEventListener("reset", () => render({}));
+  const exampleBtn = document.getElementById("btn-skill-example");
+  if (exampleBtn) {
+    exampleBtn.addEventListener("click", () => {
+      const ex = SKILL_EXAMPLES[0];
+      fields.forEach(f => { document.getElementById(`skill-${f}`).value = ex[f] || ""; });
+      render(readParts());
+    });
+  }
+  render({});
+});

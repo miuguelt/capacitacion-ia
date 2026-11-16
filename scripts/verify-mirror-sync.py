@@ -17,6 +17,8 @@ PAIRS = [
     ("devbrain-prose.js", "src/devbrain-prose.js"),
     ("js/app.js", "src/js/app.js"),
     ("js/app.js", "src/shared/app.js"),
+    ("js/skills-module.js", "src/js/skills-module.js"),
+    ("js/skills-module.js", "src/shared/skills-module.js"),
     ("js/productivity-module.js", "src/js/productivity-module.js"),
     ("js/productivity-module.js", "src/shared/productivity-module.js"),
     ("js/projects-hub.js", "src/js/projects-hub.js"),

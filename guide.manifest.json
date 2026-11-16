@@ -103,6 +103,25 @@
     "materials": [
       "materiales/dia1_prompting/bandeja_correos_practica.md",
       "materiales/dia4_agentes_integrador/biblioteca_personal_prompts.md"
-    ]
+    ],
+    "officeAi": {
+      "sectionId": "dia-1",
+      "anchor": "office-ai-module",
+      "suites": [
+        "Google Workspace (Gemini)",
+        "Microsoft 365 (Copilot)"
+      ]
+    }
+  },
+  "skills": {
+    "module": "js/skills-module.js",
+    "sectionId": "dia-3",
+    "anchor": "skills-module",
+    "examples": [
+      "materiales/dia3_agentes_web/skills/acta-de-comite/SKILL.md",
+      "materiales/dia3_agentes_web/skills/respuesta-correo-institucional/SKILL.md",
+      "materiales/dia3_agentes_web/skills/informe-mesa-ayuda/SKILL.md"
+    ],
+    "guide": "materiales/dia3_agentes_web/guia_agent_skills.md"
   }
 }

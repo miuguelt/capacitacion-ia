@@ -5618,3 +5618,58 @@ body.instructor-mode .instructor-guide-card {
     inset: 0;
   }
 }
+
+/* ==========================================
+   Agent Skills e IA en suites ofimáticas
+   ========================================== */
+.skills-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.skills-table th,
+.skills-table td {
+  text-align: start;
+  vertical-align: top;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.skill-status {
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid var(--color-primary);
+  background: var(--bg-subtle);
+  border-radius: 6px;
+}
+
+.skill-status[data-state="invalid"] {
+  border-left-color: var(--color-instructor);
+}
+
+.skill-status ul {
+  margin: 0.25rem 0 0 1rem;
+  padding: 0;
+}
+
+.skill-example {
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.5rem 0;
+}
+
+.skill-example summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* text-layout-exception: el SKILL.md conserva sus saltos de línea; el texto completo queda visible y se puede copiar. */
+.skill-example pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.office-ai-note {
+  border-left: 3px solid var(--color-instructor);
+  padding-inline-start: 0.75rem;
+}
