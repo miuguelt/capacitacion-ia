@@ -908,7 +908,7 @@ function buildDia3ExamplePreviewHtml(exampleId) {
             <strong style="color:var(--color-primary); font-size:0.95rem;">📊 Panel de Instructores Ejecutándose en Vivo (3 Archivos)</strong>
             <small style="display:block; color:var(--text-muted); font-size:0.78rem;">Prueba el buscador y el selector de estado directamente aquí o abre la ventana independiente</small>
           </div>
-          <a href="materiales/dia3_agentes_web/plantilla_3_archivos/index.html" target="_blank" class="material-link" style="font-size:0.78rem; padding:0.3rem 0.7rem;">
+          <a href="materiales/dia3_agentes_web/plantilla_3_archivos/index.html" target="_blank" rel="noopener noreferrer" class="material-link" style="font-size:0.78rem; padding:0.3rem 0.7rem;">
             🚀 Abrir en pestaña nueva
           </a>
         </div>

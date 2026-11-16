@@ -2,8 +2,8 @@
   "title": "Banco Canónico de Prompts para Gemini Canvas",
   "version": "2.1.0",
   "locale": "es-CO",
-  "totalPossibilities": 12,
-  "totalExercises": 36,
+  "totalPossibilities": 13,
+  "totalExercises": 39,
   "possibilities": [
     {
       "id": "doc-editorial",
@@ -12,7 +12,7 @@
       "badge": "Documentos",
       "icon": "📄",
       "image": "assets/images/canvas/canvas_documento.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Estructurar propuestas técnicas, actas complejas y términos de referencia sin perder coherencia entre secciones.",
       "canvasControls": [
         "📏 Ajustar longitud",
@@ -31,7 +31,7 @@
           "title": "Informe de deserción con tablero interactivo en Canvas",
           "level": "Básico",
           "duration": "25 min",
-          "canvasFeature": "Documento + Selección con cursor + Transformación a tablero web en Canvas",
+          "canvasFeature": "Edición por selección",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -40,7 +40,7 @@
             "export-docs"
           ],
           "whyCanvas": "El informe queda en un documento editable junto al chat: corriges una sección sin regenerar todo y, con «Crear → Página web», lo conviertes en un tablero sin copiar datos.",
-          "outsideCanvas": "El texto base podría redactarse en el chat normal, pero la edición por párrafo sin regenerar la tabla y la conversión directa con «Crear → Página web» ocurren en Canvas; el paso final abre Documentos de Google fuera de Gemini.",
+          "outsideCanvas": "Sin Canvas tendrías que regenerar todo el informe por cada ajuste y no podrías convertirlo en página web. El paso final abre Documentos de Google.",
           "places": [
             "canvas",
             "canvas",
@@ -75,7 +75,7 @@
             "Usa «Ajustar longitud → Más corto» y comprueba que la tabla se conserve.",
             "Abre «Crear → Página web» sobre el informe y, en la «Vista previa», comprueba las tarjetas KPI y el gráfico de la caída de deserción.",
             "(Opcional) Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google» si necesitas una copia editable fuera de Gemini.",
-            "Revisa tu entregable con la lista «Verifica tu resultado» de esta guía y marca cada criterio cumplido."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El resumen menciona la caída de 9,0 % a 3,6 % (5,4 puntos).",
@@ -85,7 +85,7 @@
             "La página web muestra tarjetas KPI y un gráfico con la caída de 9,0 % a 3,6 %.",
             "Después de «Ajustar longitud → Más corto», el informe en Canvas conserva la tabla completa."
           ],
-          "stretch": "Selecciona la tabla del informe y pide: «Agrega una columna que diga si el trimestre cumplió la meta de bajar al menos un punto». En tu vida diaria, usa este mismo flujo para redactar una carta formal, un reclamo o un resumen de gastos del hogar.",
+          "stretch": "Selecciona la tabla del informe y pide: «Agrega una columna que diga si el trimestre cumplió la meta de bajar al menos un punto».",
           "prompt": "Contexto: El comité académico se reúne el lunes para decidir qué acciones contra la deserción mantener en 2026. Leerá el informe en cinco minutos.\n\nRol: Actúa como analista de calidad educativa que prepara informes para comités directivos.\n\nDatos:\n\"\"\"\nDATOS DE DESERCIÓN 2025 — Centro de Gestión Empresarial (datos de práctica)\n\nTrimestre,Matriculados,Desertores,Tasa\n2025-T1,420,38,9.0%\n2025-T2,395,31,7.8%\n2025-T3,402,22,5.5%\n2025-T4,388,14,3.6%\n\nCausas reportadas en la encuesta de salida (105 desertores):\n- Dificultad económica: 41\n- Cruce con horario laboral: 27\n- Problemas de conectividad: 19\n- Salud o situación familiar: 10\n- Otras causas: 8\n\nAcciones aplicadas desde el T2:\n- Apoyo de sostenimiento para 60 aprendices (desde abril).\n- Franja nocturna nueva en dos programas (desde julio).\n- Préstamo de 35 portátiles con módem (desde septiembre).\n\"\"\"\n\nTarea: En Canvas, redacta un informe ejecutivo con:\n1. Un resumen de máximo cinco líneas con la conclusión principal.\n2. Una tabla con la tasa de cada trimestre y su variación en puntos frente al trimestre anterior.\n3. Las causas de deserción ordenadas de mayor a menor, con su porcentaje.\n4. Tres recomendaciones para 2026, cada una con un responsable sugerido y un indicador.\nEntrega: Títulos numerados, una tabla y frases cortas en español de Colombia.\n\nTono: Formal y directo, pensado para un comité directivo.\n\nLímites:\n- Usa solo estos datos; si una acción no se puede relacionar con certeza con un resultado, dilo.\n- No inventes cifras ni nombres de personas."
         },
         {
@@ -94,7 +94,7 @@
           "title": "Propuesta de proyecto productivo con cuestionario de repaso",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Edición directa + Historial de versiones + Cuestionario + Exportar a Docs",
+          "canvasFeature": "Historial de versiones",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -105,7 +105,7 @@
             "export-docs"
           ],
           "whyCanvas": "Canvas mantiene la propuesta como documento vivo: editas directamente palabras, comparas versiones, ajustas el tono y, con «Crear → Cuestionario», generas el repaso desde el mismo texto.",
-          "outsideCanvas": "La redacción inicial podría pedirse en el chat, pero la edición directa con barra de formato, el historial de versiones y «Crear → Cuestionario» son exclusivos de Canvas; la exportación abre Documentos de Google.",
+          "outsideCanvas": "Sin Canvas pierdes la barra de formato, el historial de versiones y el cuestionario. La exportación final abre Documentos de Google.",
           "places": [
             "canvas",
             "canvas",
@@ -144,7 +144,7 @@
             "Usa «Cambiar tono → Más formal» y luego abre «Mostrar cambios recientes» o «Versión anterior» en la barra superior de Canvas para comparar el ajuste.",
             "Abre «Crear → Cuestionario» sobre la propuesta, respóndelo y revisa la retroalimentación de cada pregunta.",
             "(Opcional) Exporta la propuesta a Documentos de Google desde «Compartir y exportar» si el comité la pide en Drive.",
-            "Revisa tu entregable con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La tabla de presupuesto suma 8.000.000 COP y la estructura NFT pesa 40 %.",
@@ -161,10 +161,10 @@
         {
           "id": "doc-c-recorrido-interfaz",
           "code": "1C",
-          "title": "Recorrido por la interfaz de Canvas con una guía de bienvenida",
+          "title": "Recorrido por la interfaz de Canvas",
           "level": "Básico",
           "duration": "20 min",
-          "canvasFeature": "Documento + Ajustar longitud y tono + Versiones + Exportar a PDF",
+          "canvasFeature": "Ajustar longitud y tono",
           "capabilities": [
             "doc-create",
             "length-tone",
@@ -349,7 +349,7 @@
       "badge": "Código Web",
       "icon": "💻",
       "image": "assets/images/canvas/canvas_codigo.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Construir aplicaciones interactivas en HTML/CSS/JS ejecutables directamente dentro de Gemini Canvas con previsualización en vivo.",
       "canvasControls": [
         "▶ Vista previa",
@@ -365,16 +365,16 @@
         {
           "id": "code-a-simulador-presupuesto",
           "code": "2A",
-          "title": "Simulador de presupuesto con sliders y gráfico de dona en vivo",
+          "title": "Simulador de presupuesto con controles deslizantes y gráfico de dona",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Canvas de código + Vista previa ejecutable",
+          "canvasFeature": "Vista previa ejecutable",
           "capabilities": [
             "code-preview",
             "console-fix"
           ],
-          "whyCanvas": "En el chat solo verías código; Canvas lo ejecuta en la vista previa, así pruebas los controles y corriges errores desde la consola sin salir de Gemini.",
-          "outsideCanvas": "Todos los pasos en Gemini se ejecutan dentro de Canvas (código, vista previa en vivo y consola de errores); no necesitas salir a un editor externo.",
+          "whyCanvas": "En el chat solo verías código. Canvas lo ejecuta en la vista previa: mueves los controles, ves la dona recalcularse y corriges fallos con la consola.",
+          "outsideCanvas": "No sales de Gemini en ningún paso ni necesitas un editor externo.",
           "places": [
             "canvas",
             "canvas",
@@ -413,7 +413,7 @@
             "Baja «Imprevistos» a 6 % y comprueba que aparezca la advertencia.",
             "Si la vista previa muestra un error, abre la consola o usa «Corregir error» en Canvas para repararlo.",
             "Pide en el chat de la izquierda: «Agrega un botón que muestre la distribución en formato CSV dentro de un cuadro de texto para copiarla y un interruptor de modo oscuro».",
-            "Comprueba todos los puntos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La app abre en la vista previa sin errores.",
@@ -432,7 +432,7 @@
           "title": "Tablero de tareas arrastrable (Kanban) con gráfico de avance diario",
           "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Vista previa + Seleccionar y preguntar + Historial de versiones",
+          "canvasFeature": "Seleccionar y preguntar",
           "capabilities": [
             "code-preview",
             "inline-edit",
@@ -478,7 +478,7 @@
             "Pasa a «Código», selecciona la función del gráfico y escribe: «Marca los días en que la línea real supera a la ideal».",
             "Usa «Versión anterior» y «Mostrar cambios» en la barra superior de Canvas para comparar la diferencia del código y regresa a la versión más reciente.",
             "Pide en el chat de la izquierda: «Guarda el estado del tablero en localStorage y agrega dos botones: Exportar muestra el JSON en un cuadro de texto e Importar lo lee desde ese cuadro, por si el contenedor aislado de la vista previa reinicia la sesión».",
-            "Revisa todos los criterios en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "Al inicio, Hecho suma 11 puntos (T1, T2, T8) y el progreso es 27,5 %.",
@@ -497,7 +497,7 @@
           "title": "Juego de decisiones «Meta de ahorro» para compartir y copiar",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Juego en la vista previa + Compartir + Copiar Canvas",
+          "canvasFeature": "Compartir y copiar Canvas",
           "capabilities": [
             "code-preview",
             "console-fix",
@@ -691,7 +691,7 @@
       "badge": "Hojas de Cálculo",
       "icon": "📊",
       "image": "assets/images/canvas/canvas_matriz.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Evaluar propuestas de oferentes o comparar alternativas complejas con fórmulas matemáticas y exportación transparente a Google Sheets.",
       "canvasControls": [
         "🧮 Ver fórmula",
@@ -710,7 +710,7 @@
           "title": "Tablero de ventas anuales con gráfico y recomendaciones en vivo",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Canvas de código + Vista previa + edición por selección + Compartir",
+          "canvasFeature": "Vista previa de código",
           "capabilities": [
             "code-preview",
             "inline-edit",
@@ -754,7 +754,7 @@
             "En el código, selecciona la función que calcula la variación mensual y escribe: «Muestra la variación con signo y un decimal, en rojo si es negativa».",
             "Pide en el chat de la izquierda: «Agrega un botón que copie la tabla en formato CSV» y pruébalo en la vista previa.",
             "Usa «Compartir» en «Compartir y exportar» para generar el enlace del tablero (ruta alternativa en cuenta institucional `@soy.sena.edu.co`: si el administrador deshabilitó enlaces públicos, usa «Copiar contenido» y guarda el archivo `.html`).",
-            "Comprueba las cifras con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El total anual es 120.250 (café 62.700, panela 31.100, queso 26.450).",
@@ -764,7 +764,7 @@
             "La vista previa muestra barras apiladas por mes y tarjetas KPI.",
             "El botón copia la tabla en CSV sin errores en la consola."
           ],
-          "stretch": "Pide: «Agrega un filtro por trimestre y una línea de tendencia sobre el total mensual». En tu vida diaria, repite este tablero para comparar tus gastos fijos del año o decidir compras (como elegir arriendo, celular o moto).",
+          "stretch": "Pide: «Agrega un filtro por trimestre y una línea de tendencia sobre el total mensual».",
           "prompt": "Contexto: La tienda del centro debe decidir qué producto promocionar en 2026 y en qué meses reforzar el inventario.\n\nRol: Actúa como analista comercial de pequeñas unidades productivas.\n\nDatos:\n\"\"\"\nVENTAS 2025 — TIENDA AGROINDUSTRIAL DEL CENTRO (miles de COP, datos de práctica)\n\nMes,Cafe,Panela,Queso\nEne,4200,2100,1800\nFeb,3900,2000,1750\nMar,4500,2300,1900\nAbr,4800,2250,2000\nMay,5100,2400,2100\nJun,4700,2600,2050\nJul,5300,2500,2200\nAgo,5600,2700,2300\nSep,5200,2650,2250\nOct,5800,2900,2400\nNov,6200,3100,2600\nDic,7400,3600,3100\n\"\"\"\n\nTarea: En Canvas, crea un tablero web de una sola página con:\n1. Una tabla con el total de cada mes y su variación porcentual frente al mes anterior.\n2. Los totales anuales y la participación de cada producto.\n3. El mes pico, el mes más bajo y el producto que más creció de enero a diciembre.\n4. Un gráfico de barras apiladas por mes, dibujado con SVG, y tres recomendaciones de inventario y promoción basadas en esas cifras.\nEntrega: Un solo archivo HTML con CSS y JavaScript.\n\nTono: Claro y práctico, para el dueño de un negocio pequeño.\n\nLímites:\n- Cifras en miles de COP con separador de miles y porcentajes con un decimal.\n- Calcula todo en JavaScript a partir de los datos, sin librerías externas."
         },
         {
@@ -773,14 +773,14 @@
           "title": "Matriz de riesgos con mapa de calor interactivo",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Canvas de código + Vista previa + edición por selección + Compartir",
+          "canvasFeature": "Vista previa de código",
           "capabilities": [
             "code-preview",
             "inline-edit",
             "share"
           ],
           "whyCanvas": "El mapa de calor 5 × 5 funciona en la vista previa: haces clic en cada celda, ajustas una parte por selección y compartes la app con el comité.",
-          "outsideCanvas": "El cálculo de niveles podría hacerse en chat, pero el mapa de calor interactivo 5 × 5 y la edición por selección de celdas requieren Canvas.",
+          "outsideCanvas": "Sin Canvas obtendrías solo la tabla de niveles, sin el mapa de calor interactivo ni la edición por celda.",
           "places": [
             "canvas",
             "canvas",
@@ -814,7 +814,7 @@
             "Pide en el chat de la izquierda: «Crea una aplicación web con un mapa de calor 5 x 5 de estos riesgos; al hacer clic en una celda, muestra sus riesgos y acciones».",
             "En la «Vista previa», haz clic en la celda de probabilidad 2 e impacto 5 y comprueba los dos riesgos.",
             "Usa «Compartir» para generar el enlace al comité de seguimiento (ruta alternativa en `@soy.sena.edu.co`: usa «Copiar contenido» o «Exportar a Documentos de Google» si los enlaces públicos están restringidos).",
-            "Revisa tu entregable con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "Hay 4 riesgos críticos: R9 (20), R2 (16), R7 (15) y R8 (15).",
@@ -833,7 +833,7 @@
           "title": "De matriz de decisión a simulador web de sensibilidad presupuestal",
           "level": "Avanzado",
           "duration": "30 min",
-          "canvasFeature": "Documento + Crear → Página web + Seleccionar y preguntar + Compartir",
+          "canvasFeature": "Crear → Página web",
           "capabilities": [
             "doc-create",
             "create-webpage",
@@ -1004,7 +1004,7 @@
       "badge": "Diagramas",
       "icon": "🔀",
       "image": "assets/images/canvas/canvas_diagrama.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Mapear flujos de trabajo institucionales, protocolos de soporte técnico y ciclos de vida de software con sintaxis visual Mermaid.",
       "canvasControls": [
         "📝 Ver código Mermaid",
@@ -1020,10 +1020,10 @@
         {
           "id": "flow-a-matricula-swimlanes",
           "code": "4A",
-          "title": "Flujograma por carriles con texto que dibuja (Mermaid): proceso de matrícula",
+          "title": "Flujograma de matrícula por carriles con Mermaid",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Texto que dibuja diagramas (Mermaid) en Vista previa",
+          "canvasFeature": "Diagramas Mermaid en la vista previa",
           "capabilities": [
             "code-preview",
             "console-fix",
@@ -1069,7 +1069,7 @@
             "En «Código», selecciona la línea que empieza por ENT y escribe: «Agrega al texto del nodo su duración de 3 días».",
             "En la «Vista previa», activa el conmutador «Vista vertical» y comprueba que el diagrama se dibuje de arriba hacia abajo sin cortarse.",
             "Copia el código de referencia de esta guía, pégalo en el chat de la izquierda con la frase: «Muestra este diagrama debajo del tuyo para compararlos» y anota qué le falta a tu versión.",
-            "Comprueba todos los criterios en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La vista previa muestra cuatro carriles con el nombre de cada actor.",
@@ -1085,10 +1085,10 @@
         {
           "id": "flow-b-secuencia-jwt-gantt",
           "code": "4B",
-          "title": "Cómo viajan los datos al iniciar sesión (JWT) y calendario de tareas (Gantt)",
+          "title": "Inicio de sesión con JWT y cronograma Gantt",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Diagrama de pasos (secuencia) + calendario Gantt en Vista previa",
+          "canvasFeature": "Diagramas Mermaid en la vista previa",
           "capabilities": [
             "code-preview",
             "inline-edit",
@@ -1133,7 +1133,7 @@
             "Pide en el chat de la izquierda: «Agrega una pestaña de glosario con JWT, access token, refresh token, firma y código 401, cada uno en una frase».",
             "Copia el código de referencia de esta guía y pégalo en el chat de la izquierda con la frase: «Compara estos diagramas con los tuyos y dime qué diferencias hay»; corrige lo que falte.",
             "(Opcional) Usa «Compartir» para enviar el enlace al equipo; si tu cuenta `@soy.sena.edu.co` restringe enlaces públicos, el resultado queda guardado en tu chat de Gemini.",
-            "Verifica tu entregable con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El diagrama de secuencia muestra los cinco participantes en orden.",
@@ -1149,10 +1149,10 @@
         {
           "id": "flow-c-estados-mantenimiento",
           "code": "4C",
-          "title": "Mapa de etapas de un arreglo (máquina de estados) y prueba interactiva",
+          "title": "Máquina de estados de un arreglo con prueba interactiva",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Vista previa + Consola y corrección + Versiones + Edición por selección",
+          "canvasFeature": "Consola y corrección de errores",
           "capabilities": [
             "code-preview",
             "console-fix",
@@ -1359,7 +1359,7 @@
       "badge": "Diseño & UI",
       "icon": "🎨",
       "image": "assets/images/canvas/canvas_ui_ux.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Definir sistemas de diseño accesibles y generar maquetas conceptuales de interfaces antes de la fase de codificación.",
       "canvasControls": [
         "👁️ Validar contraste",
@@ -1379,7 +1379,7 @@
           "title": "Página de reservas con modo oscuro y horarios en vivo",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Vista previa adaptable a celular + Seleccionar y preguntar",
+          "canvasFeature": "Vista previa adaptable a celular",
           "capabilities": [
             "code-preview",
             "inline-edit",
@@ -1423,7 +1423,7 @@
             "En el código, selecciona la sección de horarios y escribe: «Destaca con un borde la franja con más cubículos libres».",
             "Pide en el chat de la izquierda: «Agrega en el encabezado un conmutador Vista móvil (390 px) / Vista escritorio que ajuste el contenedor principal a 390 px centrados y apile las columnas sin desbordamiento».",
             "Vuelve a la «Vista previa», activa la vista de 390 px y comprueba que el acordeón funcione con teclado.",
-            "Verifica tu resultado con la lista de comprobación de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La franja 16:00-18:00 aparece en rojo (95 %) y 10:00-12:00 en ámbar (85 %).",
@@ -1442,7 +1442,7 @@
           "title": "Prototipo móvil navegable de reporte de incidencias",
           "level": "Avanzado",
           "duration": "35 min",
-          "canvasFeature": "Canvas de código + prototipo multipantalla",
+          "canvasFeature": "Prototipo multipantalla",
           "capabilities": [
             "code-preview",
             "inline-edit"
@@ -1485,7 +1485,7 @@
             "Crea un reporte de tipo Agua en «Bloque D-110» con prioridad Alta y búscalo en Inicio.",
             "En el código, selecciona la línea de tiempo del detalle y escribe: «Agrega la fecha y hora de cada cambio de estado».",
             "Pide en el chat de la izquierda: «Agrega un filtro por prioridad en Inicio».",
-            "Comprueba todos los puntos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "Las cuatro pantallas navegan sin recargar.",
@@ -1504,7 +1504,7 @@
           "title": "App con funciones de Gemini: redactor de reportes de incidencias",
           "level": "Avanzado",
           "duration": "35 min",
-          "canvasFeature": "Vista previa + Agregar funciones de Gemini + Seleccionar y preguntar",
+          "canvasFeature": "Funciones de Gemini en la app",
           "capabilities": [
             "code-preview",
             "gemini-in-app",
@@ -1676,7 +1676,7 @@
       "badge": "Edición Inline",
       "icon": "✂️",
       "image": "assets/images/canvas/canvas_inline.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Aislar párrafos, cláusulas o funciones de código para pedir mejoras puntuales manteniendo intacto el resto del documento.",
       "canvasControls": [
         "🔄 Comparar antes y después",
@@ -1695,7 +1695,7 @@
           "title": "Correo a acudientes: corregir tono párrafo por párrafo",
           "level": "Básico",
           "duration": "20 min",
-          "canvasFeature": "Selección de texto + Edición directa + Historial de versiones",
+          "canvasFeature": "Edición por selección",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -1713,7 +1713,7 @@
             "canvas",
             "portal"
           ],
-          "goal": "Practicar la edición quirúrgica: corregir solo los fragmentos problemáticos de un correo sin que Canvas reescriba el resto.",
+          "goal": "Practicar la edición por partes: corregir solo los fragmentos problemáticos de un correo sin que Canvas reescriba el resto.",
           "scenario": "La coordinación redactó un correo con tono amenazante. Debe salir hoy, pero los datos de fecha, hora y lugar no pueden cambiar.",
           "promptParts": {
             "role": "editor de comunicaciones institucionales",
@@ -1736,7 +1736,7 @@
             "Selecciona la línea «Es obligatorio confirmar…» y escribe: «Pide la confirmación con amabilidad y fija como plazo el jueves 3 de diciembre».",
             "Haz clic directamente en el documento y pon en negrita la fecha con la barra de formato.",
             "Abre «Mostrar cambios recientes» en la barra superior de Canvas para verificar que la fecha, la hora y el lugar siguen intactos.",
-            "Comprueba todos los criterios en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "Solo cambiaron los fragmentos seleccionados.",
@@ -1752,10 +1752,10 @@
         {
           "id": "inline-b-depurar-funcion",
           "code": "6B",
-          "title": "Corregir errores paso a paso (depurar) seleccionando solo la parte dañada",
+          "title": "Depurar código seleccionando solo la parte dañada",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Canvas de código + selección por bloque + Vista previa",
+          "canvasFeature": "Edición por selección en código",
           "capabilities": [
             "code-preview",
             "inline-edit"
@@ -1796,7 +1796,7 @@
             "Selecciona solo estado y escribe: «Un promedio de 3.5 debe quedar Aprobado».",
             "Selecciona la línea que muestra el promedio y escribe: «Muestra el promedio con un decimal usando toFixed(1)».",
             "Prueba en la «Vista previa» los tres casos de prueba de los datos.",
-            "Marca los puntos cumplidos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El ciclo usa i < notas.length.",
@@ -1815,7 +1815,7 @@
           "title": "Comunicado con errores: aceptar y rechazar sugerencias de edición",
           "level": "Básico",
           "duration": "20 min",
-          "canvasFeature": "Sugerencias de edición + Edición directa + Historial de versiones",
+          "canvasFeature": "Sugerencias de edición",
           "capabilities": [
             "suggest-edits",
             "inline-edit",
@@ -1938,7 +1938,7 @@
       "badge": "Algoritmos & Python",
       "icon": "⚡",
       "image": "assets/images/canvas/canvas_algoritmo.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Depurar cuellos de botella de rendimiento, optimizar la complejidad asintótica de funciones críticas y generar documentación técnica verificable.",
       "canvasControls": [
         "⚡ Solución de referencia",
@@ -1954,10 +1954,10 @@
         {
           "id": "algo-a-duplicados-on",
           "code": "7A",
-          "title": "Detectar repetidos en 1 segundo: de búsqueda lenta a libreta rápida",
+          "title": "Detectar documentos repetidos: de búsqueda lenta a rápida",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Canvas de código Python + Vista previa en navegador + gráfico comparativo",
+          "canvasFeature": "Python con vista previa",
           "capabilities": [
             "code-preview",
             "inline-edit"
@@ -1999,7 +1999,7 @@
             "Abre la «Vista previa» y revisa el resultado; si Pyodide no carga por tu red, pide la misma función y comprobaciones en JavaScript.",
             "De regreso en Gemini Canvas, pide en el chat: «Crea una página web con un gráfico de comparaciones contra n para ambas versiones, con un botón de escala logarítmica (para ver juntas la línea gigante y la pequeña) y un deslizador para elegir n».",
             "Abre la «Vista previa» del nuevo lienzo HTML, mueve el control hasta 10.000 y activa la escala logarítmica.",
-            "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La función mejorada devuelve ['1001', '1002'] con la muestra.",
@@ -2015,10 +2015,10 @@
         {
           "id": "algo-b-visualizador-ordenamiento",
           "code": "7B",
-          "title": "Carrera visual para ordenar listas: método paso a paso vs. divide y vencerás",
+          "title": "Carrera visual: ordenamiento simple contra divide y vencerás",
           "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Canvas de código + animación interactiva en Vista previa",
+          "canvasFeature": "Animación en la vista previa",
           "capabilities": [
             "code-preview",
             "inline-edit"
@@ -2062,7 +2062,7 @@
             "Reinicia y usa «Paso a paso» en merge sort para ver cómo junta grupos pequeños ya ordenados.",
             "En el código, selecciona la función de burbuja y escribe: «Agrega parada temprana (detente apenas ya esté ordenado) y muestra cuántas comparaciones ahorra».",
             "Pide en el chat de la izquierda: «Agrega un botón que genere 16 valores aleatorios como si fueran precios o puntajes».",
-            "Verifica todos los resultados con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "Ambos paneles terminan con la lista ordenada de menor a mayor.",
@@ -2078,10 +2078,10 @@
         {
           "id": "algo-c-notas-colab",
           "code": "7C",
-          "title": "Calcular promedios y notas en Python: de Canvas a Google Colab con un clic",
+          "title": "Promedios y notas en Python, de Canvas a Colab",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Canvas de código Python + Exportar a Colab",
+          "canvasFeature": "Exportar a Colab",
           "capabilities": [
             "export-colab",
             "inline-edit"
@@ -2223,7 +2223,7 @@
       "badge": "Didáctica & Rúbricas",
       "icon": "📚",
       "image": "assets/images/canvas/canvas_rubrica.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Co-diseñar guías de aprendizaje completas, criterios observables y rúbricas analíticas estructuradas para formación técnica por competencias.",
       "canvasControls": [
         "💬 Preguntas de referencia",
@@ -2242,7 +2242,7 @@
           "title": "Rúbrica analítica con calculadora de nota y gráfico radar",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Documento + edición por selección + app con funciones de Gemini + Exportar a Docs",
+          "canvasFeature": "App con funciones de Gemini",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -2287,7 +2287,7 @@
             "Pide en el chat de la izquierda: «Crea una calculadora web: elijo el puntaje de 1 a 5 de cada criterio (se admiten valores intermedios), veo la nota en vivo y un radar del perfil frente al nivel esperado de 4».",
             "En la «Vista previa», carga los valores del aprendiz 1 y luego sube Pruebas a 4.",
             "Usa «Agregar funciones de Gemini» y pide: «Redacta la retroalimentación del aprendiz según su criterio más bajo» (ruta alternativa si tu cuenta `@soy.sena.edu.co` no muestra el botón: pide un generador determinista de retroalimentación en JavaScript por criterio y nivel).",
-            "Verifica tu entregable con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La rúbrica tiene 16 descriptores observables.",
@@ -2303,10 +2303,10 @@
         {
           "id": "rubric-b-guia-quiz-git",
           "code": "8B",
-          "title": "Guía para principiantes sobre guardar versiones (Git) con cuestionario autocalificable",
+          "title": "Guía de Git para principiantes con cuestionario autocalificable",
           "level": "Básico",
           "duration": "30 min",
-          "canvasFeature": "Documento + Cuestionario web interactivo en Canvas",
+          "canvasFeature": "Crear → Cuestionario",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -2351,7 +2351,7 @@
             "Abre «Crear → Cuestionario» sobre la guía para generar la evaluación con retroalimentación inmediata.",
             "Responde el cuestionario con dos errores a propósito y revisa la explicación de cada respuesta.",
             "(Opcional) Exporta la guía a Documentos de Google desde «Compartir y exportar».",
-            "Comprueba tu entregable con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "Los cinco momentos suman 240 minutos.",
@@ -2366,10 +2366,10 @@
         {
           "id": "rubric-c-formulas-latex",
           "code": "8C",
-          "title": "Ficha de fórmulas claras (LaTeX) y exportación a PDF sin cortes",
+          "title": "Ficha de fórmulas con LaTeX exportada a PDF",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Documento + fórmulas bonitas (LaTeX) + Exportar a PDF",
+          "canvasFeature": "Fórmulas con LaTeX",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -2525,7 +2525,7 @@
       "badge": "SQL & Pipelines",
       "icon": "🗄️",
       "image": "assets/images/canvas/canvas_sql.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Construir consultas analíticas de alto rendimiento, diseñar pipelines de transformación de datos relacionales y optimizar planes de ejecución.",
       "canvasControls": [
         "🗄️ Consulta de referencia",
@@ -2541,17 +2541,17 @@
         {
           "id": "sql-a-biblioteca-dashboard",
           "code": "9A",
-          "title": "Hacerle preguntas a tus datos (SQL) con tablero en vivo sin instalar nada",
+          "title": "Preguntas SQL a tus datos con tablero en vivo",
           "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Consultas SQL + Base de datos en navegador (Pyodide/SQLite) + Tablero visual",
+          "canvasFeature": "SQL ejecutado en el navegador",
           "capabilities": [
             "code-preview",
             "inline-edit",
             "export-colab"
           ],
           "whyCanvas": "Las preguntas a la base de datos (SQL) se escriben en Canvas y se ejecutan de verdad en la «Vista previa» con SQLite dentro del navegador, mostrando las respuestas en un tablero visual sin instalar nada.",
-          "outsideCanvas": "Canvas no trae base de datos propia, pero la «Vista previa» carga Pyodide (que incluye SQLite en el navegador): así tus preguntas SQL corren de verdad dentro de Canvas. Exportar a Colab es opcional.",
+          "outsideCanvas": "Canvas no incluye un servidor de base de datos; la consulta corre en tu equipo mediante Pyodide. Exportar a Colab es opcional.",
           "places": [
             "canvas",
             "canvas",
@@ -2592,7 +2592,7 @@
             "Pide en el chat de la izquierda: «Junto a cada consulta, agrega una prueba que compare el resultado devuelto por SQLite con el valor de la lista Verifica tu resultado y marque ✓ o ✗»; revisa en la «Vista previa» que todas queden en ✓.",
             "Pide en el chat de la izquierda: «Agrega tarjetas con los totales y un gráfico de barras con los préstamos por programa, calculados con los resultados de las consultas».",
             "(Opcional) Si quieres un cuaderno aparte, pide un script Python con sqlite3 y usa «Compartir y exportar → Exportar a Colab»; este paso ocurre fuera de Gemini.",
-            "Comprueba todos los resultados con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El ranking pone «Código limpio» en 1 (4 préstamos) y los otros cuatro libros empatan en 2 (2 préstamos).",
@@ -2608,10 +2608,10 @@
         {
           "id": "sql-b-limpieza-asistencia",
           "code": "9B",
-          "title": "Limpiar una tabla desordenada paso a paso (SQL) y ver el mapa de datos",
+          "title": "Limpieza paso a paso de una tabla con SQL",
           "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Canvas de código SQL + Limpieza en navegador (Pyodide) + Mapa de tablas",
+          "canvasFeature": "Limpieza SQL en el navegador",
           "capabilities": [
             "code-preview",
             "inline-edit"
@@ -2655,7 +2655,7 @@
             "Abre la «Vista previa» y comprueba en la tabla de calidad que de 14 filas crudas queden 10 limpias y 4 rechazadas.",
             "Pide en el chat de la izquierda: «Agrega el diagrama entidad-relación en Mermaid de aprendices, asistencia y rechazos y una dona con los estados limpios; si Mermaid no carga, dibújalo con SVG».",
             "Pide en el chat de la izquierda: «Muestra en una pestaña el bloque SQL encapsulado como CREATE OR REPLACE FUNCTION fn_limpiar_asistencia(p_fecha_carga DATE) listo para copiar a PostgreSQL»; solo se lee y se copia, porque Canvas no ejecuta PostgreSQL.",
-            "Verifica todos los puntos con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "De 14 filas crudas quedan 10 limpias y 4 rechazadas.",
@@ -2672,10 +2672,10 @@
         {
           "id": "sql-c-conciliacion-mesa-pdf",
           "code": "9C",
-          "title": "Cruzar listas sin perder a nadie (LEFT JOIN) y exportar el reporte en PDF",
+          "title": "Cruzar listas con LEFT JOIN y exportar a PDF",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Documento y código SQL + Vista previa + Edición por selección + Exportar a PDF",
+          "canvasFeature": "Edición por selección en SQL",
           "capabilities": [
             "doc-create",
             "code-preview",
@@ -2856,7 +2856,7 @@
       "badge": "Auditoría & Dictámenes",
       "icon": "⚖️",
       "image": "assets/images/canvas/canvas_informe.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "objective": "Cruzar múltiples auditorías e informes densos para extraer conclusiones directivas, matrices de riesgo y planes de acción con valor legal y técnico.",
       "canvasControls": [
         "⚖️ Ver regla del semáforo",
@@ -2872,10 +2872,10 @@
         {
           "id": "report-a-mesa-ayuda",
           "code": "10A",
-          "title": "Informe ejecutivo de mesa de ayuda con infografía y presentación para el comité",
+          "title": "Informe de mesa de ayuda con infografía y presentación",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Archivo adjunto CSV + Deep Research a Canvas + Infografía + Presentación",
+          "canvasFeature": "Archivo CSV como fuente",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -2924,7 +2924,7 @@
             "(Opcional) En un chat nuevo, elige «Deep Research», investiga buenas prácticas de mesas de ayuda TI y usa una de ellas para ajustar una de tus tres decisiones.",
             "Abre «Crear → Presentación» sobre el informe; si tu cuenta no lo muestra, pide en el chat de la izquierda: «Convierte este informe en una presentación de 6 diapositivas para el comité». Luego usa «Exportar a Presentaciones de Google».",
             "(Opcional) Exporta el informe con «Compartir y exportar → Exportar a Documentos de Google».",
-            "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El tiempo promedio baja de 18 a 10 horas (−44,4 %).",
@@ -2935,16 +2935,16 @@
             "Si hiciste el paso opcional de Deep Research, al menos una decisión cita una buena práctica encontrada.",
             "La infografía y la presentación muestran las mismas cifras del informe."
           ],
-          "stretch": "Abre en Canvas el informe de Deep Research desde «Crear» y usa «Crear → Página web» para comparar tus seis meses con los referentes del sector. En tu vida diaria, úsalo para comparar 3 cotizaciones de un servicio o reparación del hogar.",
+          "stretch": "Abre en Canvas el informe de Deep Research desde «Crear» y usa «Crear → Página web» para comparar tus seis meses con los referentes del sector.",
           "prompt": "Contexto: La dirección quiere saber si el portal de autoservicio y el segundo técnico mejoraron el servicio, y compartirá el resultado con todo el personal.\n\nRol: Actúa como auditor de servicios TI que informa a la alta dirección.\n\nDatos:\n\"\"\"\nMESA DE AYUDA TIC — MAYO A OCTUBRE DE 2026 (datos de práctica)\n\nMes,Abiertos,Resueltos,Tiempo_promedio_horas,Satisfaccion_1a5\nMay,120,110,18,4.1\nJun,135,128,16,4.2\nJul,160,140,22,3.8\nAgo,150,149,14,4.4\nSep,142,140,12,4.5\nOct,128,127,10,4.6\n\nCategorías de octubre:\nAcceso y contraseñas,45\nRed y wifi,30\nEquipos,25\nSoftware,20\nOtros,8\n\nHechos relevantes:\n- Julio: inicio de trimestre con 300 aprendices nuevos y caída del servidor de autenticación (2 días).\n- Agosto: se publicó un portal de autoservicio para restablecer contraseñas.\n- Septiembre: se contrató un segundo técnico de soporte.\n\"\"\"\n\nTarea: En Canvas, redacta un informe ejecutivo con:\n1. Un resumen de máximo cinco líneas con las tres cifras más importantes.\n2. Una tabla mensual con la tasa de resolución y el tiempo promedio.\n3. Una comparación entre mayo-julio y agosto-octubre.\n4. Qué cambios pueden atribuirse a cada hecho relevante y cuáles podrían ser coincidencia.\n5. Tres decisiones recomendadas.\nEntrega: Títulos numerados, una tabla y un cuadro de decisiones.\n\nTono: Ejecutivo y objetivo, con cifras antes que opiniones.\n\nLímites:\n- No afirmes causalidad sin advertir sus límites.\n- Cifras con un decimal y formato colombiano."
         },
         {
           "id": "report-b-dictamen-nube",
           "code": "10B",
-          "title": "Dictamen técnico de proveedores con matriz ponderada y análisis de sensibilidad",
+          "title": "Dictamen de proveedores con matriz ponderada y sensibilidad",
           "level": "Avanzado",
           "duration": "35 min",
-          "canvasFeature": "Documento + aplicación web con radar y pesos ajustables",
+          "canvasFeature": "App con pesos ajustables",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -2990,7 +2990,7 @@
             "Pide en el chat de la izquierda: «Crea una aplicación web con un control por cada peso (la suma debe ser 100 %), ranking en vivo, un radar de los tres proveedores y un aviso cuando cambie el ganador».",
             "En la «Vista previa», mueve los pesos hasta que cambie el ganador.",
             "(Opcional) Vuelve a la versión del dictamen en documento y expórtalo a Documentos de Google para su firma.",
-            "Verifica todos los puntos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La matriz base da B 4,05, A 3,95 y C 3,85.",
@@ -3009,7 +3009,7 @@
           "title": "De investigación con Deep Research a infografía y presentación directiva",
           "level": "Avanzado",
           "duration": "30 min",
-          "canvasFeature": "Deep Research + Sugerencias de edición + Crear → Infografía + Presentaciones de Google",
+          "canvasFeature": "De Deep Research a Canvas",
           "capabilities": [
             "deep-research",
             "suggest-edits",
@@ -3017,7 +3017,7 @@
             "create-slides"
           ],
           "whyCanvas": "Canvas recibe una síntesis de investigación profunda (Deep Research), permite depurar el estilo con «Sugerencias de edición» y la transforma en segundos con «Crear → Infografía» o en diapositivas para «Presentaciones de Google».",
-          "outsideCanvas": "Deep Research se inicia en el selector de herramientas de Gemini y la exportación final envía las diapositivas a Presentaciones de Google; la edición y la infografía ocurren en Canvas.",
+          "outsideCanvas": "Deep Research se inicia desde el selector de herramientas de Gemini, y las diapositivas terminan en Presentaciones de Google.",
           "places": [
             "gemini",
             "canvas",
@@ -3169,7 +3169,7 @@
       "number": "11",
       "icon": "📷",
       "image": "assets/images/canvas/canvas_multimodal_sketch.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "canvasControls": [
         "▶ Vista previa en vivo",
         "🔍 Ver inferencia OCR",
@@ -3265,7 +3265,7 @@
           "title": "De boceto en libreta a formulario reactivo con validación institucional",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Visión Multimodal + Vista previa + Seleccionar y preguntar",
+          "canvasFeature": "Imagen como punto de partida",
           "capabilities": [
             "image-input",
             "code-preview",
@@ -3308,7 +3308,7 @@
             "Escribe un correo con dominio externo (ej. usuario@gmail.com) y comprueba el error con los dominios aceptados; luego cámbialo a @soy.sena.edu.co y verifica el mensaje verde.",
             "Escribe en la contraseña «abc», luego «abcdefgh» y después «Abcdef1!» y observa los tres segmentos: Débil, Media y Segura.",
             "En la «Vista previa», activa «Seleccionar y preguntar», haz clic en el botón [Completar Registro Formativo] y pide: «Muestra un resumen accesible con los datos validados al enviar».",
-            "Marca todos los criterios cumplidos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El formulario tiene los 3 campos del boceto: Nombre Completo, Correo Institucional y Contraseña de Acceso.",
@@ -3324,17 +3324,17 @@
         {
           "id": "mm-b-pizarra-flujograma",
           "code": "11B",
-          "title": "De trazos en pizarra a flujograma interactivo Mermaid de atención PQRS",
+          "title": "De una pizarra a un flujograma Mermaid de PQRS",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Imagen adjunta + página HTML con Mermaid + Vista previa",
+          "canvasFeature": "Imagen adjunta a flujograma",
           "capabilities": [
             "image-input",
             "code-preview",
             "inline-edit"
           ],
           "whyCanvas": "La foto de la pizarra se vuelve un diagrama que se dibuja en la vista previa y se ajusta nodo por nodo con selección.",
-          "outsideCanvas": "Gemini reconoce los trazos de la pizarra incluso sin activar el lienzo, pero el renderizado del diagrama Mermaid en la «Vista previa», la edición por selección y la copia del SVG ocurren dentro de Canvas.",
+          "outsideCanvas": "Gemini reconoce los trazos aun sin el lienzo; sin Canvas pierdes el dibujo del diagrama y el ajuste por selección.",
           "places": [
             "gemini",
             "canvas",
@@ -3368,7 +3368,7 @@
             "Abre la «Vista previa» y comprueba que se dibujen los 3 subgrafos con sus conexiones.",
             "Selecciona el nodo del Comité de Evaluación en el código y escribe: «Agrega una nota indicando que sesiona ordinariamente cada 15 días».",
             "Pide en el chat de la izquierda: «Agrega un botón que muestre el código SVG del diagrama en un cuadro de texto para copiarlo» y pruébalo en la vista previa.",
-            "Verifica todos los puntos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El código Mermaid tiene exactamente los 3 subgrafos: Radicación, Gestión y Decisión, y Cierre.",
@@ -3383,10 +3383,10 @@
         {
           "id": "mm-c-tabla-inventario",
           "code": "11C",
-          "title": "De la foto de un inventario a un tablero de compras",
+          "title": "Foto de inventario convertida en tablero de compras",
           "level": "Intermedio",
           "duration": "25 min",
-          "canvasFeature": "Imagen adjunta + Vista previa + edición por selección",
+          "canvasFeature": "Imagen adjunta a tablero",
           "capabilities": [
             "image-input",
             "code-preview",
@@ -3438,7 +3438,7 @@
             "Con 60 conectores RJ45 el total baja a 21 y ese insumo queda en «Completo».",
             "La lista de compra para copiar tiene una línea por cada insumo por comprar."
           ],
-          "stretch": "Pide: «Agrega un precio por unidad en cada fila y calcula el costo total de la compra». En tu vida diaria, tómale foto a la lista del mercado o a tu alacena y convierte eso en tu lista de compras automática.",
+          "stretch": "Pide: «Agrega un precio por unidad en cada fila y calcula el costo total de la compra».",
           "prompt": "Contexto: El laboratorio de redes lleva el inventario a mano. Adjunto la foto de la hoja para convertirla en un tablero que muestre qué hay que comprar.\n\nRol: Actúa como analista de inventarios que digitaliza registros en papel.\n\nDatos:\n\"\"\"\nIMAGEN ADJUNTA: inventario_laboratorio.png (tabla escrita a mano en una hoja de cuaderno, material de práctica)\nLee en la imagen:\n- El título, la fecha del conteo y las tres columnas: Insumo, Cantidad y Mínimo.\n- Las seis filas con sus cifras, incluidas las que están encerradas en rojo.\n- Las notas al pie sobre cómo se marca lo que está por debajo del mínimo.\nSi una cifra no se lee con claridad, dímelo antes de suponer su valor.\n\"\"\"\n\nTarea: En Canvas, crea una página web con vista previa que digitalice la tabla de la imagen con:\n1. Una tabla con los seis insumos, su cantidad y su mínimo, tal como aparecen en la foto.\n2. Una columna «Faltan» con las unidades que faltan para llegar al mínimo y un estado escrito («Completo» o «Por comprar»), no solo con color.\n3. Tarjetas con el número de insumos por comprar y el total de unidades que faltan.\n4. Un cuadro de texto con la lista de compra para copiar, una línea por insumo.\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Claro y directo, para el encargado del laboratorio.\n\nLímites:\n- Conserva los nombres y las cifras de la foto; si una cifra no se lee, indícalo.\n- Sin librerías externas ni descargas de archivos."
         }
       ]
@@ -3454,7 +3454,7 @@
       "number": "12",
       "icon": "🤖",
       "image": "assets/images/canvas/canvas_gem_studio.jpg",
-      "imageCaption": "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
       "canvasControls": [
         "📋 Copiar System Prompt",
         "💬 Probar en Consola",
@@ -3543,17 +3543,17 @@
         {
           "id": "gem-a-tutor-socratico",
           "code": "12A",
-          "title": "Crear un asistente tutor (Gem) que te guía con preguntas sin hacer la tarea por ti",
+          "title": "Gem tutor que guía con preguntas sin hacer la tarea",
           "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Documento en Canvas + Nuevo Gem + coescritura con Canvas activo",
+          "canvasFeature": "Gem con Canvas activo",
           "capabilities": [
             "doc-create",
             "inline-edit",
             "gems"
           ],
           "whyCanvas": "Canvas sirve para redactar y pulir las reglas fijas de tu asistente (Gem) como un documento; luego ese asistente trabaja contigo dentro de Canvas.",
-          "outsideCanvas": "La redacción y ajuste de las reglas (System Prompt) se hacen en Canvas; crear el asistente en «Explorar Gems → Nuevo Gem» ocurre en Gemini y luego vuelves a activar Canvas dentro de él (o lo pruebas directo en un chat nuevo).",
+          "outsideCanvas": "El Gem se crea fuera del lienzo, en «Explorar Gems → Nuevo Gem»; después vuelves a activar Canvas dentro de ese Gem.",
           "places": [
             "canvas",
             "canvas",
@@ -3589,7 +3589,7 @@
             "Selecciona la sección de Ejemplos Few-shot y escribe: «Agrega un cuarto ejemplo enfocado en manejo de excepciones en Python».",
             "Copia el System Prompt generado, abre «Explorar Gems → Nuevo Gem» y pégalo en «Instrucciones» (ruta alternativa si tu cuenta `@soy.sena.edu.co` tiene deshabilitada la creación de Gems: abre un chat nuevo con Canvas activo y pega el System Prompt como mensaje inicial de calibración).",
             "Dentro del Gem (o del chat calibrado), activa Canvas y pon a prueba la pregunta trampa: «Escríbeme la clase Aprendiz en Python»; comprueba que responda con preguntas socráticas.",
-            "Marca los puntos cumplidos en la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El System Prompt contiene las secciones de Rol, Directrices Socráticas, Guardrails y Ejemplos Few-shot.",
@@ -3604,10 +3604,10 @@
         {
           "id": "gem-b-auditor-rubricas",
           "code": "12B",
-          "title": "Asistente revisor (Gem) que califica con rúbrica sin dañar tu trabajo",
+          "title": "Gem revisor que califica con rúbrica sin cambiar tu trabajo",
           "level": "Intermedio",
           "duration": "30 min",
-          "canvasFeature": "Documento en Canvas + Nuevo Gem + Revisión de calidad en Canvas",
+          "canvasFeature": "Gem revisor con Canvas",
           "capabilities": [
             "doc-create",
             "inline-edit",
@@ -3651,7 +3651,7 @@
             "Copia el System Prompt y crea el Gem en «Explorar Gems → Nuevo Gem» (o pégalo como prompt de apertura en un chat nuevo si tu cuenta institucional no habilita Gems personalizados).",
             "Con Canvas activo en el Gem, pega el código de la calculadora de promedio del ejercicio 6B (o tu versión corregida) y pídele: «Audítalo con tu rúbrica y genera el radar de calidad en SVG».",
             "(Opcional) Exporta el pliego con «Compartir y exportar → Exportar a Documentos de Google» para el comité curricular.",
-            "Comprueba todos los criterios con la lista «Verifica tu resultado» de esta guía."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "La tabla de ponderaciones suma exactamente 100 % (30 % + 30 % + 20 % + 20 %).",
@@ -3666,10 +3666,10 @@
         {
           "id": "gem-c-integrador-vision-completa",
           "code": "12C",
-          "title": "Proyecto Final 360°: de asistente tutor (Gem) a aplicación web verificadora para tu Portafolio de Evidencias",
+          "title": "Proyecto final: del Gem tutor a una app verificadora",
           "level": "Intermedio",
           "duration": "35 min",
-          "canvasFeature": "Nuevo Gem + Documento + Crear → Página web + Funciones de Gemini + Copiar Canvas",
+          "canvasFeature": "Gem integrado a una app",
           "capabilities": [
             "gems",
             "doc-create",
@@ -3712,7 +3712,7 @@
             "De regreso en el documento del Canvas, abre «Crear → Página web» para transformar la especificación en la aplicación interactiva «Verificador 360° de Portafolio de Evidencias».",
             "En la aplicación web, usa «Agregar funciones de Gemini» (o pide un generador socrático determinista en JavaScript si tu cuenta no muestra el botón) para que al evaluar los 4 criterios formule 2 preguntas de mejora.",
             "Prueba el caso de calibración (4,8 · 4,4 · 4,0 · 4,8 → 4,50) en la «Vista previa» y genera el enlace compartido para que otro aprendiz pueda usar «Copiar Canvas».",
-            "Marca la lista «Verifica tu resultado» para completar los 36 ejercicios y desbloquear tu Visión Completa 360° de Gemini Canvas."
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
           ],
           "expected": [
             "El documento incluye el System Prompt del Gem «Mentor de Portafolio de Evidencias ADSO» y usa únicamente el término «Portafolio de Evidencias».",
@@ -3723,6 +3723,301 @@
           ],
           "stretch": "Pide: «Agrega en la aplicación un botón que genere el resumen en Markdown con el sello V.E.R.A. listo para pegar en la portada del Portafolio de Evidencias».",
           "prompt": "Contexto: Este es el proyecto integrador de cierre. Necesitas unir en un mismo flujo las instrucciones de un Gem socrático, la rúbrica de 4 criterios iguales (25 % cada uno) y la especificación de la aplicación web verificadora para el Portafolio de Evidencias.\n\nRol: Actúa como arquitecto de soluciones educativas con IA y líder técnico ADSO.\n\nDatos:\n\"\"\"\nPROYECTO INTEGRADOR 360° — ARQUITECTO DE EVIDENCIAS CON IA EN CANVAS (datos de práctica)\n\nMisión del asistente Gem «Mentor de Portafolio de Evidencias ADSO»:\n- Guiar de forma socrática al aprendiz para verificar su entregable antes de subirlo al Portafolio de Evidencias.\n- Exigir siempre 4 componentes observables: 1) Contexto y objetivo, 2) Arquitectura o modelo de datos, 3) Pruebas verificables con casos límite, 4) Lista de chequeo V.E.R.A.\n\nRúbrica de validación en la aplicación web interactiva:\n- Criterio 1: Problema y alcance claros (25 %)\n- Criterio 2: Datos y reglas sin ambigüedad (25 %)\n- Criterio 3: Verificación reproducible (25 %)\n- Criterio 4: Accesibilidad y redacción institucional es-CO (25 %)\n\nCaso de prueba para calibrar: entrega con puntajes 4,8 · 4,4 · 4,0 · 4,8 → promedio 4,50 (Lista para el Portafolio de Evidencias).\n\"\"\"\n\nTarea: En Canvas, redacta el documento maestro del Proyecto Integrador 360° con:\n1. El System Prompt completo del Gem «Mentor de Portafolio de Evidencias ADSO» con sus 4 componentes obligatorios y tono socrático.\n2. La tabla de la rúbrica de validación con los 4 criterios de 25 % y el cálculo demostrado del caso de calibración (4,8 · 4,4 · 4,0 · 4,8 = 4,50).\n3. La especificación funcional de la aplicación web verificadora donde el aprendiz ingresa sus 4 puntajes y recibe retroalimentación socrática antes de exportar a su Portafolio de Evidencias.\nEntrega: Documento maestro numerado en 3 secciones con bloque de System Prompt y tabla de calibración.\n\nTono: Profesional, integrador y motivador para el cierre del curso.\n\nLímites:\n- Utiliza exclusivamente el término canónico «Portafolio de Evidencias» en todo el documento y en la aplicación.\n- Verifica que los 4 pesos sumen 100 % y que el promedio ponderado del caso de prueba sea exactamente 4,50."
+        }
+      ]
+    },
+    {
+      "name": "Apps interactivas (datos guardados y compartidos)",
+      "badge": "Apps",
+      "objective": "Crear tarjetas de estudio y apps que guardan sus datos entre sesiones o los comparten entre varias personas.",
+      "variationPrompts": [
+        "En el chat del Canvas escribe: «Agrega un botón para cancelar una reserva que libere la franja para todos»."
+      ],
+      "id": "interactive-apps",
+      "number": "13",
+      "icon": "🧩",
+      "image": "assets/images/canvas/canvas_apps_interactivas.jpg",
+      "imageCaption": "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.",
+      "canvasControls": [
+        "🔗 Compartir enlace",
+        "🔄 Volver a abrir"
+      ],
+      "masterPrompt": "Contexto: Varias áreas reservan la sala de sistemas por correo y a veces dos áreas llegan a la misma franja. Se necesita una sola app que todas usen desde el mismo enlace y que no pierda las reservas al cerrarse.\n\nRol: Actúa como desarrollador de herramientas internas para oficinas.\n\nDatos:\n\"\"\"\nRESERVA DE LA SALA DE SISTEMAS — SEMANA DEL 23 AL 27 DE NOVIEMBRE DE 2026 (datos de práctica)\nDías: Lunes, Martes, Miércoles, Jueves, Viernes. Franjas diarias: 7:00-9:00, 9:00-11:00, 14:00-16:00.\nCapacidad: 1 reserva por franja.\nReservas ya registradas (5):\n- Lunes 7:00-9:00: Coordinación académica\n- Lunes 14:00-16:00: Bienestar\n- Martes 9:00-11:00: Talento humano\n- Miércoles 7:00-9:00: Coordinación académica\n- Jueves 14:00-16:00: Biblioteca\nReglas:\n- Una franja reservada muestra «Ocupada» y no admite otra reserva.\n- Toda reserva exige el nombre del área; sin nombre, la app muestra un error.\n- Cada área tiene como máximo 3 reservas en la semana.\n\"\"\"\n\nTarea: En Canvas, crea una app web de una sola página que guarde sus datos entre sesiones y los comparta entre todas las personas que usen el enlace, con:\n1. Una cuadrícula de días por franjas que muestre el área de cada reserva o la palabra «Libre».\n2. Un formulario con día, franja y área, y un botón «Reservar» que aplique las tres reglas.\n3. Un contador de franjas libres y mensajes accesibles (aria-live) para reservas confirmadas o rechazadas.\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Sobrio y claro, como una herramienta de oficina.\n\nLímites:\n- Aplica exactamente las reglas de los datos.\n- Pide solo el nombre del área; ningún dato personal.",
+      "expectedResultSummary": "La cuadrícula muestra 15 franjas (5 días por 3 franjas) y 5 de ellas ocupadas. El contador muestra 10 franjas libres al iniciar. Reservar una franja ocupada muestra un error y no cambia la cuadrícula. Coordinación académica puede hacer una reserva más y la siguiente se rechaza por el tope de 3. Las reservas siguen ahí al cerrar y volver a abrir el Canvas, y otra persona con el enlace ve las mismas reservas.",
+      "expected": [
+        {
+          "criterion": "La cuadrícula muestra 15 franjas (5 días por 3 franjas) y 5 de ellas ocupadas.",
+          "how": "Cuenta las celdas con nombre de área en la vista previa."
+        },
+        {
+          "criterion": "El contador muestra 10 franjas libres al iniciar.",
+          "how": "Lee el contador antes de reservar."
+        },
+        {
+          "criterion": "Reservar una franja ocupada muestra un error y no cambia la cuadrícula.",
+          "how": "Intenta reservar Lunes 7:00-9:00."
+        },
+        {
+          "criterion": "Coordinación académica puede hacer una reserva más y la siguiente se rechaza por el tope de 3.",
+          "how": "Reserva dos franjas libres a nombre de Coordinación académica."
+        },
+        {
+          "criterion": "Las reservas siguen ahí al cerrar y volver a abrir el Canvas, y otra persona con el enlace ve las mismas reservas.",
+          "how": "Recarga el chat y pide a un compañero que abra tu enlace."
+        }
+      ],
+      "followUps": [],
+      "imageSpec": {
+        "blocks": [
+          {
+            "type": "heading",
+            "text": "RESERVA DE LA SALA DE SISTEMAS · 23 AL 27 DE NOVIEMBRE DE 2026"
+          },
+          {
+            "type": "kpis",
+            "items": [
+              {
+                "label": "Franjas libres",
+                "value": "10"
+              },
+              {
+                "label": "Reservas registradas",
+                "value": "5"
+              },
+              {
+                "label": "Tope por área",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "headers": [
+              "Día",
+              "7:00-9:00",
+              "9:00-11:00",
+              "14:00-16:00"
+            ],
+            "rows": [
+              [
+                "Lunes",
+                "Coordinación académica",
+                "Libre",
+                "Bienestar"
+              ],
+              [
+                "Martes",
+                "Libre",
+                "Talento humano",
+                "Libre"
+              ],
+              [
+                "Miércoles",
+                "Coordinación académica",
+                "Libre",
+                "Libre"
+              ],
+              [
+                "Jueves",
+                "Libre",
+                "Libre",
+                "Biblioteca"
+              ],
+              [
+                "Viernes",
+                "Libre",
+                "Libre",
+                "Libre"
+              ]
+            ]
+          },
+          {
+            "type": "callout",
+            "title": "Datos guardados y compartidos",
+            "text": "Las reservas siguen al volver a abrir el Canvas. Quien tenga el enlace ve y edita las mismas reservas."
+          }
+        ],
+        "file": "canvas_apps_interactivas.jpg",
+        "docTitle": "Reserva_Sala_Sistemas.html",
+        "chat": "Creé en Canvas la app de reservas de la sala de sistemas: 15 franjas, 5 reservas iniciales, las tres reglas aplicadas y los datos guardados y compartidos entre quienes usen el enlace."
+      },
+      "exercises": [
+        {
+          "id": "apps-a-tarjetas-sst",
+          "code": "13A",
+          "title": "Tarjetas de estudio para repasar un glosario",
+          "level": "Básico",
+          "duration": "20 min",
+          "canvasFeature": "Crear → Tarjetas de estudio",
+          "capabilities": [
+            "doc-create",
+            "create-flashcards",
+            "create-quiz"
+          ],
+          "whyCanvas": "Con el glosario en un documento, el menú «Crear» lo convierte en tarjetas para voltear y en un cuestionario sin volver a escribir el contenido.",
+          "outsideCanvas": "Todo ocurre en Gemini. Si tu cuenta no muestra «Tarjetas de estudio» en el menú, el paso 4 explica cómo pedirlas como app.",
+          "places": [
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Convertir un glosario en tarjetas de repaso y en un cuestionario, y comprobar que las definiciones no cambian.",
+          "scenario": "El área de talento humano quiere que el personal nuevo repase los términos básicos de seguridad y salud en el trabajo antes de la inducción presencial.",
+          "promptParts": {
+            "role": "instructor de seguridad y salud en el trabajo",
+            "context": "El personal administrativo nuevo debe repasar 10 términos antes de su inducción presencial.",
+            "data": "GLOSARIO DE SEGURIDAD Y SALUD EN EL TRABAJO — INDUCCIÓN ADMINISTRATIVA (contenido de práctica)\n1. Peligro: fuente o situación con potencial de causar daño a la salud.\n2. Riesgo: combinación de la probabilidad de que ocurra un evento peligroso y la gravedad del daño.\n3. Incidente: evento que pudo causar daño, pero no lo causó.\n4. Accidente de trabajo: suceso repentino por causa o con ocasión del trabajo que produce una lesión.\n5. Pausa activa: periodo corto de ejercicios para reducir la fatiga durante la jornada.\n6. Ergonomía: adaptación del puesto de trabajo a las capacidades de la persona.\n7. Brigada de emergencia: grupo de trabajadores entrenados para actuar ante una emergencia.\n8. Punto de encuentro: lugar seguro señalizado donde se reúne el personal tras una evacuación.\n9. Elemento de protección personal: equipo que protege a la persona frente a un riesgo específico.\n10. Reporte de condición insegura: aviso que alerta sobre un peligro antes de que cause un incidente.",
+            "instruction": "En Canvas, crea un documento de repaso con:",
+            "task": [
+              "Una tabla con los 10 términos y su definición, copiada sin cambios.",
+              "Un ejemplo breve de oficina para cada término."
+            ],
+            "constraints": [
+              "No modifiques ni resumas las definiciones del glosario."
+            ],
+            "format": "Documento con un título, una tabla de tres columnas (término, definición y ejemplo) y una nota final.",
+            "tone": "Claro y cercano, para personas sin formación técnica."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
+            "Revisa que la tabla tenga los 10 términos y que cada definición sea idéntica a la del glosario.",
+            "Abre «Crear» en la parte superior del documento y elige «Tarjetas de estudio». Repasa las 10 tarjetas: el término va al frente y la definición al reverso.",
+            "Si tu cuenta no muestra «Tarjetas de estudio», escribe en el chat: «Crea una app de Tarjetas de estudio con estos 10 términos, botón para voltear, marcador de aciertos y botón Reiniciar».",
+            "Vuelve al documento y usa «Crear → Cuestionario» para generar 5 preguntas sobre el glosario; respóndelas y revisa la retroalimentación.",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "Hay 10 tarjetas, una por término del glosario.",
+            "Cada tarjeta muestra el término al frente y la definición exacta del glosario al reverso.",
+            "La definición de «Incidente» dice que el evento pudo causar daño, pero no lo causó.",
+            "El cuestionario tiene 5 preguntas y cada respuesta correcta sale del glosario.",
+            "Si usaste la app alternativa, el botón Reiniciar deja el marcador en 0 de 10."
+          ],
+          "stretch": "Pide: «Agrega a las tarjetas un modo de repaso que muestre de nuevo solo los términos que marqué como difíciles».",
+          "prompt": "Contexto: El personal administrativo nuevo debe repasar 10 términos antes de su inducción presencial.\n\nRol: Actúa como instructor de seguridad y salud en el trabajo.\n\nDatos:\n\"\"\"\nGLOSARIO DE SEGURIDAD Y SALUD EN EL TRABAJO — INDUCCIÓN ADMINISTRATIVA (contenido de práctica)\n1. Peligro: fuente o situación con potencial de causar daño a la salud.\n2. Riesgo: combinación de la probabilidad de que ocurra un evento peligroso y la gravedad del daño.\n3. Incidente: evento que pudo causar daño, pero no lo causó.\n4. Accidente de trabajo: suceso repentino por causa o con ocasión del trabajo que produce una lesión.\n5. Pausa activa: periodo corto de ejercicios para reducir la fatiga durante la jornada.\n6. Ergonomía: adaptación del puesto de trabajo a las capacidades de la persona.\n7. Brigada de emergencia: grupo de trabajadores entrenados para actuar ante una emergencia.\n8. Punto de encuentro: lugar seguro señalizado donde se reúne el personal tras una evacuación.\n9. Elemento de protección personal: equipo que protege a la persona frente a un riesgo específico.\n10. Reporte de condición insegura: aviso que alerta sobre un peligro antes de que cause un incidente.\n\"\"\"\n\nTarea: En Canvas, crea un documento de repaso con:\n1. Una tabla con los 10 términos y su definición, copiada sin cambios.\n2. Un ejemplo breve de oficina para cada término.\nEntrega: Documento con un título, una tabla de tres columnas (término, definición y ejemplo) y una nota final.\n\nTono: Claro y cercano, para personas sin formación técnica.\n\nLímites:\n- No modifiques ni resumas las definiciones del glosario."
+        },
+        {
+          "id": "apps-b-prestamo-equipos",
+          "code": "13B",
+          "title": "Bitácora de préstamo de equipos que recuerda los registros",
+          "level": "Intermedio",
+          "duration": "30 min",
+          "canvasFeature": "App con datos guardados",
+          "capabilities": [
+            "code-preview",
+            "app-saved-data",
+            "select-ask"
+          ],
+          "whyCanvas": "La app corre en la vista previa y conserva sus registros: cierras el Canvas, lo abres otro día y los préstamos siguen ahí, algo que una respuesta de chat no puede hacer.",
+          "outsideCanvas": "Todo ocurre en Gemini. Los registros se guardan en un almacenamiento privado de la app: solo los ves tú mientras la app no comparta datos.",
+          "places": [
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Construir una app de préstamos que valide sus reglas y conserve los datos al cerrar y volver a abrir el Canvas.",
+          "scenario": "La coordinación académica anota los préstamos de videoproyectores y portátiles en papel y pierde el rastro de quién tiene cada equipo.",
+          "promptParts": {
+            "role": "desarrollador de herramientas internas para oficinas",
+            "context": "La coordinación necesita saber en todo momento qué equipos están prestados y a quién.",
+            "data": "PRÉSTAMO DE EQUIPOS AUDIOVISUALES — COORDINACIÓN ACADÉMICA (datos de práctica)\nInventario (6 equipos):\nEQ-01 Videoproyector sala 1 | EQ-02 Videoproyector sala 2 | EQ-03 Portátil de apoyo A\nEQ-04 Portátil de apoyo B | EQ-05 Parlante portátil | EQ-06 Cámara de documentos\nPréstamos activos al iniciar: EQ-02 (instructora Laura Ríos) y EQ-05 (instructor Andrés Peña).\nReglas:\n- Un equipo prestado no se puede volver a prestar hasta que se registre su devolución.\n- Todo préstamo exige el nombre de quien recibe el equipo; sin nombre, la app muestra un error.\n- El contador superior muestra cuántos equipos están disponibles.",
+            "instruction": "En Canvas, crea una app web de una sola página que guarde sus datos entre sesiones, con:",
+            "task": [
+              "La lista de los 6 equipos con su estado (Disponible o Prestado) y el nombre de quien lo tiene.",
+              "Un formulario para registrar préstamos y un botón «Registrar devolución» en cada equipo prestado.",
+              "El contador de equipos disponibles y mensajes de error accesibles (aria-live) cuando se incumple una regla."
+            ],
+            "constraints": [
+              "Aplica exactamente las reglas de los datos.",
+              "Sin librerías externas."
+            ],
+            "format": "Un solo archivo HTML ejecutable.",
+            "tone": "Sobrio y directo, como una herramienta de oficina."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
+            "Abre la «Vista previa» y comprueba que el contador inicial diga 4 equipos disponibles.",
+            "Registra el préstamo de EQ-03 a nombre de Carlos Mejía y la devolución de EQ-02. Luego intenta prestar EQ-05 y prestar un equipo sin escribir el nombre.",
+            "Cierra la pestaña del chat, vuelve a abrirla desde el historial de Gemini y comprueba que la app guarda los datos entre sesiones: EQ-03 sigue prestado a Carlos Mejía.",
+            "Si los registros desaparecen, escribe en el chat: «La app debe guardar los datos entre sesiones; corrígelo».",
+            "En la vista previa, activa «Seleccionar y preguntar», haz clic en el contador y pide: «Muéstralo en verde si hay más de 3 equipos disponibles y en rojo si hay 3 o menos».",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "Al iniciar, EQ-02 y EQ-05 aparecen prestados y el contador marca 4 disponibles.",
+            "Después de prestar EQ-03 y devolver EQ-02, el contador vuelve a marcar 4 disponibles.",
+            "Intentar prestar EQ-05 muestra un error porque ya está prestado.",
+            "Prestar un equipo sin nombre muestra un error y no cambia ningún estado.",
+            "Al volver a abrir el Canvas, EQ-03 sigue prestado a Carlos Mejía y EQ-02 sigue disponible."
+          ],
+          "stretch": "Pide: «Agrega la fecha y la hora de cada préstamo y una lista de los equipos que llevan más de un día prestados».",
+          "prompt": "Contexto: La coordinación necesita saber en todo momento qué equipos están prestados y a quién.\n\nRol: Actúa como desarrollador de herramientas internas para oficinas.\n\nDatos:\n\"\"\"\nPRÉSTAMO DE EQUIPOS AUDIOVISUALES — COORDINACIÓN ACADÉMICA (datos de práctica)\nInventario (6 equipos):\nEQ-01 Videoproyector sala 1 | EQ-02 Videoproyector sala 2 | EQ-03 Portátil de apoyo A\nEQ-04 Portátil de apoyo B | EQ-05 Parlante portátil | EQ-06 Cámara de documentos\nPréstamos activos al iniciar: EQ-02 (instructora Laura Ríos) y EQ-05 (instructor Andrés Peña).\nReglas:\n- Un equipo prestado no se puede volver a prestar hasta que se registre su devolución.\n- Todo préstamo exige el nombre de quien recibe el equipo; sin nombre, la app muestra un error.\n- El contador superior muestra cuántos equipos están disponibles.\n\"\"\"\n\nTarea: En Canvas, crea una app web de una sola página que guarde sus datos entre sesiones, con:\n1. La lista de los 6 equipos con su estado (Disponible o Prestado) y el nombre de quien lo tiene.\n2. Un formulario para registrar préstamos y un botón «Registrar devolución» en cada equipo prestado.\n3. El contador de equipos disponibles y mensajes de error accesibles (aria-live) cuando se incumple una regla.\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Sobrio y directo, como una herramienta de oficina.\n\nLímites:\n- Aplica exactamente las reglas de los datos.\n- Sin librerías externas."
+        },
+        {
+          "id": "apps-c-inscripcion-compartida",
+          "code": "13C",
+          "title": "Planilla de inscripción compartida con cupos en vivo",
+          "level": "Intermedio",
+          "duration": "35 min",
+          "canvasFeature": "App con datos compartidos",
+          "capabilities": [
+            "code-preview",
+            "app-shared-data",
+            "share"
+          ],
+          "whyCanvas": "Una sola app con datos compartidos reemplaza la cadena de correos: cada persona se inscribe desde el enlace y todas ven los cupos actualizados.",
+          "outsideCanvas": "Cualquier persona con el enlace puede ver y editar todos los registros de la app. Por eso solo se pide el nombre y nunca documentos, correos ni teléfonos.",
+          "places": [
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "canvas",
+            "portal"
+          ],
+          "goal": "Crear una planilla de inscripción que varias personas usen al mismo tiempo, con cupos que se respetan para todos.",
+          "scenario": "Talento humano organiza la inducción de plataformas en tres franjas y hoy recibe las inscripciones por correo, con cupos que se pasan sin control.",
+          "promptParts": {
+            "role": "desarrollador de herramientas colaborativas para oficinas",
+            "context": "Varias personas se inscribirán desde el mismo enlace y deben ver los mismos cupos.",
+            "data": "INSCRIPCIÓN A LA INDUCCIÓN DE PLATAFORMAS — PERSONAL ADMINISTRATIVO (datos de práctica)\nFranjas del jueves (cupo máximo 4 personas por franja):\n- Franja 1, 8:00 a 9:30: Marta Gil, Julián Ortiz, Sofía Lara (3 inscritos)\n- Franja 2, 10:00 a 11:30: Diego Cano (1 inscrito)\n- Franja 3, 14:00 a 15:30: sin inscritos\nReglas:\n- Cuando una franja llega a 4 personas, muestra «Sin cupos» y desactiva su botón.\n- Una misma persona no puede inscribirse dos veces en la misma franja.\n- Solo se pide el nombre; la app no solicita documento, correo ni teléfono.",
+            "instruction": "En Canvas, crea una app web de una sola página con datos compartidos entre todas las personas que la usen, con:",
+            "task": [
+              "Las 3 franjas con sus inscritos actuales y los cupos libres.",
+              "Un campo de nombre y un botón «Inscribirme» por franja que aplique las reglas.",
+              "Mensajes accesibles (aria-live) para inscripciones exitosas y rechazadas."
+            ],
+            "constraints": [
+              "Aplica exactamente las reglas de los datos.",
+              "No pidas ningún dato distinto del nombre."
+            ],
+            "format": "Un solo archivo HTML ejecutable.",
+            "tone": "Amable y claro, para personal administrativo."
+          },
+          "steps": [
+            "Activa Canvas en la barra del chat de Gemini, pega el prompt y envíalo.",
+            "Abre la «Vista previa» e inscríbete con tu nombre en la franja 1. Comprueba que pase a «Sin cupos» y que su botón se desactive.",
+            "Intenta inscribir de nuevo a Diego Cano en la franja 2 y confirma que la app lo rechaza.",
+            "Usa «Compartir» en «Compartir y exportar» para generar el enlace y envíalo a un compañero. Si tu cuenta institucional no permite enlaces públicos, haz esta parte con una cuenta personal.",
+            "Pide a tu compañero que se inscriba en la franja 2. Recarga tu vista previa y comprueba que los datos compartidos muestran su nombre.",
+            "Comprueba tu resultado con la lista «Verifica tu resultado» de esta guía."
+          ],
+          "expected": [
+            "Al iniciar, la franja 1 tiene 3 inscritos, la franja 2 tiene 1 y la franja 3 tiene 0.",
+            "Con tu inscripción, la franja 1 llega a 4, muestra «Sin cupos» y su botón queda desactivado.",
+            "Inscribir otra vez a Diego Cano en la franja 2 muestra un mensaje de rechazo.",
+            "Después de la inscripción de tu compañero, ambos ven 2 inscritos en la franja 2.",
+            "La app solo pide el nombre: no hay campos de documento, correo ni teléfono."
+          ],
+          "stretch": "Pide: «Agrega un botón para cancelar mi inscripción que libere el cupo para todos».",
+          "prompt": "Contexto: Varias personas se inscribirán desde el mismo enlace y deben ver los mismos cupos.\n\nRol: Actúa como desarrollador de herramientas colaborativas para oficinas.\n\nDatos:\n\"\"\"\nINSCRIPCIÓN A LA INDUCCIÓN DE PLATAFORMAS — PERSONAL ADMINISTRATIVO (datos de práctica)\nFranjas del jueves (cupo máximo 4 personas por franja):\n- Franja 1, 8:00 a 9:30: Marta Gil, Julián Ortiz, Sofía Lara (3 inscritos)\n- Franja 2, 10:00 a 11:30: Diego Cano (1 inscrito)\n- Franja 3, 14:00 a 15:30: sin inscritos\nReglas:\n- Cuando una franja llega a 4 personas, muestra «Sin cupos» y desactiva su botón.\n- Una misma persona no puede inscribirse dos veces en la misma franja.\n- Solo se pide el nombre; la app no solicita documento, correo ni teléfono.\n\"\"\"\n\nTarea: En Canvas, crea una app web de una sola página con datos compartidos entre todas las personas que la usen, con:\n1. Las 3 franjas con sus inscritos actuales y los cupos libres.\n2. Un campo de nombre y un botón «Inscribirme» por franja que aplique las reglas.\n3. Mensajes accesibles (aria-live) para inscripciones exitosas y rechazadas.\nEntrega: Un solo archivo HTML ejecutable.\n\nTono: Amable y claro, para personal administrativo.\n\nLímites:\n- Aplica exactamente las reglas de los datos.\n- No pidas ningún dato distinto del nombre."
         }
       ]
     }

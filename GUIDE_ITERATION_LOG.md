@@ -13,3 +13,11 @@
 - Materiales: `guia_agent_skills.md` y `materiales/dia3_agentes_web/skills/` (los SKILL.md se generan desde el módulo y una prueba verifica que coincidan).
 - Día 1: tabla de IA en Google Workspace (Gemini) y Microsoft 365 (Copilot) con prompts CRTT+L por tarea.
 - Se corrigieron fallas previas de CI: cobertura de ramas al 100 % y harness alineados con el banco de 36 ejercicios.
+
+## 2026-11-16 · Gemini Canvas: apps con datos y revisión de claridad
+- Posibilidad 13 «Apps interactivas» con simulador de reservas (cuatro estados: válida, inválida, vacía y reinicio) e imagen `canvas_apps_interactivas.jpg`.
+- Ejercicios 13A (Crear → Tarjetas de estudio), 13B (app que guarda datos entre sesiones) y 13C (app con datos compartidos, con advertencia sobre quién ve los registros). Total: 39 ejercicios y 28 capacidades.
+- Fuentes consultadas: notas de versión y ayuda oficial de Gemini sobre apps que guardan y comparten datos; las tarjetas de estudio pasan de «por confirmar» a capacidad practicada, con alternativa si la cuenta no muestra la opción.
+- Claridad: títulos de 10 palabras o menos, `canvasFeature` con una sola función, `whyCanvas` y `outsideCanvas` sin repetir ideas, paso final único (`CANVAS_VERIFY_STEP`), retos sin relleno y sin la jerga «Visión Completa 360°».
+- Redacción del portal: se retiraron expresiones como «edición quirúrgica», «alta fidelidad», «canónico» y «en caliente».
+- Pruebas nuevas que vigilan esas reglas de redacción, el modo 13 y `canvasSlotBooking`; conteos del Hub de Proyectos actualizados a 43.

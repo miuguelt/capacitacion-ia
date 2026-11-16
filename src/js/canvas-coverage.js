@@ -1,7 +1,7 @@
 /* ==========================================================================
    MATRIZ DE COBERTURA Y FRONTERAS DE EJECUCIÓN — GEMINI CANVAS
    Clasifica dónde ocurre cada paso (En Canvas, En Gemini sin Canvas, Fuera de
-   Gemini, En esta guía) y audita las 25 capacidades verificadas del módulo.
+   Gemini, En esta guía) y audita las 28 capacidades verificadas del módulo.
    ========================================================================== */
 
 const CANVAS_STEP_PLACES = {
@@ -33,12 +33,6 @@ const CANVAS_STEP_PLACES = {
 
 const CANVAS_EXTRA_CAPABILITIES = [
     {
-        id: "study-cards",
-        name: "Crear → Tarjetas de estudio (Flashcards)",
-        status: "por-confirmar",
-        detail: "Aparece en algunas cuentas educativas dentro del menú «Crear» junto a Cuestionario; si tu cuenta la muestra, úsala para repasar conceptos clave."
-    },
-    {
         id: "google-classroom",
         name: "Anexar en Google Classroom",
         status: "condicional",
@@ -56,29 +50,29 @@ const CANVAS_VISION_STAGES = [
     {
         id: "stage-inputs",
         step: "Etapa 1",
-        title: "Entradas y Fuentes de Contexto",
-        summary: "Lo que entregas a Gemini antes de abrir o alimentar el lienzo: prompt estructurado CRTT+L, archivos adjuntos (CSV/PDF), fotos de bocetos o pizarras, informes de Deep Research o un Gem personalizado.",
+        title: "Entradas y fuentes de contexto",
+        summary: "Lo que le entregas a Gemini antes de trabajar en el lienzo: el prompt CRTT+L, archivos adjuntos (CSV o PDF), fotos de bocetos o pizarras, informes de Deep Research o un Gem.",
         capabilityIds: ["doc-create", "file-input", "image-input", "deep-research", "gems"]
     },
     {
         id: "stage-canvas-core",
         step: "Etapa 2",
-        title: "Co-creación e Iteración en el Lienzo",
-        summary: "Edición quirúrgica sin perder lo que ya funciona: selección con cursor, sugerencias de edición, ajuste de longitud y tono, vista previa en vivo, seleccionar y preguntar, consola de errores, historial de versiones y fórmulas LaTeX.",
+        title: "Edición e iteración en el lienzo",
+        summary: "Cambias solo lo necesario sin perder lo que ya funciona: selección, sugerencias de edición, longitud y tono, vista previa, «Seleccionar y preguntar», consola de errores, versiones y fórmulas LaTeX.",
         capabilityIds: ["inline-edit", "suggest-edits", "manual-edit", "length-tone", "code-preview", "select-ask", "console-fix", "versions", "latex"]
     },
     {
         id: "stage-transforms",
         step: "Etapa 3",
-        title: "Transformación Multipropósito («Crear»)",
-        summary: "Un mismo artefacto validado en Canvas se transforma con un clic en página web interactiva, infografía ejecutiva, cuestionario de autoevaluación, resumen en audio dialogado o aplicación con funciones de Gemini.",
-        capabilityIds: ["create-webpage", "create-infographic", "create-quiz", "create-audio", "gemini-in-app"]
+        title: "Transformación y apps («Crear»)",
+        summary: "Un documento revisado se convierte en página web, infografía, cuestionario, tarjetas de estudio o resumen en audio. Las apps pueden usar funciones de Gemini, guardar datos entre sesiones y compartirlos entre varias personas.",
+        capabilityIds: ["create-webpage", "create-infographic", "create-quiz", "create-flashcards", "create-audio", "gemini-in-app", "app-saved-data", "app-shared-data"]
     },
     {
         id: "stage-governance",
         step: "Etapa 4",
-        title: "Salida, Gobernanza y Portafolio de Evidencias",
-        summary: "Verificación con lista de chequeo V.E.R.A. y salida limpia hacia Documentos de Google, Presentaciones de Google, cuadernos de Colab, archivo PDF o enlace compartido con «Copiar Canvas».",
+        title: "Salida y Portafolio de Evidencias",
+        summary: "Revisas el resultado con V.E.R.A. y lo llevas a Documentos de Google, Presentaciones de Google, Colab, PDF o un enlace que otra persona puede duplicar con «Copiar Canvas».",
         capabilityIds: ["export-docs", "create-slides", "export-colab", "export-pdf", "share", "copy-canvas"]
     }
 ];
@@ -194,10 +188,10 @@ function buildCompleteVisionSummaryHtml(exercisesByMode, capabilities, completed
     }).join("");
 
     const masteryBanner = totalEx > 0 && doneEx === totalEx
-        ? `<div class="canvas-vision-mastery-banner" data-vision-mastery="complete">🏆 <strong>¡Visión Completa 360° alcanzada!</strong> Completaste los ${totalEx} ejercicios y practicaste las ${totalCaps} capacidades oficiales de Gemini Canvas.</div>`
-        : `<div class="canvas-vision-mastery-banner" data-vision-mastery="progress">🧭 <strong>Tu avance hacia la Visión Completa 360°:</strong> ${doneEx} de ${totalEx} ejercicios completados · ${practicedCaps} de ${totalCaps} capacidades oficiales practicadas por ti.</div>`;
+        ? `<div class="canvas-vision-mastery-banner" data-vision-mastery="complete">🏆 <strong>Recorrido completo.</strong> Completaste los ${totalEx} ejercicios y practicaste las ${totalCaps} funciones de Gemini Canvas.</div>`
+        : `<div class="canvas-vision-mastery-banner" data-vision-mastery="progress">🧭 <strong>Tu avance:</strong> ${doneEx} de ${totalEx} ejercicios completados · ${practicedCaps} de ${totalCaps} funciones practicadas.</div>`;
 
-    return `<section class="canvas-vision-360-panel" id="canvas-vision-360-panel" aria-label="Mapa de visión completa 360 grados de Gemini Canvas">
+    return `<section class="canvas-vision-360-panel" id="canvas-vision-360-panel" aria-label="Avance por etapas en Gemini Canvas">
         ${masteryBanner}
         <div class="canvas-vision-stages-grid">${stagesHtml}</div>
     </section>`;

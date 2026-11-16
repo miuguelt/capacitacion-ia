@@ -368,7 +368,7 @@ function initClassroomTimer() {
 }
 
 // 7. Módulo Especial: Simulador de Gemini Canvas Lab (Todas las Posibilidades)
-// Los 12 modos (prompts, datos y criterios) viven en js/canvas-possibilities.js.
+// Los 13 modos (prompts, datos y criterios) viven en js/canvas-possibilities.js.
 
 function initCanvasLab() {
   const tabs = document.querySelectorAll(".canvas-tab[data-possibility]");

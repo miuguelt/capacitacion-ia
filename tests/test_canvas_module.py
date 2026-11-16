@@ -52,7 +52,8 @@ def test_all_ten_possibilities_tabs_exist():
         "sql-pipeline",
         "executive-report",
         "multimodal-vision",
-        "gem-studio"
+        "gem-studio",
+        "interactive-apps"
     ]
     for p in expected_possibilities:
         assert f'data-possibility="{p}"' in html, f"La pestaña de posibilidad {p} debe existir"
@@ -76,7 +77,8 @@ def test_all_ten_possibilities_in_app_js():
         "sql-pipeline",
         "executive-report",
         "multimodal-vision",
-        "gem-studio"
+        "gem-studio",
+        "interactive-apps"
     ]
     for p in expected_possibilities:
         assert f'"{p}"' in js_code, f"La clave de posibilidad {p} debe estar registrada en CANVAS_POSSIBILITIES"
@@ -97,7 +99,8 @@ def test_canvas_images_exist_and_non_empty():
         "canvas_sql.jpg",
         "canvas_informe.jpg",
         "canvas_multimodal_sketch.jpg",
-        "canvas_gem_studio.jpg"
+        "canvas_gem_studio.jpg",
+        "canvas_apps_interactivas.jpg"
     ]
     for img_name in expected_images:
         img_path = images_dir / img_name
@@ -126,9 +129,9 @@ def test_canvas_json_dataset_validity():
     data = json.loads(json_file.read_text(encoding="utf-8"))
     
     total = data.get("totalPossibilities")
-    assert total == 12, f"totalPossibilities debe ser 12, obtenido {total}"
+    assert total == 13, f"totalPossibilities debe ser 13, obtenido {total}"
     possibilities = data.get("possibilities", [])
-    assert len(possibilities) == 12, f"Debe contener exactamente 12 posibilidades, obtenido {len(possibilities)}"
+    assert len(possibilities) == 13, f"Debe contener exactamente 13 posibilidades, obtenido {len(possibilities)}"
     
     for p in possibilities:
         assert "id" in p

@@ -36,14 +36,14 @@ const {
 const MODES = [
   "doc-editorial", "code-prototyping", "data-matrix", "flowchart-diagram", "visual-mockup",
   "inline-prompting", "algorithm-refactor", "rubric-curriculum", "sql-pipeline", "executive-report",
-  "multimodal-vision", "gem-studio"
+  "multimodal-vision", "gem-studio", "interactive-apps"
 ];
 const all = () => MODES.map(id => [id, CANVAS_POSSIBILITIES[id]]);
 const textOf = p => JSON.stringify([p.expected, p.interactiveHtml, p.imageSpec, p.aiResponse, p.imageCaption, p.quickActions]);
 
-// --- Estructura de los 12 modos ---
+// --- Estructura de los 13 modos ---
 
-test("los 12 modos existen en el orden del simulador", () => {
+test("los 13 modos existen en el orden del simulador", () => {
   assert.deepEqual(Object.keys(CANVAS_POSSIBILITIES), MODES);
 });
 
@@ -328,7 +328,7 @@ test("exportCanvasPossibilities actualiza el banco JSON sin perder campos propio
   const bank = { title: "Banco", possibilities: [{ id: "doc-editorial", exercises: [1], badge: "Docs" }] };
   const out = exportCanvasPossibilities(bank);
   assert.equal(out.title, "Banco");
-  assert.equal(out.possibilities.length, 12);
+  assert.equal(out.possibilities.length, 13);
   const doc = out.possibilities[0];
   assert.deepEqual(doc.exercises, [1]);
   assert.equal(doc.badge, "Docs");
@@ -339,7 +339,7 @@ test("exportCanvasPossibilities actualiza el banco JSON sin perder campos propio
 
   // Casos borde: banco vacío y posibilidad con ejercicios vacíos previos
   const bankEmpty = exportCanvasPossibilities({});
-  assert.equal(bankEmpty.totalPossibilities, 12);
+  assert.equal(bankEmpty.totalPossibilities, 13);
   assert.ok(bankEmpty.totalExercises >= 24);
 
   const bankWithEmptyExercises = exportCanvasPossibilities({
@@ -371,7 +371,7 @@ test("el banco JSON del repositorio está sincronizado con el módulo", () => {
   assert.deepEqual(bank, exportCanvasPossibilities(bank), "ejecuta node scripts/export_canvas_possibilities.cjs");
 });
 
-test("computeCalibratedSimulation calibra longitud, tono y audiencia en los 12 modos y maneja entradas inválidas", () => {
+test("computeCalibratedSimulation calibra longitud, tono y audiencia en los 13 modos y maneja entradas inválidas", () => {
   const docShort = computeCalibratedSimulation("doc-editorial", { length: 1, tone: "formal", audience: "intro" });
   assert.equal(docShort.lengthLevel, 1);
   assert.equal(docShort.lengthLabel, "Síntesis (1/5)");
@@ -395,7 +395,7 @@ test("computeCalibratedSimulation calibra longitud, tono y audiencia en los 12 m
   assert.equal(defaultOpts.lengthLevel, 3);
 });
 
-test("simulateVariationForMode entrega resultado determinista para los 12 modos y respaldo seguro", () => {
+test("simulateVariationForMode entrega resultado determinista para los 13 modos y respaldo seguro", () => {
   for (const id of MODES) {
     const sim = simulateVariationForMode(id);
     assert.equal(sim.modeId, id);
@@ -442,4 +442,51 @@ test("buildCanvasTransformPreviewHtml genera artefacto, infografía, cuestionari
   } finally {
     delete kit.CANVAS_POSSIBILITIES["temp-empty-expected"];
   }
+});
+
+// --- Modo 13: reserva compartida de la sala de sistemas ---
+test("apps interactivas: el prompt pide guardar y compartir datos y las cifras salen de las reservas", () => {
+  const p = CANVAS_POSSIBILITIES["interactive-apps"];
+  assert.match(p.promptParts.instruction, /guarde sus datos entre sesiones/);
+  assert.match(p.promptParts.instruction, /los comparta/);
+  assert.match(p.promptParts.data, /Reservas ya registradas \(5\)/);
+  assert.match(textOf(p), /15 franjas/);
+  assert.match(textOf(p), /10 franjas libres/);
+  assert.doesNotMatch(p.promptParts.data, /@|\b\d{7,10}\b/, "sin correos ni documentos de identidad");
+  assert.equal(p.quickActions.length, 2);
+});
+
+test("canvasSlotBooking aplica entrada válida, inválida, vacía y reinicio sin mutar la lista", () => {
+  const { canvasSlotBooking, canvasFreeSlots, canvasBookingSeed } = kit;
+  const seed = canvasBookingSeed();
+  assert.equal(seed.length, 5);
+  assert.equal(canvasFreeSlots(seed), 10);
+  assert.equal(canvasFreeSlots(null), 15);
+
+  const ok = canvasSlotBooking(seed, { day: "Viernes", slot: "9:00-11:00", area: " Bienestar " });
+  assert.equal(ok.ok, true);
+  assert.equal(ok.bookings.length, 6);
+  assert.equal(ok.bookings.at(-1).area, "Bienestar");
+  assert.equal(seed.length, 5, "no modifica la lista original");
+
+  const busy = canvasSlotBooking(seed, { day: "Lunes", slot: "7:00-9:00", area: "Biblioteca" });
+  assert.equal(busy.ok, false);
+  assert.match(busy.error, /ya está ocupada/);
+  assert.equal(busy.bookings, seed);
+
+  const third = canvasSlotBooking(seed, { day: "Martes", slot: "7:00-9:00", area: "coordinación académica" });
+  assert.equal(third.ok, true, "la tercera reserva del área se admite");
+  const fourth = canvasSlotBooking(third.bookings, { day: "Viernes", slot: "7:00-9:00", area: "Coordinación académica" });
+  assert.equal(fourth.ok, false);
+  assert.match(fourth.error, /ya tiene 3 reservas/);
+
+  assert.match(canvasSlotBooking(seed, { day: "Lunes", slot: "9:00-11:00", area: "   " }).error, /Escribe el nombre del área/);
+  assert.match(canvasSlotBooking(seed, undefined).error, /Escribe el nombre del área/);
+  assert.match(canvasSlotBooking(seed, { day: "Sábado", slot: "9:00-11:00", area: "TIC" }).error, /Elige un día/);
+  assert.match(canvasSlotBooking(seed, { day: "Lunes", slot: "18:00-20:00", area: "TIC" }).error, /Elige un día/);
+  assert.equal(canvasSlotBooking(null, { day: "Lunes", slot: "7:00-9:00", area: "TIC" }).bookings.length, 1);
+  assert.equal(canvasSlotBooking(seed, { day: "Viernes", slot: "14:00-16:00", area: "TIC" }, 0).ok, false, "tope configurable");
+
+  assert.deepEqual(canvasBookingSeed(), seed, "el reinicio devuelve los datos iniciales");
+  assert.notEqual(canvasBookingSeed()[0], canvasBookingSeed()[0], "cada reinicio entrega copias nuevas");
 });

@@ -6,7 +6,7 @@ const path = require("node:path");
 const coverage = require("../js/canvas-coverage.js");
 const exercisesMod = require("../js/canvas-exercises.js");
 
-test("CANVAS_STEP_PLACES define los 4 lugares verificables y CANVAS_EXTRA_CAPABILITIES las 3 fronteras", () => {
+test("CANVAS_STEP_PLACES define los 4 lugares verificables y CANVAS_EXTRA_CAPABILITIES las 2 fronteras", () => {
     assert.deepEqual(Object.keys(coverage.CANVAS_STEP_PLACES), ["canvas", "gemini", "external", "portal"]);
     for (const [key, item] of Object.entries(coverage.CANVAS_STEP_PLACES)) {
         assert.equal(item.id, key);
@@ -14,9 +14,9 @@ test("CANVAS_STEP_PLACES define los 4 lugares verificables y CANVAS_EXTRA_CAPABI
         assert.ok(item.label.length > 0);
         assert.ok(item.summary.length > 0);
     }
-    assert.equal(coverage.CANVAS_EXTRA_CAPABILITIES.length, 3);
+    assert.equal(coverage.CANVAS_EXTRA_CAPABILITIES.length, 2);
     const statuses = coverage.CANVAS_EXTRA_CAPABILITIES.map((c) => c.status);
-    assert.deepEqual(statuses, ["por-confirmar", "condicional", "informativa"]);
+    assert.deepEqual(statuses, ["condicional", "informativa"]);
 });
 
 test("escapeCoverageHtml y buildStepPlaceBadge manejan entradas normales, nulas y desconocidas", () => {
@@ -60,9 +60,9 @@ test("summarizeStepPlaces y buildExerciseScopeTag distinguen ejercicios 100 % Ca
     assert.match(geminiScope, /Combina chat\/Gems y Canvas/);
 });
 
-test("Los 36 ejercicios declaran places alineados con steps, outsideCanvas claro y cubren las 25 capacidades", () => {
+test("Los 39 ejercicios declaran places alineados con steps, outsideCanvas claro y cubren las 28 capacidades", () => {
     const allExercises = Object.values(exercisesMod.CANVAS_EXERCISES).flat();
-    assert.equal(allExercises.length, 36);
+    assert.equal(allExercises.length, 39);
 
     for (const ex of allExercises) {
         assert.ok(Array.isArray(ex.places), `${ex.id} debe incluir arreglo places`);
@@ -76,13 +76,13 @@ test("Los 36 ejercicios declaran places alineados con steps, outsideCanvas claro
     }
 
     const capKeys = Object.keys(exercisesMod.CANVAS_CAPABILITIES);
-    assert.equal(capKeys.length, 25);
+    assert.equal(capKeys.length, 28);
     for (const required of ["select-ask", "versions", "manual-edit", "file-input", "deep-research"]) {
         assert.ok(exercisesMod.CANVAS_CAPABILITIES[required], `Falta capacidad ${required}`);
     }
 
     const matrix = coverage.buildCoverageMatrix(exercisesMod.CANVAS_EXERCISES, exercisesMod.CANVAS_CAPABILITIES);
-    assert.equal(matrix.length, 25);
+    assert.equal(matrix.length, 28);
     assert.deepEqual(coverage.listUncoveredCapabilities(matrix), []);
 
     const emptyMatrix = coverage.buildCoverageMatrix(null, null);
@@ -107,7 +107,7 @@ test("buildCoverageTableHtml renderiza la matriz verificable con enlaces profund
         coverage.CANVAS_EXTRA_CAPABILITIES
     );
     assert.match(html, /canvas-coverage-summary/);
-    assert.match(html, /25\/25/);
+    assert.match(html, /28\/28/);
     assert.match(html, /Seleccionar y preguntar en la vista previa/);
     assert.match(html, /De Deep Research a Canvas/);
     assert.match(html, /Tarjetas de estudio/);
@@ -173,7 +173,7 @@ test("buildCoverageMatrix y buildCoverageTableHtml cubren índices >= 3 y entrad
     assert.match(htmlBrokenList, /en los 0 ejercicios/);
 });
 
-test("CANVAS_VISION_STAGES y buildCompleteVisionSummaryHtml cubren las 25 capacidades en 4 etapas y calculan el dominio 360", () => {
+test("CANVAS_VISION_STAGES y buildCompleteVisionSummaryHtml cubren las 28 capacidades en 4 etapas y calculan el dominio 360", () => {
     assert.equal(coverage.CANVAS_VISION_STAGES.length, 4);
     const stageCaps = coverage.CANVAS_VISION_STAGES.flatMap((s) => s.capabilityIds);
     assert.deepEqual([...stageCaps].sort(), Object.keys(exercisesMod.CANVAS_CAPABILITIES).sort());
@@ -184,7 +184,7 @@ test("CANVAS_VISION_STAGES y buildCompleteVisionSummaryHtml cubren las 25 capaci
         ["doc-a-informe-desercion"]
     );
     assert.match(partialHtml, /data-vision-mastery="progress"/);
-    assert.match(partialHtml, /1 de 36 ejercicios completados/);
+    assert.match(partialHtml, /1 de 39 ejercicios completados/);
     assert.match(partialHtml, /is-practiced/);
 
     const allIds = Object.values(exercisesMod.CANVAS_EXERCISES).flat().map((ex) => ex.id);
@@ -194,7 +194,7 @@ test("CANVAS_VISION_STAGES y buildCompleteVisionSummaryHtml cubren las 25 capaci
         allIds
     );
     assert.match(completeHtml, /data-vision-mastery="complete"/);
-    assert.match(completeHtml, /¡Visión Completa 360° alcanzada!/);
+    assert.match(completeHtml, /Recorrido completo/);
 
     const nullHtml = coverage.buildCompleteVisionSummaryHtml(null, null, null);
     assert.match(nullHtml, /0 de 0 ejercicios completados/);
@@ -206,5 +206,5 @@ test("buildCompleteVisionSummaryHtml tolera ejercicios completados sin lista de 
         {},
         ["sin-capacidades", "con-capacidades"]
     );
-    assert.match(html, /Completaste los 2 ejercicios y practicaste las 0 capacidades/);
+    assert.match(html, /Completaste los 2 ejercicios y practicaste las 0 funciones/);
 });

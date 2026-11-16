@@ -24,9 +24,10 @@ MODES = [
     "executive-report",
     "multimodal-vision",
     "gem-studio",
+    "interactive-apps",
 ]
 
-# Los 12 modos cuentan con las partes A, B y C (36 ejercicios en total).
+# Los 13 modos cuentan con las partes A, B y C (39 ejercicios en total).
 MODES_WITH_PART_C = list(MODES)
 
 
@@ -83,7 +84,7 @@ def test_exercises_css_present():
 
 def test_json_bank_matches_js_exercises():
     data = json.loads((BASE_DIR / "materiales" / "gemini_canvas" / "banco_prompts_canvas.json").read_text(encoding="utf-8"))
-    assert data["totalExercises"] == 36
+    assert data["totalExercises"] == 39
     js_ex = _js_exercises()
     by_id = {p["id"]: p for p in data["possibilities"]}
     for mode in MODES:

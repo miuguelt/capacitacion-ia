@@ -1,4 +1,4 @@
-// Simulador de Gemini Canvas Lab: los 12 modos con prompts autosuficientes.
+// Simulador de Gemini Canvas Lab: los 13 modos con prompts autosuficientes.
 // Cada modo lleva sus datos dentro del prompt (método CRTT+L), la lista de criterios que el aprendiz
 // comprueba en su propio Canvas y la especificación de la imagen de referencia. Las cifras se calculan
 // con las funciones de este archivo para que prompt, imagen, vista interactiva y lista de chequeo coincidan.
@@ -202,7 +202,7 @@ const canvasInsight = (title, text) => `
         <p>${text}</p>
       </div>`;
 
-const CANVAS_IMAGE_CAPTION = "Reconstrucción del resultado esperado, dibujada con los datos del prompt. Tu Canvas puede variar en diseño, no en cifras ni en contenido.";
+const CANVAS_IMAGE_CAPTION = "Reconstrucción del resultado esperado con los datos del prompt. Tu Canvas puede tener otro diseño, pero las cifras deben coincidir.";
 
 // =====================================================================
 // 1. Redacción y documentos: términos de referencia
@@ -1479,11 +1479,133 @@ Guardrails obligatorios (Restricciones del System Prompt):
     ]
   },
   insightsHtml: canvasInsight("🤖 Coescritura asistida con Gems", "Configurar un Gem personalizado permite que Gemini actúe con un rol especializado dentro de Canvas, aplicando reglas de pedagogía activa como el método socrático y garantizando la terminología institucional.") +
-    canvasInsight("🛡️ Blindaje de guardrails e integridad", "El System Prompt delimita estrictamente lo que el asistente puede y no puede hacer, forzando la evaluación formativa y garantizando el uso canónico de «Portafolio de Evidencias»."),
+    canvasInsight("🛡️ Reglas que protegen el aprendizaje", "Las instrucciones del Gem (System Prompt) fijan qué puede y qué no puede hacer: guía con preguntas en lugar de resolver la tarea y usa siempre «Portafolio de Evidencias»."),
   variationTip: "En el chat del Canvas escribe: «Añade una regla al System Prompt para que cuando el usuario pida ayuda con bases de datos relacionales, exija siempre diagramas entidad-relación en Mermaid»."
 };
 
-// --- Registro de los 12 modos en el orden del simulador ---
+// =====================================================================
+// 13. Apps interactivas: reserva compartida que guarda sus datos
+// =====================================================================
+const BOOKING_DAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+const BOOKING_SLOTS = ["7:00-9:00", "9:00-11:00", "14:00-16:00"];
+const BOOKING_MAX_PER_AREA = 3;
+const BOOKING_SEED = [
+  { day: "Lunes", slot: "7:00-9:00", area: "Coordinación académica" },
+  { day: "Lunes", slot: "14:00-16:00", area: "Bienestar" },
+  { day: "Martes", slot: "9:00-11:00", area: "Talento humano" },
+  { day: "Miércoles", slot: "7:00-9:00", area: "Coordinación académica" },
+  { day: "Jueves", slot: "14:00-16:00", area: "Biblioteca" }
+];
+
+// Aplica las reglas de la sala sin modificar la lista recibida: franja libre, área obligatoria y tope semanal.
+function canvasSlotBooking(bookings, request, maxPerArea = BOOKING_MAX_PER_AREA) {
+  const list = Array.isArray(bookings) ? bookings : [];
+  const req = request || {};
+  const area = String(req.area || "").trim();
+  if (!area) return { ok: false, error: "Escribe el nombre del área antes de reservar.", bookings: list };
+  if (!BOOKING_DAYS.includes(req.day) || !BOOKING_SLOTS.includes(req.slot)) {
+    return { ok: false, error: "Elige un día y una franja de la semana.", bookings: list };
+  }
+  if (list.some(b => b.day === req.day && b.slot === req.slot)) {
+    return { ok: false, error: `La franja ${req.day} ${req.slot} ya está ocupada.`, bookings: list };
+  }
+  const used = list.filter(b => b.area.toLowerCase() === area.toLowerCase()).length;
+  if (used >= maxPerArea) {
+    return { ok: false, error: `${area} ya tiene ${maxPerArea} reservas esta semana.`, bookings: list };
+  }
+  return { ok: true, error: "", bookings: [...list, { day: req.day, slot: req.slot, area }] };
+}
+
+function canvasFreeSlots(bookings) {
+  return BOOKING_DAYS.length * BOOKING_SLOTS.length - (Array.isArray(bookings) ? bookings.length : 0);
+}
+
+const BOOKING_TOTAL = BOOKING_DAYS.length * BOOKING_SLOTS.length;
+const BOOKING_FREE = canvasFreeSlots(BOOKING_SEED);
+const bookingCell = (day, slot) => (BOOKING_SEED.find(b => b.day === day && b.slot === slot) || { area: "Libre" }).area;
+
+const INTERACTIVE_APPS = {
+  name: "13. Apps interactivas",
+  docIcon: "🧩",
+  docTitle: "Reserva_Sala_Sistemas.html",
+  image: "assets/images/canvas/canvas_apps_interactivas.jpg",
+  promptParts: {
+    role: "desarrollador de herramientas internas para oficinas",
+    context: "Varias áreas reservan la sala de sistemas por correo y a veces dos áreas llegan a la misma franja. Se necesita una sola app que todas usen desde el mismo enlace y que no pierda las reservas al cerrarse.",
+    data: `RESERVA DE LA SALA DE SISTEMAS — SEMANA DEL 23 AL 27 DE NOVIEMBRE DE 2026 (datos de práctica)
+Días: ${BOOKING_DAYS.join(", ")}. Franjas diarias: ${BOOKING_SLOTS.join(", ")}.
+Capacidad: 1 reserva por franja.
+Reservas ya registradas (${BOOKING_SEED.length}):
+${BOOKING_SEED.map(b => `- ${b.day} ${b.slot}: ${b.area}`).join("\n")}
+Reglas:
+- Una franja reservada muestra «Ocupada» y no admite otra reserva.
+- Toda reserva exige el nombre del área; sin nombre, la app muestra un error.
+- Cada área tiene como máximo ${BOOKING_MAX_PER_AREA} reservas en la semana.`,
+    instruction: "En Canvas, crea una app web de una sola página que guarde sus datos entre sesiones y los comparta entre todas las personas que usen el enlace, con:",
+    task: [
+      "Una cuadrícula de días por franjas que muestre el área de cada reserva o la palabra «Libre».",
+      "Un formulario con día, franja y área, y un botón «Reservar» que aplique las tres reglas.",
+      "Un contador de franjas libres y mensajes accesibles (aria-live) para reservas confirmadas o rechazadas."
+    ],
+    constraints: [
+      "Aplica exactamente las reglas de los datos.",
+      "Pide solo el nombre del área; ningún dato personal."
+    ],
+    format: "Un solo archivo HTML ejecutable.",
+    tone: "Sobrio y claro, como una herramienta de oficina."
+  },
+  expected: [
+    { criterion: `La cuadrícula muestra ${BOOKING_TOTAL} franjas (5 días por 3 franjas) y ${BOOKING_SEED.length} de ellas ocupadas.`, how: "Cuenta las celdas con nombre de área en la vista previa." },
+    { criterion: `El contador muestra ${BOOKING_FREE} franjas libres al iniciar.`, how: "Lee el contador antes de reservar." },
+    { criterion: "Reservar una franja ocupada muestra un error y no cambia la cuadrícula.", how: "Intenta reservar Lunes 7:00-9:00." },
+    { criterion: `Coordinación académica puede hacer una reserva más y la siguiente se rechaza por el tope de ${BOOKING_MAX_PER_AREA}.`, how: "Reserva dos franjas libres a nombre de Coordinación académica." },
+    { criterion: "Las reservas siguen ahí al cerrar y volver a abrir el Canvas, y otra persona con el enlace ve las mismas reservas.", how: "Recarga el chat y pide a un compañero que abra tu enlace." }
+  ],
+  aiResponse: `Creé en Canvas la app de reservas de la sala de sistemas: ${BOOKING_TOTAL} franjas, ${BOOKING_SEED.length} reservas iniciales, las tres reglas aplicadas y los datos guardados y compartidos entre quienes usen el enlace.`,
+  quickActions: [
+    { id: "act-apps-share", label: "🔗 Compartir enlace", toast: "🔗 Enlace listo: quien lo abra verá y podrá editar las mismas reservas." },
+    { id: "act-apps-reload", label: "🔄 Volver a abrir", toast: "🔄 Al volver a abrir el Canvas, las reservas guardadas siguen en la cuadrícula." }
+  ],
+  interactiveHtml: `
+      <div class="apps-booking-demo" style="font-family:var(--font-sans);">
+        <div style="border-bottom:2px solid var(--color-primary); padding-bottom:0.5rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+          <h4 style="margin:0; color:var(--color-primary);">🧩 Reserva de la sala de sistemas</h4>
+          <span class="badge badge-success" id="demo-apps-free">${BOOKING_FREE} franjas libres</span>
+        </div>
+        <div style="overflow-x:auto;">${canvasTable(["Día", ...BOOKING_SLOTS], BOOKING_DAYS.map(d => [d, ...BOOKING_SLOTS.map(s => bookingCell(d, s))]), ' style="font-size:0.8rem;"')}</div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+          <select id="demo-apps-day" aria-label="Día">${BOOKING_DAYS.map(d => `<option>${d}</option>`).join("")}</select>
+          <select id="demo-apps-slot" aria-label="Franja">${BOOKING_SLOTS.map(s => `<option>${s}</option>`).join("")}</select>
+          <input type="text" id="demo-apps-area" placeholder="Nombre del área" aria-label="Nombre del área" style="flex:1; min-width:10rem;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="const st=window.__canvasBookingState||(window.__canvasBookingState=canvasBookingSeed()); const r=canvasSlotBooking(st, {day:document.getElementById('demo-apps-day').value, slot:document.getElementById('demo-apps-slot').value, area:document.getElementById('demo-apps-area').value}); window.__canvasBookingState=r.bookings; document.getElementById('demo-apps-free').textContent=canvasFreeSlots(r.bookings)+' franjas libres'; document.getElementById('demo-apps-msg').textContent=r.ok?'Reserva confirmada.':r.error;">Reservar</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.__canvasBookingState=canvasBookingSeed(); document.getElementById('demo-apps-area').value=''; document.getElementById('demo-apps-free').textContent=canvasFreeSlots(window.__canvasBookingState)+' franjas libres'; document.getElementById('demo-apps-msg').textContent='Reservas reiniciadas a los datos iniciales.';">Reiniciar</button>
+        </div>
+        <p id="demo-apps-msg" aria-live="polite" style="margin:0.6rem 0 0; font-size:0.85rem;">Elige un día, una franja y escribe el área.</p>
+      </div>`,
+  imageSpec: {
+    blocks: [
+      { type: "heading", text: "RESERVA DE LA SALA DE SISTEMAS · 23 AL 27 DE NOVIEMBRE DE 2026" },
+      { type: "kpis", items: [{ label: "Franjas libres", value: String(BOOKING_FREE) }, { label: "Reservas registradas", value: String(BOOKING_SEED.length) }, { label: "Tope por área", value: String(BOOKING_MAX_PER_AREA) }] },
+      { type: "table", headers: ["Día", ...BOOKING_SLOTS], rows: BOOKING_DAYS.map(d => [d, ...BOOKING_SLOTS.map(s => bookingCell(d, s))]) },
+      { type: "callout", title: "Datos guardados y compartidos", text: "Las reservas siguen al volver a abrir el Canvas. Quien tenga el enlace ve y edita las mismas reservas." }
+    ]
+  },
+  insightsHtml: canvasInsight("🧩 Apps que recuerdan", "Canvas puede crear apps que guardan sus datos entre sesiones. Sirven para bitácoras, inventarios o registros que se consultan otro día.") +
+    canvasInsight("🔐 Datos compartidos con cuidado", "En una app que comparte datos, cualquier persona con el enlace puede ver y editar todos los registros. Pide solo lo indispensable y nunca datos personales sensibles."),
+  variationTip: "En el chat del Canvas escribe: «Agrega un botón para cancelar una reserva que libere la franja para todos»."
+};
+
+function canvasBookingSeed() {
+  return BOOKING_SEED.map(b => ({ ...b }));
+}
+
+if (typeof globalThis !== "undefined") {
+  globalThis.canvasSlotBooking = canvasSlotBooking;
+  globalThis.canvasFreeSlots = canvasFreeSlots;
+  globalThis.canvasBookingSeed = canvasBookingSeed;
+}
+
+// --- Registro de los 13 modos en el orden del simulador ---
 const CANVAS_POSSIBILITIES = {
   "doc-editorial": DOC_EDITORIAL,
   "code-prototyping": CODE_PROTOTYPING,
@@ -1496,7 +1618,8 @@ const CANVAS_POSSIBILITIES = {
   "sql-pipeline": SQL_PIPELINE,
   "executive-report": EXECUTIVE_REPORT,
   "multimodal-vision": MULTIMODAL_VISION,
-  "gem-studio": GEM_STUDIO
+  "gem-studio": GEM_STUDIO,
+  "interactive-apps": INTERACTIVE_APPS
 };
 
 Object.values(CANVAS_POSSIBILITIES).forEach(p => {
@@ -1507,7 +1630,7 @@ Object.values(CANVAS_POSSIBILITIES).forEach(p => {
   p.imageSpec.chat = p.aiResponse;
 });
 
-// --- Simulación determinista de Calibración (Longitud, Tono y Audiencia) en los 12 modos ---
+// --- Simulación determinista de Calibración (Longitud, Tono y Audiencia) en los 13 modos ---
 const CALIBRATION_LENGTH_LABELS = {
   1: "Síntesis (1/5)",
   2: "Conciso (2/5)",
@@ -1651,6 +1774,12 @@ const MODE_VARIATION_SIMULATIONS = {
   }
 };
 
+MODE_VARIATION_SIMULATIONS["interactive-apps"] = {
+  promptCommand: "Agrega un botón para cancelar una reserva que libere la franja para todos",
+  aiFollowUp: "Agregué el botón «Cancelar» en cada franja ocupada. Al cancelar, la franja vuelve a «Libre», el contador sube en 1 y el cambio aparece para todas las personas que usan el enlace.",
+  deltaHtml: `<strong>⚡ Variación aplicada (cancelar reservas):</strong><p style="margin:0.25rem 0 0; font-size:0.82rem;">Si Biblioteca cancela Jueves 14:00-16:00, la cuadrícula muestra <strong>Libre</strong> y el contador pasa de ${BOOKING_FREE} a ${BOOKING_FREE + 1} franjas libres.</p>`
+};
+
 function simulateVariationForMode(modeId) {
   const modeData = CANVAS_POSSIBILITIES[modeId] || CANVAS_POSSIBILITIES["doc-editorial"];
   const sim = MODE_VARIATION_SIMULATIONS[modeId] || MODE_VARIATION_SIMULATIONS["doc-editorial"];
@@ -1729,7 +1858,7 @@ function buildCanvasTransformPreviewHtml(modeId, transformType) {
         <strong>🗣️ Voz 2 (Analista de Canvas):</strong> «Lo fundamental es verificar que ${e(modeData.expected[0] ? modeData.expected[0].criterion.toLowerCase() : "todas las cifras coincidan")} y que ${e(modeData.expected[1] ? modeData.expected[1].criterion.toLowerCase() : "se cumplan las restricciones")}.»
       </div>
       <div style="padding:0.65rem 0.8rem; background:var(--bg-subtle); border-left:3px solid var(--color-primary); border-radius:4px;">
-        <strong>🗣️ Voz 1 (Coordinación Académica):</strong> «Excelente. Y si necesitamos iterar en caliente dentro del lienzo, podemos aplicar: <em>${e(modeData.variationTip)}</em>.»
+        <strong>🗣️ Voz 1 (Coordinación Académica):</strong> «Bien. Y si necesitamos ajustar el resultado dentro del lienzo, podemos pedir: <em>${e(modeData.variationTip)}</em>.»
       </div>
     </div>
   </div>`;
@@ -1751,6 +1880,14 @@ function exportCanvasPossibilities(bank) {
       objective: "Digitalizar bocetos manuscritos y trazos en pizarra directamente en artefactos web y flujogramas ejecutables en Canvas.",
       variationPrompts: [
         "En el chat del Canvas escribe: «Agrega un selector de sede y valida que el botón se deshabilite hasta que la contraseña sea Segura»."
+      ]
+    },
+    "interactive-apps": {
+      name: "Apps interactivas (datos guardados y compartidos)",
+      badge: "Apps",
+      objective: "Crear tarjetas de estudio y apps que guardan sus datos entre sesiones o los comparten entre varias personas.",
+      variationPrompts: [
+        "En el chat del Canvas escribe: «Agrega un botón para cancelar una reserva que libere la franja para todos»."
       ]
     },
     "gem-studio": {
@@ -1839,6 +1976,9 @@ if (typeof module !== "undefined" && module.exports) {
     computeCalibratedSimulation,
     simulateVariationForMode,
     buildCanvasTransformPreviewHtml,
-    exportCanvasPossibilities
+    exportCanvasPossibilities,
+    canvasSlotBooking,
+    canvasFreeSlots,
+    canvasBookingSeed
   };
 }

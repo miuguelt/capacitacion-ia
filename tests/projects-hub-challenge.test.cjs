@@ -39,7 +39,7 @@ test("SUITE 1: Immutability & Deep Freeze Challenge", async (t) => {
 
     assert.doesNotThrow(() => {
       const collated = ProjectsHub.collateAllProjects(frozenExercises, frozenDailies);
-      assert.equal(collated.length, 40);
+      assert.equal(collated.length, 43);
     });
   });
 
@@ -141,20 +141,20 @@ test("SUITE 1: Immutability & Deep Freeze Challenge", async (t) => {
 test("SUITE 2: Contract Integrity & Deep Link Resolution", async (t) => {
   const collated = ProjectsHub.collateAllProjects(CANVAS_EXERCISES, ProjectsHub.DEFAULT_DAILY_PROJECTS);
 
-  await t.test("2.1 Exactly 40 consolidated projects with zero duplicate IDs", () => {
-    assert.equal(collated.length, 40, "Must have exactly 40 projects (36 Canvas + 4 Daily)");
+  await t.test("2.1 Exactly 43 consolidated projects with zero duplicate IDs", () => {
+    assert.equal(collated.length, 43, "Must have exactly 43 projects (39 Canvas + 4 Daily)");
     const ids = collated.map(p => p.id);
     const uniqueIds = new Set(ids);
-    assert.equal(uniqueIds.size, 40, "All project IDs must be unique");
+    assert.equal(uniqueIds.size, 43, "All project IDs must be unique");
   });
 
-  await t.test("2.2 ID set matches exactly the 36 Canvas items + 4 Daily items", () => {
+  await t.test("2.2 ID set matches exactly the 39 Canvas items + 4 Daily items", () => {
     const dailyIds = ["dia-1-acta-rag", "dia-2-capsula-multimedia", "dia-3-panel-web-telemetria", "dia-4-prototipo-demo-day"];
     const canvasIds = [];
     for (const [mode, list] of Object.entries(CANVAS_EXERCISES)) {
       list.forEach(ex => canvasIds.push(ex.id));
     }
-    assert.equal(canvasIds.length, 36, "Canvas exercises must be exactly 36");
+    assert.equal(canvasIds.length, 39, "Canvas exercises must be exactly 39");
     assert.equal(dailyIds.length, 4, "Daily items must be exactly 4");
 
     const expectedSet = new Set([...canvasIds, ...dailyIds]);
@@ -207,10 +207,10 @@ test("SUITE 2: Contract Integrity & Deep Link Resolution", async (t) => {
     });
   });
 
-  await t.test("2.4 Deep links resolution: all 36 Canvas routes parse accurately with parseCanvasRoute", () => {
+  await t.test("2.4 Deep links resolution: all 39 Canvas routes parse accurately with parseCanvasRoute", () => {
     const modes = Object.keys(CANVAS_EXERCISES);
     const canvasProjects = collated.filter(p => p.route.startsWith("#gemini-canvas/"));
-    assert.equal(canvasProjects.length, 36);
+    assert.equal(canvasProjects.length, 39);
 
     canvasProjects.forEach(p => {
       const parsed = parseCanvasRoute(p.route, modes);
@@ -383,10 +383,10 @@ test("SUITE 4: Adversarial Boundary & Stress Harness", async (t) => {
     const collated = ProjectsHub.collateAllProjects(CANVAS_EXERCISES, ProjectsHub.DEFAULT_DAILY_PROJECTS);
 
     // Empty object, undefined fields, falsy search should fall back to all items
-    assert.equal(ProjectsHub.filterProjects(collated, {}).length, 40);
-    assert.equal(ProjectsHub.filterProjects(collated, { search: null }).length, 40);
-    assert.equal(ProjectsHub.filterProjects(collated, { search: undefined }).length, 40);
-    assert.equal(ProjectsHub.filterProjects(collated, { search: false }).length, 40, "Falsy boolean treated as empty query");
+    assert.equal(ProjectsHub.filterProjects(collated, {}).length, 43);
+    assert.equal(ProjectsHub.filterProjects(collated, { search: null }).length, 43);
+    assert.equal(ProjectsHub.filterProjects(collated, { search: undefined }).length, 43);
+    assert.equal(ProjectsHub.filterProjects(collated, { search: false }).length, 43, "Falsy boolean treated as empty query");
 
     // Non-matching queries
     assert.equal(ProjectsHub.filterProjects(collated, { search: 12345 }).length, 0);
@@ -568,7 +568,7 @@ test("SUITE 5: DOM Event & Life-Cycle Adversarial Stress", async (t) => {
 // SUITE 6: CONCURRENCY & DESYNCHRONIZATION STRESS
 // -------------------------------------------------------------
 test("SUITE 6: Rapid Sequential Mutation & Stability Stress", async (t) => {
-  await t.test("6.1 1,000 rapid reorderings do not lose or duplicate any of the 40 projects", () => {
+  await t.test("6.1 1,000 rapid reorderings do not lose or duplicate any of the 43 projects", () => {
     const collated = ProjectsHub.collateAllProjects(CANVAS_EXERCISES, ProjectsHub.DEFAULT_DAILY_PROJECTS);
     let order = collated.map(p => p.id);
     const initialSet = new Set(order);
@@ -583,10 +583,10 @@ test("SUITE 6: Rapid Sequential Mutation & Stability Stress", async (t) => {
       order = ProjectsHub.reorderProjectList(order, srcId, tgtId, pos);
 
       // Verify invariants on every step
-      assert.equal(order.length, 40);
+      assert.equal(order.length, 43);
     }
 
-    assert.equal(new Set(order).size, 40);
+    assert.equal(new Set(order).size, 43);
     for (const id of order) {
       assert(initialSet.has(id));
     }
@@ -597,7 +597,7 @@ test("SUITE 6: Rapid Sequential Mutation & Stability Stress", async (t) => {
     const corruptedCustomOrder = ["nonexistent-1", "dia-2-capsula-multimedia", "nonexistent-2", null, undefined, 123];
 
     const sorted = ProjectsHub.sortProjects(collated, "custom", corruptedCustomOrder);
-    assert.equal(sorted.length, 40);
+    assert.equal(sorted.length, 43);
     assert.equal(sorted[0].id, "dia-2-capsula-multimedia");
   });
 });

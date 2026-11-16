@@ -9,7 +9,7 @@ const DEFAULT_DAILY_PROJECTS = [
 ];
 const MODE_AREAS = {
   "doc-editorial": "Redacción", "code-prototyping": "Web & Código", "data-matrix": "Datos & SQL", "flowchart-diagram": "Diseño", "visual-mockup": "Diseño", "inline-prompting": "Redacción",
-  "algorithm-refactor": "Web & Código", "rubric-curriculum": "Redacción", "sql-pipeline": "Datos & SQL", "executive-report": "Redacción", "multimodal-vision": "Diseño", "gem-studio": "Automatización"
+  "algorithm-refactor": "Web & Código", "rubric-curriculum": "Redacción", "sql-pipeline": "Datos & SQL", "executive-report": "Redacción", "multimodal-vision": "Diseño", "gem-studio": "Automatización", "interactive-apps": "Automatización"
 };
 
 function escapeHtml(s) {

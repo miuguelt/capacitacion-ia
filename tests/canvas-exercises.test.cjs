@@ -13,7 +13,8 @@ const {
   buildCanvasMaterialsHtml,
   countCanvasChecklist,
   CANVAS_CAPABILITIES,
-  canvasCapabilityNames
+  canvasCapabilityNames,
+  CANVAS_VERIFY_STEP
 } = require(path.join(__dirname, "..", "js", "canvas-exercises.js"));
 
 const MODES = [
@@ -28,25 +29,26 @@ const MODES = [
   "sql-pipeline",
   "executive-report",
   "multimodal-vision",
-  "gem-studio"
+  "gem-studio",
+  "interactive-apps"
 ];
 
 const allExercises = () => MODES.flatMap(mode => CANVAS_EXERCISES[mode] || []);
 // La instrucción se dirige a Gemini y nombra Canvas como lugar de trabajo; activar Canvas es un paso del aprendiz.
 const CANVAS_INSTRUCTION = /^(En Canvas, |Copia (el|la) \S+ en Canvas sin cambiar )/;
 
-// Los 12 modos cuentan con las partes A, B y C (36 ejercicios en total).
+// Los 13 modos cuentan con las partes A, B y C (39 ejercicios en total).
 const MODES_WITH_PART_C = [...MODES];
 
-test("cada modo tiene las partes A, B y C (36 ejercicios en total)", () => {
+test("cada modo tiene las partes A, B y C (39 ejercicios en total)", () => {
   assert.deepEqual(Object.keys(CANVAS_EXERCISES).sort(), [...MODES].sort());
   for (const mode of MODES) {
     const expected = MODES_WITH_PART_C.includes(mode) ? 3 : 2;
     assert.equal(CANVAS_EXERCISES[mode].length, expected, `${mode} debe tener ${expected} ejercicios`);
   }
-  assert.equal(allExercises().length, 36);
+  assert.equal(allExercises().length, 39);
   const codes = allExercises().map(ex => ex.code);
-  assert.equal(new Set(codes).size, 36, "los códigos de ejercicio no se repiten");
+  assert.equal(new Set(codes).size, 39, "los códigos de ejercicio no se repiten");
   MODES.forEach((mode, i) => CANVAS_EXERCISES[mode].forEach((ex, j) => assert.equal(ex.code, `${i + 1}${"ABC"[j]}`, `${ex.id}: código según su posición`)));
 });
 
@@ -121,7 +123,7 @@ test("cada ejercicio declara capacidades de Canvas que de verdad usa en sus paso
   }
 });
 
-test("los 31 ejercicios cubren todas las capacidades del catálogo", () => {
+test("los 39 ejercicios cubren todas las capacidades del catálogo", () => {
   const used = new Set(allExercises().flatMap(ex => ex.capabilities));
   assert.deepEqual([...used].sort(), Object.keys(CANVAS_CAPABILITIES).sort());
 });
@@ -369,4 +371,57 @@ test("buildCanvasExerciseHtml y canvasCopyText manejan índices >= 3 y propiedad
   const html = buildCanvasExerciseHtml(minimal, 5, "doc-editorial");
   assert.match(html, /Parte A/);
   assert.equal(canvasCopyText({ prompt: "" }, "prompt"), "");
+});
+
+// --- Claridad de la redacción (revisión editorial de noviembre de 2026) ---
+const contentWords = s => new Set((s.toLowerCase().match(/[a-záéíóúñü]{5,}/g) || []));
+
+test("los títulos de los ejercicios son breves (10 palabras o menos)", () => {
+  for (const ex of allExercises()) {
+    const n = ex.title.trim().split(/\s+/).length;
+    assert.ok(n <= 10, `${ex.code}: el título tiene ${n} palabras`);
+  }
+});
+
+test("canvasFeature nombra una sola función principal; las demás viven en capabilities", () => {
+  for (const ex of allExercises()) {
+    assert.doesNotMatch(ex.canvasFeature, /\+/, `${ex.code}: canvasFeature no encadena funciones con «+»`);
+    assert.ok(ex.canvasFeature.split(/\s+/).length <= 6, `${ex.code}: canvasFeature breve`);
+  }
+});
+
+test("whyCanvas y outsideCanvas no repiten la misma idea", () => {
+  for (const ex of allExercises()) {
+    const a = contentWords(ex.whyCanvas);
+    const b = contentWords(ex.outsideCanvas);
+    const shared = [...a].filter(w => b.has(w)).length;
+    const ratio = shared / Math.min(a.size, b.size);
+    assert.ok(ratio <= 0.4, `${ex.code}: whyCanvas y outsideCanvas comparten ${Math.round(ratio * 100)} % de palabras`);
+    assert.doesNotMatch(ex.outsideCanvas, /podría .*pero/i, `${ex.code}: outsideCanvas sin rodeos`);
+  }
+});
+
+test("el reto adicional no repite relleno genérico", () => {
+  for (const ex of allExercises()) {
+    assert.doesNotMatch(ex.stretch, /vida diaria/i, `${ex.code}: stretch concreto`);
+  }
+});
+
+test("todos los ejercicios cierran con el mismo paso de verificación", () => {
+  for (const ex of allExercises()) {
+    assert.equal(ex.steps.at(-1), CANVAS_VERIFY_STEP, `${ex.code}: último paso estándar`);
+  }
+});
+
+// --- Modo 13: apps interactivas que recuerdan y comparten datos ---
+test("modo 13 practica tarjetas de estudio, datos guardados y datos compartidos", () => {
+  const [a, b, c] = CANVAS_EXERCISES["interactive-apps"];
+  assert.deepEqual([a.code, b.code, c.code], ["13A", "13B", "13C"]);
+  assert.ok(a.capabilities.includes("create-flashcards"));
+  assert.ok(b.capabilities.includes("app-saved-data"));
+  assert.ok(c.capabilities.includes("app-shared-data"));
+  assert.match(c.outsideCanvas, /enlace/i, "13C advierte quién puede ver los datos compartidos");
+  for (const ex of [a, b, c]) {
+    assert.doesNotMatch(ex.promptParts.data, /@|\b\d{7,10}\b/, `${ex.code}: sin correos ni documentos de identidad en los datos`);
+  }
 });

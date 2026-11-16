@@ -13,7 +13,8 @@ const LF = String.fromCharCode(10);
 
 const EXTRA_HEADINGS = {
   "multimodal-vision": "### 11. Visión Multimodal (De boceto a Canvas en vivo)",
-  "gem-studio": "### 12. Gems para Canvas (Asistente especializado de coescritura)"
+  "gem-studio": "### 12. Gems para Canvas (Asistente especializado de coescritura)",
+  "interactive-apps": "### 13. Apps interactivas (datos guardados y compartidos)"
 };
 
 function formatStepWithPlace(step, placeKey) {

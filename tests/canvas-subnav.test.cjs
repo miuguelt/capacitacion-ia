@@ -75,14 +75,14 @@ test("countCompletedExercises y formatProgressLabel calculan avance global y por
 
     const nullCompletedStats = subnav.countCompletedExercises(null, CANVAS_EXERCISES);
     assert.equal(nullCompletedStats.done, 0);
-    assert.equal(nullCompletedStats.total, 36);
+    assert.equal(nullCompletedStats.total, 39);
 
     const stats = subnav.countCompletedExercises(
         ["doc-a-informe-desercion", "code-a-simulador-presupuesto", "id-inexistente"],
         CANVAS_EXERCISES
     );
     assert.equal(stats.done, 2);
-    assert.equal(stats.total, 36);
+    assert.equal(stats.total, 39);
     assert.deepEqual(stats.byMode["doc-editorial"], { done: 1, total: 3 });
     assert.deepEqual(stats.byMode["code-prototyping"], { done: 1, total: 3 });
     assert.deepEqual(stats.byMode["visual-mockup"], { done: 0, total: 3 });
@@ -265,7 +265,7 @@ test("bindTablistKeyboard e initCanvasSubnav sincronizan píldoras, pestañas, p
     const api = subnav.initCanvasSubnav(fakeDoc, fakeWin);
     assert.ok(api);
     assert.equal(typeof api.refreshProgress, "function");
-    assert.equal(countBadge.textContent, "3/36");
+    assert.equal(countBadge.textContent, "3/39");
     assert.equal(observed.length, 2);
 
     const docProgress = tabDoc.querySelector(".canvas-tab-progress");
