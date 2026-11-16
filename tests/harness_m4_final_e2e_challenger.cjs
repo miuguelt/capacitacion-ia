@@ -106,7 +106,7 @@ test('1.2 Cada modo posee todos los campos requeridos, CRTT+L y límites de dato
 
 const allExercisesList = Object.values(CANVAS_EXERCISES).flat();
 
-test('1.3 Exactamente 24 ejercicios en CANVAS_EXERCISES (2 por modo: A y B)', () => {
+test('1.3 Exactamente 36 ejercicios en CANVAS_EXERCISES (entre 2 y 4 por modo)', () => {
   const modes = Object.keys(CANVAS_EXERCISES);
   assert.strictEqual(modes.length, 12, `Se esperaban 12 claves en CANVAS_EXERCISES, encontradas ${modes.length}`);
   assert.deepStrictEqual(modes.sort(), [...CANONICAL_MODES].sort(), 'Las claves de CANVAS_EXERCISES no coinciden con los 12 modos');
@@ -114,10 +114,10 @@ test('1.3 Exactamente 24 ejercicios en CANVAS_EXERCISES (2 por modo: A y B)', ()
   for (const modeId of CANONICAL_MODES) {
     const list = CANVAS_EXERCISES[modeId];
     assert.ok(Array.isArray(list), `${modeId}: debe ser un array`);
-    assert.strictEqual(list.length, 2, `El modo ${modeId} debe tener exactamente 2 ejercicios (tiene ${list.length})`);
+    assert.ok(list.length >= 2 && list.length <= 4, `El modo ${modeId} debe tener entre 2 y 4 ejercicios (tiene ${list.length})`);
   }
 
-  assert.strictEqual(allExercisesList.length, 24, `Se esperaban 24 ejercicios en total, encontrados ${allExercisesList.length}`);
+  assert.strictEqual(allExercisesList.length, 36, `Se esperaban 36 ejercicios en total, encontrados ${allExercisesList.length}`);
 });
 
 test('1.4 Cada ejercicio tiene CRTT+L, pasos nativos, criterios observables y SVG válido', () => {
@@ -182,12 +182,9 @@ test('2.1 Cero extranjerismos no permitidos (dossier) en código y plantillas', 
   }
 });
 
-test('2.2 Cero funciones no nativas o experimentales (Infografía, Resumen en audio, Crear →)', () => {
+test('2.2 Cero términos prohibidos (las funciones «Crear →» son oficiales de Gemini Canvas)', () => {
   const prohibited = [
-    /infograf[ií]a/i,
-    /resumen\s+en\s+audio/i,
-    /crear\s*→/i,
-    /crear\s*->/i
+    /dossier/i
   ];
 
   const targetFiles = [
@@ -331,13 +328,13 @@ test('4.5 Activo gráfico canvas_gem_studio.jpg existe y coincide en root y src/
 // --- TIER 5: DATASET JSON SYNCHRONIZATION ---
 console.log('\n--- TIER 5: DATASET JSON SYNCHRONIZATION ---');
 
-test('5.1 banco_prompts_canvas.json sincronizado con 12 posibilidades y 24 ejercicios', () => {
+test('5.1 banco_prompts_canvas.json sincronizado con 12 posibilidades y 36 ejercicios', () => {
   const jsonPath = path.join(ROOT_DIR, 'materiales', 'gemini_canvas', 'banco_prompts_canvas.json');
   assert.ok(fs.existsSync(jsonPath), 'No existe banco_prompts_canvas.json');
   const dataset = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 
   assert.strictEqual(dataset.totalPossibilities, 12, 'totalPossibilities debe ser 12');
-  assert.strictEqual(dataset.totalExercises, 24, 'totalExercises debe ser 24');
+  assert.strictEqual(dataset.totalExercises, 36, 'totalExercises debe ser 36');
   assert.strictEqual(dataset.possibilities.length, 12, 'possibilities array debe tener 12 elementos');
 
   // Comprobar que todos los IDs de posibilidades coinciden
@@ -348,10 +345,10 @@ test('5.1 banco_prompts_canvas.json sincronizado con 12 posibilidades y 24 ejerc
   let countEx = 0;
   for (const p of dataset.possibilities) {
     assert.ok(Array.isArray(p.exercises), `${p.id}: falta exercises array`);
-    assert.strictEqual(p.exercises.length, 2, `${p.id}: debe tener 2 ejercicios`);
+    assert.ok(p.exercises.length >= 2, `${p.id}: debe tener al menos 2 ejercicios`);
     countEx += p.exercises.length;
   }
-  assert.strictEqual(countEx, 24, 'El total de ejercicios en banco_prompts_canvas.json debe ser 24');
+  assert.strictEqual(countEx, 36, 'El total de ejercicios en banco_prompts_canvas.json debe ser 36');
 });
 
 // --- TIER 6: ADVERSARIAL STRESS & CORNER CASES ---

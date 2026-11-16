@@ -199,3 +199,12 @@ test("CANVAS_VISION_STAGES y buildCompleteVisionSummaryHtml cubren las 25 capaci
     const nullHtml = coverage.buildCompleteVisionSummaryHtml(null, null, null);
     assert.match(nullHtml, /0 de 0 ejercicios completados/);
 });
+
+test("buildCompleteVisionSummaryHtml tolera ejercicios completados sin lista de capacidades", () => {
+    const html = coverage.buildCompleteVisionSummaryHtml(
+        { demo: [{ id: "sin-capacidades" }, { id: "con-capacidades", capabilities: ["no-existe"] }] },
+        {},
+        ["sin-capacidades", "con-capacidades"]
+    );
+    assert.match(html, /Completaste los 2 ejercicios y practicaste las 0 capacidades/);
+});
