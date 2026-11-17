@@ -151,7 +151,7 @@ test("composeCanvasPrompt ordena las partes y delimita los datos", () => {
     'Datos:\n"""\na,b\n1,2\n"""',
     "Tarea: En Canvas, haz:\n1. Uno\n2. Dos\nEntrega: Tabla.",
     "Tono: Claro y directo.",
-    "Límites:\n- Sin inventar"
+    "Límites:\n- Sin inventar\n- Responde en español de Colombia.\n- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo."
   ].join("\n\n"));
 });
 
@@ -197,6 +197,10 @@ test("buildCanvasExerciseHtml arma una tarjeta completa y segura", () => {
   assert.equal((html.match(/class="canvas-exercise-step"/g) || []).length, ex.steps.length);
   assert.ok(html.includes("Parte A"));
   assert.ok(html.includes("¿Por qué en Canvas?"), "la tarjeta explica qué aporta Canvas");
+  for (const aside of ["canvas-exercise-why", "canvas-exercise-prompt-view", "canvas-exercise-preview-wrap", "canvas-exercise-stretch"]) {
+    assert.match(html, new RegExp(`<details class="canvas-aside ${aside}">`), `${aside} queda plegado para no distraer`);
+  }
+  assert.doesNotMatch(html, /<details[^>]* open/, "ningún bloque secundario abre por defecto");
   assert.ok(html.includes(escapeCanvasHtml(ex.whyCanvas)));
   assert.equal((html.match(/class="canvas-capability-chip"/g) || []).length, ex.capabilities.length);
   assert.ok(html.includes(`id="ejercicio-${ex.id}"`), "la tarjeta tiene ancla para enlaces directos");
@@ -423,5 +427,34 @@ test("modo 13 practica tarjetas de estudio, datos guardados y datos compartidos"
   assert.match(c.outsideCanvas, /enlace/i, "13C advierte quién puede ver los datos compartidos");
   for (const ex of [a, b, c]) {
     assert.doesNotMatch(ex.promptParts.data, /@|\b\d{7,10}\b/, `${ex.code}: sin correos ni documentos de identidad en los datos`);
+  }
+});
+
+// --- Prompts completos: idioma y manejo de datos faltantes ---
+const { canvasPromptGuardrails } = require(path.join(__dirname, "..", "js", "canvas-exercises.js"));
+
+test("canvasPromptGuardrails agrega idioma y datos faltantes solo cuando faltan", () => {
+  const base = { format: "Tabla.", tone: "Claro.", constraints: ["Usa solo estos datos."] };
+  assert.deepEqual(canvasPromptGuardrails(base), [
+    "Responde en español de Colombia.",
+    "Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo."
+  ]);
+  assert.deepEqual(canvasPromptGuardrails({ ...base, format: "Frases en español de Colombia.", constraints: ["Si falta un dato, márcalo como pendiente."] }), []);
+  assert.equal(canvasPromptGuardrails(undefined).length, 2, "sin partes agrega ambos límites");
+  assert.deepEqual(canvasPromptGuardrails({}), [
+    "Responde en español de Colombia.",
+    "Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo."
+  ]);
+});
+
+test("los 39 prompts fijan el idioma y dicen qué hacer si falta un dato", () => {
+  const list = Object.values(CANVAS_EXERCISES).flat();
+  assert.equal(list.length, 39);
+  for (const ex of list) {
+    assert.match(ex.prompt, /español de Colombia/, `${ex.id}: idioma`);
+    assert.match(ex.prompt, /falta un dato|pendiente/i, `${ex.id}: datos faltantes`);
+    for (const label of ["Contexto:", "Rol:", "Datos:", "Tarea:", "Tono:", "Límites:"]) {
+      assert.ok(ex.prompt.includes(label), `${ex.id}: ${label}`);
+    }
   }
 });

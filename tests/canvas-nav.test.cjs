@@ -300,3 +300,55 @@ test("computeLearnerGuideState orienta las 4 fases del aprendizaje (explorar, it
   });
   assert.equal(phase2OnlyChecks.phase, "2-iterate");
 });
+
+// --- Recorrido guiado: selector desplegable de los ejercicios y progreso global ---
+const { buildJourneyGroups, journeyRemaining, parseJourneyValue } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
+const JOURNEY_BANK = {
+  "doc-editorial": [{ id: "d-a", code: "1A", title: "Informe" }, { id: "d-b", code: "1B", title: "Propuesta" }],
+  "code-prototyping": [{ id: "c-a", code: "2A", title: "Landing" }]
+};
+const JOURNEY_MODES = ["doc-editorial", "code-prototyping"];
+const JOURNEY_NAMES = { "doc-editorial": "1. Redacción", "code-prototyping": "2. Código" };
+
+test("buildJourneyGroups agrupa los ejercicios por modo con su estado", () => {
+  const groups = buildJourneyGroups(JOURNEY_MODES, JOURNEY_NAMES, JOURNEY_BANK, ["d-a"]);
+  assert.equal(groups.length, 2);
+  assert.equal(groups[0].label, "1. Redacción (1/2)");
+  assert.deepEqual(groups[0].options[0], { value: "doc-editorial|0", label: "✓ 1A · Informe", done: true });
+  assert.deepEqual(groups[0].options[1], { value: "doc-editorial|1", label: "1B · Propuesta", done: false });
+  assert.equal(groups[1].label, "2. Código (0/1)");
+});
+
+test("buildJourneyGroups tolera progreso vacío, nombres ausentes y modos sin ejercicios", () => {
+  const groups = buildJourneyGroups(["doc-editorial", "vacio"], {}, JOURNEY_BANK, null);
+  assert.equal(groups.length, 1, "un modo sin ejercicios no aparece en el selector");
+  assert.equal(groups[0].label, "doc-editorial (0/2)");
+  assert.ok(groups[0].options.every(o => o.done === false));
+  assert.deepEqual(buildJourneyGroups(null, null, null, null), []);
+});
+
+test("journeyRemaining cuenta lo que falta y en cuántos modos", () => {
+  const seq = listExerciseSequence(JOURNEY_MODES, JOURNEY_BANK);
+  assert.deepEqual(journeyRemaining(seq, []), { done: 0, total: 3, pending: 3, pendingModes: 2 });
+  assert.deepEqual(journeyRemaining(seq, ["d-a", "d-b"]), { done: 2, total: 3, pending: 1, pendingModes: 1 });
+  assert.deepEqual(journeyRemaining(seq, ["d-a", "d-b", "c-a", "otro"]), { done: 3, total: 3, pending: 0, pendingModes: 0 });
+  assert.deepEqual(journeyRemaining(seq, undefined), { done: 0, total: 3, pending: 3, pendingModes: 2 });
+});
+
+test("parseJourneyValue acepta opciones válidas y rechaza las inválidas o vacías", () => {
+  const seq = listExerciseSequence(JOURNEY_MODES, JOURNEY_BANK);
+  assert.deepEqual(parseJourneyValue("doc-editorial|1", seq), { mode: "doc-editorial", exercise: 1, id: "d-b" });
+  assert.equal(parseJourneyValue("code-prototyping|4", seq), null, "ejercicio inexistente");
+  assert.equal(parseJourneyValue("otro|0", seq), null, "modo inexistente");
+  assert.equal(parseJourneyValue("", seq), null, "valor vacío");
+  assert.equal(parseJourneyValue(undefined, seq), null);
+});
+
+test("computeLearnerGuideState expone la letra y el código del ejercicio", () => {
+  const withEx = computeLearnerGuideState({ exerciseIndex: 1, exercise: { code: "1B", title: "Propuesta" } });
+  assert.equal(withEx.letter, "B");
+  assert.equal(withEx.exerciseCode, "1B");
+  const empty = computeLearnerGuideState(null);
+  assert.equal(empty.letter, "A");
+  assert.equal(empty.exerciseCode, "1A");
+});

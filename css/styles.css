@@ -5673,3 +5673,109 @@ body.instructor-mode .instructor-guide-card {
   border-left: 3px solid var(--color-instructor);
   padding-inline-start: 0.75rem;
 }
+
+/* --- Recorrido guiado de Gemini Canvas: barra fija, progreso y bloques plegables --- */
+.canvas-journey-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.canvas-journey-bar .immersive-mode-select {
+  display: inline-block;
+  inline-size: auto;
+  max-inline-size: 100%;
+  min-inline-size: min(100%, 18rem);
+  flex: 1 1 18rem;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.55rem;
+}
+
+.canvas-journey-bar .immersive-hud-status {
+  flex: 1 1 26rem;
+}
+
+.canvas-journey-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.canvas-journey-pager .canvas-mode-pager-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.canvas-journey-progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.canvas-journey-progress {
+  flex: 1 1 12rem;
+  inline-size: 100%;
+  block-size: 0.6rem;
+  accent-color: var(--color-primary);
+}
+
+.canvas-journey-arrow {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.canvas-journey-remaining {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  text-align: start;
+}
+
+details.canvas-aside {
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.8rem;
+  margin-block: 0.6rem;
+  background: var(--bg-surface);
+}
+
+details.canvas-aside > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  list-style-position: inside;
+}
+
+details.canvas-aside > summary:hover,
+details.canvas-aside > summary:focus-visible {
+  color: var(--color-primary);
+}
+
+details.canvas-aside > summary h3 {
+  display: inline;
+  font-size: 1rem;
+  margin: 0;
+}
+
+details.canvas-aside[open] > summary {
+  margin-block-end: 0.6rem;
+}
+
+.canvas-view-options .immersive-focus-toolbar {
+  margin-block-start: 0.4rem;
+}
+
+.copy-btn.is-copied,
+.canvas-exercise-copy.is-copied,
+.canvas-mode-pager-btn.is-copied {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module details.canvas-aside {
+  display: none !important;
+}

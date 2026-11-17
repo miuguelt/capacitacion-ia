@@ -103,6 +103,7 @@ Límites:
 - Copia los requisitos y valores tal como aparecen en los datos; no agregues componentes ni cambies cifras.
 - No menciones marcas ni modelos comerciales.
 - Escribe los valores en pesos colombianos con punto de miles, por ejemplo COP 1.000.000.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -157,6 +158,8 @@ Límites:
 - No uses librerías externas, CDN ni npm: todo debe funcionar en la vista previa de Canvas.
 - Guarda los datos en un arreglo de JavaScript; no escribas los resultados a mano.
 - Usa el color #2D5A4C para los elementos principales y conserva un contraste AA.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -208,6 +211,8 @@ Tono: Objetivo y neutral, sin favorecer a ningún proveedor.
 Límites:
 - Usa solo las calificaciones y los pesos de los datos, y muestra la fórmula que aplicaste.
 - Debajo de la tabla, escribe la operación que produce cada total para que se pueda recalcular.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -268,6 +273,8 @@ Tono: Claro y neutral, con etiquetas cortas en los nodos.
 Límites:
 - No agregues pasos, responsables ni conexiones que no estén en los datos.
 - El diagrama debe dibujarse sin errores en la vista previa de Canvas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -329,6 +336,8 @@ Tono: Cercano y claro en los textos de la interfaz.
 Límites:
 - Calcula los contrastes en el código; no los escribas a mano.
 - Usa solo los colores de la paleta y no uses librerías externas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -371,6 +380,8 @@ Tono: Formal y respetuoso, propio de un acta institucional.
 
 Límites:
 - Conserva sin cambios las fechas, la hora y los números de ficha y de ambiente.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Paso 2 · Selecciona solo el punto 3 en el Canvas y escribe en el cuadro de edición:**
@@ -443,6 +454,8 @@ Tono: Cercano, didáctico y claro, con ejemplos de la vida diaria.
 Límites:
 - Conserva el comportamiento: si un documento se repite, cuenta su primer registro.
 - Usa lenguaje cotidiano para alguien que no es programador.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -499,6 +512,8 @@ Tono: Formativo y respetuoso con el aprendiz evaluado.
 Límites:
 - Cada descriptor debe nombrar algo observable en el repositorio o en el informe (archivos, pruebas, códigos HTTP), no adjetivos como «bueno» o «adecuado».
 - Los pesos deben sumar 100 %.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -551,6 +566,8 @@ Tono: Cercano, didáctico y sin jerga innecesaria.
 Límites:
 - No uses subconsultas anidadas dentro de SELECT o WHERE; usa pasos ordenados (CTE).
 - Usa ROUND(…, 1) para redondear el promedio y el porcentaje, y ordena por ficha y puesto.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -603,6 +620,7 @@ Límites:
 - Usa solo los hechos de los extractos, cita la fuente de cada uno (por ejemplo [INF-1, p. 12]) y presenta las acciones como recomendaciones.
 - Calcula la matriz antes de redactar la síntesis: los colores que mencione la síntesis deben coincidir con la matriz.
 - Escribe los porcentajes como texto normal (94 %), sin notación matemática, y no pases de una página (unas 450 palabras).
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 * **Cómo verificar el resultado:**
@@ -719,6 +737,7 @@ Tono: Formal y directo, pensado para un comité directivo.
 Límites:
 - Usa solo estos datos; si una acción no se puede relacionar con certeza con un resultado, dilo.
 - No inventes cifras ni nombres de personas.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -798,6 +817,8 @@ Límites:
 - Muestra los cálculos paso a paso.
 - Montos en pesos colombianos con punto de miles.
 - Si la inversión no se recupera en las 16 semanas, dilo con claridad y propón una medida.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -863,6 +884,8 @@ Tono: Cercano y claro, dirigido a jóvenes aprendices.
 Límites:
 - Conserva las horas y los plazos de los datos.
 - No agregues reglas nuevas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -936,6 +959,8 @@ Límites:
 - Formato de moneda colombiano.
 - Diseño responsivo y accesible: contraste AA y controles con etiqueta.
 - Sin librerías externas ni descargas de archivos.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1006,6 +1031,8 @@ Tono: Claro y conciso en los comentarios del código.
 Límites:
 - Sin herramientas externas: solo HTML, CSS y JavaScript.
 - Cada tarjeta debe poder usarse con teclado y tener etiqueta accesible.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1068,6 +1095,8 @@ Tono: Motivador y claro, para jóvenes aprendices.
 Límites:
 - Sin librerías externas ni descargas de archivos.
 - Montos en pesos colombianos con punto de miles.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1140,6 +1169,8 @@ Tono: Claro y práctico, para el dueño de un negocio pequeño.
 Límites:
 - Cifras en miles de COP con separador de miles y porcentajes con un decimal.
 - Calcula todo en JavaScript a partir de los datos, sin librerías externas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1209,6 +1240,8 @@ Tono: Técnico y objetivo, sin dramatizar los riesgos.
 Límites:
 - Usa exactamente los umbrales entregados.
 - Propón acciones realistas para un equipo de cinco personas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1278,6 +1311,8 @@ Tono: Analítico, transparente y verificable.
 Límites:
 - Muestra las operaciones completas de cada alternativa con un decimal.
 - Usa exclusivamente las calificaciones y umbrales de los datos.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1352,6 +1387,8 @@ Límites:
 - Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js con sintaxis válida de flowchart; si no carga, muestra un aviso y el código en un bloque de texto.
 - Máximo seis palabras por cuadro para que se lea fácil.
 - No uses descargas de archivos: la vista previa de Canvas puede bloquearlas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1469,6 +1506,8 @@ Límites:
 - Carga Mermaid 10 desde https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js; si no carga, muestra un aviso y el código en un bloque de texto.
 - Los códigos HTTP y las fechas deben coincidir con los datos.
 - Las pestañas deben funcionar con teclado y volver a dibujar el diagrama al mostrarse.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1590,6 +1629,8 @@ Tono: Claro, estructurado y fácil de entender sin saber programar.
 Límites:
 - Usa exactamente los nombres de etapa y los 9 saltos de los datos.
 - Incluye un respaldo visual en SVG o tarjetas si el CDN de Mermaid no carga sin conexión.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1667,6 +1708,8 @@ Tono: Cercano y claro en los textos de la interfaz.
 Límites:
 - Buen contraste de lectura (WCAG AA), foco visible y uso completo con teclado.
 - Adaptable a celular desde 360 px y sin librerías externas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1738,6 +1781,8 @@ Tono: Cercano y directo en los textos de cada pantalla.
 Límites:
 - Botones de al menos 44 px de alto y texto de al menos 16 px.
 - El estado se comunica con texto, no solo con color.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1798,6 +1843,8 @@ Tono: Cercano y directo en los textos de la app.
 Límites:
 - Sin librerías externas.
 - Por ahora el botón puede mostrar una plantilla de texto; en un paso posterior se conecta a Gemini.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1864,6 +1911,8 @@ Tono: Respetuoso y neutral en las observaciones del chat.
 
 Límites:
 - No cambies ninguna palabra del documento en este paso.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -1956,6 +2005,8 @@ Tono: Didáctico: explica cada fallo en lenguaje sencillo sin adelantar la respu
 
 Límites:
 - No modifiques el código en este paso.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2017,6 +2068,8 @@ Tono: Respetuoso y neutral en las observaciones.
 
 Límites:
 - No cambies ninguna palabra del documento en este paso.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2082,6 +2135,8 @@ Tono: Didáctico, cercano y preciso, con ejemplos numéricos.
 Límites:
 - Solo biblioteca estándar de Python.
 - Explica para alguien que no es programador, con analogías cotidianas y sin fórmulas difíciles.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2152,6 +2207,8 @@ Tono: Didáctico, claro y visual, con rótulos breves en español.
 Límites:
 - Implementa la pausa animada paso a paso con generadores de JavaScript para que el usuario pueda detener y avanzar cada movimiento.
 - Anuncia los contadores con aria-live y no uses librerías externas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2224,6 +2281,8 @@ Tono: Didáctico, cercano y con comentarios breves.
 Límites:
 - Solo biblioteca estándar de Python.
 - Todo el código en un solo archivo, listo para ejecutarse de arriba abajo con un clic.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2297,6 +2356,8 @@ Tono: Formativo y respetuoso con el aprendiz evaluado.
 Límites:
 - Cada descriptor nombra una evidencia verificable en el código o la entrega; evita adjetivos como «bueno» o «adecuado».
 - Tono respetuoso y orientado a la mejora.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2370,6 +2431,8 @@ Tono: Cercano, motivador y comprensible para principiantes.
 Límites:
 - Usa comandos reales y vigentes de Git (git switch en lugar de git checkout).
 - Explica cada término técnico con una analogía cotidiana la primera vez que aparezca.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2432,6 +2495,8 @@ Tono: Formativo y preciso, sin tecnicismos innecesarios.
 Límites:
 - Escribe las ecuaciones en LaTeX, no como texto con símbolos.
 - Usa los pesos como decimales: 0,30; 0,25; 0,20 y 0,25.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2524,6 +2589,8 @@ Límites:
 - Antes de cada consulta, escribe un comentario en español sencillo explicando qué pregunta responde.
 - Usa JOIN explícitos (cruces claros entre tablas) y nombres fáciles de leer.
 - Si una función de fecha es propia de SQLite, deja en un comentario su equivalente en PostgreSQL.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2607,6 +2674,8 @@ Tono: Claro y didáctico, explicando en palabras simples por qué se rechaza cad
 Límites:
 - Cada etapa debe poder ejecutarse de nuevo sin duplicar datos.
 - Un comentario en español sencillo por cada regla aplicada.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2675,6 +2744,8 @@ Tono: Claro, riguroso y fácil de entender incluso para quien no programa.
 Límites:
 - No uses INNER JOIN: ningún aprendiz matriculado puede desaparecer del listado.
 - Usa COALESCE para evitar valores vacíos (nulos) en el conteo y en el promedio.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2752,6 +2823,8 @@ Tono: Ejecutivo y objetivo, con cifras antes que opiniones.
 Límites:
 - No afirmes causalidad sin advertir sus límites.
 - Cifras con un decimal y formato colombiano.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2821,6 +2894,8 @@ Tono: Formal e imparcial, sin favorecer a ningún proveedor.
 Límites:
 - Muestra cada cálculo.
 - No uses marcas comerciales reales.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2883,6 +2958,8 @@ Tono: Directivo, persuasivo con datos y conciso.
 Límites:
 - Conserva con exactitud las cifras de la muestra (420 aprendices, 18 instructores, 14 min a 3,5 min, 68 % a 91 %, 12 a 3 defectos).
 - No agregues rubros de gasto que no estén en los datos.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -2946,6 +3023,7 @@ Límites:
 - Cero librerías externas o frameworks: todo debe funcionar de manera nativa e inmediata en la vista previa de Canvas.
 - Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.
 - Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3007,6 +3085,7 @@ Límites:
 - Usa únicamente sintaxis Mermaid estándar para que se dibuje sin errores; si Mermaid no carga, muestra un aviso y el código en un bloque de texto.
 - Conserva textualmente las etiquetas, plazos y nombres de subgrafos dibujados en la pizarra.
 - No inventes pasos intermedios ni omitas los plazos de notificación especificados.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3065,6 +3144,8 @@ Tono: Claro y directo, para el encargado del laboratorio.
 Límites:
 - Conserva los nombres y las cifras de la foto; si una cifra no se lee, indícalo.
 - Sin librerías externas ni descargas de archivos.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3133,6 +3214,7 @@ Límites:
 - Exige el uso obligatorio y exclusivo del término institucional «Portafolio de Evidencias» en todo el texto.
 - El System Prompt no debe contener código de solución para los ejercicios, sino preguntas guía.
 - Redacta en español de Colombia claro, cercano y comprensible incluso para alguien que no es programador.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3199,6 +3281,8 @@ Límites:
 - Los 4 criterios deben sumar exactamente 100 % en su ponderación.
 - Prohíbe que el Gem cambie o reescriba por su cuenta el funcionamiento del código revisado.
 - Toda mención al archivo de seguimiento formativo debe usar «Portafolio de Evidencias».
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3264,6 +3348,8 @@ Tono: Profesional, integrador y motivador para el cierre del curso.
 Límites:
 - Utiliza exclusivamente el término canónico «Portafolio de Evidencias» en todo el documento y en la aplicación.
 - Verifica que los 4 pesos sumen 100 % y que el promedio ponderado del caso de prueba sea exactamente 4,50.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3327,6 +3413,8 @@ Tono: Claro y cercano, para personas sin formación técnica.
 
 Límites:
 - No modifiques ni resumas las definiciones del glosario.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3388,6 +3476,8 @@ Tono: Sobrio y directo, como una herramienta de oficina.
 Límites:
 - Aplica exactamente las reglas de los datos.
 - Sin librerías externas.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3450,6 +3540,8 @@ Tono: Amable y claro, para personal administrativo.
 Límites:
 - Aplica exactamente las reglas de los datos.
 - No pidas ningún dato distinto del nombre.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 **2. Itera paso a paso (con frontera de ejecución):**
@@ -3504,6 +3596,7 @@ Límites:
 - Cero librerías externas o frameworks: todo debe funcionar de manera nativa e inmediata en la vista previa de Canvas.
 - Conserva exactamente los textos, dominios y reglas anotados en el boceto a lápiz.
 - Garantiza contraste WCAG 2.2 nivel AA para todos los elementos interactivos y textos.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 #### Ejercicios prácticos del modo:
@@ -3543,6 +3636,7 @@ Límites:
 - El System Prompt debe exigir el uso obligatorio de «Portafolio de Evidencias» erradicando cualquier extranjerismo o término no institucional en todo el texto.
 - No uses nombres de modelos comerciales ni enlaces externos no institucionales.
 - Redacta en español de Colombia con lenguaje técnico accesible y riguroso.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 #### Ejercicios prácticos del modo:
@@ -3588,6 +3682,8 @@ Tono: Sobrio y claro, como una herramienta de oficina.
 Límites:
 - Aplica exactamente las reglas de los datos.
 - Pide solo el nombre del área; ningún dato personal.
+- Responde en español de Colombia.
+- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.
 ```
 
 #### Ejercicios prácticos del modo:

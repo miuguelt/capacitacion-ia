@@ -524,7 +524,7 @@ Notas tomadas por Julián:
           <section id="canvas-fundamentals-anchor" class="canvas-zone-section" data-canvas-section="canvas-fundamentals-anchor">
 
           <!-- Nota para el Facilitador (Desplegable amigable) -->
-          <details class="instructor-guide-card canvas-instructor-collapsible" open>
+          <details class="instructor-guide-card canvas-instructor-collapsible">
             <summary class="canvas-instructor-summary">
               <div style="display:inline-flex; align-items:center; gap:0.5rem;">
                 <span class="card-badge">Guion del Facilitador</span>
@@ -541,9 +541,9 @@ Notas tomadas por Julián:
             </div>
           </details>
 
-          <!-- Guía de Activación en 3 Pasos -->
-          <div class="tool-container">
-            <h3>🚀 ¿Cómo activar y utilizar Canvas en tu cuenta de Gemini?</h3>
+          <!-- Guía de Activación en 3 Pasos (plegada: el foco es el recorrido de simuladores y ejercicios) -->
+          <details class="tool-container canvas-aside canvas-start-details" id="canvas-start-details">
+            <summary><h3>🚀 Antes de empezar: cómo activar y usar Canvas en Gemini (3 pasos)</h3></summary>
             <p>Sigue estos tres pasos para habilitar el espacio de trabajo en cualquier navegador:</p>
             <div class="steps-grid">
               <div class="step-card">
@@ -562,53 +562,35 @@ Notas tomadas por Julián:
                 <p>Usa los controles del documento para ajustar longitud o cambiar tono, el botón «Crear» para transformarlo en página web, infografía, cuestionario o resumen en audio, y «Compartir y exportar» para enviarlo a Documentos de Google, Presentaciones de Google o Colab. También puedes seleccionar cualquier frase y pedir un cambio solo para ese fragmento.</p>
               </div>
             </div>
-          </div>
+          </details>
           </section>
 
-          <!-- BARRA DE RUTA GUIADA E INMERSIVA (SIMULADORES + EJERCICIOS) -->
-          <div class="canvas-immersive-hud" id="canvas-immersive-hud" role="region" aria-label="Ruta guiada interactiva e inmersiva">
+          <!-- BARRA DE RECORRIDO: un solo lugar para saber dónde vas, cambiar de ejercicio y avanzar -->
+          <div class="canvas-immersive-hud canvas-journey-bar" id="canvas-immersive-hud" role="region" aria-label="Recorrido de los 39 ejercicios de Gemini Canvas">
             <div class="canvas-immersive-hud-top">
-              <div class="immersive-hud-status" id="immersive-hud-status" aria-live="polite">
-                <span class="immersive-hud-badge" id="immersive-hud-mode-badge">Modo 1/12</span>
-                <label for="immersive-mode-select" class="sr-only" data-text-layout-exception="Rótulo accesible oculto para lectores de pantalla" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Cambiar modo de Gemini Canvas</label>
-                <select id="immersive-mode-select" class="immersive-mode-select" aria-label="Cambiar modo de Gemini Canvas">
-                  <option value="doc-editorial">1. Redacción &amp; Documentos</option>
-                  <option value="code-prototyping">2. Código &amp; Web en Vivo</option>
-                  <option value="data-matrix">3. Matrices &amp; Tablas de Decisión</option>
-                  <option value="flowchart-diagram">4. Diagramas de Proceso</option>
-                  <option value="visual-mockup">5. Diseño Visual UI/UX</option>
-                  <option value="inline-prompting">6. Edición por Selección (Inline)</option>
-                  <option value="algorithm-refactor">7. Algoritmos &amp; Python (O(n))</option>
-                  <option value="rubric-curriculum">8. Rúbricas &amp; Didáctica</option>
-                  <option value="sql-pipeline">9. SQL &amp; Pipelines</option>
-                  <option value="executive-report">10. Informes &amp; Auditoría</option>
-                  <option value="multimodal-vision">11. Visión Multimodal</option>
-                  <option value="gem-studio">12. Gems para Canvas</option>
-                  <option value="interactive-apps">13. Apps interactivas</option>
+              <div class="immersive-hud-status" id="immersive-hud-status">
+                <span class="immersive-hud-badge" id="immersive-hud-mode-badge">Ejercicio 1 de 39</span>
+                <label for="immersive-mode-select" class="canvas-journey-label">Ir a:</label>
+                <select id="immersive-mode-select" class="immersive-mode-select" aria-describedby="canvas-journey-remaining">
+                  <option value="doc-editorial|0">1A · Informe de deserción con tablero interactivo en Canvas</option>
                 </select>
-                <strong id="immersive-hud-title">1. Redacción &amp; Documentos · Parte A (1A)</strong>
-                <span class="immersive-hud-progress" id="immersive-hud-progress">0/39 completados</span>
               </div>
-              <div class="immersive-stations-bar" role="toolbar" aria-label="Estaciones del ciclo guiado">
-                <button type="button" class="guided-station-btn is-active" id="btn-guide-station-sim" data-guide-target="simulator">
-                  🖥️ 1. Simulador del Modo
-                </button>
-                <button type="button" class="guided-station-btn" id="btn-guide-station-ex" data-guide-target="exercises">
-                  🧪 2. Ejercicios Prácticos <span class="guided-station-pill" id="guide-station-ex-badge">Parte A</span>
-                </button>
-                <button type="button" class="guided-station-btn" id="btn-guide-station-lab" data-guide-target="labs" hidden>
-                  🔬 3. Simulador Especializado
-                </button>
-              </div>
-              <div class="immersive-focus-toolbar" id="canvas-immersive-focus-group" role="group" aria-label="Disposición de vista">
-                <button type="button" class="immersive-focus-btn active" data-immersive-focus="all" title="Ver simulador y ejercicios en flujo continuo">🔄 Flujo Completo</button>
-                <button type="button" class="immersive-focus-btn" data-immersive-focus="split" title="Ver simulador y ejercicio lado a lado">⬌ Simulador + Ejercicio</button>
-                <button type="button" class="immersive-focus-btn" data-immersive-focus="simulator" title="Enfocar solo el simulador">🖥️ Solo Simulador</button>
-                <button type="button" class="immersive-focus-btn" data-immersive-focus="exercises" title="Enfocar solo los ejercicios prácticos">🧪 Solo Ejercicios</button>
-                <button type="button" class="immersive-focus-btn" id="btn-immersive-toggle-tools" aria-pressed="false" title="Mostrar u ocultar barra de calibración, filtros y herramientas secundarias">🎛️ Calibrar</button>
+              <div class="canvas-journey-pager">
+                <button type="button" class="canvas-mode-pager-btn" id="canvas-journey-prev">← Anterior</button>
+                <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-journey-next">Siguiente →</button>
                 <button type="button" class="btn-canvas-fullscreen" id="btn-hud-toggle-immersive" title="Alternar modo inmersivo de simulador y ejercicios">⛶ Modo Inmersivo</button>
               </div>
             </div>
+            <div class="canvas-journey-progress-row">
+              <progress class="canvas-journey-progress" id="canvas-journey-progress" max="39" value="0" aria-label="Ejercicios completados">0 de 39</progress>
+              <span class="immersive-hud-progress" id="immersive-hud-progress">0 de 39 completados</span>
+            </div>
+            <div class="immersive-stations-bar" role="toolbar" aria-label="Ciclo de cada modo: primero el ejemplo, después el ejercicio">
+              <button type="button" class="guided-station-btn is-active" id="btn-guide-station-sim" data-guide-target="simulator">① Revisa el ejemplo en el simulador</button>
+              <span class="canvas-journey-arrow" aria-hidden="true">→</span>
+              <button type="button" class="guided-station-btn" id="btn-guide-station-ex" data-guide-target="exercises">② Haz el ejercicio <span class="guided-station-pill" id="guide-station-ex-badge">1A</span></button>
+            </div>
+            <p class="canvas-journey-remaining" id="canvas-journey-remaining" aria-live="polite">Te faltan 39 ejercicios en 13 modos.</p>
             <div class="canvas-learner-compass" id="canvas-learner-compass" aria-live="polite">
               <div class="compass-copy">
                 <span class="compass-phase-pill" id="canvas-compass-phase">Fase 1 de 4</span>
@@ -618,6 +600,16 @@ Notas tomadas por Julián:
                 <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-compass-cta">📋 Copiar prompt de 1A e iniciar →</button>
               </div>
             </div>
+            <details class="canvas-aside canvas-view-options">
+              <summary>🎛️ Opciones de vista (opcional)</summary>
+              <div class="immersive-focus-toolbar" id="canvas-immersive-focus-group" role="group" aria-label="Disposición de vista">
+                <button type="button" class="immersive-focus-btn active" data-immersive-focus="all" title="Ver simulador y ejercicios en flujo continuo">🔄 Flujo completo</button>
+                <button type="button" class="immersive-focus-btn" data-immersive-focus="split" title="Ver simulador y ejercicio lado a lado">⬌ Simulador + ejercicio</button>
+                <button type="button" class="immersive-focus-btn" data-immersive-focus="simulator" title="Enfocar solo el simulador">🖥️ Solo simulador</button>
+                <button type="button" class="immersive-focus-btn" data-immersive-focus="exercises" title="Enfocar solo los ejercicios prácticos">🧪 Solo ejercicios</button>
+                <button type="button" class="immersive-focus-btn" id="btn-immersive-toggle-tools" aria-pressed="false" title="Mostrar u ocultar en modo inmersivo la calibración, los filtros y las herramientas secundarias">🎛️ Calibrar</button>
+              </div>
+            </details>
           </div>
 
           <!-- SIMULADOR INTERACTIVO DE GEMINI CANVAS -->
@@ -640,6 +632,8 @@ Notas tomadas por Julián:
             <!-- Aviso de transición guiada cuando se avanza a un modo nuevo -->
             <div class="canvas-mode-transition-banner" id="canvas-mode-transition-banner" hidden aria-live="polite"></div>
 
+            <details class="canvas-aside canvas-sim-settings" id="canvas-sim-settings">
+            <summary>⚙️ Ajustes del simulador: longitud, tono y filtros por área (opcional)</summary>
             <!-- Barra de Calibración Reactiva de Canvas -->
             <div class="canvas-calibration-bar" id="canvas-calibration-toolbar">
               <div class="calibration-group">
@@ -674,7 +668,7 @@ Notas tomadas por Julián:
               <span class="filter-label">Filtrar por área:</span>
               <div class="filter-pills-group" id="canvas-category-filters">
                 <button type="button" class="category-pill active" data-category="all">
-                  <span>✨</span> Todas (12)
+                  <span>✨</span> Todas (13)
                 </button>
                 <button type="button" class="category-pill" data-category="editorial">
                   <span>📄</span> Redacción &amp; Gestión (4)
@@ -686,12 +680,14 @@ Notas tomadas por Julián:
                   <span>🎨</span> Diseño &amp; Procesos (2)
                 </button>
                 <button type="button" class="category-pill" data-category="advanced">
-                  <span>🤖</span> Especializados (3)
+                  <span>🤖</span> Especializados (4)
                 </button>
               </div>
             </div>
 
-            <!-- Selector de las 12 Posibilidades -->
+            </details>
+
+            <!-- Selector de las 13 Posibilidades -->
             <div class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas">
               <button type="button" class="canvas-tab active" role="tab" aria-selected="true" tabindex="0" data-possibility="doc-editorial" data-mode="doc-editorial" data-category="editorial">
                 <span>📄</span> 1. Redacción & Documentos
@@ -735,6 +731,8 @@ Notas tomadas por Julián:
             </div>
 
             <!-- Barra de Disposición y Organización de Columnas -->
+            <details class="canvas-aside canvas-sim-layout">
+            <summary>⬌ Disposición de las columnas (opcional)</summary>
             <div class="canvas-split-toolbar" role="toolbar" aria-label="Disposición y organización de las columnas">
               <div class="split-layout-group">
                 <span class="split-layout-label">Disposición:</span>
@@ -749,6 +747,7 @@ Notas tomadas por Julián:
                 <span class="drag-grip" aria-hidden="true">⋮⋮</span> Puedes organizar las columnas arrastrándolas de arriba a abajo o con ▲ ▼.
               </span>
             </div>
+            </details>
 
             <!-- Estructura Split-Screen del Simulador (Modo Split de 2 Salidas) -->
             <div class="canvas-split-container">
@@ -903,13 +902,13 @@ Notas tomadas por Julián:
           </div>
 
           <!-- ==========================================
-               EJERCICIOS PRÁCTICOS POR MODO (A y B en cada modo; C en siete)
+               EJERCICIOS PRÁCTICOS POR MODO (A, B y C en los 13 modos: 39 en total)
                ========================================== -->
           <div class="tool-container" id="canvas-exercises-module" data-canvas-section="canvas-exercises-module">
             <div class="canvas-exercises-header">
               <div>
                 <h3 style="margin:0;">🧪 Ejercicios prácticos del modo: <span id="canvas-exercises-mode-label">1. Redacción &amp; Documentos</span></h3>
-                <p class="canvas-exercises-intro">Son 39 ejercicios en orden: las partes A, B y C de cada uno de los 13 modos. Copia el prompt (ya incluye los datos), sigue los pasos en Gemini Canvas y marca los criterios que tu resultado cumpla. Cuando termines, usa «Siguiente ejercicio».</p>
+                <p class="canvas-exercises-intro">Cada modo tiene tres partes (A, B y C) y el recorrido completo suma 39 ejercicios. Copia el prompt, hazlo en Gemini Canvas y marca los criterios que cumpla tu resultado. Terminar la Parte A no completa el modo: sigue con «Siguiente →» hasta la Parte C.</p>
               </div>
               <div class="canvas-exercises-header-actions" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                 <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-exercises-fullscreen" title="Practicar ejercicios en modo inmersivo a pantalla completa">
@@ -948,6 +947,8 @@ Notas tomadas por Julián:
                MAPA DE COBERTURA Y FRONTERAS DE GEMINI CANVAS
                ========================================== -->
           <section class="tool-container" id="canvas-coverage-module" data-canvas-section="canvas-coverage-module">
+            <details class="canvas-aside canvas-coverage-details">
+            <summary>🧭 Consulta opcional: mapa de las 28 funciones de Gemini Canvas</summary>
             <div class="canvas-coverage-header">
               <div>
                 <h3 class="canvas-coverage-title">🧭 Mapa de las 28 funciones de Gemini Canvas y qué ocurre fuera del lienzo</h3>
@@ -960,6 +961,7 @@ Notas tomadas por Julián:
               </a>
             </div>
             <div id="canvas-coverage-content" aria-live="polite"></div>
+            </details>
           </section>
 
           <!-- ==========================================

@@ -2761,6 +2761,25 @@ CANVAS_EXERCISES["interactive-apps"] = [
 ];
 
 // --- Prompt estructurado con método CRTT+L (Contexto, Rol, Tarea, Tono y Límites) ---
+// Completa cada prompt con dos límites que el aprendiz suele olvidar: el idioma y qué hacer si falta un dato.
+// Solo se agregan cuando el ejercicio no los trae, para no repetir instrucciones.
+const CANVAS_GUARDRAIL_LANGUAGE = "Responde en español de Colombia.";
+const CANVAS_GUARDRAIL_MISSING = "Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo.";
+
+function canvasPromptGuardrails(parts) {
+  const p = parts || {};
+  const constraints = Array.isArray(p.constraints) ? p.constraints : [];
+  const declared = [p.format, p.tone, ...constraints].join(" ");
+  const extra = [];
+  if (!/español de Colombia/i.test(declared)) extra.push(CANVAS_GUARDRAIL_LANGUAGE);
+  if (!constraints.some(c => /falta|pendiente/i.test(c))) extra.push(CANVAS_GUARDRAIL_MISSING);
+  return extra;
+}
+
+function canvasPromptLimits(parts) {
+  return parts.constraints.concat(canvasPromptGuardrails(parts));
+}
+
 function composeCanvasPrompt(parts) {
   return [
     `Contexto: ${parts.context}`,
@@ -2768,7 +2787,7 @@ function composeCanvasPrompt(parts) {
     `Datos:\n"""\n${parts.data.trim()}\n"""`,
     `Tarea: ${parts.instruction}\n${parts.task.map((t, i) => `${i + 1}. ${t}`).join("\n")}\nEntrega: ${parts.format}`,
     `Tono: ${parts.tone}`,
-    `Límites:\n${parts.constraints.map(c => `- ${c}`).join("\n")}`
+    `Límites:\n${canvasPromptLimits(parts).map(c => `- ${c}`).join("\n")}`
   ].join("\n\n");
 }
 
@@ -2802,7 +2821,7 @@ function buildCanvasPromptHtml(parts) {
       ${row("Datos", `<pre class="canvas-exercise-code"><code>${e(parts.data.trim())}</code></pre>`)}
       ${row("Tarea", `<p>${e(parts.instruction)}</p><ol>${parts.task.map(t => `<li>${e(t)}</li>`).join("")}</ol><p><strong>Entrega:</strong> ${e(parts.format)}</p>`)}
       ${row("Tono", `<p>${e(parts.tone)}</p>`)}
-      ${row("Límites", `<ul>${parts.constraints.map(c => `<li>${e(c)}</li>`).join("")}</ul>`)}
+      ${row("Límites", `<ul>${canvasPromptLimits(parts).map(c => `<li>${e(c)}</li>`).join("")}</ul>`)}
     </div>`;
 }
 
@@ -2890,11 +2909,13 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
             <p>${e(exercise.goal)}</p>
             <h5>📌 Situación</h5>
             <p>${e(exercise.scenario)}</p>
-            ${exercise.whyCanvas ? `<h5>✨ ¿Por qué en Canvas?</h5>
+          </section>
+          ${exercise.whyCanvas ? `<details class="canvas-aside canvas-exercise-why">
+            <summary>✨ ¿Por qué en Canvas? Funciones que practicas (opcional)</summary>
             <p>${e(exercise.whyCanvas)}</p>
             ${exercise.outsideCanvas ? `<div class="canvas-outside-callout"><strong>🧭 Qué ocurre en Canvas y qué ocurre fuera:</strong> ${e(exercise.outsideCanvas)}</div>` : ""}
-            <ul class="canvas-capability-list" aria-label="Capacidades de Canvas que practicas">${caps}</ul>` : ""}
-          </section>
+            <ul class="canvas-capability-list" aria-label="Capacidades de Canvas que practicas">${caps}</ul>
+          </details>` : ""}
           ${buildCanvasMaterialsHtml(exercise.materials)}
           <section class="canvas-exercise-section">
             <div class="canvas-exercise-block-head">
@@ -2904,9 +2925,12 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
                 <a class="canvas-exercise-open" href="${GEMINI_APP_URL}" target="_blank" rel="noopener noreferrer">↗ Abrir Gemini</a>
               </div>
             </div>
-            <p class="canvas-exercise-hint">En Gemini, abre «Herramientas → Canvas» en la barra del chat antes de pegar el prompt.</p>
-            <p class="canvas-exercise-hint">Las órdenes del prompt van dirigidas a Gemini: tú solo activas Canvas, pegas el texto y lo envías. Está organizado con el método CRTT+L (Contexto, Rol, Tarea, Tono y Límites) y los datos van entre comillas triples (""") para que Gemini los distinga de las instrucciones.</p>
-            ${buildCanvasPromptHtml(exercise.promptParts)}
+            <p class="canvas-exercise-hint">En Gemini, abre «Herramientas → Canvas» en la barra del chat, pega el prompt y envíalo.</p>
+            <details class="canvas-aside canvas-exercise-prompt-view">
+              <summary>👁️ Ver el prompt por partes (CRTT+L)</summary>
+              <p class="canvas-exercise-hint">Las órdenes del prompt van dirigidas a Gemini. Está organizado con el método CRTT+L (Contexto, Rol, Tarea, Tono y Límites) y los datos van entre comillas triples (""") para que Gemini los distinga de las instrucciones.</p>
+              ${buildCanvasPromptHtml(exercise.promptParts)}
+            </details>
           </section>
           <section class="canvas-exercise-section">
             <h5>🧭 2. Itera dentro de Canvas</h5>
@@ -2916,10 +2940,6 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
           ${buildCanvasReferenceHtml(exercise.reference)}
         </div>
         <aside class="canvas-exercise-side">
-          <figure class="canvas-exercise-preview">
-            ${exercise.previewSvg}
-            <figcaption>Vista de referencia del resultado, dibujada con los mismos datos del ejercicio.</figcaption>
-          </figure>
           <section class="canvas-exercise-checklist">
             <div class="canvas-exercise-block-head">
               <h5>✅ 3. Verifica tu resultado</h5>
@@ -2929,10 +2949,17 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
             <ul>${checks}</ul>
             <button type="button" class="canvas-exercise-reset" data-exercise-reset>↺ Reiniciar verificación</button>
           </section>
-          <section class="canvas-exercise-stretch">
-            <h5>🚀 Reto extra</h5>
+          <details class="canvas-aside canvas-exercise-preview-wrap">
+            <summary>🖼️ Ver la vista de referencia del resultado</summary>
+            <figure class="canvas-exercise-preview">
+              ${exercise.previewSvg}
+              <figcaption>Vista de referencia del resultado, dibujada con los mismos datos del ejercicio.</figcaption>
+            </figure>
+          </details>
+          <details class="canvas-aside canvas-exercise-stretch">
+            <summary>🚀 Reto extra (opcional)</summary>
             <p>${e(exercise.stretch)}</p>
-          </section>
+          </details>
         </aside>
       </div>
     </article>`;
@@ -2947,5 +2974,5 @@ globalThis.CANVAS_CAPABILITIES = CANVAS_CAPABILITIES;
 globalThis.canvasCopyText = canvasCopyText;
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { GEMINI_APP_URL, canvasCopyText, buildCanvasReferenceHtml, CANVAS_EXERCISES, CANVAS_CAPABILITIES, CANVAS_VERIFY_STEP, canvasCapabilityNames, composeCanvasPrompt, escapeCanvasHtml, formatCanvasStep, buildCanvasPromptHtml, buildCanvasExerciseHtml, buildCanvasMaterialsHtml, countCanvasChecklist, canvasSvgFrame, canvasSvgBars, canvasSvgLine, canvasSvgDonut, canvasSvgRadar, canvasSvgHeatmap, canvasSvgFlow, canvasSvgMock };
+  module.exports = { canvasPromptGuardrails, GEMINI_APP_URL, canvasCopyText, buildCanvasReferenceHtml, CANVAS_EXERCISES, CANVAS_CAPABILITIES, CANVAS_VERIFY_STEP, canvasCapabilityNames, composeCanvasPrompt, escapeCanvasHtml, formatCanvasStep, buildCanvasPromptHtml, buildCanvasExerciseHtml, buildCanvasMaterialsHtml, countCanvasChecklist, canvasSvgFrame, canvasSvgBars, canvasSvgLine, canvasSvgDonut, canvasSvgRadar, canvasSvgHeatmap, canvasSvgFlow, canvasSvgMock };
 }

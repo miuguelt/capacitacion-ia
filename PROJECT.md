@@ -6,7 +6,7 @@ El módulo de Gemini Canvas Lab (`#gemini-canvas`) es una aplicación web SPA of
 ### Capas del Sistema:
 1. **Capa de Datos y Especificaciones**:
    - `js/canvas-possibilities.js` (espejos en `src/shared/` y `src/js/`): Catálogo canónico de posibilidades del Canvas con promptParts (CRTT+L), imágenes de referencia, expected criteria (5+), quickActions, followUps y vistas interactivas.
-   - `js/canvas-exercises.js` (espejos en `src/shared/` y `src/js/`): Banco de ejercicios prácticos A y B (2 por modo) y parte C en siete modos (31 en total) con prompts CRTT+L autosuficientes, pasos nativos de réplica, criterios observables y generadores SVG vectoriales puros.
+   - `js/canvas-exercises.js` (espejos en `src/shared/` y `src/js/`): Banco de ejercicios prácticos A, B y C en los 13 modos (39 en total) con prompts CRTT+L autosuficientes que fijan el idioma y el manejo de datos faltantes, pasos nativos de réplica, criterios observables y generadores SVG vectoriales puros.
    - `materiales/gemini_canvas/banco_prompts_canvas.json`: Dataset estructurado de posibilidades y ejercicios exportado automáticamente.
 2. **Capa de Interfaz y Experiencia de Usuario**:
    - `index.html` / `src/index.html`: Botonera de 12 modos `.canvas-tab-bar`, simulador split `.canvas-split-container` con delimitación explícita de **Salida 1: Lienzo Principal** y **Salida 2: Interacción y Refinamiento**, toolbar de calibración reactiva y contenedor de ejercicios.

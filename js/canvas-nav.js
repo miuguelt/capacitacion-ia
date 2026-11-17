@@ -135,9 +135,11 @@ function computeLearnerGuideState(params) {
   const checksDone = Math.max(0, Number(p.checksDone) || 0);
   const checksTotal = Math.max(0, Number(p.checksTotal) || 0);
   const labInfo = getSpecializedLabForMode(mode);
+  const base = { letter, exerciseCode: exCode };
 
   if (!ex) {
     return {
+      ...base,
       phase: "1-explore",
       phaseNumber: 1,
       totalPhases: 4,
@@ -154,6 +156,7 @@ function computeLearnerGuideState(params) {
     const nextStep = p.nextStep || null;
     if (!nextStep) {
       return {
+        ...base,
         phase: "4-advance",
         phaseNumber: 4,
         totalPhases: 4,
@@ -166,6 +169,7 @@ function computeLearnerGuideState(params) {
     }
     if (isModeTransition(mode, nextStep.mode)) {
       return {
+        ...base,
         phase: "4-advance",
         phaseNumber: 4,
         totalPhases: 4,
@@ -178,6 +182,7 @@ function computeLearnerGuideState(params) {
     }
     const nextLetter = ["A", "B", "C"][nextStep.exercise] || "B";
     return {
+      ...base,
       phase: "4-advance",
       phaseNumber: 4,
       totalPhases: 4,
@@ -192,6 +197,7 @@ function computeLearnerGuideState(params) {
   // Fase 3: Todos los pasos de iteración en Canvas marcados, falta verificar criterios
   if (stepsTotal > 0 && stepsDone >= stepsTotal) {
     return {
+      ...base,
       phase: "3-verify",
       phaseNumber: 3,
       totalPhases: 4,
@@ -207,6 +213,7 @@ function computeLearnerGuideState(params) {
   if (stepsDone > 0 || checksDone > 0) {
     const nextStepNum = Math.min(stepsTotal, stepsDone + 1);
     return {
+      ...base,
       phase: "2-iterate",
       phaseNumber: 2,
       totalPhases: 4,
@@ -220,6 +227,7 @@ function computeLearnerGuideState(params) {
 
   // Fase 1: Inicio del ejercicio
   return {
+    ...base,
     phase: "1-explore",
     phaseNumber: 1,
     totalPhases: 4,
@@ -231,8 +239,44 @@ function computeLearnerGuideState(params) {
   };
 }
 
+// --- Recorrido guiado: selector de ejercicios agrupado por modo y progreso global ---
+function buildJourneyGroups(modes, names, bank, completedIds) {
+  const done = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const labels = names && typeof names === "object" ? names : {};
+  const source = bank && typeof bank === "object" ? bank : {};
+  return (Array.isArray(modes) ? modes : [])
+    .filter(mode => Array.isArray(source[mode]) && source[mode].length)
+    .map(mode => {
+      const options = source[mode].map((ex, i) => ({
+        value: `${mode}|${i}`,
+        label: `${done.has(ex.id) ? "✓ " : ""}${ex.code} · ${ex.title}`,
+        done: done.has(ex.id)
+      }));
+      const count = options.filter(o => o.done).length;
+      return { mode, label: `${labels[mode] || mode} (${count}/${options.length})`, options };
+    });
+}
+
+function journeyRemaining(seq, completedIds) {
+  const done = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const pendingSteps = seq.filter(step => !done.has(step.id));
+  return {
+    done: seq.length - pendingSteps.length,
+    total: seq.length,
+    pending: pendingSteps.length,
+    pendingModes: new Set(pendingSteps.map(step => step.mode)).size
+  };
+}
+
+function parseJourneyValue(value, seq) {
+  const [mode, raw] = String(value || "").split("|");
+  const exercise = Number(raw);
+  return seq.find(step => step.mode === mode && step.exercise === exercise) || null;
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
+    buildJourneyGroups, journeyRemaining, parseJourneyValue,
     parseCanvasRoute, buildCanvasRoute, neighborCanvasMode, listExerciseSequence,
     neighborExercise, firstPendingExercise, exercisePosition, serializeChecks, parseChecks,
     modeExerciseProgress, isModeTransition, SPECIALIZED_MODE_LABS, getSpecializedLabForMode,
