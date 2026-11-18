@@ -518,18 +518,23 @@ Notas tomadas por Julián:
           </details>
           </section>
 
-          <!-- BARRA FIJA DEL RECORRIDO: dice siempre en qué modo y en qué paso vas, y permite saltar a cualquier modo o ejercicio -->
-          <div class="canvas-journey-bar" id="canvas-journey-bar" role="region" aria-label="Recorrido de Gemini Canvas: modo y paso actual">
+          <!-- BARRA FIJA DEL RECORRIDO: dice siempre en qué simulador y en qué paso vas; cualquier simulador se abre en el orden que el aprendiz quiera -->
+          <div class="canvas-journey-bar" id="canvas-journey-bar" role="region" aria-label="Recorrido de Gemini Canvas: simulador y paso actual">
             <div class="canvas-journey-row">
+              <div class="canvas-mode-picker">
+                <label class="canvas-journey-kicker" for="canvas-mode-select">Simulador</label>
+                <select class="canvas-mode-select" id="canvas-mode-select" aria-describedby="canvas-journey-where">
+                  <option value="doc-editorial">1. Redacción &amp; Documentos (0/3)</option>
+                </select>
+                <span class="canvas-journey-where" id="canvas-journey-where" aria-live="polite">Modo 1 de 13 · Ejemplo</span>
+              </div>
               <details class="canvas-mode-menu" id="canvas-mode-menu">
                 <summary class="canvas-mode-menu-summary">
-                  <span class="canvas-journey-kicker">Estás en</span>
-                  <span class="canvas-journey-where" id="canvas-journey-where">Modo 1 de 13 · 1. Redacción &amp; Documentos</span>
-                  <span class="canvas-mode-menu-cta">Cambiar de modo o ejercicio ▾</span>
+                  <span class="canvas-mode-menu-cta">🗂️ Ver los 13 simuladores y sus 39 ejercicios ▾</span>
                 </summary>
                 <div class="canvas-mode-menu-panel">
                   <div class="canvas-mode-menu-head">
-                    <p>Cada modo tiene un ejemplo resuelto y tres ejercicios (A, B y C). Elige por dónde seguir.</p>
+                    <p>Puedes abrir cualquier simulador y hacer sus ejercicios en el orden que prefieras. Cada uno tiene un ejemplo resuelto y tres ejercicios (A, B y C).</p>
                     <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-continue-btn">▶ Continuar con el primer pendiente</button>
                   </div>
                   <ol class="canvas-mode-menu-grid" id="canvas-mode-menu-grid"></ol>
@@ -555,7 +560,7 @@ Notas tomadas por Julián:
               <ol class="canvas-workspace-cycle" aria-label="Ciclo de cada modo">
                 <li>① Revisa el ejemplo resuelto</li>
                 <li>② Haz las partes A, B y C</li>
-                <li>③ Pasa al modo siguiente</li>
+                <li>③ Elige otro modo, en el orden que prefieras</li>
               </ol>
             </header>
 

@@ -799,7 +799,7 @@ function initCanvasLab() {
       modeTransitionBannerEl.innerHTML = `
         <div class="canvas-transition-copy">
           <span class="canvas-transition-badge">🆕 Nuevo modo</span>
-          <p>Pasaste a <strong>${escapeCanvasHtml(modeInfo.name)}</strong>. Revisa primero este ejemplo resuelto en el simulador y luego pasa al ejercicio <strong>${escapeCanvasHtml(ex.code)} (Parte ${letter})</strong>.</p>
+          <p>Pasaste a <strong>${escapeCanvasHtml(modeInfo.name)}</strong>. Revisa este ejemplo resuelto en el simulador y, cuando quieras, practica el ejercicio <strong>${escapeCanvasHtml(ex.code)} (Parte ${letter})</strong>.</p>
         </div>
         <div class="canvas-transition-actions">
           <button type="button" class="canvas-mode-pager-btn is-primary" id="btn-transition-go-exercise">🧪 Practicar ${escapeCanvasHtml(ex.code)} →</button>
@@ -1176,6 +1176,7 @@ function initCanvasLab() {
   const journeyNextBtn = document.getElementById("canvas-journey-next");
   const journeyWhereEl = document.getElementById("canvas-journey-where");
   const modeMenuEl = document.getElementById("canvas-mode-menu");
+  const modeSelectEl = document.getElementById("canvas-mode-select");
   const modeMenuGridEl = document.getElementById("canvas-mode-menu-grid");
   const modeStationsEl = document.getElementById("canvas-mode-stations");
   const workspaceTitleEl = document.getElementById("canvas-workspace-title");
@@ -1198,11 +1199,20 @@ function initCanvasLab() {
     return `Modo ${modeNumber(mode)} de ${modeKeys.length} · ${modeShortName(mode)}`;
   }
 
+  // Selector siempre visible: cualquier simulador se abre con un clic, sin seguir un orden.
+  function renderModeSelect(groups) {
+    if (!modeSelectEl) return;
+    modeSelectEl.innerHTML = groups.map(group =>
+      `<option value="${escapeCanvasHtml(group.mode)}">${escapeCanvasHtml(group.label)}</option>`).join("");
+    modeSelectEl.value = currentExerciseMode;
+  }
+
   function renderModeMenu(completedIds) {
-    if (!modeMenuGridEl) return;
     const names = {};
     modeKeys.forEach(key => { names[key] = CANVAS_POSSIBILITIES[key].name; });
     const groups = buildJourneyGroups(modeKeys, names, CANVAS_EXERCISES, completedIds);
+    renderModeSelect(groups);
+    if (!modeMenuGridEl) return;
     modeMenuGridEl.innerHTML = groups.map(group => {
       const mode = group.mode;
       const isCurrentMode = mode === currentExerciseMode;
@@ -1254,18 +1264,20 @@ function initCanvasLab() {
     if (info.kind === "next-part") {
       const nextEx = CANVAS_EXERCISES[info.next.mode][info.next.exercise];
       title = `③ Cuando termines ${ex.code}, sigue con la Parte ${partLetter(info.next.exercise)} de este modo`;
-      text = `El modo ${modeNumber(currentExerciseMode)} todavía no termina: tiene las partes A, B y C. ${pendingText}`;
+      text = `El modo ${modeNumber(currentExerciseMode)} tiene las partes A, B y C. También puedes abrir otro simulador cuando quieras. ${pendingText}`;
       actions = `<button type="button" class="canvas-mode-pager-btn is-primary" data-wrapup-go>Ir a ${escapeCanvasHtml(nextEx.code)}: ${escapeCanvasHtml(nextEx.title)} →</button>`;
     } else if (info.kind === "next-mode") {
       title = `③ Con la Parte ${partLetter(currentExerciseIndex)} terminas el modo ${modeNumber(currentExerciseMode)}`;
-      text = `Lo siguiente es revisar el ejemplo del modo ${modeNumber(info.next.mode)}: ${modeShortName(info.next.mode)}. ${pendingText}`;
+      text = `Elige el simulador que quieras. Si prefieres seguir la lista, el siguiente es el modo ${modeNumber(info.next.mode)}: ${modeShortName(info.next.mode)}. ${pendingText}`;
       actions = `<button type="button" class="canvas-mode-pager-btn is-primary" data-wrapup-go>Ir al ejemplo del modo ${modeNumber(info.next.mode)} →</button>`;
     } else {
-      title = "③ Este es el último ejercicio del recorrido";
-      text = r.pending ? `${pendingText} Abre «Cambiar de modo o ejercicio» para completar los que faltan.` : `${pendingText} Ahora aplica lo aprendido en un proyecto.`;
+      title = "③ Este es el último ejercicio de la lista";
+      text = r.pending ? `${pendingText} Elige otro simulador para completar los que faltan.` : `${pendingText} Ahora aplica lo aprendido en un proyecto.`;
       actions = (r.pending ? '<button type="button" class="canvas-mode-pager-btn is-primary" data-wrapup-continue>▶ Ir al primer pendiente</button>' : "")
         + `<a class="canvas-mode-pager-btn${r.pending ? "" : " is-primary"}" href="#proyectos">Ir al Hub de proyectos →</a>`;
     }
+    // El orden es libre: cada cierre ofrece también abrir cualquier otro simulador.
+    actions += '<button type="button" class="canvas-mode-pager-btn" data-wrapup-choose>🗂️ Elegir otro simulador</button>';
     modeWrapUpEl.innerHTML = `
       <div class="canvas-mode-wrapup-copy">
         <p class="canvas-mode-wrapup-title">${escapeCanvasHtml(title)}</p>
@@ -1276,6 +1288,17 @@ function initCanvasLab() {
     if (goBtn) goBtn.addEventListener("click", () => goToStep(info.next));
     const continueWrapBtn = modeWrapUpEl.querySelector("[data-wrapup-continue]");
     if (continueWrapBtn) continueWrapBtn.addEventListener("click", () => goToStep(firstPendingExercise(exerciseSequence, readCanvasCompleted())));
+    const chooseBtn = modeWrapUpEl.querySelector("[data-wrapup-choose]");
+    if (chooseBtn) {
+      chooseBtn.addEventListener("click", event => {
+        // Sin propagar: el clic fuera del menú lo cerraría en el mismo instante.
+        event.stopPropagation();
+        if (!modeMenuEl) return;
+        modeMenuEl.open = true;
+        const summary = modeMenuEl.querySelector("summary");
+        if (summary) summary.focus();
+      });
+    }
   }
 
   // Lleva al ejemplo del modo actual sin cambiar de modo.
@@ -1311,6 +1334,15 @@ function initCanvasLab() {
       }
       const step = parseJourneyValue(link.getAttribute("data-journey-value"), exerciseSequence);
       if (step) openCanvasRoute(step.mode, step.exercise);
+    });
+  }
+  if (modeSelectEl) {
+    modeSelectEl.addEventListener("change", () => {
+      const mode = modeSelectEl.value;
+      if (!CANVAS_POSSIBILITIES[mode]) return;
+      if (modeTransitionBannerEl) modeTransitionBannerEl.hidden = true;
+      if (mode === currentExerciseMode) showCurrentExample();
+      else openCanvasRoute(mode);
     });
   }
   if (modeMenuEl) {
@@ -1376,7 +1408,7 @@ function initCanvasLab() {
     const remaining = journeyRemaining(exerciseSequence, completedIds);
     const heading = modeHeading(currentExerciseMode);
     const stationText = currentGuidedStation === "exercises" ? `Parte ${partLetter(currentExerciseIndex)}` : "Ejemplo";
-    if (journeyWhereEl) journeyWhereEl.textContent = `${heading} · ${stationText}`;
+    if (journeyWhereEl) journeyWhereEl.textContent = `Modo ${modeNumber(currentExerciseMode)} de ${modeKeys.length} · ${stationText}`;
     if (workspaceTitleEl) workspaceTitleEl.textContent = heading;
     if (simModeLabelEl) simModeLabelEl.textContent = CANVAS_POSSIBILITIES[currentExerciseMode].name;
     renderModeMenu(completedIds);

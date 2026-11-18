@@ -180,7 +180,7 @@ def test_canvas_page_follows_one_journey_per_mode():
     end = html.index('<section class="page-view" id="proyectos">')
     page = html[start:end]
     assert "canvas-quick-nav" not in page, "la navegación por secciones ya no compite con el recorrido"
-    for element_id in ["canvas-journey-bar", "canvas-mode-menu", "canvas-mode-menu-grid", "canvas-mode-stations",
+    for element_id in ["canvas-journey-bar", "canvas-mode-select", "canvas-mode-menu", "canvas-mode-menu-grid", "canvas-mode-stations",
                        "canvas-journey-prev", "canvas-journey-next", "canvas-journey-progress",
                        "canvas-mode-workspace", "canvas-workspace-title", "canvas-sim-mode-label", "canvas-mode-wrapup",
                        "canvas-resources"]:
@@ -295,6 +295,14 @@ def test_simulator_live_enhancements_and_360_vision():
         assert f'id="{clean_id}"' in html, f"Falta #{clean_id} en index.html"
 
 
-
-
-
+def test_canvas_modes_can_be_chosen_in_any_order():
+    html = _html()
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    bar = html[html.index('id="canvas-journey-bar"'):html.index('id="canvas-mode-workspace"')]
+    assert '<label class="canvas-journey-kicker" for="canvas-mode-select">' in bar, "el selector de simulador tiene etiqueta visible"
+    assert bar.index('id="canvas-mode-select"') < bar.index('id="canvas-mode-menu"'), "el selector está a la vista antes del menú completo"
+    assert "en el orden que prefieras" in bar, "el menú aclara que el orden es libre"
+    assert "③ Elige otro modo" in html, "el ciclo no obliga a pasar al modo siguiente"
+    assert 'modeSelectEl.addEventListener("change"' in app, "cambiar el selector abre el ejemplo de ese modo"
+    assert "data-wrapup-choose" in app, "el cierre de cada parte ofrece elegir cualquier otro modo"
+    assert "Revisa primero este ejemplo" not in app, "el aviso de modo nuevo no impone un orden"

@@ -5242,10 +5242,43 @@ details.canvas-mode-lab[hidden] {
   gap: 0.5rem 0.75rem;
 }
 
-/* El modo actual ocupa la primera línea; los pasos y los botones comparten la segunda. */
-.canvas-mode-menu {
-  flex: 1 1 100%;
+/* Primera línea: selector de simulador y menú completo; segunda: pasos del modo y botones. */
+.canvas-mode-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  flex: 1 1 24rem;
   min-inline-size: 0;
+}
+
+.canvas-mode-select {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 2.4rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.canvas-mode-select:focus-visible {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+.canvas-mode-menu {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+}
+
+.canvas-journey-row > .canvas-mode-stations {
+  flex-basis: auto;
 }
 
 .canvas-journey-row > .canvas-journey-pager {
@@ -5285,9 +5318,9 @@ details.canvas-mode-lab[hidden] {
 }
 
 .canvas-journey-where {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .canvas-mode-menu-cta {
@@ -5675,8 +5708,19 @@ details.canvas-mode-lab > .tool-container {
     padding-inline: 0.5rem;
   }
 
+  /* En móvil el selector ya nombra el simulador y los pasos marcan la parte activa; esta línea repetiría lo mismo. */
   .canvas-journey-where {
+    display: none;
+  }
+
+  /* text-layout-exception: el selector nativo puede recortar un nombre largo; la lista desplegada muestra cada simulador completo. */
+  .canvas-mode-select {
+    flex-basis: 10rem;
     font-size: 0.92rem;
+  }
+
+  .canvas-mode-menu-summary {
+    padding-block: 0.2rem;
   }
 
   #canvas-simulator-module,

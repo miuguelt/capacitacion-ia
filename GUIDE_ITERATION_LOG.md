@@ -30,3 +30,4 @@
 - Se retiraron los filtros por área y las pestañas visibles de los 13 modos (siguen ocultas porque el simulador las usa).
 - Corrección: al completar un ejercicio, `writeCanvasCompleted` usaba una variable inexistente y cortaba la actualización del progreso.
 - Funciones nuevas con pruebas: `buildModeStations`, `buildModeWrapUp` y `stationAtScroll`; se retiró `computeLearnerGuideState`.
+- Orden libre: la barra tiene un selector visible «Simulador» con los 13 modos y su avance, para abrir cualquiera con un clic. El menú aclara que el orden lo elige el aprendiz, el ciclo dice «③ Elige otro modo» y cada cierre ofrece «Elegir otro simulador» junto al modo siguiente de la lista.
