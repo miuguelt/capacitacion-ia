@@ -114,7 +114,7 @@ test("buildDragHandleHtml genera marcado accesible con icono y botones de teclad
   assert.match(emptyHtml, /aria-label="Arrastrar para organizar: "/);
 });
 
-test("initColumnDnD enlaza eventos y permite reordenar con teclado y ratón", () => {
+test("initColumnDnD enlaza eventos y permite reordenar con teclado y mouse", () => {
   const listeners = {};
   function makeMockCol(id) {
     return {

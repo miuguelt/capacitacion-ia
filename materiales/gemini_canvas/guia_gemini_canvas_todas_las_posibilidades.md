@@ -1020,7 +1020,7 @@ Puntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,2
 
 Tarea: En Canvas, crea un tablero Kanban web que:
 1. Muestre las tareas en las columnas Por hacer, En curso y Hecho.
-2. Permita mover las tarjetas arrastrándolas con el ratón y también con el teclado.
+2. Permita mover las tarjetas arrastrándolas con el mouse y también con el teclado.
 3. Sume los puntos de cada columna y muestre el porcentaje de avance.
 4. Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.
 5. Filtre las tarjetas por responsable.
@@ -1048,7 +1048,7 @@ Límites:
 **3. Verifica tu resultado:**
 
 - [ ] Al inicio, Hecho suma 11 puntos (T1, T2, T8) y el progreso es 27,5 %.
-- [ ] Las tarjetas se mueven con ratón y con teclado.
+- [ ] Las tarjetas se mueven con el mouse y con el teclado.
 - [ ] El burndown muestra la línea ideal y la real; la real queda por encima desde el día 2 y cierra con 29 puntos pendientes.
 - [ ] El filtro por responsable funciona sin recargar.
 - [ ] Los contadores se actualizan al soltar una tarjeta.

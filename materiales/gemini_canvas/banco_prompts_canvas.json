@@ -459,7 +459,7 @@
             "instruction": "En Canvas, crea un tablero Kanban web que:",
             "task": [
               "Muestre las tareas en las columnas Por hacer, En curso y Hecho.",
-              "Permita mover las tarjetas arrastrándolas con el ratón y también con el teclado.",
+              "Permita mover las tarjetas arrastrándolas con el mouse y también con el teclado.",
               "Sume los puntos de cada columna y muestre el porcentaje de avance.",
               "Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.",
               "Filtre las tarjetas por responsable."
@@ -482,14 +482,14 @@
           ],
           "expected": [
             "Al inicio, Hecho suma 11 puntos (T1, T2, T8) y el progreso es 27,5 %.",
-            "Las tarjetas se mueven con ratón y con teclado.",
+            "Las tarjetas se mueven con el mouse y con el teclado.",
             "El burndown muestra la línea ideal y la real; la real queda por encima desde el día 2 y cierra con 29 puntos pendientes.",
             "El filtro por responsable funciona sin recargar.",
             "Los contadores se actualizan al soltar una tarjeta.",
             "El estado se conserva con localStorage o mediante los botones de exportar e importar JSON."
           ],
           "stretch": "Pide: «Agrega una columna Bloqueado con límite WIP de 2 tarjetas y una alerta visual cuando se supere».",
-          "prompt": "Contexto: Un equipo necesita ver en una sola pantalla qué tareas faltan por hacer, cuáles están en marcha y si el avance real va al ritmo del plan (sprint 3).\n\nRol: Actúa como diseñador de herramientas visuales para organizar tareas diarias.\n\nDatos:\n\"\"\"\nTAREAS DEL SPRINT 3 — APP DE CITAS DEL CENTRO (datos de práctica)\n\nid,titulo,responsable,puntos,estado\nT1,Diseñar pantalla de login,Ana,3,Hecho\nT2,Conectar API de usuarios,Luis,5,Hecho\nT3,Validar formulario de cita,Marta,3,En curso\nT4,Calendario de disponibilidad,Jorge,8,En curso\nT5,Notificación por correo,Sara,5,Por hacer\nT6,Pruebas unitarias del backend,Iván,5,Por hacer\nT7,Panel del instructor,Ana,8,Por hacer\nT8,Accesibilidad y contraste,Marta,3,Hecho\n\nSprint de 10 días con 40 puntos.\nPuntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,29,29\n\"\"\"\n\nTarea: En Canvas, crea un tablero Kanban web que:\n1. Muestre las tareas en las columnas Por hacer, En curso y Hecho.\n2. Permita mover las tarjetas arrastrándolas con el ratón y también con el teclado.\n3. Sume los puntos de cada columna y muestre el porcentaje de avance.\n4. Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.\n5. Filtre las tarjetas por responsable.\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Claro y conciso en los comentarios del código.\n\nLímites:\n- Sin herramientas externas: solo HTML, CSS y JavaScript.\n- Cada tarjeta debe poder usarse con teclado y tener etiqueta accesible.\n- Responde en español de Colombia.\n- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo."
+          "prompt": "Contexto: Un equipo necesita ver en una sola pantalla qué tareas faltan por hacer, cuáles están en marcha y si el avance real va al ritmo del plan (sprint 3).\n\nRol: Actúa como diseñador de herramientas visuales para organizar tareas diarias.\n\nDatos:\n\"\"\"\nTAREAS DEL SPRINT 3 — APP DE CITAS DEL CENTRO (datos de práctica)\n\nid,titulo,responsable,puntos,estado\nT1,Diseñar pantalla de login,Ana,3,Hecho\nT2,Conectar API de usuarios,Luis,5,Hecho\nT3,Validar formulario de cita,Marta,3,En curso\nT4,Calendario de disponibilidad,Jorge,8,En curso\nT5,Notificación por correo,Sara,5,Por hacer\nT6,Pruebas unitarias del backend,Iván,5,Por hacer\nT7,Panel del instructor,Ana,8,Por hacer\nT8,Accesibilidad y contraste,Marta,3,Hecho\n\nSprint de 10 días con 40 puntos.\nPuntos pendientes reales por día (corte del día 10): 40,40,37,37,34,34,32,29,29,29\n\"\"\"\n\nTarea: En Canvas, crea un tablero Kanban web que:\n1. Muestre las tareas en las columnas Por hacer, En curso y Hecho.\n2. Permita mover las tarjetas arrastrándolas con el mouse y también con el teclado.\n3. Sume los puntos de cada columna y muestre el porcentaje de avance.\n4. Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.\n5. Filtre las tarjetas por responsable.\nEntrega: Un solo archivo HTML listo para abrir en Vista previa.\n\nTono: Claro y conciso en los comentarios del código.\n\nLímites:\n- Sin herramientas externas: solo HTML, CSS y JavaScript.\n- Cada tarjeta debe poder usarse con teclado y tener etiqueta accesible.\n- Responde en español de Colombia.\n- Si falta un dato necesario, escribe «[pendiente]» en vez de suponerlo."
         },
         {
           "id": "code-c-juego-ahorro",

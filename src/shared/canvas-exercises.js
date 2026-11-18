@@ -420,7 +420,7 @@ CANVAS_EXERCISES["code-prototyping"] = [
       context: "Un equipo necesita ver en una sola pantalla qué tareas faltan por hacer, cuáles están en marcha y si el avance real va al ritmo del plan (sprint 3).",
       data: IN_KANBAN,
       instruction: "En Canvas, crea un tablero Kanban web que:",
-      task: ["Muestre las tareas en las columnas Por hacer, En curso y Hecho.", "Permita mover las tarjetas arrastrándolas con el ratón y también con el teclado.", "Sume los puntos de cada columna y muestre el porcentaje de avance.", "Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.", "Filtre las tarjetas por responsable."],
+      task: ["Muestre las tareas en las columnas Por hacer, En curso y Hecho.", "Permita mover las tarjetas arrastrándolas con el mouse y también con el teclado.", "Sume los puntos de cada columna y muestre el porcentaje de avance.", "Incluya un gráfico de avance (burndown) con la línea ideal y la real, dibujado con SVG.", "Filtre las tarjetas por responsable."],
       constraints: ["Sin herramientas externas: solo HTML, CSS y JavaScript.", "Cada tarjeta debe poder usarse con teclado y tener etiqueta accesible."],
       format: "Un solo archivo HTML listo para abrir en Vista previa.",
       tone: "Claro y conciso en los comentarios del código."
@@ -437,7 +437,7 @@ CANVAS_EXERCISES["code-prototyping"] = [
     ],
     expected: [
       "Al inicio, Hecho suma 11 puntos (T1, T2, T8) y el progreso es 27,5 %.",
-      "Las tarjetas se mueven con ratón y con teclado.",
+      "Las tarjetas se mueven con el mouse y con el teclado.",
       "El burndown muestra la línea ideal y la real; la real queda por encima desde el día 2 y cierra con 29 puntos pendientes.",
       "El filtro por responsable funciona sin recargar.",
       "Los contadores se actualizan al soltar una tarjeta.",
