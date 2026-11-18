@@ -155,20 +155,15 @@ function canvasPythonRepr(summary) {
 function buildCanvasChecklistHtml(expected) {
   if (!expected.length) return "";
   const e = canvasKit.escapeCanvasHtml;
-  const items = expected.map((item, i) => `
-        <li><label><input type="checkbox" class="canvas-exercise-check" data-check-index="${i}">
-          <span><strong>${e(item.criterion)}</strong><small class="sim-check-how">Cómo comprobarlo: ${e(item.how)}</small></span></label></li>`).join("");
+  // El ejemplo se observa, no se verifica: el avance del aprendiz vive en los ejercicios A, B y C.
+  const items = expected.map(item => `
+        <li><strong>${e(item.criterion)}</strong><small class="sim-check-how">Cómo comprobarlo: ${e(item.how)}</small></li>`).join("");
   return `
-    <section class="canvas-exercise-checklist sim-checklist" aria-label="Verificación del resultado">
-      <div class="canvas-exercise-block-head">
-        <h5>✅ Verifica el resultado de tu Canvas</h5>
-        <span class="canvas-exercise-progress" data-exercise-progress aria-live="polite">0/${expected.length}</span>
-      </div>
-      <p class="canvas-exercise-hint">Copia el prompt, pégalo en Gemini con Canvas activo y marca cada criterio solo cuando lo compruebes en tu propio resultado. El diseño puede variar; las cifras no.</p>
-      <div class="canvas-exercise-bar" aria-hidden="true"><span data-exercise-bar></span></div>
-      <ul>${items}
+    <section class="canvas-exercise-checklist sim-checklist" aria-label="Qué observar en el resultado del ejemplo">
+      <h5>🔎 Fíjate en esto del resultado</h5>
+      <p class="canvas-exercise-hint">Son los rasgos que hacen bueno este resultado. Búscalos también cuando hagas los ejercicios de este modo; el diseño puede variar, las cifras no.</p>
+      <ul class="sim-observe-list">${items}
       </ul>
-      <button type="button" class="canvas-exercise-reset" data-exercise-reset>↺ Reiniciar verificación</button>
     </section>`;
 }
 

@@ -14,7 +14,9 @@ const {
   countCanvasChecklist,
   CANVAS_CAPABILITIES,
   canvasCapabilityNames,
-  CANVAS_VERIFY_STEP
+  CANVAS_VERIFY_STEP,
+  buildCriterionFixPrompt,
+  groupCanvasCriteria
 } = require(path.join(__dirname, "..", "js", "canvas-exercises.js"));
 
 const MODES = [
@@ -156,7 +158,9 @@ test("composeCanvasPrompt ordena las partes y delimita los datos", () => {
 });
 
 test("formatCanvasStep resalta lo que se escribe y escapa el resto", () => {
-  assert.equal(formatCanvasStep("Escribe: «Hazlo <b>»."), 'Escribe: <span class="canvas-exercise-followup">«Hazlo &lt;b&gt;»</span>.');
+  assert.equal(formatCanvasStep("Escribe: «Hazlo <b>»."),
+    'Escribe: <span class="canvas-exercise-followup">«Hazlo &lt;b&gt;»</span><button type="button" class="canvas-step-copy" data-copy-text="Hazlo &lt;b&gt;" aria-label="Copiar el texto que escribes">📋</button>.',
+    "lo que se escribe queda resaltado y con botón para copiarlo");
   assert.equal(formatCanvasStep("Sin comillas"), "Sin comillas");
   assert.equal(formatCanvasStep("Abre «Exportar» y elige «Documentos de Google»."), "Abre «Exportar» y elige «Documentos de Google».", "los menús no se resaltan");
 });
@@ -194,10 +198,10 @@ test("buildCanvasExerciseHtml arma una tarjeta completa y segura", () => {
   assert.ok(html.includes(ex.previewSvg), "la vista previa SVG se inserta tal cual");
   assert.ok(html.includes('class="canvas-exercise-followup"'), "los pasos resaltan lo que se escribe");
   assert.equal(countCanvasChecklist(html), ex.expected.length);
-  assert.equal((html.match(/class="canvas-exercise-step"/g) || []).length, ex.steps.length);
+  assert.equal((html.match(/class="canvas-exercise-step"/g) || []).length, ex.steps.length - 1, "el paso que remite a la lista no se repite en la tarjeta");
   assert.ok(html.includes("Parte A"));
   assert.ok(html.includes("¿Por qué en Canvas?"), "la tarjeta explica qué aporta Canvas");
-  for (const aside of ["canvas-exercise-why", "canvas-exercise-prompt-view", "canvas-exercise-preview-wrap", "canvas-exercise-stretch"]) {
+  for (const aside of ["canvas-exercise-why", "canvas-exercise-prompt-view", "canvas-exercise-preview-wrap", "canvas-exercise-stretch", "canvas-fix-prompt"]) {
     assert.match(html, new RegExp(`<details class="canvas-aside ${aside}">`), `${aside} queda plegado para no distraer`);
   }
   assert.doesNotMatch(html, /<details[^>]* open/, "ningún bloque secundario abre por defecto");
@@ -355,14 +359,58 @@ test("las exportaciones a Documentos de Google son opcionales y no bloquean la v
   }
 });
 
-test("cada tarjeta incluye el hilo paso a paso, enlace de regreso al simulador y pasos marcables", () => {
+test("los pasos se leen y se copian: sin casillas, sin indicador de fases y sin el paso que remite a la lista", () => {
   const ex = CANVAS_EXERCISES["doc-editorial"][0];
   const html = buildCanvasExerciseHtml(ex, 0);
-  assert.match(html, /class="canvas-exercise-stepper"/);
   assert.match(html, /data-go-simulator/, "incluye botón para volver a ver el ejemplo en el simulador");
-  assert.match(html, /class="canvas-step-done"/, "cada paso de iteración tiene control de avance");
-  const stepChecks = (html.match(/class="canvas-step-done"/g) || []).length;
-  assert.equal(stepChecks, ex.steps.length, "un control por cada paso");
+  assert.doesNotMatch(html, /canvas-step-done/, "los pasos ya no se marcan uno a uno");
+  assert.doesNotMatch(html, /canvas-exercise-stepper/, "los títulos numerados reemplazan el indicador de fases");
+  assert.ok(!html.includes(escapeCanvasHtml(CANVAS_VERIFY_STEP)), "la sección 3 ya es la verificación");
+  const followUps = ex.steps.filter(st => /: «[^»]+»/.test(st)).reduce((n, st) => n + st.match(/: «[^»]+»/g).length, 0);
+  const stepsHtml = html.slice(html.indexOf('<ol class="canvas-exercise-steps">'), html.indexOf("</ol>", html.indexOf('<ol class="canvas-exercise-steps">')));
+  assert.equal((stepsHtml.match(/class="canvas-step-copy"/g) || []).length, followUps, "un botón 📋 por cada texto que se escribe");
+  assert.ok(html.includes("El texto resaltado es lo que escribes"));
+});
+
+test("la sección 3 agrupa los criterios, ofrece Todo cumple y un prompt de corrección por criterio", () => {
+  const ex = CANVAS_EXERCISES["doc-editorial"][0];
+  const html = buildCanvasExerciseHtml(ex, 0);
+  assert.ok(html.includes("3. Revisa tu resultado"));
+  assert.ok(html.includes("Las cifras deben coincidir; el diseño puede variar."));
+  assert.ok(html.includes("data-check-all"), "botón para marcar todo de un clic");
+  assert.equal((html.match(/data-check-fail=/g) || []).length, ex.expected.length, "un botón No cumple por criterio");
+  assert.equal((html.match(/class="canvas-aside canvas-fix-prompt"/g) || []).length, ex.expected.length);
+  ex.expected.forEach((c, i) => {
+    assert.ok(html.includes(`data-check-index="${i}"`), `se conserva el índice ${i}`);
+    assert.ok(html.includes(escapeCanvasHtml(buildCriterionFixPrompt(c))), `prompt de corrección del criterio ${i + 1}`);
+  });
+  const groups = groupCanvasCriteria(ex.expected);
+  if (groups.data.length) assert.ok(html.includes("Cifras y datos"));
+  if (groups.visual.length) assert.ok(html.includes("Lo que debes ver"));
+  assert.doesNotMatch(html, /canvas-exercise-side/, "la tarjeta se lee en una sola columna");
+  const main = html.slice(html.indexOf('class="canvas-exercise-main"'));
+  assert.ok(main.includes("canvas-exercise-checklist"), "la revisión sigue a los pasos en la columna principal");
+  assert.ok(main.indexOf("3. Revisa tu resultado") < main.indexOf("Reto extra (opcional)"), "lo opcional queda al final");
+  assert.ok(main.indexOf("2. Itera dentro de Canvas") < main.indexOf("3. Revisa tu resultado"));
+});
+
+test("buildCriterionFixPrompt arma una corrección puntual y se omite sin criterio", () => {
+  assert.equal(buildCriterionFixPrompt("La tabla muestra las cuatro tasas."),
+    "Revisa el Canvas y corrige solo lo necesario para que se cumpla esto: «La tabla muestra las cuatro tasas». No cambies el resto.");
+  assert.equal(buildCriterionFixPrompt("  El total es 5 <b>  "), "Revisa el Canvas y corrige solo lo necesario para que se cumpla esto: «El total es 5 <b>». No cambies el resto.");
+  assert.equal(buildCriterionFixPrompt(""), "");
+  assert.equal(buildCriterionFixPrompt(null), "");
+});
+
+test("groupCanvasCriteria separa cifras y datos de lo que se ve, conservando el índice", () => {
+  const groups = groupCanvasCriteria(["El total es 196.000.000.", "La dona se anima.", "El botón dice «Enviar».", "Hay un título claro."]);
+  assert.deepEqual(groups.data, [{ text: "El total es 196.000.000.", index: 0 }, { text: "El botón dice «Enviar».", index: 2 }]);
+  assert.deepEqual(groups.visual, [{ text: "La dona se anima.", index: 1 }, { text: "Hay un título claro.", index: 3 }]);
+  assert.deepEqual(groupCanvasCriteria([]), { data: [], visual: [] });
+  assert.deepEqual(groupCanvasCriteria(undefined), { data: [], visual: [] });
+  const onlyVisual = buildCanvasExerciseHtml({ ...CANVAS_EXERCISES["doc-editorial"][0], expected: ["Se ve un título."] }, 0);
+  assert.ok(!onlyVisual.includes("Cifras y datos"), "un grupo vacío no se muestra");
+  assert.ok(onlyVisual.includes("Lo que debes ver"));
 });
 
 test("buildCanvasExerciseHtml y canvasCopyText manejan índices >= 3 y propiedades opcionales ausentes", () => {

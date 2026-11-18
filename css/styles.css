@@ -3074,15 +3074,15 @@ body.instructor-mode .instructor-guide-card {
   color: var(--text-main);
 }
 
+/* Una sola columna: 1 copia → 2 itera → 3 revisa, de arriba abajo; lo opcional va plegado al final. */
 .canvas-exercise-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
   padding: 1.25rem;
 }
 
-.canvas-exercise-main,
-.canvas-exercise-side {
+.canvas-exercise-main {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -3436,21 +3436,166 @@ body.instructor-mode .instructor-guide-card {
   flex-shrink: 0;
 }
 
-.canvas-exercise-check:checked + span {
-  color: var(--text-muted);
-  text-decoration: line-through;
+/* Sección 3 del ejercicio: un criterio por fila, con Cumple, No cumple y cómo corregirlo */
+.canvas-criteria-group {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
 }
 
-/* Lista de verificación del simulador: criterio y forma de comprobarlo */
+.canvas-exercise-checklist ul.canvas-criteria {
+  gap: 0.4rem;
+}
+
+.canvas-criterion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-inline-start: 4px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+
+.canvas-criterion.is-ok {
+  border-inline-start-color: var(--color-primary);
+}
+
+.canvas-criterion.is-fail {
+  border-inline-start-color: #b45309;
+}
+
+.canvas-criterion-text {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+  font-size: 0.88rem;
+  text-align: start;
+}
+
+.canvas-criterion.is-ok .canvas-criterion-text {
+  color: var(--text-muted);
+}
+
+.canvas-criterion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.canvas-exercise-checklist label.canvas-criterion-ok,
+.canvas-criterion-fail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-block-size: 2rem;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.canvas-criterion-ok:has(.canvas-exercise-check:checked) {
+  color: #ffffff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.canvas-criterion-ok:focus-within,
+.canvas-criterion-fail:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+.canvas-criterion.is-fail .canvas-criterion-fail {
+  color: #ffffff;
+  background: #b45309;
+  border-color: #b45309;
+}
+
+/* La casilla sigue siendo el control accesible; el botón en forma de píldora muestra su estado. */
+.canvas-exercise-checklist label.canvas-criterion-ok {
+  position: relative;
+}
+
+.canvas-criterion .canvas-exercise-check {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.canvas-criterion > .canvas-fix-prompt {
+  flex: 1 1 100%;
+  margin-block: 0.15rem 0;
+}
+
+/* La ayuda para corregir solo aparece cuando el aprendiz marca «No cumple». */
+.canvas-criterion:not(.is-fail) > .canvas-fix-prompt {
+  display: none;
+}
+
+.canvas-fix-text {
+  margin: 0;
+  font-size: 0.86rem;
+  text-align: start;
+}
+
+.canvas-criteria-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block: 0.5rem;
+}
+
+/* Botón 📋 junto a lo que el aprendiz escribe y junto a cada prompt de corrección */
+.canvas-step-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.9rem;
+  min-block-size: 1.9rem;
+  margin-inline-start: 0.25rem;
+  padding: 0 0.3rem;
+  font-size: 0.85rem;
+  vertical-align: middle;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.canvas-step-copy:hover,
+.canvas-step-copy:focus-visible {
+  border-color: var(--color-primary);
+}
+
+.canvas-step-copy.is-copied {
+  color: #ffffff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* Lista del simulador: qué observar en el resultado del ejemplo, sin casillas */
 .sim-checklist {
   margin-block-end: 1rem;
 }
 
-.sim-checklist label > span {
+.sim-observe-list li {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   min-inline-size: 0;
+  font-size: 0.86rem;
 }
 
 .sim-check-how {
@@ -4929,54 +5074,6 @@ body.instructor-mode .instructor-guide-card {
   color: var(--color-primary);
 }
 
-.canvas-exercise-stepper {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.65rem 0.9rem;
-  margin-bottom: 1rem;
-  border-radius: 10px;
-  background: var(--bg-soft, #f8fafc);
-  border: 1px solid var(--border-light);
-  font-size: 0.82rem;
-}
-.canvas-exercise-stepper .stepper-item {
-  padding: 0.22rem 0.58rem;
-  border-radius: 999px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-.canvas-exercise-stepper .stepper-item.is-done {
-  background: #dcfce7;
-  color: #166534;
-}
-.canvas-exercise-stepper .stepper-item.is-current {
-  background: var(--color-primary);
-  color: #ffffff;
-}
-.canvas-exercise-stepper .stepper-sep {
-  color: var(--text-muted);
-}
-
-.canvas-step-check-wrap {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-.canvas-step-done {
-  margin-top: 0.25rem;
-  flex-shrink: 0;
-  accent-color: var(--color-primary);
-  width: 1rem;
-  height: 1rem;
-}
-.canvas-exercise-step.is-step-done .canvas-step-text {
-  opacity: 0.72;
-  text-decoration: line-through;
-}
-
 /* devbrain-prose-contract:start */
 /* Contrato 7.4: cada región ocupa su espacio y conserva sus controles. */
 :where(p, dd, blockquote) {
@@ -5706,6 +5803,19 @@ details.canvas-mode-lab > .tool-container {
   .canvas-station-btn {
     flex: 1 1 auto;
     padding-inline: 0.5rem;
+  }
+
+  .canvas-mode-workspace,
+  .canvas-exercise-checklist {
+    padding-inline: 0.5rem;
+  }
+
+  .canvas-criterion {
+    padding: 0.45rem 0.5rem;
+  }
+
+  .canvas-criterion-actions {
+    flex-wrap: nowrap;
   }
 
   /* En móvil el selector ya nombra el simulador y los pasos marcan la parte activa; esta línea repetiría lo mismo. */

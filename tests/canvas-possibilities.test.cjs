@@ -310,12 +310,12 @@ test("canvasMermaidFlow arma subgrafos, formas y flechas rotuladas", () => {
   assert.equal(code, 'flowchart TD\n  subgraph U["Usuario"]\n    A(["Inicio"])\n    B{"¿Listo?"}\n    C["Paso"]\n  end\n  A --> B\n  B -- Sí --> C');
 });
 
-test("buildCanvasChecklistHtml escapa el contenido y cuenta las casillas", () => {
+test("buildCanvasChecklistHtml muestra qué observar en el ejemplo, sin casillas que marcar", () => {
   const html = buildCanvasChecklistHtml([{ criterion: "Total <b>", how: "Busca «x»" }]);
   assert.ok(html.includes("Total &lt;b&gt;"));
-  assert.equal((html.match(/class="canvas-exercise-check"/g) || []).length, 1);
-  assert.ok(html.includes("data-exercise-progress"));
-  assert.ok(html.includes("data-exercise-reset"));
+  assert.ok(html.includes("Fíjate en esto del resultado"));
+  assert.ok(html.includes("Cómo comprobarlo: Busca «x»"));
+  assert.doesNotMatch(html, /type="checkbox"|class="canvas-exercise-check"|data-exercise-progress|data-exercise-reset/, "el ejemplo no se verifica: el avance vive en los ejercicios");
   assert.equal(buildCanvasChecklistHtml([]), "");
 });
 

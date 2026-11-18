@@ -31,3 +31,11 @@
 - Corrección: al completar un ejercicio, `writeCanvasCompleted` usaba una variable inexistente y cortaba la actualización del progreso.
 - Funciones nuevas con pruebas: `buildModeStations`, `buildModeWrapUp` y `stationAtScroll`; se retiró `computeLearnerGuideState`.
 - Orden libre: la barra tiene un selector visible «Simulador» con los 13 modos y su avance, para abrir cualquiera con un clic. El menú aclara que el orden lo elige el aprendiz, el ciclo dice «③ Elige otro modo» y cada cierre ofrece «Elegir otro simulador» junto al modo siguiente de la lista.
+
+## 2026-11-17 · Gemini Canvas: revisar el resultado sin trámites
+- Motivo: cada ejercicio pedía unas 12 casillas (pasos y criterios). El último paso repetía la lista de verificación y el ejemplo del simulador tenía su propia lista, aunque el aprendiz no lo hizo.
+- «2. Itera dentro de Canvas»: los pasos se leen, no se marcan. El texto que se escribe en Canvas tiene botón 📋 y la tarjeta no repite el paso «Comprueba tu resultado…».
+- «3. Revisa tu resultado»: va después de los pasos, en una sola columna, con los criterios agrupados en «Cifras y datos» y «Lo que debes ver». Cada criterio tiene «✓ Cumple» y «✗ No cumple»; al marcar «No cumple» aparece un prompt de corrección listo para copiar. «✓ Todo cumple» marca todo de un clic.
+- El simulador ya no tiene casillas: la pestaña «🔎 Qué fijarte en el resultado» muestra los criterios y cómo comprobarlos.
+- El avance a medias se guarda por índice del criterio, así que los grupos no alteran lo ya marcado.
+- Funciones nuevas con pruebas: `buildCriterionFixPrompt` y `groupCanvasCriteria`.

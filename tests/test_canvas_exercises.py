@@ -306,3 +306,13 @@ def test_canvas_modes_can_be_chosen_in_any_order():
     assert 'modeSelectEl.addEventListener("change"' in app, "cambiar el selector abre el ejemplo de ese modo"
     assert "data-wrapup-choose" in app, "el cierre de cada parte ofrece elegir cualquier otro modo"
     assert "Revisa primero este ejemplo" not in app, "el aviso de modo nuevo no impone un orden"
+
+
+def test_simulator_example_is_observed_not_verified():
+    html = _html()
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    assert "🔎 Qué fijarte en el resultado" in html, "la pestaña del ejemplo invita a observar, no a marcar"
+    assert "Verifica tu resultado &amp; claves" not in html and "Verifica tu resultado & claves" not in html
+    assert 'checklist.querySelectorAll(".canvas-exercise-check")' not in app, "el ejemplo del simulador ya no tiene casillas"
+    for handler in ["[data-check-fail]", "[data-check-all]", "[data-copy-text]", "orderedExerciseChecks("]:
+        assert handler in app, f"app.js debe manejar {handler}"

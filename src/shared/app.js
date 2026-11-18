@@ -684,19 +684,9 @@ function initCanvasLab() {
       window.refreshCanvasCalibration();
     }
 
-    // Actualizar lista de verificación y claves de éxito
+    // Qué observar en el resultado del ejemplo (solo lectura) y claves de éxito
     if (insightsContentEl) {
       insightsContentEl.innerHTML = buildCanvasChecklistHtml(data.expected) + data.insightsHtml;
-      const checklist = insightsContentEl.querySelector(".sim-checklist");
-      if (checklist) {
-        checklist.querySelectorAll(".canvas-exercise-check").forEach(check => {
-          check.addEventListener("change", () => updateExerciseProgress(checklist));
-        });
-        checklist.querySelector("[data-exercise-reset]").addEventListener("click", () => {
-          checklist.querySelectorAll(".canvas-exercise-check").forEach(c => { c.checked = false; });
-          updateExerciseProgress(checklist);
-        });
-      }
     }
 
     // Actualizar ejercicios prácticos del modo y el puente ejemplo <-> ejercicios
@@ -833,13 +823,23 @@ function initCanvasLab() {
   let currentExerciseMode = "doc-editorial";
   let currentExerciseIndex = 0;
 
+  // Casillas en el orden de los datos: en pantalla los criterios se agrupan, pero el avance se guarda por índice.
+  function orderedExerciseChecks(card) {
+    return Array.from(card.querySelectorAll(".canvas-exercise-check"))
+      .sort((a, b) => Number(a.getAttribute("data-check-index")) - Number(b.getAttribute("data-check-index")));
+  }
+
   function updateExerciseProgress(card) {
-    const checks = card.querySelectorAll(".canvas-exercise-check");
-    const done = Array.from(checks).filter(c => c.checked).length;
+    const checks = orderedExerciseChecks(card);
+    const done = checks.filter(c => c.checked).length;
     const progressEl = card.querySelector("[data-exercise-progress]");
     const barEl = card.querySelector("[data-exercise-bar]");
+    checks.forEach(c => {
+      const row = c.closest(".canvas-criterion");
+      if (row) row.classList.toggle("is-ok", c.checked);
+    });
     if (progressEl) {
-      progressEl.textContent = done === checks.length ? `${done}/${checks.length} · ¡Resultado completo!` : `${done}/${checks.length}`;
+      progressEl.textContent = done === checks.length ? `✅ ${done} de ${checks.length}: ¡todo cumple!` : `${done} de ${checks.length} cumplen`;
     }
     if (barEl) barEl.style.width = `${checks.length ? (done / checks.length) * 100 : 0}%`;
     const complete = checks.length > 0 && done === checks.length;
@@ -848,7 +848,7 @@ function initCanvasLab() {
     if (exId) {
       const partial = readCanvasStore("canvasPartialChecks", {});
       const store = partial && typeof partial === "object" ? partial : {};
-      store[exId] = serializeChecks(Array.from(checks).map(c => c.checked));
+      store[exId] = serializeChecks(checks.map(c => c.checked));
       writeCanvasStore("canvasPartialChecks", store);
       const saved = readCanvasCompleted();
       const had = saved.includes(exId);
@@ -933,27 +933,36 @@ function initCanvasLab() {
         if (simEl) requestAnimationFrame(() => simEl.scrollIntoView({ behavior: "smooth", block: "start" }));
       });
     }
-    const stepperItems = card.querySelectorAll(".canvas-exercise-stepper .stepper-item");
-    const stepChecks = card.querySelectorAll(".canvas-step-done");
-    const syncStepper = () => {
-      const doneSteps = Array.from(stepChecks).filter(c => c.checked).length;
-      const allStepsDone = stepChecks.length > 0 && doneSteps === stepChecks.length;
-      if (stepperItems.length >= 4) {
-        stepperItems[1].classList.toggle("is-done", doneSteps > 0);
-        stepperItems[1].classList.toggle("is-current", doneSteps === 0);
-        stepperItems[2].classList.toggle("is-done", allStepsDone);
-        stepperItems[2].classList.toggle("is-current", doneSteps > 0 && !allStepsDone);
-        stepperItems[3].classList.toggle("is-current", allStepsDone);
-      }
-      if (typeof updateLearnerGuideHud === "function") updateLearnerGuideHud();
-    };
-    stepChecks.forEach(sc => {
-      sc.addEventListener("change", () => {
-        const li = sc.closest(".canvas-exercise-step");
-        if (li) li.classList.toggle("is-step-done", sc.checked);
-        syncStepper();
+    // Textos que el aprendiz escribe en Canvas y prompts de corrección: se copian con 📋.
+    card.querySelectorAll("[data-copy-text]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        copyTextToClipboard(btn.getAttribute("data-copy-text")).then(() => {
+          flashCopiedButton(btn);
+          showCanvasToast("📋 Texto copiado: pégalo en Gemini.");
+        }).catch(() => showCanvasToast("No se pudo copiar. Selecciona el texto resaltado y usa Ctrl+C."));
       });
     });
+    // «No cumple»: desmarca el criterio y abre el prompt para corregirlo.
+    card.querySelectorAll("[data-check-fail]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const row = btn.closest(".canvas-criterion");
+        const check = row ? row.querySelector(".canvas-exercise-check") : null;
+        if (!row || !check) return;
+        check.checked = false;
+        row.classList.add("is-fail");
+        const fix = row.querySelector(".canvas-fix-prompt");
+        if (fix) fix.open = true;
+        updateExerciseProgress(card);
+      });
+    });
+    const checkAllBtn = card.querySelector("[data-check-all]");
+    if (checkAllBtn) {
+      checkAllBtn.addEventListener("click", () => {
+        card.querySelectorAll(".canvas-exercise-check").forEach(c => { c.checked = true; });
+        card.querySelectorAll(".canvas-criterion").forEach(row => row.classList.remove("is-fail"));
+        updateExerciseProgress(card);
+      });
+    }
     card.querySelectorAll("[data-copy]").forEach(btn => {
       btn.addEventListener("click", () => {
         const kind = btn.getAttribute("data-copy");
@@ -966,16 +975,22 @@ function initCanvasLab() {
       });
     });
     card.querySelectorAll(".canvas-exercise-check").forEach(check => {
-      check.addEventListener("change", () => updateExerciseProgress(card));
+      check.addEventListener("change", () => {
+        const row = check.closest(".canvas-criterion");
+        if (row && check.checked) row.classList.remove("is-fail");
+        updateExerciseProgress(card);
+      });
     });
     const resetBtn = card.querySelector("[data-exercise-reset]");
     if (resetBtn) {
       resetBtn.addEventListener("click", () => {
         card.querySelectorAll(".canvas-exercise-check").forEach(c => { c.checked = false; });
+        card.querySelectorAll(".canvas-criterion").forEach(row => row.classList.remove("is-fail"));
+        card.querySelectorAll(".canvas-fix-prompt").forEach(d => { d.open = false; });
         updateExerciseProgress(card);
       });
     }
-    const cardChecks = Array.from(card.querySelectorAll(".canvas-exercise-check"));
+    const cardChecks = orderedExerciseChecks(card);
     const partialStore = readCanvasStore("canvasPartialChecks", {}) || {};
     const restored = readCanvasCompleted().includes(exercise.id)
       ? cardChecks.map(() => true)

@@ -2805,10 +2805,26 @@ function escapeCanvasHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
-// Resalta lo que el aprendiz escribe: el texto entre comillas latinas que sigue a dos puntos.
-// Los nombres de botones y menús («Crear», «Vista previa») quedan sin resaltar.
+// Resalta lo que el aprendiz escribe: el texto entre comillas latinas que sigue a dos puntos,
+// con un botón 📋 para copiarlo sin reescribirlo. Los nombres de botones y menús («Crear», «Vista previa») quedan sin resaltar.
 function formatCanvasStep(text) {
-  return escapeCanvasHtml(text).replace(/: «([^»]+)»/g, ': <span class="canvas-exercise-followup">«$1»</span>');
+  return escapeCanvasHtml(text).replace(/: «([^»]+)»/g,
+    ': <span class="canvas-exercise-followup">«$1»</span><button type="button" class="canvas-step-copy" data-copy-text="$1" aria-label="Copiar el texto que escribes">📋</button>');
+}
+
+// Prompt corto para pedirle a Gemini que corrija un criterio que no se cumple, sin tocar lo demás.
+function buildCriterionFixPrompt(criterion) {
+  const text = String(criterion ?? "").trim().replace(/\.$/, "");
+  return text ? `Revisa el Canvas y corrige solo lo necesario para que se cumpla esto: «${text}». No cambies el resto.` : "";
+}
+
+// Separa los criterios con cifras o textos exactos de los que se comprueban mirando el resultado.
+function groupCanvasCriteria(expected) {
+  const groups = { data: [], visual: [] };
+  (Array.isArray(expected) ? expected : []).forEach((text, index) => {
+    groups[/\d|«|"/.test(text) ? "data" : "visual"].push({ text, index });
+  });
+  return groups;
 }
 
 function buildCanvasPromptHtml(parts) {
@@ -2871,13 +2887,32 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
   const scopeTag = coverageKit.buildExerciseScopeTag(exercise);
   const caps = (exercise.capabilities || []).filter(id => CANVAS_CAPABILITIES[id]).map(id =>
     `<li class="canvas-capability-chip" title="${e(CANVAS_CAPABILITIES[id].how)}">${e(CANVAS_CAPABILITIES[id].name)}</li>`).join("");
+  // El último paso de los datos remite a la lista de verificación; en la tarjeta esa lista ya es la sección 3.
   const steps = exercise.steps.map((s, si) => {
+    if (s === CANVAS_VERIFY_STEP) return "";
     const placeKey = Array.isArray(exercise.places) ? exercise.places[si] : "canvas";
     const placeBadge = coverageKit.buildStepPlaceBadge(placeKey);
-    return `<li class="canvas-exercise-step" data-step-index="${si}"><label class="canvas-step-check-wrap"><input type="checkbox" class="canvas-step-done" data-step-index="${si}" aria-label="Marcar paso ${si + 1} como realizado"> ${placeBadge} <span class="canvas-step-text">${formatCanvasStep(s)}</span></label></li>`;
+    return `<li class="canvas-exercise-step" data-step-index="${si}">${placeBadge} <span class="canvas-step-text">${formatCanvasStep(s)}</span></li>`;
   }).join("");
-  const checks = exercise.expected.map((c, i) =>
-    `<li><label><input type="checkbox" class="canvas-exercise-check" data-check-index="${i}"> <span>${e(c)}</span></label></li>`).join("");
+  const criterion = item => {
+    const fix = buildCriterionFixPrompt(item.text);
+    return `<li class="canvas-criterion" data-criterion-index="${item.index}">
+              <span class="canvas-criterion-text">${e(item.text)}</span>
+              <span class="canvas-criterion-actions">
+                <label class="canvas-criterion-ok"><input type="checkbox" class="canvas-exercise-check" data-check-index="${item.index}"> ✓ Cumple</label>
+                <button type="button" class="canvas-criterion-fail" data-check-fail="${item.index}">✗ No cumple</button>
+              </span>
+              <details class="canvas-aside canvas-fix-prompt">
+                <summary>Cómo corregirlo</summary>
+                <p class="canvas-exercise-hint">Selecciona en Canvas la parte afectada o escribe en el chat:</p>
+                <p class="canvas-fix-text">${e(fix)} <button type="button" class="canvas-step-copy" data-copy-text="${e(fix)}" aria-label="Copiar el prompt de corrección">📋</button></p>
+              </details>
+            </li>`;
+  };
+  const groups = groupCanvasCriteria(exercise.expected);
+  const group = (title, items) => items.length
+    ? `<h6 class="canvas-criteria-group">${title}</h6><ul class="canvas-criteria">${items.map(criterion).join("")}</ul>` : "";
+  const checks = group("🔢 Cifras y datos", groups.data) + group("👀 Lo que debes ver", groups.visual);
   return `
     <article class="canvas-exercise-card" id="ejercicio-${e(exercise.id)}" data-exercise-id="${e(exercise.id)}" tabindex="-1">
       <header class="canvas-exercise-head">
@@ -2893,15 +2928,6 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
           <span>✨ ${e(exercise.canvasFeature)}</span>
         </div>
       </header>
-      <nav class="canvas-exercise-stepper" aria-label="Ruta guiada del ejercicio">
-        <span class="stepper-item is-done">0. Ejemplo visto</span>
-        <span class="stepper-sep" aria-hidden="true">→</span>
-        <span class="stepper-item is-current">1. Copia el prompt</span>
-        <span class="stepper-sep" aria-hidden="true">→</span>
-        <span class="stepper-item">2. Itera en Canvas</span>
-        <span class="stepper-sep" aria-hidden="true">→</span>
-        <span class="stepper-item">3. Verifica y avanza</span>
-      </nav>
       <div class="canvas-exercise-grid">
         <div class="canvas-exercise-main">
           <section class="canvas-exercise-section">
@@ -2934,33 +2960,35 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
           </section>
           <section class="canvas-exercise-section">
             <h5>🧭 2. Itera dentro de Canvas</h5>
-            <p class="canvas-exercise-hint">Cada paso indica dónde se ejecuta (🟢 En Canvas, 🟡 En Gemini sin Canvas, 🟠 Fuera de Gemini o 🔵 En esta guía). El texto resaltado es lo que escribes.</p>
+            <p class="canvas-exercise-hint">El texto resaltado es lo que escribes; cópialo con 📋.</p>
             <ol class="canvas-exercise-steps">${steps}</ol>
           </section>
-          ${buildCanvasReferenceHtml(exercise.reference)}
-        </div>
-        <aside class="canvas-exercise-side">
           <section class="canvas-exercise-checklist">
             <div class="canvas-exercise-block-head">
-              <h5>✅ 3. Verifica tu resultado</h5>
-              <span class="canvas-exercise-progress" data-exercise-progress aria-live="polite">0/${exercise.expected.length}</span>
+              <h5>✅ 3. Revisa tu resultado</h5>
+              <span class="canvas-exercise-progress" data-exercise-progress aria-live="polite">0 de ${exercise.expected.length} cumplen</span>
             </div>
+            <p class="canvas-exercise-hint">Las cifras deben coincidir; el diseño puede variar. Si algo falla, usa «Cómo corregirlo».</p>
             <div class="canvas-exercise-bar" aria-hidden="true"><span data-exercise-bar></span></div>
-            <ul>${checks}</ul>
-            <button type="button" class="canvas-exercise-reset" data-exercise-reset>↺ Reiniciar verificación</button>
+            ${checks}
+            <div class="canvas-criteria-tools">
+              <button type="button" class="canvas-mode-pager-btn is-primary" data-check-all>✓ Todo cumple</button>
+              <button type="button" class="canvas-exercise-reset" data-exercise-reset>↺ Reiniciar</button>
+            </div>
+            <details class="canvas-aside canvas-exercise-preview-wrap">
+              <summary>🖼️ Compara con la vista de referencia</summary>
+              <figure class="canvas-exercise-preview">
+                ${exercise.previewSvg}
+                <figcaption>Vista de referencia del resultado, dibujada con los mismos datos del ejercicio.</figcaption>
+              </figure>
+            </details>
           </section>
-          <details class="canvas-aside canvas-exercise-preview-wrap">
-            <summary>🖼️ Ver la vista de referencia del resultado</summary>
-            <figure class="canvas-exercise-preview">
-              ${exercise.previewSvg}
-              <figcaption>Vista de referencia del resultado, dibujada con los mismos datos del ejercicio.</figcaption>
-            </figure>
-          </details>
+          ${buildCanvasReferenceHtml(exercise.reference)}
           <details class="canvas-aside canvas-exercise-stretch">
             <summary>🚀 Reto extra (opcional)</summary>
             <p>${e(exercise.stretch)}</p>
           </details>
-        </aside>
+        </div>
       </div>
     </article>`;
 }
@@ -2974,5 +3002,5 @@ globalThis.CANVAS_CAPABILITIES = CANVAS_CAPABILITIES;
 globalThis.canvasCopyText = canvasCopyText;
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { canvasPromptGuardrails, GEMINI_APP_URL, canvasCopyText, buildCanvasReferenceHtml, CANVAS_EXERCISES, CANVAS_CAPABILITIES, CANVAS_VERIFY_STEP, canvasCapabilityNames, composeCanvasPrompt, escapeCanvasHtml, formatCanvasStep, buildCanvasPromptHtml, buildCanvasExerciseHtml, buildCanvasMaterialsHtml, countCanvasChecklist, canvasSvgFrame, canvasSvgBars, canvasSvgLine, canvasSvgDonut, canvasSvgRadar, canvasSvgHeatmap, canvasSvgFlow, canvasSvgMock };
+  module.exports = { buildCriterionFixPrompt, groupCanvasCriteria, canvasPromptGuardrails, GEMINI_APP_URL, canvasCopyText, buildCanvasReferenceHtml, CANVAS_EXERCISES, CANVAS_CAPABILITIES, CANVAS_VERIFY_STEP, canvasCapabilityNames, composeCanvasPrompt, escapeCanvasHtml, formatCanvasStep, buildCanvasPromptHtml, buildCanvasExerciseHtml, buildCanvasMaterialsHtml, countCanvasChecklist, canvasSvgFrame, canvasSvgBars, canvasSvgLine, canvasSvgDonut, canvasSvgRadar, canvasSvgHeatmap, canvasSvgFlow, canvasSvgMock };
 }
