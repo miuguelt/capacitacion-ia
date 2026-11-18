@@ -201,7 +201,7 @@ test("buildCanvasExerciseHtml arma una tarjeta completa y segura", () => {
   assert.equal((html.match(/class="canvas-exercise-step"/g) || []).length, ex.steps.length - 1, "el paso que remite a la lista no se repite en la tarjeta");
   assert.ok(html.includes("Parte A"));
   assert.ok(html.includes("¿Por qué en Canvas?"), "la tarjeta explica qué aporta Canvas");
-  for (const aside of ["canvas-exercise-why", "canvas-exercise-prompt-view", "canvas-exercise-preview-wrap", "canvas-exercise-stretch", "canvas-fix-prompt"]) {
+  for (const aside of ["canvas-exercise-why", "canvas-exercise-prompt-view", "canvas-exercise-stretch", "canvas-fix-prompt"]) {
     assert.match(html, new RegExp(`<details class="canvas-aside ${aside}">`), `${aside} queda plegado para no distraer`);
   }
   assert.doesNotMatch(html, /<details[^>]* open/, "ningún bloque secundario abre por defecto");
@@ -505,4 +505,17 @@ test("los 39 prompts fijan el idioma y dicen qué hacer si falta un dato", () =>
       assert.ok(ex.prompt.includes(label), `${ex.id}: ${label}`);
     }
   }
+});
+
+test("la vista de referencia se abre en una ventana emergente y no ocupa espacio en la tarjeta", () => {
+  const ex = CANVAS_EXERCISES["doc-editorial"][0];
+  const html = buildCanvasExerciseHtml(ex, 0);
+  assert.doesNotMatch(html, /canvas-exercise-preview-wrap/, "la vista ya no se despliega dentro de la tarjeta");
+  assert.match(html, /<button type="button" class="canvas-preview-open" data-open-preview aria-haspopup="dialog">🖼️ Ver la vista de referencia<\/button>/);
+  const tpl = html.slice(html.indexOf('<template class="canvas-exercise-preview-template">'), html.indexOf("</template>"));
+  assert.ok(tpl.includes(ex.previewSvg), "el dibujo espera en una plantilla, sin pintarse hasta abrir la ventana");
+  assert.ok(tpl.includes('<figure class="canvas-exercise-preview">'));
+  assert.ok(tpl.includes("Vista de referencia del resultado"));
+  const section = html.slice(html.indexOf("3. Revisa tu resultado"));
+  assert.ok(section.includes("data-open-preview"), "el botón está junto a la revisión del resultado");
 });

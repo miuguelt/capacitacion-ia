@@ -1083,6 +1083,24 @@ Notas tomadas por Julián:
             </div>
           </div>
 
+          <!-- MODAL: VISTA DE REFERENCIA DEL EJERCICIO (se llena al abrirla desde la tarjeta) -->
+          <div class="canvas-modal-backdrop" id="modal-exercise-preview" role="dialog" aria-modal="true" aria-labelledby="exercise-preview-title" hidden>
+            <div class="canvas-modal-dialog canvas-preview-dialog">
+              <div class="canvas-modal-header">
+                <div class="canvas-modal-title-group">
+                  <span class="modal-icon">🖼️</span>
+                  <div>
+                    <h4 id="exercise-preview-title" class="canvas-modal-title">Vista de referencia</h4>
+                    <small class="canvas-modal-subtitle">Compárala con el resultado de tu Canvas</small>
+                  </div>
+                </div>
+                <button type="button" class="canvas-modal-close" title="Cerrar (Esc)" aria-label="Cerrar la vista de referencia">✕</button>
+              </div>
+              <div class="canvas-modal-body" id="exercise-preview-body"></div>
+            </div>
+          </div>
+          <!-- fin: vista de referencia -->
+
           <!-- MODAL 2: VALIDADOR INTERACTIVO DE CONTRASTE WCAG 2.2 AA -->
           <div class="canvas-modal-backdrop" id="modal-canvas-contrast" role="dialog" aria-modal="true" aria-labelledby="contrast-modal-title" hidden>
             <div class="canvas-modal-dialog">

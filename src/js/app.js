@@ -934,6 +934,19 @@ function initCanvasLab() {
       });
     }
     // Textos que el aprendiz escribe en Canvas y prompts de corrección: se copian con 📋.
+    // Vista de referencia: se pinta en la ventana emergente solo cuando el aprendiz la abre.
+    const previewBtn = card.querySelector("[data-open-preview]");
+    const previewTpl = card.querySelector(".canvas-exercise-preview-template");
+    if (previewBtn && previewTpl) {
+      previewBtn.addEventListener("click", () => {
+        const body = document.getElementById("exercise-preview-body");
+        const title = document.getElementById("exercise-preview-title");
+        if (!body) return;
+        body.replaceChildren(previewTpl.content.cloneNode(true));
+        if (title) title.textContent = `Vista de referencia · ${exercise.code}: ${exercise.title}`;
+        openModal("modal-exercise-preview");
+      });
+    }
     card.querySelectorAll("[data-copy-text]").forEach(btn => {
       btn.addEventListener("click", () => {
         copyTextToClipboard(btn.getAttribute("data-copy-text")).then(() => {

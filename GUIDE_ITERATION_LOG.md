@@ -39,3 +39,4 @@
 - El simulador ya no tiene casillas: la pestaña «🔎 Qué fijarte en el resultado» muestra los criterios y cómo comprobarlos.
 - El avance a medias se guarda por índice del criterio, así que los grupos no alteran lo ya marcado.
 - Funciones nuevas con pruebas: `buildCriterionFixPrompt` y `groupCanvasCriteria`.
+- Vista de referencia en ventana emergente: el dibujo espera en un `<template>` y solo se pinta en el diálogo `#modal-exercise-preview` cuando el aprendiz pulsa «🖼️ Ver la vista de referencia». Se cierra con ✕, con Esc o con un clic fuera, y el foco vuelve al botón.

@@ -2974,14 +2974,15 @@ function buildCanvasExerciseHtml(exercise, index, mode) {
             <div class="canvas-criteria-tools">
               <button type="button" class="canvas-mode-pager-btn is-primary" data-check-all>✓ Todo cumple</button>
               <button type="button" class="canvas-exercise-reset" data-exercise-reset>↺ Reiniciar</button>
+              <button type="button" class="canvas-preview-open" data-open-preview aria-haspopup="dialog">🖼️ Ver la vista de referencia</button>
             </div>
-            <details class="canvas-aside canvas-exercise-preview-wrap">
-              <summary>🖼️ Compara con la vista de referencia</summary>
+            <!-- La vista de referencia espera en una plantilla: no ocupa espacio hasta abrirla en la ventana emergente. -->
+            <template class="canvas-exercise-preview-template">
               <figure class="canvas-exercise-preview">
                 ${exercise.previewSvg}
-                <figcaption>Vista de referencia del resultado, dibujada con los mismos datos del ejercicio.</figcaption>
+                <figcaption>Vista de referencia del resultado, dibujada con los mismos datos del ejercicio. Compárala con tu Canvas: las cifras deben coincidir; el diseño puede variar.</figcaption>
               </figure>
-            </details>
+            </template>
           </section>
           ${buildCanvasReferenceHtml(exercise.reference)}
           <details class="canvas-aside canvas-exercise-stretch">

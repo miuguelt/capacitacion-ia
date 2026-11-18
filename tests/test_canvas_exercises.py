@@ -316,3 +316,15 @@ def test_simulator_example_is_observed_not_verified():
     assert 'checklist.querySelectorAll(".canvas-exercise-check")' not in app, "el ejemplo del simulador ya no tiene casillas"
     for handler in ["[data-check-fail]", "[data-check-all]", "[data-copy-text]", "orderedExerciseChecks("]:
         assert handler in app, f"app.js debe manejar {handler}"
+
+
+def test_exercise_preview_opens_in_accessible_dialog():
+    html = _html()
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    start = html.index('id="modal-exercise-preview"')
+    dialog = html[html.rindex("<div", 0, start):html.index("<!-- fin: vista de referencia -->", start)]
+    assert 'role="dialog"' in dialog and 'aria-modal="true"' in dialog and "hidden" in dialog
+    assert 'aria-labelledby="exercise-preview-title"' in dialog
+    assert 'id="exercise-preview-body"' in html and 'id="exercise-preview-title"' in html
+    assert 'class="canvas-modal-close"' in dialog, "la ventana se cierra con ✕, con Esc o con un clic fuera"
+    assert '[data-open-preview]' in app and 'openModal("modal-exercise-preview")' in app
