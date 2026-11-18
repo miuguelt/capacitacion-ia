@@ -96,8 +96,7 @@ const {
   SPECIALIZED_MODE_LABS,
   getSpecializedLabForMode,
   IMMERSIVE_FOCUS_MODES,
-  resolveImmersiveFocus,
-  computeLearnerGuideState
+  resolveImmersiveFocus
 } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
 
 test("modeExerciseProgress calcula completados, total y siguiente pendiente por modo", () => {
@@ -159,148 +158,6 @@ test("resolveImmersiveFocus conmuta automáticamente la vista cuando el aprendiz
   assert.equal(resolveImmersiveFocus("exercises", "otro"), "exercises");
 });
 
-test("computeLearnerGuideState orienta las 4 fases del aprendizaje (explorar, iterar, verificar y avanzar)", () => {
-  // Caso 0: sin parámetros o sin ejercicio
-  const emptyState = computeLearnerGuideState(null);
-  assert.equal(emptyState.phase, "1-explore");
-  assert.equal(emptyState.phaseNumber, 1);
-  assert.equal(emptyState.ctaAction, "go-exercises");
-  assert.equal(emptyState.labInfo, null);
-
-  // Fase 1: Inicio de ejercicio (0 pasos y 0 criterios marcados)
-  const phase1 = computeLearnerGuideState({
-    mode: "doc-editorial",
-    modeName: "1. Redacción & Documentos",
-    exerciseIndex: 0,
-    exercise: { code: "1A", title: "Informe ejecutivo" },
-    stepsDone: 0,
-    stepsTotal: 4,
-    checksDone: 0,
-    checksTotal: 5,
-    modeStats: { done: 0, total: 3 },
-    nextStep: { mode: "doc-editorial", exercise: 1, id: "d-b" }
-  });
-  assert.equal(phase1.phase, "1-explore");
-  assert.equal(phase1.phaseNumber, 1);
-  assert.equal(phase1.totalPhases, 4);
-  assert.match(phase1.headline, /1A/);
-  assert.equal(phase1.ctaAction, "copy-prompt");
-
-  // Fase 2: Iterando pasos en Canvas (algunos pasos hechos, pero no todos)
-  const phase2 = computeLearnerGuideState({
-    mode: "multimodal-vision",
-    modeName: "11. Visión Multimodal",
-    exerciseIndex: 0,
-    exercise: { code: "11A", title: "Boceto de formulario" },
-    stepsDone: 2,
-    stepsTotal: 4,
-    checksDone: 1,
-    checksTotal: 4,
-    modeStats: { done: 0, total: 3 },
-    nextStep: { mode: "multimodal-vision", exercise: 1, id: "mm-b" }
-  });
-  assert.equal(phase2.phase, "2-iterate");
-  assert.equal(phase2.phaseNumber, 2);
-  assert.match(phase2.headline, /Paso 3 de 4/);
-  assert.equal(phase2.ctaAction, "focus-steps");
-  assert.ok(phase2.labInfo);
-  assert.equal(phase2.labInfo.labId, "multimodal-simulator-module");
-
-  // Fase 3: Todos los pasos completados, faltan criterios de verificación
-  const phase3 = computeLearnerGuideState({
-    mode: "code-prototyping",
-    modeName: "2. Código & Web en Vivo",
-    exerciseIndex: 1,
-    exercise: { code: "2B", title: "Tablero web" },
-    stepsDone: 4,
-    stepsTotal: 4,
-    checksDone: 2,
-    checksTotal: 4,
-    modeStats: { done: 1, total: 3 },
-    nextStep: { mode: "code-prototyping", exercise: 2, id: "c-c" }
-  });
-  assert.equal(phase3.phase, "3-verify");
-  assert.equal(phase3.phaseNumber, 3);
-  assert.match(phase3.headline, /2\/4/);
-  assert.equal(phase3.ctaAction, "focus-checks");
-
-  // Fase 4a: Ejercicio completado, siguiente ejercicio es del mismo modo
-  const phase4SameMode = computeLearnerGuideState({
-    mode: "doc-editorial",
-    modeName: "1. Redacción & Documentos",
-    exerciseIndex: 0,
-    exercise: { code: "1A", title: "Informe ejecutivo" },
-    stepsDone: 4,
-    stepsTotal: 4,
-    checksDone: 4,
-    checksTotal: 4,
-    modeStats: { done: 1, total: 3 },
-    nextStep: { mode: "doc-editorial", exercise: 1, id: "d-b" }
-  });
-  assert.equal(phase4SameMode.phase, "4-advance");
-  assert.equal(phase4SameMode.phaseNumber, 4);
-  assert.equal(phase4SameMode.ctaAction, "next-exercise");
-  assert.match(phase4SameMode.ctaLabel, /Parte B/);
-
-  // Fase 4b: Ejercicio completado, siguiente ejercicio cambia de modo
-  const phase4NewMode = computeLearnerGuideState({
-    mode: "doc-editorial",
-    modeName: "1. Redacción & Documentos",
-    exerciseIndex: 2,
-    exercise: { code: "1C", title: "Recorrido interfaz" },
-    stepsDone: 4,
-    stepsTotal: 4,
-    checksDone: 4,
-    checksTotal: 4,
-    modeStats: { done: 3, total: 3 },
-    nextStep: { mode: "code-prototyping", exercise: 0, id: "c-a" }
-  });
-  assert.equal(phase4NewMode.phase, "4-advance");
-  assert.equal(phase4NewMode.ctaAction, "next-mode");
-  assert.match(phase4NewMode.ctaLabel, /Siguiente modo/);
-
-  // Fase 4c: Último ejercicio completado (nextStep es null) y ramas fallback de índice/título
-  const phase4CourseDone = computeLearnerGuideState({
-    mode: "gem-studio",
-    modeName: "12. Gems para Canvas",
-    exerciseIndex: 5,
-    exercise: {},
-    stepsDone: 4,
-    stepsTotal: 4,
-    checksDone: 4,
-    checksTotal: 4,
-    modeStats: { done: 2, total: 2 },
-    nextStep: null
-  });
-  assert.equal(phase4CourseDone.phase, "4-advance");
-  assert.equal(phase4CourseDone.ctaAction, "open-projects-hub");
-  assert.match(phase4CourseDone.ctaLabel, /Hub de Proyectos/);
-
-  // Fase 4a con índice fuera de ABC en nextStep y Fase 2 iniciada solo con checksDone > 0
-  const phase4FallbackLetter = computeLearnerGuideState({
-    mode: "doc-editorial",
-    exerciseIndex: 0,
-    exercise: { code: "1A", title: "Informe" },
-    stepsDone: 0,
-    stepsTotal: 4,
-    checksDone: 4,
-    checksTotal: 4,
-    nextStep: { mode: "doc-editorial", exercise: 9 }
-  });
-  assert.match(phase4FallbackLetter.ctaLabel, /Parte B/);
-
-  const phase2OnlyChecks = computeLearnerGuideState({
-    mode: "doc-editorial",
-    exerciseIndex: 0,
-    exercise: { code: "1A", title: "Informe" },
-    stepsDone: 0,
-    stepsTotal: 4,
-    checksDone: 1,
-    checksTotal: 4
-  });
-  assert.equal(phase2OnlyChecks.phase, "2-iterate");
-});
-
 // --- Recorrido guiado: selector desplegable de los ejercicios y progreso global ---
 const { buildJourneyGroups, journeyRemaining, parseJourneyValue } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
 const JOURNEY_BANK = {
@@ -344,11 +201,58 @@ test("parseJourneyValue acepta opciones válidas y rechaza las inválidas o vac�
   assert.equal(parseJourneyValue(undefined, seq), null);
 });
 
-test("computeLearnerGuideState expone la letra y el código del ejercicio", () => {
-  const withEx = computeLearnerGuideState({ exerciseIndex: 1, exercise: { code: "1B", title: "Propuesta" } });
-  assert.equal(withEx.letter, "B");
-  assert.equal(withEx.exerciseCode, "1B");
-  const empty = computeLearnerGuideState(null);
-  assert.equal(empty.letter, "A");
-  assert.equal(empty.exerciseCode, "1A");
+// --- Barra fija del recorrido: estaciones del modo actual y cierre de cada modo ---
+const { buildModeStations, buildModeWrapUp } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
+
+test("buildModeStations arma el ejemplo y las partes del modo con su estado", () => {
+  const onExample = buildModeStations("doc-editorial", JOURNEY_BANK, ["d-b"], "simulator", 0);
+  assert.equal(onExample.length, 3, "ejemplo más dos partes");
+  assert.deepEqual(onExample[0], { key: "example", label: "Ejemplo", done: false, active: true });
+  assert.deepEqual(onExample[1], { key: 0, label: "Parte A", code: "1A", title: "Informe", done: false, active: false });
+  assert.deepEqual(onExample[2], { key: 1, label: "Parte B", code: "1B", title: "Propuesta", done: true, active: false });
+
+  const onPartB = buildModeStations("doc-editorial", JOURNEY_BANK, [], "exercises", 1);
+  assert.equal(onPartB[0].active, false, "el ejemplo deja de estar activo");
+  assert.equal(onPartB[1].active, false);
+  assert.equal(onPartB[2].active, true, "la parte B queda activa");
+  assert.ok(onPartB.every(s => s.done === false), "sin avance no hay partes completas");
+  const noStore = buildModeStations("doc-editorial", JOURNEY_BANK, undefined, "exercises", 0);
+  assert.ok(noStore.every(s => s.done === false), "sin almacenamiento todas las partes quedan pendientes");
+});
+
+test("buildModeStations devuelve una lista vacía con modo inexistente o banco vacío", () => {
+  assert.deepEqual(buildModeStations("otro", JOURNEY_BANK, [], "exercises", 0), []);
+  assert.deepEqual(buildModeStations("doc-editorial", null, null, "exercises", 0), []);
+  assert.deepEqual(buildModeStations("doc-editorial", { "doc-editorial": [] }, [], "simulator", 0), []);
+});
+
+test("buildModeWrapUp indica si sigue otra parte, el modo siguiente o el final", () => {
+  const seq = listExerciseSequence(JOURNEY_MODES, JOURNEY_BANK);
+  const nextPart = buildModeWrapUp(seq, "doc-editorial", 0, ["d-a"]);
+  assert.equal(nextPart.kind, "next-part");
+  assert.deepEqual(nextPart.next, { mode: "doc-editorial", exercise: 1, id: "d-b" });
+  assert.deepEqual(nextPart.remaining, { done: 1, total: 3, pending: 2, pendingModes: 2 });
+
+  const nextMode = buildModeWrapUp(seq, "doc-editorial", 1, []);
+  assert.equal(nextMode.kind, "next-mode");
+  assert.deepEqual(nextMode.next, { mode: "code-prototyping", exercise: 0, id: "c-a" });
+
+  const finished = buildModeWrapUp(seq, "code-prototyping", 0, ["d-a", "d-b", "c-a"]);
+  assert.equal(finished.kind, "finished");
+  assert.equal(finished.next, null);
+  assert.equal(finished.remaining.pending, 0);
+});
+
+test("buildModeWrapUp devuelve null si el ejercicio no existe o no hay secuencia", () => {
+  const seq = listExerciseSequence(JOURNEY_MODES, JOURNEY_BANK);
+  assert.equal(buildModeWrapUp(seq, "doc-editorial", 7, []), null);
+  assert.equal(buildModeWrapUp(null, "doc-editorial", 0, []), null);
+});
+
+test("stationAtScroll marca los ejercicios cuando su borde superior pasa del 40 % de la ventana", () => {
+  const { stationAtScroll } = require(path.join(__dirname, "..", "js", "canvas-nav.js"));
+  assert.equal(stationAtScroll(900, 800), "simulator", "los ejercicios aún están abajo");
+  assert.equal(stationAtScroll(320, 800), "exercises", "justo en el límite del 40 %");
+  assert.equal(stationAtScroll(321, 800), "simulator");
+  assert.equal(stationAtScroll(-1500, 800), "exercises", "ya se bajó dentro de los ejercicios");
 });

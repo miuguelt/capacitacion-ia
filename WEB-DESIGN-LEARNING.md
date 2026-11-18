@@ -6,3 +6,5 @@
 - **Espejos `src/`.** Cada archivo fuente tiene réplicas en `src/`; `scripts/verify-mirror-sync.py` comprueba la paridad SHA-256 y debe incluir todo módulo nuevo.
 - **Impresión acotada.** El kit de bolsillo se imprime activando la clase `printing-kit` solo durante la impresión, sin afectar la impresión del resto del portal.
 - **Escapado obligatorio.** Todo texto insertado con `innerHTML` pasa por una función de escapado probada.
+- **Una sola barra de orientación fija.** Una barra fija que muestra secciones («Fundamentos», «Laboratorios») no orienta: el aprendiz necesita ver el modo y la parte en que está. Lo que no es un paso del recorrido va plegado al final, para que la lectura de arriba abajo siga el ciclo ejemplo → ejercicios → modo siguiente.
+- **Paso activo por posición, no por proporción visible.** Con secciones más altas que la ventana, `IntersectionObserver` con umbrales de proporción casi nunca se dispara; comparar el borde superior de los ejercicios con el 40 % de la ventana (`stationAtScroll`) es determinista y fácil de probar.

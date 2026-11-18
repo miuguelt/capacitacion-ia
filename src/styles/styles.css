@@ -875,63 +875,6 @@ body.instructor-mode .instructor-guide-card {
 }
 
 /* --- Componente de Navegación Rápida Interna (Quick-Nav) --- */
-.canvas-quick-nav {
-  position: sticky;
-  top: 4.75rem;
-  z-index: 40;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.65rem 1rem;
-  margin: 1.25rem 0 1.5rem 0;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(8px);
-  inline-size: 100%;
-  box-sizing: border-box;
-}
-
-.canvas-quick-nav .quick-nav-title {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.canvas-quick-nav .quick-nav-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.quick-nav-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-.quick-nav-pill:hover,
-.quick-nav-pill.active {
-  color: var(--color-primary-dark);
-  background: var(--color-primary-subtle);
-  border-color: var(--color-primary-light);
-}
-
-.canvas-section-anchor {
-  scroll-margin-top: 9rem;
-}
 
 /* Guion del facilitador colapsable */
 .canvas-instructor-collapsible {
@@ -960,92 +903,8 @@ body.instructor-mode .instructor-guide-card {
 }
 
 /* Barra de Filtros por Categoría Funcional */
-.canvas-category-filter-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  padding: 0.6rem 0.85rem;
-  background: var(--bg-subtle);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-light);
-}
-
-.canvas-category-filter-bar .filter-label {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.filter-pills-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.category-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.category-pill:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary-light);
-}
-
-.category-pill.active {
-  background: var(--color-primary);
-  color: #ffffff;
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
-}
 
 /* Banner de Laboratorios Avanzados */
-.canvas-advanced-labs-banner {
-  margin: 2.25rem 0 1rem 0;
-  padding: 1.25rem 1.5rem;
-  background: linear-gradient(135deg, var(--color-primary-subtle) 0%, var(--bg-surface) 100%);
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-primary);
-  border-top: 1px solid var(--border-light);
-  border-right: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-}
-
-.canvas-advanced-labs-banner .labs-tag {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-primary-dark);
-  margin-bottom: 0.35rem;
-}
-
-.canvas-advanced-labs-banner h3 {
-  margin: 0 0 0.4rem 0;
-  font-size: 1.25rem;
-  color: var(--text-main);
-}
-
-.canvas-advanced-labs-banner p {
-  margin: 0;
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  line-height: 1.55;
-}
 
 /* Tab bar para las 12 posibilidades */
 .canvas-tab-bar {
@@ -1790,49 +1649,14 @@ body.instructor-mode .instructor-guide-card {
 }
 
 #gemini-canvas.is-immersive > .hero-card,
-#gemini-canvas.is-immersive > .canvas-quick-nav,
 #gemini-canvas.is-immersive > #canvas-fundamentals-anchor,
-#gemini-canvas.is-immersive > #canvas-coverage-module {
+#gemini-canvas.is-immersive > #canvas-resources {
   display: none !important;
 }
 
 /* Enfoque limpio en Modo Inmersivo: ocultar barras y encabezados redundantes por defecto */
-.immersive-mode-select {
-  display: none;
-  padding: 0.3rem 0.65rem;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--text-main);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
 
-#gemini-canvas.is-immersive .immersive-mode-select {
-  display: inline-block;
-}
-
-#gemini-canvas.is-immersive #immersive-hud-title {
-  display: none;
-}
-
-#gemini-canvas:not(.is-immersive) #btn-immersive-toggle-tools {
-  display: none;
-}
-
-#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module > div:first-child,
-#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-calibration-toolbar,
-#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module .canvas-category-filter-bar,
-#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module .canvas-tab-bar,
-#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module .canvas-split-toolbar {
-  display: none !important;
-}
-
-#gemini-canvas.is-immersive #canvas-exercises-module .canvas-exercises-intro,
-#gemini-canvas.is-immersive #canvas-exercises-module #btn-toggle-exercises-fullscreen,
-#gemini-canvas.is-immersive #canvas-exercises-module .canvas-exercises-notice,
-#gemini-canvas.is-immersive #canvas-exercises-module #canvas-exercise-index {
+#gemini-canvas.is-immersive #canvas-exercises-module .canvas-exercises-notice {
   display: none !important;
 }
 
@@ -1869,13 +1693,11 @@ body.instructor-mode .instructor-guide-card {
 }
 
 /* Disposiciones de enfoque en la ruta guiada e inmersiva */
-#gemini-canvas[data-immersive-focus="simulator"] #canvas-exercises-module,
-#gemini-canvas[data-immersive-focus="simulator"] #canvas-advanced-labs-anchor {
+#gemini-canvas[data-immersive-focus="simulator"] #canvas-exercises-module {
   display: none !important;
 }
 
-#gemini-canvas[data-immersive-focus="exercises"] #canvas-simulator-module,
-#gemini-canvas[data-immersive-focus="exercises"] #canvas-advanced-labs-anchor {
+#gemini-canvas[data-immersive-focus="exercises"] #canvas-simulator-module {
   display: none !important;
 }
 
@@ -1894,167 +1716,6 @@ body.instructor-mode .instructor-guide-card {
 }
 
 /* Barra de Ruta Guiada e Inmersiva y Brújula del Aprendiz */
-.canvas-immersive-hud {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-left: 4px solid var(--color-primary);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 1.15rem;
-  margin-bottom: 1.25rem;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  box-sizing: border-box;
-  inline-size: 100%;
-  min-inline-size: 0;
-}
-
-#gemini-canvas.is-immersive .canvas-immersive-hud {
-  position: sticky;
-  top: 0;
-  z-index: 1520;
-  box-shadow: var(--shadow-md);
-}
-
-.canvas-immersive-hud-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.immersive-hud-status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  min-inline-size: 0;
-}
-
-.immersive-hud-badge {
-  display: inline-flex;
-  align-items: center;
-  background: var(--color-primary);
-  color: #ffffff;
-  font-size: 0.74rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-}
-
-.immersive-hud-progress {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  padding: 0.18rem 0.55rem;
-  border-radius: 999px;
-}
-
-.immersive-stations-bar,
-.immersive-focus-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.guided-station-btn,
-.immersive-focus-btn {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  color: var(--text-main);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.38rem 0.75rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: var(--transition);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.guided-station-btn:hover,
-.immersive-focus-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.guided-station-btn.is-active,
-.immersive-focus-btn.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #ffffff;
-}
-
-.guided-station-btn[hidden] {
-  display: none !important;
-}
-
-.guided-station-pill {
-  background: rgba(255, 255, 255, 0.22);
-  padding: 0.1rem 0.45rem;
-  border-radius: 999px;
-  font-size: 0.72rem;
-}
-
-.guided-station-btn:not(.is-active) .guided-station-pill {
-  background: var(--color-primary-subtle);
-  color: var(--color-primary-dark);
-}
-
-.canvas-learner-compass {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.65rem 0.9rem;
-  border-radius: var(--radius-sm);
-  background: var(--color-primary-subtle);
-  border: 1px solid var(--color-primary-light);
-}
-
-.compass-copy {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-  flex: 1 1 22rem;
-  min-inline-size: 0;
-}
-
-.compass-phase-pill {
-  display: inline-flex;
-  align-items: center;
-  background: var(--color-primary-dark);
-  color: #ffffff;
-  font-size: 0.73rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  flex-shrink: 0;
-}
-
-.compass-headline {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-main);
-  flex: 1 1 16rem;
-  min-inline-size: 0;
-}
-
-.compass-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-}
 
 /* Controles de Calibración en Vivo, Variaciones en 1 Clic y Transformaciones de Canvas */
 .sim-variation-actions {
@@ -3547,71 +3208,6 @@ body.instructor-mode .instructor-guide-card {
 }
 
 /* Índice de los ejercicios con enlaces directos */
-.canvas-exercise-index {
-  margin: 0 0 1rem;
-  padding: 0.75rem 1rem;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-}
-
-.canvas-exercise-index summary {
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.canvas-exercise-index-count {
-  font-weight: 500;
-  color: var(--text-muted);
-}
-
-.canvas-exercise-index-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
-  gap: 0.75rem 1.25rem;
-  list-style: none;
-  padding: 0;
-  margin: 0.75rem 0 0;
-}
-
-.canvas-exercise-index-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0.25rem 0 0;
-}
-
-.canvas-index-mode {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-.canvas-exercise-index-list a {
-  display: block;
-  padding: 0.3rem 0.4rem;
-  font-size: 0.85rem;
-  color: var(--text-main);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-}
-
-.canvas-exercise-index-list a:hover,
-.canvas-exercise-index-list a:focus-visible {
-  background: var(--color-primary-subtle);
-  text-decoration: underline;
-}
-
-.canvas-exercise-index-list a[aria-current="true"] {
-  font-weight: 700;
-  color: var(--color-primary-dark);
-  background: var(--color-primary-subtle);
-}
-
-.canvas-index-done {
-  color: var(--color-primary);
-  font-weight: 700;
-}
 
 /* Anterior y siguiente entre modos */
 .canvas-mode-pager {
@@ -3654,85 +3250,6 @@ body.instructor-mode .instructor-guide-card {
   background: var(--color-primary);
 }
 
-.canvas-exercise-position {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
-  margin: 0.75rem 0;
-  padding: 0.75rem 1rem;
-  background: var(--color-primary-subtle);
-  border-radius: var(--radius-sm);
-}
-
-.canvas-exercise-position-label {
-  font-weight: 700;
-  color: var(--color-primary-dark);
-}
-
-.canvas-exercise-position-track {
-  flex: 1 1 8rem;
-  min-inline-size: 0;
-  height: 0.5rem;
-  background: var(--bg-surface);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.canvas-exercise-position-bar {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: var(--color-primary);
-  transition: width 0.3s ease;
-}
-
-.canvas-exercise-position-done {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-}
-
-.canvas-exercise-done {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-primary-light);
-  border-radius: var(--radius-sm);
-  background: var(--color-primary-subtle);
-}
-
-.canvas-exercise-done[hidden] {
-  display: none;
-}
-
-.canvas-exercise-done p {
-  margin: 0;
-}
-
-.quick-nav-continue {
-  min-height: 36px;
-  padding: 0.35rem 0.9rem;
-  font: inherit;
-  font-weight: 700;
-  color: var(--bg-surface);
-  background: var(--color-primary-dark);
-  border: 1px solid var(--color-primary-dark);
-  border-radius: 999px;
-  cursor: pointer;
-}
-
-.quick-nav-continue:hover {
-  background: var(--color-primary);
-}
-
-.quick-nav-continue[hidden] {
-  display: none;
-}
-
 .canvas-tab-progress.is-complete::before {
   content: "✓ ";
 }
@@ -3745,15 +3262,13 @@ body.instructor-mode .instructor-guide-card {
 
 /* En pantallas angostas la navegación del módulo ocupa varias líneas: deja de ser fija para no tapar el contenido */
 @media (max-width: 767px) {
-  .topbar,
-  .canvas-quick-nav {
+  .topbar {
     position: static;
   }
 
   #canvas-simulator-module,
   #canvas-exercises-module,
   .canvas-exercise-card,
-  .canvas-section-anchor,
   .canvas-zone-section {
     scroll-margin-top: 5rem;
   }
@@ -3998,7 +3513,6 @@ body.instructor-mode .instructor-guide-card {
    Subnavegación con Progreso, Insignias de Lugar y Matriz de Cobertura 100 %
    ========================================================================== */
 
-.quick-nav-count,
 .canvas-tab-progress {
   display: inline-flex;
   align-items: center;
@@ -4013,7 +3527,6 @@ body.instructor-mode .instructor-guide-card {
   line-height: 1.2;
 }
 
-.quick-nav-pill.active .quick-nav-count,
 .canvas-tab.active .canvas-tab-progress {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.35);
@@ -4030,27 +3543,6 @@ body.instructor-mode .instructor-guide-card {
   background: #14532d;
   border-color: #22c55e;
   color: #bbf7d0;
-}
-
-@media (max-width: 767px) {
-  .canvas-quick-nav .quick-nav-title {
-    display: none;
-  }
-
-  .canvas-quick-nav .quick-nav-links {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 0.25rem;
-    inline-size: 100%;
-    max-inline-size: 100%;
-  }
-
-  .canvas-quick-nav .quick-nav-pill {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-    white-space: nowrap; /* text-layout-exception: píldoras de navegación rápida en carrusel horizontal táctil en pantallas estrechas */
-  }
 }
 
 .canvas-exercise-head-top {
@@ -5674,65 +5166,7 @@ body.instructor-mode .instructor-guide-card {
   padding-inline-start: 0.75rem;
 }
 
-/* --- Recorrido guiado de Gemini Canvas: barra fija, progreso y bloques plegables --- */
-.canvas-journey-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.canvas-journey-bar .immersive-mode-select {
-  display: inline-block;
-  inline-size: auto;
-  max-inline-size: 100%;
-  min-inline-size: min(100%, 18rem);
-  flex: 1 1 18rem;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.55rem;
-}
-
-.canvas-journey-bar .immersive-hud-status {
-  flex: 1 1 26rem;
-}
-
-.canvas-journey-pager {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.canvas-journey-pager .canvas-mode-pager-btn[disabled] {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.canvas-journey-progress-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.canvas-journey-progress {
-  flex: 1 1 12rem;
-  inline-size: 100%;
-  block-size: 0.6rem;
-  accent-color: var(--color-primary);
-}
-
-.canvas-journey-arrow {
-  color: var(--text-muted);
-  font-weight: 700;
-}
-
-.canvas-journey-remaining {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--text-main);
-  text-align: start;
-}
-
+/* --- Bloques plegables de información secundaria en Gemini Canvas --- */
 details.canvas-aside {
   border: 1px dashed var(--border-light);
   border-radius: var(--radius-sm);
@@ -5764,10 +5198,6 @@ details.canvas-aside[open] > summary {
   margin-block-end: 0.6rem;
 }
 
-.canvas-view-options .immersive-focus-toolbar {
-  margin-block-start: 0.4rem;
-}
-
 .copy-btn.is-copied,
 .canvas-exercise-copy.is-copied,
 .canvas-mode-pager-btn.is-copied {
@@ -5776,6 +5206,483 @@ details.canvas-aside[open] > summary {
   color: #ffffff;
 }
 
-#gemini-canvas.is-immersive:not(.show-immersive-tools) #canvas-simulator-module details.canvas-aside {
+/* --- Recorrido de Gemini Canvas: barra fija, menú de modos, pasos del modo y cierre --- */
+.canvas-tab-bar[hidden],
+details.canvas-mode-lab[hidden] {
   display: none !important;
+}
+
+.canvas-journey-bar {
+  position: sticky;
+  top: 4.75rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  margin-block: 1rem 1.25rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-inline-start: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+#gemini-canvas.is-immersive .canvas-journey-bar {
+  top: 0;
+}
+
+.canvas-journey-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+/* El modo actual ocupa la primera línea; los pasos y los botones comparten la segunda. */
+.canvas-mode-menu {
+  flex: 1 1 100%;
+  min-inline-size: 0;
+}
+
+.canvas-journey-row > .canvas-journey-pager {
+  margin-inline-start: auto;
+}
+
+.canvas-mode-menu-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.1rem 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+}
+
+.canvas-mode-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+.canvas-mode-menu-summary:hover,
+.canvas-mode-menu-summary:focus-visible,
+.canvas-mode-menu[open] > .canvas-mode-menu-summary {
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.canvas-journey-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.canvas-journey-where {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.canvas-mode-menu-cta {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.canvas-mode-menu-panel {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 45;
+  max-block-size: min(70vh, 40rem);
+  overflow-y: auto;
+  padding: 0.9rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  box-sizing: border-box;
+}
+
+.canvas-mode-menu-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-block-end: 0.75rem;
+}
+
+.canvas-mode-menu-head p {
+  margin: 0;
+  flex: 1 1 18rem;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  text-align: start;
+}
+
+.canvas-mode-menu-head .canvas-mode-pager-btn[hidden] {
+  display: none;
+}
+
+.canvas-mode-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.canvas-mode-menu-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem 0.5rem;
+  align-items: start;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+}
+
+.canvas-mode-menu-item.is-current {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-subtle);
+}
+
+.canvas-mode-menu-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.canvas-mode-menu-here {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.canvas-mode-menu-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+.canvas-mode-menu-item.is-complete .canvas-mode-menu-count {
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.canvas-mode-menu-parts {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.canvas-mode-menu-part {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 2.5rem;
+  min-block-size: 2.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-decoration: none;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  box-sizing: border-box;
+}
+
+.canvas-mode-menu-part:hover,
+.canvas-mode-menu-part:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.canvas-mode-menu-part.is-done {
+  border-color: var(--color-primary-light);
+  background: var(--color-primary-subtle);
+}
+
+.canvas-mode-menu-part[aria-current="step"] {
+  color: #ffffff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.canvas-mode-stations {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.canvas-station-arrow {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.canvas-station-btn {
+  min-block-size: 2.25rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.canvas-station-btn:hover,
+.canvas-station-btn:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.canvas-station-btn.is-done {
+  border-color: var(--color-primary-light);
+  background: var(--color-primary-subtle);
+}
+
+.canvas-station-btn.is-active {
+  color: #ffffff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.canvas-journey-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.canvas-journey-pager .canvas-mode-pager-btn,
+.canvas-journey-pager .btn-canvas-fullscreen {
+  min-block-size: 2.25rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.canvas-journey-pager .canvas-mode-pager-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.canvas-journey-progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+}
+
+.canvas-journey-progress {
+  flex: 1 1 10rem;
+  inline-size: 100%;
+  block-size: 0.5rem;
+  accent-color: var(--color-primary);
+}
+
+.canvas-journey-remaining {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: start;
+}
+
+/* Espacio de trabajo del modo: un marco con los pasos ① y ② en orden */
+.canvas-mode-workspace {
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border: 2px solid var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-subtle);
+}
+
+.canvas-workspace-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-block-end: 1rem;
+}
+
+.canvas-workspace-head h3 {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  color: var(--text-main);
+}
+
+.canvas-workspace-cycle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.canvas-workspace-cycle li {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+}
+
+.canvas-mode-workspace > .canvas-workspace-step {
+  margin-block-end: 1.25rem;
+}
+
+.canvas-step-head {
+  margin-block-end: 0.75rem;
+}
+
+.tool-container h3.canvas-step-title {
+  display: block;
+  margin: 0;
+}
+
+.canvas-step-title > span {
+  display: inline;
+}
+
+.canvas-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: 0.25rem;
+  color: var(--color-primary);
+}
+
+.canvas-step-hint {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-align: start;
+}
+
+#canvas-simulator-module,
+#canvas-exercises-module,
+.canvas-exercise-card,
+#canvas-mode-workspace {
+  scroll-margin-top: 11rem;
+}
+
+/* Laboratorio extra del modo (11 y 12) dentro del paso ② */
+details.canvas-mode-lab > .tool-container {
+  margin: 0.5rem 0 0;
+  box-shadow: none;
+}
+
+/* ③ Qué sigue después del ejercicio */
+.canvas-mode-wrapup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-block-start: 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 2px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.canvas-mode-wrapup:empty {
+  display: none;
+}
+
+.canvas-mode-wrapup-copy {
+  flex: 1 1 20rem;
+  min-inline-size: 0;
+}
+
+.canvas-mode-wrapup-title {
+  margin: 0 0 0.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  text-align: start;
+}
+
+.canvas-mode-wrapup-text {
+  margin: 0;
+  color: var(--text-muted);
+  text-align: start;
+}
+
+.canvas-mode-wrapup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.canvas-mode-wrapup-actions a.canvas-mode-pager-btn {
+  text-decoration: none;
+}
+
+/* Recursos complementarios: al final y fuera del recorrido */
+.canvas-resources {
+  margin-block-start: 1.5rem;
+}
+
+.canvas-resources-links {
+  margin: 0 0 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .canvas-journey-bar {
+    top: 0;
+    padding: 0.5rem 0.6rem;
+    gap: 0.35rem;
+  }
+
+  .canvas-journey-pager,
+  .canvas-journey-remaining,
+  .canvas-station-arrow {
+    display: none;
+  }
+
+  /* text-layout-exception: rótulo compacto de la estación; el título y el aria-label conservan «Parte A», «Parte B» o «Parte C». */
+  .canvas-station-word {
+    display: none;
+  }
+
+  .canvas-mode-stations {
+    flex-wrap: nowrap;
+  }
+
+  .canvas-station-btn {
+    flex: 1 1 auto;
+    padding-inline: 0.5rem;
+  }
+
+  .canvas-journey-where {
+    font-size: 0.92rem;
+  }
+
+  #canvas-simulator-module,
+  #canvas-exercises-module,
+  .canvas-exercise-card,
+  #canvas-mode-workspace {
+    scroll-margin-top: 9rem;
+  }
 }

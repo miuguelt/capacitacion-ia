@@ -21,3 +21,12 @@
 - Claridad: títulos de 10 palabras o menos, `canvasFeature` con una sola función, `whyCanvas` y `outsideCanvas` sin repetir ideas, paso final único (`CANVAS_VERIFY_STEP`), retos sin relleno y sin la jerga «Visión Completa 360°».
 - Redacción del portal: se retiraron expresiones como «edición quirúrgica», «alta fidelidad», «canónico» y «en caliente».
 - Pruebas nuevas que vigilan esas reglas de redacción, el modo 13 y `canvasSlotBooking`; conteos del Hub de Proyectos actualizados a 43.
+
+## 2026-11-17 · Gemini Canvas: un recorrido por modo
+- Motivo: el aprendiz no sabía en qué modo estaba al bajar por la página, y el material que seguía a los ejercicios parecía un paso más del recorrido.
+- Barra fija `#canvas-journey-bar`: dice siempre «Modo N de 13 · nombre · Ejemplo o Parte», abre un menú con los 13 modos y sus 39 ejercicios, muestra los pasos del modo (Ejemplo, A, B y C) y el avance global. Reemplaza la navegación por secciones, la brújula, las estaciones y la barra de enfoque.
+- Espacio de trabajo `#canvas-mode-workspace`: ① ejemplo en el simulador, ② ejercicios del mismo modo y ③ qué sigue (otra parte, el ejemplo del modo siguiente o el cierre con enlace al Hub de proyectos).
+- Los laboratorios de visión multimodal y de Gems pasaron a su modo (11 y 12) como contenido opcional plegado; el mapa de las 28 funciones y la guía descargable quedaron en «Recursos complementarios», al final.
+- Se retiraron los filtros por área y las pestañas visibles de los 13 modos (siguen ocultas porque el simulador las usa).
+- Corrección: al completar un ejercicio, `writeCanvasCompleted` usaba una variable inexistente y cortaba la actualización del progreso.
+- Funciones nuevas con pruebas: `buildModeStations`, `buildModeWrapUp` y `stationAtScroll`; se retiró `computeLearnerGuideState`.

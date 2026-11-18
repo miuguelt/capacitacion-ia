@@ -121,124 +121,6 @@ function resolveImmersiveFocus(currentFocus, requestedSection) {
   return safeCurrent;
 }
 
-function computeLearnerGuideState(params) {
-  const p = params && typeof params === "object" ? params : {};
-  const mode = p.mode || "doc-editorial";
-  const modeName = p.modeName || "1. Redacción & Documentos";
-  const exIndex = Number.isInteger(p.exerciseIndex) ? p.exerciseIndex : 0;
-  const letter = ["A", "B", "C"][exIndex] || "A";
-  const ex = p.exercise && typeof p.exercise === "object" ? p.exercise : null;
-  const exCode = ex && ex.code ? ex.code : `${exIndex + 1}${letter}`;
-  const exTitle = ex && ex.title ? ex.title : `Parte ${letter}`;
-  const stepsDone = Math.max(0, Number(p.stepsDone) || 0);
-  const stepsTotal = Math.max(0, Number(p.stepsTotal) || 0);
-  const checksDone = Math.max(0, Number(p.checksDone) || 0);
-  const checksTotal = Math.max(0, Number(p.checksTotal) || 0);
-  const labInfo = getSpecializedLabForMode(mode);
-  const base = { letter, exerciseCode: exCode };
-
-  if (!ex) {
-    return {
-      ...base,
-      phase: "1-explore",
-      phaseNumber: 1,
-      totalPhases: 4,
-      headline: `Paso 1 de 4 · Explora el ejemplo resuelto de ${modeName} en el simulador.`,
-      hint: "Revisa el prompt CRTT+L y luego pasa a los ejercicios prácticos de este modo.",
-      ctaLabel: `🧪 Ir a Ejercicios Prácticos →`,
-      ctaAction: "go-exercises",
-      labInfo
-    };
-  }
-
-  // Fase 4: Ejercicio completado (todos los criterios verificados)
-  if (checksTotal > 0 && checksDone >= checksTotal) {
-    const nextStep = p.nextStep || null;
-    if (!nextStep) {
-      return {
-        ...base,
-        phase: "4-advance",
-        phaseNumber: 4,
-        totalPhases: 4,
-        headline: `🎉 ¡Felicitaciones! Completaste el ejercicio ${exCode} y finalizaste la ruta de Gemini Canvas.`,
-        hint: "Ahora puedes organizar y sustentar tus entregables en el Hub de Proyectos.",
-        ctaLabel: "🗂️ Abrir Hub de Proyectos →",
-        ctaAction: "open-projects-hub",
-        labInfo
-      };
-    }
-    if (isModeTransition(mode, nextStep.mode)) {
-      return {
-        ...base,
-        phase: "4-advance",
-        phaseNumber: 4,
-        totalPhases: 4,
-        headline: `✅ Ejercicio ${exCode} completado · Terminaste las prácticas de ${modeName}.`,
-        hint: "Avanza al siguiente modo para explorar primero su ejemplo resuelto en el simulador.",
-        ctaLabel: "🆕 Siguiente modo en el simulador →",
-        ctaAction: "next-mode",
-        labInfo
-      };
-    }
-    const nextLetter = ["A", "B", "C"][nextStep.exercise] || "B";
-    return {
-      ...base,
-      phase: "4-advance",
-      phaseNumber: 4,
-      totalPhases: 4,
-      headline: `✅ Ejercicio ${exCode} (${exTitle}) completado con todos sus criterios.`,
-      hint: `Continúa ahora con la Parte ${nextLetter} de este mismo modo para afianzar la habilidad.`,
-      ctaLabel: `➡️ Continuar con Parte ${nextLetter} →`,
-      ctaAction: "next-exercise",
-      labInfo
-    };
-  }
-
-  // Fase 3: Todos los pasos de iteración en Canvas marcados, falta verificar criterios
-  if (stepsTotal > 0 && stepsDone >= stepsTotal) {
-    return {
-      ...base,
-      phase: "3-verify",
-      phaseNumber: 3,
-      totalPhases: 4,
-      headline: `Paso 3 de 4 · Verifica tu resultado en el Ejercicio ${exCode} (${checksDone}/${checksTotal} criterios cumplidos).`,
-      hint: "Compara tu artefacto de Gemini Canvas con la vista de referencia y marca cada criterio cumplido.",
-      ctaLabel: "✅ Ir a la lista de verificación →",
-      ctaAction: "focus-checks",
-      labInfo
-    };
-  }
-
-  // Fase 2: Iteración en curso (al menos 1 paso marcado o al menos 1 criterio marcado)
-  if (stepsDone > 0 || checksDone > 0) {
-    const nextStepNum = Math.min(stepsTotal, stepsDone + 1);
-    return {
-      ...base,
-      phase: "2-iterate",
-      phaseNumber: 2,
-      totalPhases: 4,
-      headline: `Paso 2 de 4 · Ejercicio ${exCode}: Ejecuta el Paso ${nextStepNum} de ${stepsTotal} en Gemini Canvas.`,
-      hint: "Sigue la instrucción resaltada en comillas latinas («…») y marca la casilla del paso al realizarlo.",
-      ctaLabel: `🧭 Ir al Paso ${nextStepNum} de ${stepsTotal} →`,
-      ctaAction: "focus-steps",
-      labInfo
-    };
-  }
-
-  // Fase 1: Inicio del ejercicio
-  return {
-    ...base,
-    phase: "1-explore",
-    phaseNumber: 1,
-    totalPhases: 4,
-    headline: `Paso 1 de 4 · Ejercicio ${exCode} (${exTitle}): Revisa el ejemplo y copia el prompt CRTT+L.`,
-    hint: "Primero observa el resultado esperado en el simulador o copia el prompt del ejercicio para abrirlo en Gemini Canvas.",
-    ctaLabel: `📋 Copiar prompt de ${exCode} e iniciar →`,
-    ctaAction: "copy-prompt",
-    labInfo
-  };
-}
-
 // --- Recorrido guiado: selector de ejercicios agrupado por modo y progreso global ---
 function buildJourneyGroups(modes, names, bank, completedIds) {
   const done = new Set(Array.isArray(completedIds) ? completedIds : []);
@@ -274,12 +156,44 @@ function parseJourneyValue(value, seq) {
   return seq.find(step => step.mode === mode && step.exercise === exercise) || null;
 }
 
+// Estaciones del modo actual para la barra fija: el ejemplo del simulador y las partes del modo.
+function buildModeStations(mode, bank, completedIds, station, exerciseIndex) {
+  const source = bank && typeof bank === "object" ? bank : {};
+  const list = Array.isArray(source[mode]) ? source[mode] : [];
+  if (!list.length) return [];
+  const done = new Set(Array.isArray(completedIds) ? completedIds : []);
+  const onExample = station !== "exercises";
+  return [{ key: "example", label: "Ejemplo", done: false, active: onExample }].concat(list.map((ex, i) => ({
+    key: i,
+    label: `Parte ${String.fromCharCode(65 + i)}`,
+    code: ex.code,
+    title: ex.title,
+    done: done.has(ex.id),
+    active: !onExample && i === exerciseIndex
+  })));
+}
+
+// Paso en pantalla según dónde empiezan los ejercicios: si su borde superior ya pasó del 40 % de la ventana, el aprendiz está en ellos.
+function stationAtScroll(exercisesTop, viewportHeight) {
+  return Number(exercisesTop) <= Number(viewportHeight) * 0.4 ? "exercises" : "simulator";
+}
+
+// Qué sigue después del ejercicio actual: otra parte del mismo modo, el modo siguiente o el final del recorrido.
+function buildModeWrapUp(seq, mode, exercise, completedIds) {
+  const steps = Array.isArray(seq) ? seq : [];
+  if (findStep(steps, mode, exercise) < 0) return null;
+  const next = neighborExercise(steps, mode, exercise, 1);
+  const remaining = journeyRemaining(steps, completedIds);
+  if (!next) return { kind: "finished", next: null, remaining };
+  return { kind: next.mode === mode ? "next-part" : "next-mode", next, remaining };
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
-    buildJourneyGroups, journeyRemaining, parseJourneyValue,
+    buildJourneyGroups, journeyRemaining, parseJourneyValue, buildModeStations, buildModeWrapUp, stationAtScroll,
     parseCanvasRoute, buildCanvasRoute, neighborCanvasMode, listExerciseSequence,
     neighborExercise, firstPendingExercise, exercisePosition, serializeChecks, parseChecks,
     modeExerciseProgress, isModeTransition, SPECIALIZED_MODE_LABS, getSpecializedLabForMode,
-    IMMERSIVE_FOCUS_MODES, resolveImmersiveFocus, computeLearnerGuideState
+    IMMERSIVE_FOCUS_MODES, resolveImmersiveFocus
   };
 }

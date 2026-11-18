@@ -474,74 +474,10 @@ Notas tomadas por Julián:
             <span class="hero-tag">Espacio de Trabajo Interactivo · Todas las Posibilidades</span>
             <h2>🎨 Gemini Canvas Lab: documentos, apps y edición por partes</h2>
             <p>Canvas abre un panel junto al chat donde tú y Gemini trabajan sobre el mismo archivo. Allí puedes redactar documentos, ejecutar apps web, convertir un documento en página web, infografía, cuestionario, tarjetas de estudio o resumen en audio, y crear apps que guardan o comparten datos. Para cambiar una parte, la seleccionas y pides el ajuste sin reescribir todo.</p>
-            <div class="hero-stats">
-              <div class="stat-box">
-                <span class="stat-value">13 modos</span>
-                <span class="stat-desc">Posibilidades completas</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-value">Split View</span>
-                <span class="stat-desc">Chat + Lienzo interactivo</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-value">Gems</span>
-                <span class="stat-desc">Asistentes a medida</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-value">Multimodal</span>
-                <span class="stat-desc">Boceto a Canvas en vivo</span>
-              </div>
-            </div>
           </div>
 
-          <!-- Barra de Navegación Rápida Interna del Módulo -->
-          <nav class="canvas-quick-nav" aria-label="Navegación interna de Gemini Canvas Lab">
-            <span class="quick-nav-title">Navegación rápida del módulo:</span>
-            <div class="quick-nav-links">
-              <a href="#canvas-fundamentals-anchor" class="quick-nav-pill active" aria-current="true" data-canvas-section="canvas-fundamentals-anchor">
-                <span>📘</span> 1. Fundamentos &amp; Activación
-              </a>
-              <a href="#canvas-simulator-module" class="quick-nav-pill" data-canvas-section="canvas-simulator-module">
-                <span>🖥️</span> 2. Simulador de 13 modos
-              </a>
-              <a href="#canvas-exercises-module" class="quick-nav-pill" data-canvas-section="canvas-exercises-module">
-                <span>🧪</span> 3. Ejercicios <span class="quick-nav-count" id="canvas-nav-exercises-count">0/39</span>
-              </a>
-              <a href="#canvas-coverage-module" class="quick-nav-pill" data-canvas-section="canvas-coverage-module">
-                <span>🧭</span> 4. Mapa de funciones (28)
-              </a>
-              <a href="#canvas-advanced-labs-anchor" class="quick-nav-pill" data-canvas-section="canvas-advanced-labs-anchor">
-                <span>🔬</span> 5. Laboratorios Avanzados
-              </a>
-              <a href="#proyectos" class="quick-nav-pill">
-                <span>🗂️</span> Hub de proyectos (43)
-              </a>
-              <button type="button" class="quick-nav-continue" id="canvas-continue-btn">▶ Continuar donde quedé</button>
-            </div>
-          </nav>
-
-          <!-- Zona de Fundamentos y Activación -->
-          <section id="canvas-fundamentals-anchor" class="canvas-zone-section" data-canvas-section="canvas-fundamentals-anchor">
-
-          <!-- Nota para el Facilitador (Desplegable amigable) -->
-          <details class="instructor-guide-card canvas-instructor-collapsible">
-            <summary class="canvas-instructor-summary">
-              <div style="display:inline-flex; align-items:center; gap:0.5rem;">
-                <span class="card-badge">Guion del Facilitador</span>
-                <h4 style="display:inline; margin:0; font-size:1rem;">Estrategia Pedagógica para la Sesión de Gemini Canvas</h4>
-              </div>
-              <span class="summary-hint">(Clic para contraer o desplegar)</span>
-            </summary>
-            <div class="canvas-instructor-body" style="margin-top:0.75rem;">
-              <ul>
-                <li><strong>El error del chat lineal:</strong> Muestra en el proyector cómo en un chat normal, al pedir corregir un error gramatical en la página 3, la IA vuelve a escribir las 3 páginas completas. Luego demuestra cómo en Canvas, al seleccionar solo ese párrafo con el cursor, la corrección ocurre en 3 segundos sin tocar el resto.</li>
-                <li><strong>Dinámica de aula de 15 minutos:</strong> Pide a los aprendices abrir <code>gemini.google.com</code>, pegar el prompt de la Posibilidad 2 (Prototipado Web) o de la Posibilidad 7 (Algoritmos en Python) y activar la previsualización en vivo para que experimenten el asombro de ver una solución ejecutándose en directo.</li>
-                <li><strong>Pregunta detonante:</strong> <em>"¿Qué diferencias de productividad encuentran entre trabajar con un documento en Google Docs tradicional versus iterarlo en Gemini Canvas con control reactivo de longitud y tono?"</em></li>
-              </ul>
-            </div>
-          </details>
-
-          <!-- Guía de Activación en 3 Pasos (plegada: el foco es el recorrido de simuladores y ejercicios) -->
+          <!-- Antes de empezar: activación de Canvas y guion del facilitador, plegados para no interrumpir el recorrido -->
+          <section id="canvas-fundamentals-anchor" class="canvas-zone-section">
           <details class="tool-container canvas-aside canvas-start-details" id="canvas-start-details">
             <summary><h3>🚀 Antes de empezar: cómo activar y usar Canvas en Gemini (3 pasos)</h3></summary>
             <p>Sigue estos tres pasos para habilitar el espacio de trabajo en cualquier navegador:</p>
@@ -562,78 +498,79 @@ Notas tomadas por Julián:
                 <p>Usa los controles del documento para ajustar longitud o cambiar tono, el botón «Crear» para transformarlo en página web, infografía, cuestionario o resumen en audio, y «Compartir y exportar» para enviarlo a Documentos de Google, Presentaciones de Google o Colab. También puedes seleccionar cualquier frase y pedir un cambio solo para ese fragmento.</p>
               </div>
             </div>
+            <!-- Nota para el Facilitador (Desplegable amigable) -->
+            <details class="instructor-guide-card canvas-instructor-collapsible">
+              <summary class="canvas-instructor-summary">
+                <div style="display:inline-flex; align-items:center; gap:0.5rem;">
+                  <span class="card-badge">Guion del Facilitador</span>
+                  <h4 style="display:inline; margin:0; font-size:1rem;">Estrategia Pedagógica para la Sesión de Gemini Canvas</h4>
+                </div>
+                <span class="summary-hint">(Clic para contraer o desplegar)</span>
+              </summary>
+              <div class="canvas-instructor-body" style="margin-top:0.75rem;">
+                <ul>
+                  <li><strong>El error del chat lineal:</strong> Muestra en el proyector cómo en un chat normal, al pedir corregir un error gramatical en la página 3, la IA vuelve a escribir las 3 páginas completas. Luego demuestra cómo en Canvas, al seleccionar solo ese párrafo con el cursor, la corrección ocurre en 3 segundos sin tocar el resto.</li>
+                  <li><strong>Dinámica de aula de 15 minutos:</strong> Pide a los aprendices abrir <code>gemini.google.com</code>, pegar el prompt de la Posibilidad 2 (Prototipado Web) o de la Posibilidad 7 (Algoritmos en Python) y activar la previsualización en vivo para que experimenten el asombro de ver una solución ejecutándose en directo.</li>
+                  <li><strong>Pregunta detonante:</strong> <em>"¿Qué diferencias de productividad encuentran entre trabajar con un documento en Google Docs tradicional versus iterarlo en Gemini Canvas con control reactivo de longitud y tono?"</em></li>
+                </ul>
+              </div>
+            </details>
           </details>
           </section>
 
-          <!-- BARRA DE RECORRIDO: un solo lugar para saber dónde vas, cambiar de ejercicio y avanzar -->
-          <div class="canvas-immersive-hud canvas-journey-bar" id="canvas-immersive-hud" role="region" aria-label="Recorrido de los 39 ejercicios de Gemini Canvas">
-            <div class="canvas-immersive-hud-top">
-              <div class="immersive-hud-status" id="immersive-hud-status">
-                <span class="immersive-hud-badge" id="immersive-hud-mode-badge">Ejercicio 1 de 39</span>
-                <label for="immersive-mode-select" class="canvas-journey-label">Ir a:</label>
-                <select id="immersive-mode-select" class="immersive-mode-select" aria-describedby="canvas-journey-remaining">
-                  <option value="doc-editorial|0">1A · Informe de deserción con tablero interactivo en Canvas</option>
-                </select>
-              </div>
+          <!-- BARRA FIJA DEL RECORRIDO: dice siempre en qué modo y en qué paso vas, y permite saltar a cualquier modo o ejercicio -->
+          <div class="canvas-journey-bar" id="canvas-journey-bar" role="region" aria-label="Recorrido de Gemini Canvas: modo y paso actual">
+            <div class="canvas-journey-row">
+              <details class="canvas-mode-menu" id="canvas-mode-menu">
+                <summary class="canvas-mode-menu-summary">
+                  <span class="canvas-journey-kicker">Estás en</span>
+                  <span class="canvas-journey-where" id="canvas-journey-where">Modo 1 de 13 · 1. Redacción &amp; Documentos</span>
+                  <span class="canvas-mode-menu-cta">Cambiar de modo o ejercicio ▾</span>
+                </summary>
+                <div class="canvas-mode-menu-panel">
+                  <div class="canvas-mode-menu-head">
+                    <p>Cada modo tiene un ejemplo resuelto y tres ejercicios (A, B y C). Elige por dónde seguir.</p>
+                    <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-continue-btn">▶ Continuar con el primer pendiente</button>
+                  </div>
+                  <ol class="canvas-mode-menu-grid" id="canvas-mode-menu-grid"></ol>
+                </div>
+              </details>
+              <div class="canvas-mode-stations" id="canvas-mode-stations" role="group" aria-label="Pasos del modo actual"></div>
               <div class="canvas-journey-pager">
                 <button type="button" class="canvas-mode-pager-btn" id="canvas-journey-prev">← Anterior</button>
                 <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-journey-next">Siguiente →</button>
-                <button type="button" class="btn-canvas-fullscreen" id="btn-hud-toggle-immersive" title="Alternar modo inmersivo de simulador y ejercicios">⛶ Modo Inmersivo</button>
+                <button type="button" class="btn-canvas-fullscreen" id="btn-hud-toggle-immersive" title="Ocultar el resto de la guía y trabajar a pantalla completa">⛶ Modo Inmersivo</button>
               </div>
             </div>
             <div class="canvas-journey-progress-row">
               <progress class="canvas-journey-progress" id="canvas-journey-progress" max="39" value="0" aria-label="Ejercicios completados">0 de 39</progress>
-              <span class="immersive-hud-progress" id="immersive-hud-progress">0 de 39 completados</span>
+              <span class="canvas-journey-remaining" id="canvas-journey-remaining" aria-live="polite">0 de 39 completados. Te faltan 39 ejercicios en 13 modos.</span>
             </div>
-            <div class="immersive-stations-bar" role="toolbar" aria-label="Ciclo de cada modo: primero el ejemplo, después el ejercicio">
-              <button type="button" class="guided-station-btn is-active" id="btn-guide-station-sim" data-guide-target="simulator">① Revisa el ejemplo en el simulador</button>
-              <span class="canvas-journey-arrow" aria-hidden="true">→</span>
-              <button type="button" class="guided-station-btn" id="btn-guide-station-ex" data-guide-target="exercises">② Haz el ejercicio <span class="guided-station-pill" id="guide-station-ex-badge">1A</span></button>
-            </div>
-            <p class="canvas-journey-remaining" id="canvas-journey-remaining" aria-live="polite">Te faltan 39 ejercicios en 13 modos.</p>
-            <div class="canvas-learner-compass" id="canvas-learner-compass" aria-live="polite">
-              <div class="compass-copy">
-                <span class="compass-phase-pill" id="canvas-compass-phase">Fase 1 de 4</span>
-                <p class="compass-headline" id="canvas-compass-text">Paso 1 de 4 · Explora el ejemplo resuelto en el simulador y copia el prompt CRTT+L.</p>
-              </div>
-              <div class="compass-actions">
-                <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-compass-cta">📋 Copiar prompt de 1A e iniciar →</button>
-              </div>
-            </div>
-            <details class="canvas-aside canvas-view-options">
-              <summary>🎛️ Opciones de vista (opcional)</summary>
-              <div class="immersive-focus-toolbar" id="canvas-immersive-focus-group" role="group" aria-label="Disposición de vista">
-                <button type="button" class="immersive-focus-btn active" data-immersive-focus="all" title="Ver simulador y ejercicios en flujo continuo">🔄 Flujo completo</button>
-                <button type="button" class="immersive-focus-btn" data-immersive-focus="split" title="Ver simulador y ejercicio lado a lado">⬌ Simulador + ejercicio</button>
-                <button type="button" class="immersive-focus-btn" data-immersive-focus="simulator" title="Enfocar solo el simulador">🖥️ Solo simulador</button>
-                <button type="button" class="immersive-focus-btn" data-immersive-focus="exercises" title="Enfocar solo los ejercicios prácticos">🧪 Solo ejercicios</button>
-                <button type="button" class="immersive-focus-btn" id="btn-immersive-toggle-tools" aria-pressed="false" title="Mostrar u ocultar en modo inmersivo la calibración, los filtros y las herramientas secundarias">🎛️ Calibrar</button>
-              </div>
-            </details>
           </div>
 
+          <!-- ESPACIO DE TRABAJO DEL MODO ACTUAL: ① ejemplo en el simulador → ② ejercicios A, B y C → ③ qué sigue -->
+          <section class="canvas-mode-workspace" id="canvas-mode-workspace" aria-labelledby="canvas-workspace-title">
+            <header class="canvas-workspace-head">
+              <h3 id="canvas-workspace-title">Modo 1 de 13 · 1. Redacción &amp; Documentos</h3>
+              <ol class="canvas-workspace-cycle" aria-label="Ciclo de cada modo">
+                <li>① Revisa el ejemplo resuelto</li>
+                <li>② Haz las partes A, B y C</li>
+                <li>③ Pasa al modo siguiente</li>
+              </ol>
+            </header>
+
           <!-- SIMULADOR INTERACTIVO DE GEMINI CANVAS -->
-          <div class="tool-container" id="canvas-simulator-module" data-canvas-section="canvas-simulator-module">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
-              <div>
-                <h3 style="margin:0;">🖥️ Simulador Interactivo de Gemini Canvas</h3>
-                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.95rem;">Explora las 13 posibilidades. Cada una trae su prompt completo, los controles de Canvas que usa y una imagen del resultado esperado.</p>
-              </div>
-              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-canvas-fullscreen" title="Alternar modo inmersivo a pantalla completa">
-                  ⛶ Modo Inmersivo
-                </button>
-                <a href="materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md" target="_blank" rel="noopener noreferrer" class="material-link" style="padding:0.4rem 0.9rem; font-size:0.85rem;">
-                  📄 Descargar Guía Completa (.md)
-                </a>
-              </div>
+          <div class="tool-container canvas-workspace-step" id="canvas-simulator-module" data-canvas-section="canvas-simulator-module">
+            <div class="canvas-step-head">
+              <h3 class="canvas-step-title"><span class="canvas-step-num" aria-hidden="true">①</span> Revisa el ejemplo resuelto del modo <span id="canvas-sim-mode-label">1. Redacción &amp; Documentos</span></h3>
+              <p class="canvas-step-hint">Mira el prompt, la respuesta de Gemini y el resultado esperado. Cuando lo entiendas, sigue con el paso ②.</p>
             </div>
 
             <!-- Aviso de transición guiada cuando se avanza a un modo nuevo -->
             <div class="canvas-mode-transition-banner" id="canvas-mode-transition-banner" hidden aria-live="polite"></div>
 
             <details class="canvas-aside canvas-sim-settings" id="canvas-sim-settings">
-            <summary>⚙️ Ajustes del simulador: longitud, tono y filtros por área (opcional)</summary>
+            <summary>⚙️ Ajustes del simulador: longitud y tono (opcional)</summary>
             <!-- Barra de Calibración Reactiva de Canvas -->
             <div class="canvas-calibration-bar" id="canvas-calibration-toolbar">
               <div class="calibration-group">
@@ -663,32 +600,10 @@ Notas tomadas por Julián:
               </div>
             </div>
 
-            <!-- Barra de Filtros por Categoría Funcional -->
-            <div class="canvas-category-filter-bar" role="toolbar" aria-label="Filtrar posibilidades por categoría">
-              <span class="filter-label">Filtrar por área:</span>
-              <div class="filter-pills-group" id="canvas-category-filters">
-                <button type="button" class="category-pill active" data-category="all">
-                  <span>✨</span> Todas (13)
-                </button>
-                <button type="button" class="category-pill" data-category="editorial">
-                  <span>📄</span> Redacción &amp; Gestión (4)
-                </button>
-                <button type="button" class="category-pill" data-category="dev">
-                  <span>💻</span> Código &amp; Datos (3)
-                </button>
-                <button type="button" class="category-pill" data-category="design">
-                  <span>🎨</span> Diseño &amp; Procesos (2)
-                </button>
-                <button type="button" class="category-pill" data-category="advanced">
-                  <span>🤖</span> Especializados (4)
-                </button>
-              </div>
-            </div>
-
             </details>
 
-            <!-- Selector de las 13 Posibilidades -->
-            <div class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas">
+            <!-- Pestañas internas de los 13 modos: el aprendiz cambia de modo desde la barra fija del recorrido -->
+            <div class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas" hidden>
               <button type="button" class="canvas-tab active" role="tab" aria-selected="true" tabindex="0" data-possibility="doc-editorial" data-mode="doc-editorial" data-category="editorial">
                 <span>📄</span> 1. Redacción & Documentos
               </button>
@@ -902,258 +817,235 @@ Notas tomadas por Julián:
           </div>
 
           <!-- ==========================================
-               EJERCICIOS PRÁCTICOS POR MODO (A, B y C en los 13 modos: 39 en total)
+               PASO ②: EJERCICIOS DEL MODO ACTUAL (A, B y C; 39 en total)
                ========================================== -->
-          <div class="tool-container" id="canvas-exercises-module" data-canvas-section="canvas-exercises-module">
+          <div class="tool-container canvas-workspace-step" id="canvas-exercises-module" data-canvas-section="canvas-exercises-module">
             <div class="canvas-exercises-header">
               <div>
-                <h3 style="margin:0;">🧪 Ejercicios prácticos del modo: <span id="canvas-exercises-mode-label">1. Redacción &amp; Documentos</span></h3>
-                <p class="canvas-exercises-intro">Cada modo tiene tres partes (A, B y C) y el recorrido completo suma 39 ejercicios. Copia el prompt, hazlo en Gemini Canvas y marca los criterios que cumpla tu resultado. Terminar la Parte A no completa el modo: sigue con «Siguiente →» hasta la Parte C.</p>
+                <h3 class="canvas-step-title"><span class="canvas-step-num" aria-hidden="true">②</span> Haz los ejercicios del modo <span id="canvas-exercises-mode-label">1. Redacción &amp; Documentos</span></h3>
+                <p class="canvas-exercises-intro">Este modo tiene tres ejercicios: A, B y C. Copia el prompt, hazlo en Gemini Canvas y marca los criterios que cumpla tu resultado. El modo termina con la Parte C.</p>
               </div>
               <div class="canvas-exercises-header-actions" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-exercises-fullscreen" title="Practicar ejercicios en modo inmersivo a pantalla completa">
-                  ⛶ Modo Inmersivo
-                </button>
-                <div class="canvas-exercises-switch" id="canvas-exercises-switch" role="tablist" aria-label="Elegir ejercicio">
+                <div class="canvas-exercises-switch" id="canvas-exercises-switch" role="tablist" aria-label="Partes del modo actual">
                   <button type="button" class="canvas-exercises-switch-btn active" role="tab" aria-selected="true" tabindex="0" data-exercise-index="0">Parte A</button>
                   <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" tabindex="-1" data-exercise-index="1">Parte B</button>
                   <button type="button" class="canvas-exercises-switch-btn" role="tab" aria-selected="false" tabindex="-1" data-exercise-index="2">Parte C</button>
                 </div>
               </div>
             </div>
-            <div class="canvas-exercise-position" id="canvas-exercise-position" aria-live="polite">
-              <span class="canvas-exercise-position-label" data-position-label>Ejercicio 1 de 39</span>
-              <span class="canvas-exercise-position-track" aria-hidden="true"><span class="canvas-exercise-position-bar" data-position-bar></span></span>
-              <span class="canvas-exercise-position-done" data-position-done>0 completados</span>
-            </div>
             <p class="canvas-exercises-notice">ℹ️ Las personas, cifras y documentos de estos ejercicios se prepararon para aprender y no contienen registros reales.</p>
-            <details class="canvas-exercise-index" id="canvas-exercise-index">
-              <summary>🗂️ Índice de los 39 ejercicios <span class="canvas-exercise-index-count" id="canvas-exercise-index-count"></span></summary>
-              <p class="canvas-exercise-hint">Cada enlace abre el ejercicio y se puede compartir. La marca ✓ indica los ejercicios que completaste en este navegador.</p>
-              <ol class="canvas-exercise-index-list" id="canvas-exercise-index-list"></ol>
-            </details>
             <div id="canvas-exercises-content" aria-live="polite"></div>
-            <div class="canvas-exercise-done" id="canvas-exercise-done" hidden>
-              <p><strong>✅ Ejercicio completado.</strong> Tu resultado cumple todos los criterios.</p>
-              <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-exercise-done-next">Ir al siguiente ejercicio →</button>
-            </div>
-            <nav class="canvas-mode-pager" aria-label="Avanzar entre ejercicios">
-              <button type="button" class="canvas-mode-pager-btn" id="canvas-exercise-prev" data-direction="-1">← <span>Ejercicio anterior</span></button>
-              <button type="button" class="canvas-mode-pager-btn is-primary" id="canvas-exercise-next" data-direction="1"><span>Siguiente ejercicio</span> →</button>
-            </nav>
-          </div>
-
-          <!-- ==========================================
-               MAPA DE COBERTURA Y FRONTERAS DE GEMINI CANVAS
-               ========================================== -->
-          <section class="tool-container" id="canvas-coverage-module" data-canvas-section="canvas-coverage-module">
-            <details class="canvas-aside canvas-coverage-details">
-            <summary>🧭 Consulta opcional: mapa de las 28 funciones de Gemini Canvas</summary>
-            <div class="canvas-coverage-header">
-              <div>
-                <h3 class="canvas-coverage-title">🧭 Mapa de las 28 funciones de Gemini Canvas y qué ocurre fuera del lienzo</h3>
-                <p class="canvas-coverage-subtitle">
-                  Comprueba en qué ejercicios se practica cada función oficial de Gemini Canvas y distingue qué pasos ocurren dentro del lienzo (🟢), en el chat o Gems (🟡), al exportar a otras herramientas de Google (🟠) o en esta guía (🔵).
-                </p>
-              </div>
-              <a href="materiales/gemini_canvas/mesa_ayuda_2026.csv" download="mesa_ayuda_2026.csv" class="material-link canvas-coverage-download">
-                📥 Descargar CSV de práctica (Ejercicio 10A)
-              </a>
-            </div>
-            <div id="canvas-coverage-content" aria-live="polite"></div>
-            </details>
-          </section>
-
-          <!-- ==========================================
-               ZONA DE LABORATORIOS ESPECIALIZADOS DE PROFUNDIZACIÓN
-               ========================================== -->
-          <section id="canvas-advanced-labs-anchor" class="canvas-zone-section" data-canvas-section="canvas-advanced-labs-anchor">
-          <div class="canvas-advanced-labs-banner">
-            <span class="labs-tag">🔬 Nivel 4 · Prácticas de Profundización</span>
-            <h3>Laboratorios Especializados de Gemini Canvas</h3>
-            <p>Estos entornos dedicados permiten experimentar en profundidad las capacidades avanzadas de Gemini Canvas: conversión directa de bocetos físicos a software web y creación de asistentes personalizados (Gems) con instrucciones de sistema rigurosas.</p>
-          </div>
-
-          <!-- ==========================================
-               SIMULADOR MULTIMODAL: BOCETO A CANVAS EN VIVO
-               ========================================== -->
-          <div class="tool-container" id="multimodal-simulator-module">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
-              <div>
-                <h3 style="margin:0;">📷 Simulador de Visión Multimodal: De Boceto a Canvas en Vivo</h3>
-                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
-                  Experimenta cómo Gemini procesa una fotografía de trazos manuscritos en una libreta o pizarra y genera un artefacto interactivo funcional en el lienzo.
-                </p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-mm-fullscreen" title="Abrir simulador multimodal en modo inmersivo">
-                  ⛶ Modo Inmersivo
-                </button>
-                <span class="badge badge-info" style="font-size:0.8rem; padding:0.35rem 0.75rem;">Image-to-Canvas AI</span>
-              </div>
-            </div>
-
-            <div class="multimodal-case-tabs" role="tablist" aria-label="Casos del simulador multimodal">
-              <button type="button" class="multimodal-case-btn active" id="btn-case-form" data-case="form">
-                📝 Caso A: Boceto en Libreta (Formulario de Matrícula)
-              </button>
-              <button type="button" class="multimodal-case-btn" id="btn-case-flow" data-case="flow">
-                🔀 Caso B: Pizarra de Aula (Flujograma de Solicitud PQRS)
-              </button>
-            </div>
-
-            <div class="multimodal-grid">
-              <!-- Columna 1: Entrada Multimodal (Fotografía + OCR + Prompt) -->
-              <div class="sketch-source-pane">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <strong style="color:var(--text-main); font-size:0.9rem;" id="mm-source-title">1. Entrada: Fotografía de Boceto Manuscrito</strong>
-                  <span class="badge badge-warning" id="mm-source-badge">Entrada Visual</span>
-                </div>
-                
-                <div class="sketch-preview-box" id="mm-sketch-box">
-                  <img src="assets/images/canvas/canvas_multimodal_sketch.jpg" alt="Captura multimodal del boceto a Canvas" id="mm-sketch-image" style="max-height:220px; object-fit:contain; border-radius:6px;">
-                </div>
-
-                <div class="ocr-detection-list" id="mm-ocr-list">
-                  <strong>🔍 Inferencia Espacial de Gemini Vision:</strong>
-                  <ul>
-                    <li>Campos detectados: <code>Nombre Completo</code>, <code>Correo Institucional</code>, <code>Contraseña</code>.</li>
-                    <li>Acción principal: Botón primario de envío tipo Pill <code>Registrarse</code>.</li>
-                    <li>Restricción implícita: Validación estricta de dominio <code>@soy.sena.edu.co</code>.</li>
-                  </ul>
-                </div>
-
-                <div class="chat-bubble user-bubble" style="margin:0;">
-                  <div class="bubble-tag">PROMPT MULTIMODAL ENVIADO A GEMINI</div>
-                  <p class="bubble-text" id="mm-user-prompt" style="font-size:0.82rem; margin:0;">
-                    "Analiza este boceto a mano en mi libreta. En Canvas, genera el formulario web responsivo en HTML/CSS/JS con validación de correo institucional y medidor de seguridad de contraseña."
+            <!-- Laboratorio extra: solo aparece en el modo al que pertenece (11 o 12) -->
+            <details class="canvas-aside canvas-mode-lab" data-lab-mode="multimodal-vision" hidden>
+              <summary>🔬 Laboratorio extra de este modo (opcional): de boceto a Canvas en vivo</summary>
+            <!-- ==========================================
+                 SIMULADOR MULTIMODAL: BOCETO A CANVAS EN VIVO
+                 ========================================== -->
+            <div class="tool-container" id="multimodal-simulator-module">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <div>
+                  <h3 style="margin:0;">📷 Simulador de Visión Multimodal: De Boceto a Canvas en Vivo</h3>
+                  <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
+                    Experimenta cómo Gemini procesa una fotografía de trazos manuscritos en una libreta o pizarra y genera un artefacto interactivo funcional en el lienzo.
                   </p>
                 </div>
-              </div>
-
-              <!-- Columna 2: Resultado Ejecutable en Canvas en Vivo -->
-              <div class="multimodal-live-pane">
-                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:0.5rem; margin-bottom:0.75rem;">
-                  <div>
-                    <strong style="color:var(--color-primary); font-size:0.95rem;" id="mm-canvas-title">2. Prototipo Web Ejecutable en Canvas</strong>
-                    <small style="display:block; color:var(--text-muted); font-size:0.75rem;">Prueba las validaciones directamente en el formulario</small>
-                  </div>
-                  <span class="badge badge-success">En Vivo (Live)</span>
-                </div>
-
-                <div class="interactive-preview-box" id="mm-interactive-result" style="flex:1;">
-                  <!-- Renderizado dinámico del formulario o flujograma -->
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                  <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-mm-fullscreen" title="Abrir simulador multimodal en modo inmersivo">
+                    ⛶ Modo Inmersivo
+                  </button>
+                  <span class="badge badge-info" style="font-size:0.8rem; padding:0.35rem 0.75rem;">Image-to-Canvas AI</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Puente guiado hacia los ejercicios del Modo 11 -->
-            <div class="canvas-sim-bridge" id="mm-sim-bridge" aria-live="polite"></div>
-          </div>
-
-          <!-- ==========================================
-               GEMS: CONSTRUCTOR Y CALIBRADOR
-               ========================================== -->
-          <div class="tool-container" id="gem-studio-module">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
-              <div>
-                <h3 style="margin:0;">🤖 Gems: constructor y calibrador de asistentes en vivo</h3>
-                <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
-                  Diseña las instrucciones del sistema (*System Prompt*), fija restricciones éticas y pon a prueba a tu propio asistente personalizado antes de crearlo en tu cuenta de Gemini.
-                </p>
-              </div>
-              <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-gem-fullscreen" title="Abrir calibrador de Gems en modo inmersivo">
-                  ⛶ Modo Inmersivo
+              <div class="multimodal-case-tabs" role="tablist" aria-label="Casos del simulador multimodal">
+                <button type="button" class="multimodal-case-btn active" id="btn-case-form" data-case="form">
+                  📝 Caso A: Boceto en Libreta (Formulario de Matrícula)
                 </button>
-                <button type="button" class="copy-btn" id="btn-copy-gem-system-prompt" style="font-size:0.82rem; padding:0.4rem 0.85rem;">
-                  📋 Copiar System Prompt para Gemini Gems
+                <button type="button" class="multimodal-case-btn" id="btn-case-flow" data-case="flow">
+                  🔀 Caso B: Pizarra de Aula (Flujograma de Solicitud PQRS)
                 </button>
               </div>
-            </div>
 
-            <!-- Presets Rápidos -->
-            <div class="gem-presets-bar">
-              <span style="font-size:0.82rem; font-weight:700; color:var(--text-main); align-self:center;">Plantillas Oficiales:</span>
-              <button type="button" class="gem-preset-btn active" data-preset="socratic">
-                <span>🎓</span> Gem Tutor Socrático ADSO
-              </button>
-              <button type="button" class="gem-preset-btn" data-preset="auditor">
-                <span>⚖️</span> Gem Auditor de Rúbricas
-              </button>
-              <button type="button" class="gem-preset-btn" data-preset="redactor">
-                <span>📋</span> Gem Redactor de Pliegos y Actas
-              </button>
-            </div>
-
-            <div class="gem-studio-grid">
-              <!-- Panel Izquierdo: Configuración del Gem -->
-              <div class="gem-config-panel">
-                <div>
-                  <label for="gem-name-input">Nombre del Asistente (Gem Name):</label>
-                  <input type="text" id="gem-name-input" class="gem-input" value="Tutor Socrático de Programación ADSO">
-                </div>
-
-                <div>
-                  <label for="gem-instructions-input">Instrucción de Sistema (System Prompt con Guardrails):</label>
-                  <textarea id="gem-instructions-input" class="gem-textarea" rows="6"></textarea>
-                </div>
-
-                <div>
-                    <label for="gem-knowledge-select">Conocimiento Adjunto:</label>
-                    <select id="gem-knowledge-select" class="gem-input">
-                      <option value="reglamento">Reglamento del Aprendiz (Acuerdo 007)</option>
-                      <option value="curriculo">Malla Curricular ADSO (Fase Ejecución)</option>
-                      <option value="norma-iso">Norma ISO/IEC 25010 Calidad Software</option>
-                    </select>
-                    <small style="color:var(--text-muted);">Un Gem solo tiene nombre, instrucciones y archivos de conocimiento; no se le ajusta la temperatura. El rigor sale de instrucciones claras y de las pruebas de calibración.</small>
+              <div class="multimodal-grid">
+                <!-- Columna 1: Entrada Multimodal (Fotografía + OCR + Prompt) -->
+                <div class="sketch-source-pane">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="color:var(--text-main); font-size:0.9rem;" id="mm-source-title">1. Entrada: Fotografía de Boceto Manuscrito</strong>
+                    <span class="badge badge-warning" id="mm-source-badge">Entrada Visual</span>
+                  </div>
+                
+                  <div class="sketch-preview-box" id="mm-sketch-box">
+                    <img src="assets/images/canvas/canvas_multimodal_sketch.jpg" alt="Captura multimodal del boceto a Canvas" id="mm-sketch-image" style="max-height:220px; object-fit:contain; border-radius:6px;">
                   </div>
 
-                <div style="font-size:0.78rem; color:var(--text-muted); background:var(--bg-surface); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border-light);">
-                  💡 <strong>Regla de Oro:</strong> Un buen Gem nunca regala el código o el resultado directo; formula preguntas de reflexión y cita la norma aplicable.
-                </div>
-              </div>
+                  <div class="ocr-detection-list" id="mm-ocr-list">
+                    <strong>🔍 Inferencia Espacial de Gemini Vision:</strong>
+                    <ul>
+                      <li>Campos detectados: <code>Nombre Completo</code>, <code>Correo Institucional</code>, <code>Contraseña</code>.</li>
+                      <li>Acción principal: Botón primario de envío tipo Pill <code>Registrarse</code>.</li>
+                      <li>Restricción implícita: Validación estricta de dominio <code>@soy.sena.edu.co</code>.</li>
+                    </ul>
+                  </div>
 
-              <!-- Panel Derecho: Consola de Prueba Interactiva en Vivo -->
-              <div class="gem-console-panel">
-                <div class="gem-console-header">
-                  <div style="display:flex; align-items:center; gap:0.5rem;">
-                    <span class="sparkle-icon" style="font-size:1.1rem;">✨</span>
+                  <div class="chat-bubble user-bubble" style="margin:0;">
+                    <div class="bubble-tag">PROMPT MULTIMODAL ENVIADO A GEMINI</div>
+                    <p class="bubble-text" id="mm-user-prompt" style="font-size:0.82rem; margin:0;">
+                      "Analiza este boceto a mano en mi libreta. En Canvas, genera el formulario web responsivo en HTML/CSS/JS con validación de correo institucional y medidor de seguridad de contraseña."
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Columna 2: Resultado Ejecutable en Canvas en Vivo -->
+                <div class="multimodal-live-pane">
+                  <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-light); padding-bottom:0.5rem; margin-bottom:0.75rem;">
                     <div>
-                      <strong style="font-size:0.88rem; color:var(--text-main);" id="gem-console-name">Tutor Socrático ADSO</strong>
-                      <small style="display:block; font-size:0.72rem; color:var(--color-primary);">● Modo de Prueba Activo</small>
+                      <strong style="color:var(--color-primary); font-size:0.95rem;" id="mm-canvas-title">2. Prototipo Web Ejecutable en Canvas</strong>
+                      <small style="display:block; color:var(--text-muted); font-size:0.75rem;">Prueba las validaciones directamente en el formulario</small>
                     </div>
+                    <span class="badge badge-success">En Vivo (Live)</span>
                   </div>
-                  <button type="button" class="btn-clean" id="btn-clear-gem-chat" style="font-size:0.75rem; background:transparent; border:none; color:var(--text-muted); cursor:pointer;">
-                    🗑️ Limpiar chat
+
+                  <div class="interactive-preview-box" id="mm-interactive-result" style="flex:1;">
+                    <!-- Renderizado dinámico del formulario o flujograma -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Puente guiado hacia los ejercicios del Modo 11 -->
+              <div class="canvas-sim-bridge" id="mm-sim-bridge" aria-live="polite"></div>
+            </div>
+            </details>
+            <details class="canvas-aside canvas-mode-lab" data-lab-mode="gem-studio" hidden>
+              <summary>🔬 Laboratorio extra de este modo (opcional): constructor y calibrador de Gems</summary>
+            <!-- ==========================================
+                 GEMS: CONSTRUCTOR Y CALIBRADOR
+                 ========================================== -->
+            <div class="tool-container" id="gem-studio-module">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <div>
+                  <h3 style="margin:0;">🤖 Gems: constructor y calibrador de asistentes en vivo</h3>
+                  <p style="margin:0.25rem 0 0 0; color:var(--text-muted); font-size:0.92rem;">
+                    Diseña las instrucciones del sistema (*System Prompt*), fija restricciones éticas y pon a prueba a tu propio asistente personalizado antes de crearlo en tu cuenta de Gemini.
+                  </p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                  <button type="button" class="btn-canvas-fullscreen" id="btn-toggle-gem-fullscreen" title="Abrir calibrador de Gems en modo inmersivo">
+                    ⛶ Modo Inmersivo
+                  </button>
+                  <button type="button" class="copy-btn" id="btn-copy-gem-system-prompt" style="font-size:0.82rem; padding:0.4rem 0.85rem;">
+                    📋 Copiar System Prompt para Gemini Gems
                   </button>
                 </div>
+              </div>
 
-                <div class="gem-chat-scroll" id="gem-chat-scroll">
-                  <!-- Mensajes del chat -->
+              <!-- Presets Rápidos -->
+              <div class="gem-presets-bar">
+                <span style="font-size:0.82rem; font-weight:700; color:var(--text-main); align-self:center;">Plantillas Oficiales:</span>
+                <button type="button" class="gem-preset-btn active" data-preset="socratic">
+                  <span>🎓</span> Gem Tutor Socrático ADSO
+                </button>
+                <button type="button" class="gem-preset-btn" data-preset="auditor">
+                  <span>⚖️</span> Gem Auditor de Rúbricas
+                </button>
+                <button type="button" class="gem-preset-btn" data-preset="redactor">
+                  <span>📋</span> Gem Redactor de Pliegos y Actas
+                </button>
+              </div>
+
+              <div class="gem-studio-grid">
+                <!-- Panel Izquierdo: Configuración del Gem -->
+                <div class="gem-config-panel">
+                  <div>
+                    <label for="gem-name-input">Nombre del Asistente (Gem Name):</label>
+                    <input type="text" id="gem-name-input" class="gem-input" value="Tutor Socrático de Programación ADSO">
+                  </div>
+
+                  <div>
+                    <label for="gem-instructions-input">Instrucción de Sistema (System Prompt con Guardrails):</label>
+                    <textarea id="gem-instructions-input" class="gem-textarea" rows="6"></textarea>
+                  </div>
+
+                  <div>
+                      <label for="gem-knowledge-select">Conocimiento Adjunto:</label>
+                      <select id="gem-knowledge-select" class="gem-input">
+                        <option value="reglamento">Reglamento del Aprendiz (Acuerdo 007)</option>
+                        <option value="curriculo">Malla Curricular ADSO (Fase Ejecución)</option>
+                        <option value="norma-iso">Norma ISO/IEC 25010 Calidad Software</option>
+                      </select>
+                      <small style="color:var(--text-muted);">Un Gem solo tiene nombre, instrucciones y archivos de conocimiento; no se le ajusta la temperatura. El rigor sale de instrucciones claras y de las pruebas de calibración.</small>
+                    </div>
+
+                  <div style="font-size:0.78rem; color:var(--text-muted); background:var(--bg-surface); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border-light);">
+                    💡 <strong>Regla de Oro:</strong> Un buen Gem nunca regala el código o el resultado directo; formula preguntas de reflexión y cita la norma aplicable.
+                  </div>
                 </div>
 
-                <div class="gem-console-footer">
-                  <div class="gem-quick-prompts">
-                    <span style="font-size:0.72rem; color:var(--text-muted); align-self:center;">Prueba rápida:</span>
-                    <button type="button" class="gem-quick-chip" id="chip-q1">"¿Cómo sumo una lista de números en Python?"</button>
-                    <button type="button" class="gem-quick-chip" id="chip-q2">"Dame el código resuelto para calcular notas"</button>
-                    <button type="button" class="gem-quick-chip" id="chip-q3">"No asistí ayer a clase, ¿qué hago?"</button>
-                  </div>
-                  <div class="gem-input-row">
-                    <input type="text" id="gem-user-input" class="gem-input" placeholder="Formula una pregunta para probar el comportamiento del Gem...">
-                    <button type="button" class="copy-btn" id="btn-send-gem" style="padding:0.45rem 1rem; font-size:0.85rem;">
-                      Enviar
+                <!-- Panel Derecho: Consola de Prueba Interactiva en Vivo -->
+                <div class="gem-console-panel">
+                  <div class="gem-console-header">
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                      <span class="sparkle-icon" style="font-size:1.1rem;">✨</span>
+                      <div>
+                        <strong style="font-size:0.88rem; color:var(--text-main);" id="gem-console-name">Tutor Socrático ADSO</strong>
+                        <small style="display:block; font-size:0.72rem; color:var(--color-primary);">● Modo de Prueba Activo</small>
+                      </div>
+                    </div>
+                    <button type="button" class="btn-clean" id="btn-clear-gem-chat" style="font-size:0.75rem; background:transparent; border:none; color:var(--text-muted); cursor:pointer;">
+                      🗑️ Limpiar chat
                     </button>
+                  </div>
+
+                  <div class="gem-chat-scroll" id="gem-chat-scroll">
+                    <!-- Mensajes del chat -->
+                  </div>
+
+                  <div class="gem-console-footer">
+                    <div class="gem-quick-prompts">
+                      <span style="font-size:0.72rem; color:var(--text-muted); align-self:center;">Prueba rápida:</span>
+                      <button type="button" class="gem-quick-chip" id="chip-q1">"¿Cómo sumo una lista de números en Python?"</button>
+                      <button type="button" class="gem-quick-chip" id="chip-q2">"Dame el código resuelto para calcular notas"</button>
+                      <button type="button" class="gem-quick-chip" id="chip-q3">"No asistí ayer a clase, ¿qué hago?"</button>
+                    </div>
+                    <div class="gem-input-row">
+                      <input type="text" id="gem-user-input" class="gem-input" placeholder="Formula una pregunta para probar el comportamiento del Gem...">
+                      <button type="button" class="copy-btn" id="btn-send-gem" style="padding:0.45rem 1rem; font-size:0.85rem;">
+                        Enviar
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Puente guiado hacia los ejercicios del Modo 12 -->
-            <div class="canvas-sim-bridge" id="gem-sim-bridge" aria-live="polite"></div>
+              <!-- Puente guiado hacia los ejercicios del Modo 12 -->
+              <div class="canvas-sim-bridge" id="gem-sim-bridge" aria-live="polite"></div>
+            </div>
+            </details>
+
+            <!-- ③ Qué sigue: otra parte del modo, el ejemplo del modo siguiente o el cierre del recorrido -->
+            <nav class="canvas-mode-wrapup" id="canvas-mode-wrapup" aria-label="Qué sigue después de este ejercicio" aria-live="polite"></nav>
           </div>
+
           </section>
+
+          <!-- RECURSOS COMPLEMENTARIOS: consulta opcional, fuera del recorrido -->
+          <details class="canvas-aside canvas-resources" id="canvas-resources">
+            <summary>📚 Recursos complementarios (opcional: no es un paso del recorrido)</summary>
+            <p class="canvas-resources-links"><a href="materiales/gemini_canvas/guia_gemini_canvas_todas_las_posibilidades.md" target="_blank" rel="noopener noreferrer" class="material-link">📄 Descargar la guía completa (.md)</a></p>
+            <section class="tool-container" id="canvas-coverage-module">
+              <div class="canvas-coverage-header">
+                <div>
+                  <h3 class="canvas-coverage-title">🧭 Mapa de las 28 funciones de Gemini Canvas y qué ocurre fuera del lienzo</h3>
+                  <p class="canvas-coverage-subtitle">
+                    Comprueba en qué ejercicios se practica cada función oficial de Gemini Canvas y distingue qué pasos ocurren dentro del lienzo (🟢), en el chat o Gems (🟡), al exportar a otras herramientas de Google (🟠) o en esta guía (🔵).
+                  </p>
+                </div>
+                <a href="materiales/gemini_canvas/mesa_ayuda_2026.csv" download="mesa_ayuda_2026.csv" class="material-link canvas-coverage-download">
+                  📥 Descargar CSV de práctica (Ejercicio 10A)
+                </a>
+              </div>
+              <div id="canvas-coverage-content" aria-live="polite"></div>
+            </section>
+          </details>
 
           <!-- MODAL 1: LIGHTBOX DE ALTA RESOLUCIÓN -->
           <div class="canvas-modal-backdrop" id="modal-canvas-lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-modal-title" hidden>

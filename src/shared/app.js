@@ -752,7 +752,7 @@ function initCanvasLab() {
 
     const labInfo = typeof getSpecializedLabForMode === "function" ? getSpecializedLabForMode(id) : null;
     const labBtnHtml = labInfo
-      ? `<button type="button" class="canvas-bridge-part-btn" data-bridge-lab="${escapeCanvasHtml(labInfo.targetId)}">${escapeCanvasHtml(labInfo.label)} →</button>`
+      ? `<button type="button" class="canvas-bridge-part-btn" data-bridge-lab="${escapeCanvasHtml(labInfo.labId)}">🔬 Laboratorio extra: ${escapeCanvasHtml(labInfo.title)} →</button>`
       : "";
 
     simBridgeEl.innerHTML = `
@@ -777,10 +777,8 @@ function initCanvasLab() {
 
     simBridgeEl.querySelectorAll("[data-bridge-lab]").forEach(btn => {
       btn.addEventListener("click", () => {
-        const labTargetId = btn.getAttribute("data-bridge-lab");
         applyImmersiveFocus(currentImmersiveFocus, "labs");
-        setActiveGuidedStation("labs");
-        const labEl = document.getElementById(labTargetId);
+        const labEl = openModeLab(currentExerciseMode, btn.getAttribute("data-bridge-lab"));
         if (labEl) requestAnimationFrame(() => labEl.scrollIntoView({ behavior: "smooth", block: "start" }));
       });
     });
@@ -791,6 +789,8 @@ function initCanvasLab() {
     selectMode(step.mode);
     currentExerciseIndex = step.exercise;
     renderCanvasExercises(step.mode);
+    setActiveGuidedStation("simulator");
+    updateLearnerGuideHud();
     const ex = (CANVAS_EXERCISES[step.mode] || [])[step.exercise];
     const modeInfo = CANVAS_POSSIBILITIES[step.mode];
     const letter = "ABC"[step.exercise] || "A";
@@ -854,12 +854,9 @@ function initCanvasLab() {
       const had = saved.includes(exId);
       if (complete && !had) writeCanvasCompleted(saved.concat(exId));
       if (!complete && had) writeCanvasCompleted(saved.filter(x => x !== exId));
-      renderCanvasExerciseIndex();
-      updateExercisePosition();
       renderCanvasSimBridge(currentExerciseMode);
       updateCanvasTabBadges();
     }
-    if (exerciseDoneEl) exerciseDoneEl.hidden = !complete || !exerciseNextStep();
     if (typeof updateLearnerGuideHud === "function") updateLearnerGuideHud();
   }
 
@@ -879,12 +876,11 @@ function initCanvasLab() {
     const list = readCanvasStore("canvasCompletedExercises", []);
     return Array.isArray(list) ? list : [];
   }
-  function writeCanvasCompleted(list) {
-    writeCanvasStore("canvasCompletedExercises", list);
-    writeCanvasStore("canvas_exercises_completed_v1", list);
-    if (typeof window.refreshCanvasSubnavProgress === "function") {
-      window.refreshCanvasSubnavProgress();
-    }
+  // Mantiene al día la copia que leen los contadores y el mapa de funciones.
+  function syncCanvasProgressViews(list) {
+    const done = Array.isArray(list) ? list : readCanvasCompleted();
+    writeCanvasStore("canvas_exercises_completed_v1", done);
+    if (typeof window.refreshCanvasSubnavProgress === "function") window.refreshCanvasSubnavProgress();
     const covEl = document.getElementById("canvas-coverage-content");
     if (covEl && typeof buildCoverageTableHtml === "function") {
       covEl.innerHTML = buildCoverageTableHtml(
@@ -895,35 +891,9 @@ function initCanvasLab() {
       );
     }
   }
-
-  const exerciseIndexListEl = document.getElementById("canvas-exercise-index-list");
-  const exerciseIndexCountEl = document.getElementById("canvas-exercise-index-count");
-  function renderCanvasExerciseIndex() {
-    if (!exerciseIndexListEl || typeof CANVAS_EXERCISES === "undefined") return;
-    const done = readCanvasCompleted();
-    writeCanvasStore("canvas_exercises_completed_v1", done);
-    if (typeof window.refreshCanvasSubnavProgress === "function") {
-      window.refreshCanvasSubnavProgress();
-    }
-    const covEl = document.getElementById("canvas-coverage-content");
-    if (covEl && typeof buildCoverageTableHtml === "function") {
-      covEl.innerHTML = buildCoverageTableHtml(
-        CANVAS_EXERCISES,
-        CANVAS_CAPABILITIES,
-        typeof CANVAS_EXTRA_CAPABILITIES !== "undefined" ? CANVAS_EXTRA_CAPABILITIES : [],
-        done
-      );
-    }
-    const total = Object.values(CANVAS_EXERCISES).reduce((n, list) => n + list.length, 0);
-    if (exerciseIndexCountEl) exerciseIndexCountEl.textContent = `(${done.length}/${total} completados)`;
-    exerciseIndexListEl.innerHTML = Object.keys(CANVAS_POSSIBILITIES).map(mode => {
-      const items = (CANVAS_EXERCISES[mode] || []).map((ex, i) => {
-        const current = mode === currentExerciseMode && i === currentExerciseIndex;
-        const mark = done.includes(ex.id) ? '<span class="canvas-index-done" aria-label="completado">✓</span> ' : "";
-        return `<li><a href="${buildCanvasRoute(mode, i)}"${current ? ' aria-current="true"' : ""}>${mark}${"ABC"[i] || "A"}. ${escapeCanvasHtml(ex.title)}</a></li>`;
-      }).join("");
-      return `<li><span class="canvas-index-mode">${escapeCanvasHtml(CANVAS_POSSIBILITIES[mode].name)}</span><ul>${items}</ul></li>`;
-    }).join("");
+  function writeCanvasCompleted(list) {
+    writeCanvasStore("canvasCompletedExercises", list);
+    syncCanvasProgressViews(list);
   }
 
   function renderCanvasExercises(id) {
@@ -1012,23 +982,16 @@ function initCanvasLab() {
       : parseChecks(partialStore[exercise.id], cardChecks.length);
     cardChecks.forEach((c, i) => { c.checked = restored[i]; });
     updateExerciseProgress(card);
-    updateExercisePager();
   }
 
   exerciseSwitchBtns.forEach(btn => {
     btn.addEventListener("click", () => {
-      currentExerciseIndex = Number(btn.getAttribute("data-exercise-index"));
-      renderCanvasExercises(currentExerciseMode);
-      history.replaceState(null, "", buildCanvasRoute(currentExerciseMode, currentExerciseIndex));
+      openCanvasRoute(currentExerciseMode, Number(btn.getAttribute("data-exercise-index")));
     });
   });
 
-  // --- Recorrido lineal de todos los ejercicios: anterior, siguiente, posición y retomar ---
+  // --- Recorrido lineal de todos los ejercicios: siguiente paso y retomar el primer pendiente ---
   const exerciseSequence = listExerciseSequence(Object.keys(CANVAS_POSSIBILITIES), CANVAS_EXERCISES);
-  const pagerBtns = document.querySelectorAll("#canvas-exercise-prev, #canvas-exercise-next");
-  const exerciseDoneEl = document.getElementById("canvas-exercise-done");
-  const exerciseDoneNextBtn = document.getElementById("canvas-exercise-done-next");
-  const positionEl = document.getElementById("canvas-exercise-position");
   const continueBtn = document.getElementById("canvas-continue-btn");
 
   function stepLabel(step) {
@@ -1038,30 +1001,6 @@ function initCanvasLab() {
   function exerciseNextStep() {
     return neighborExercise(exerciseSequence, currentExerciseMode, currentExerciseIndex, 1);
   }
-  function updateExercisePosition() {
-    if (!positionEl) return;
-    const pos = exercisePosition(exerciseSequence, currentExerciseMode, currentExerciseIndex);
-    if (!pos) return;
-    const done = readCanvasCompleted().length;
-    positionEl.querySelector("[data-position-label]").textContent = `Ejercicio ${pos.number} de ${pos.total} · ${CANVAS_POSSIBILITIES[currentExerciseMode].name} · Parte ${"ABC"[currentExerciseIndex] || "A"}`;
-    positionEl.querySelector("[data-position-bar]").style.width = `${(done / pos.total) * 100}%`;
-    positionEl.querySelector("[data-position-done]").textContent = `${done} de ${pos.total} completados`;
-    if (continueBtn) {
-      const pending = firstPendingExercise(exerciseSequence, readCanvasCompleted());
-      continueBtn.hidden = !pending;
-      continueBtn.title = pending ? `Abre: ${stepLabel(pending)}` : "";
-    }
-  }
-  function updateExercisePager() {
-    pagerBtns.forEach(btn => {
-      const target = neighborExercise(exerciseSequence, currentExerciseMode, currentExerciseIndex, Number(btn.getAttribute("data-direction")));
-      btn.disabled = !target;
-      const label = btn.querySelector("span");
-      if (label) label.textContent = target ? stepLabel(target) : (btn.id === "canvas-exercise-prev" ? "Es el primer ejercicio" : "Es el último ejercicio");
-      btn.dataset.target = target ? `${target.mode}|${target.exercise}` : "";
-    });
-    updateExercisePosition();
-  }
   function goToStep(step) {
     if (!step) return;
     if (typeof isModeTransition === "function" && isModeTransition(currentExerciseMode, step.mode)) {
@@ -1070,16 +1009,11 @@ function initCanvasLab() {
     }
     openCanvasRoute(step.mode, step.exercise);
   }
-  pagerBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (!btn.dataset.target) return;
-      const [mode, exercise] = btn.dataset.target.split("|");
-      goToStep({ mode, exercise: Number(exercise) });
-    });
-  });
-  if (exerciseDoneNextBtn) exerciseDoneNextBtn.addEventListener("click", () => goToStep(exerciseNextStep()));
   if (continueBtn) {
-    continueBtn.addEventListener("click", () => goToStep(firstPendingExercise(exerciseSequence, readCanvasCompleted())));
+    continueBtn.addEventListener("click", () => {
+      if (modeMenuEl) modeMenuEl.open = false;
+      goToStep(firstPendingExercise(exerciseSequence, readCanvasCompleted()));
+    });
   }
 
   // --- Control de Modales Accesibles (WAI-ARIA Dialog) ---
@@ -1151,39 +1085,17 @@ function initCanvasLab() {
     }
   });
 
-  // --- Modo Inmersivo Unificado (Simulador + Ejercicios Prácticos + Laboratorios) y Ruta Guiada ---
+  // --- Modo inmersivo y barra fija del recorrido ---
   const canvasPageSection = document.getElementById("gemini-canvas");
-  const btnFullscreen = document.getElementById("btn-toggle-canvas-fullscreen");
-  const btnExercisesFullscreen = document.getElementById("btn-toggle-exercises-fullscreen");
   const btnHudImmersive = document.getElementById("btn-hud-toggle-immersive");
   const btnMmFullscreen = document.getElementById("btn-toggle-mm-fullscreen");
   const btnGemFullscreen = document.getElementById("btn-toggle-gem-fullscreen");
   const simModule = document.getElementById("canvas-simulator-module");
   const exModule = document.getElementById("canvas-exercises-module");
-  const focusBtns = document.querySelectorAll("[data-immersive-focus]");
-  const stationBtns = document.querySelectorAll("[data-guide-target]");
-  const immersiveModeSelectEl = document.getElementById("immersive-mode-select");
-  const btnImmersiveToggleTools = document.getElementById("btn-immersive-toggle-tools");
   let currentImmersiveFocus = "all";
 
-  // Selector desplegable: elegir un ejercicio abre su modo en el simulador y su tarjeta de práctica.
-  if (immersiveModeSelectEl) {
-    immersiveModeSelectEl.addEventListener("change", () => {
-      const step = parseJourneyValue(immersiveModeSelectEl.value, exerciseSequence);
-      if (step) openCanvasRoute(step.mode, step.exercise);
-    });
-  }
-
-  if (btnImmersiveToggleTools && canvasPageSection) {
-    btnImmersiveToggleTools.addEventListener("click", () => {
-      const shown = canvasPageSection.classList.toggle("show-immersive-tools");
-      btnImmersiveToggleTools.classList.toggle("active", shown);
-      btnImmersiveToggleTools.setAttribute("aria-pressed", String(shown));
-    });
-  }
-
   function syncImmersiveButtons(isFull) {
-    [btnFullscreen, btnExercisesFullscreen, btnHudImmersive, btnMmFullscreen, btnGemFullscreen].forEach(btn => {
+    [btnHudImmersive, btnMmFullscreen, btnGemFullscreen].forEach(btn => {
       if (!btn) return;
       btn.innerHTML = isFull ? "✕ Salir de Modo Inmersivo" : "⛶ Modo Inmersivo";
       btn.style.background = isFull ? "var(--color-primary)" : "";
@@ -1191,13 +1103,14 @@ function initCanvasLab() {
     });
   }
 
-  let currentGuidedStation = "simulator";
+  // Paso del modo que el aprendiz tiene delante: el ejemplo del simulador o los ejercicios.
+  // «var» se eleva sin zona muerta: el paso puede consultarse antes de llegar a esta línea.
+  var currentGuidedStation = "simulator";
   function setActiveGuidedStation(sectionName) {
-    if (sectionName === "simulator" || sectionName === "exercises") currentGuidedStation = sectionName;
-    stationBtns.forEach(btn => {
-      const active = btn.getAttribute("data-guide-target") === sectionName;
-      btn.classList.toggle("is-active", active);
-    });
+    if (sectionName !== "simulator" && sectionName !== "exercises") return;
+    if (sectionName === currentGuidedStation) return;
+    currentGuidedStation = sectionName;
+    updateLearnerGuideHud();
   }
 
   function applyImmersiveFocus(requestedFocus, targetSection) {
@@ -1205,12 +1118,7 @@ function initCanvasLab() {
       ? resolveImmersiveFocus(requestedFocus, targetSection)
       : (requestedFocus || "all");
     currentImmersiveFocus = resolved;
-    if (canvasPageSection) {
-      canvasPageSection.setAttribute("data-immersive-focus", resolved);
-    }
-    focusBtns.forEach(btn => {
-      btn.classList.toggle("active", btn.getAttribute("data-immersive-focus") === resolved);
-    });
+    if (canvasPageSection) canvasPageSection.setAttribute("data-immersive-focus", resolved);
   }
 
   function toggleFullscreen(options) {
@@ -1222,98 +1130,200 @@ function initCanvasLab() {
 
     simModule.classList.toggle("is-fullscreen", isFull);
     if (exModule) exModule.classList.toggle("is-fullscreen", isFull);
-    if (canvasPageSection) {
-      canvasPageSection.classList.toggle("is-immersive", isFull);
-      if (!isFull) {
-        canvasPageSection.classList.remove("show-immersive-tools");
-        if (btnImmersiveToggleTools) {
-          btnImmersiveToggleTools.classList.remove("active");
-          btnImmersiveToggleTools.setAttribute("aria-pressed", "false");
-        }
-      }
-    }
+    if (canvasPageSection) canvasPageSection.classList.toggle("is-immersive", isFull);
     syncImmersiveButtons(isFull);
     document.body.style.overflow = isFull ? "hidden" : "";
 
     if (opts.focusMode || opts.targetSection) {
       applyImmersiveFocus(opts.focusMode || currentImmersiveFocus, opts.targetSection);
     }
-    if (opts.targetSection) {
-      setActiveGuidedStation(opts.targetSection);
-    }
     if (opts.scrollTargetId) {
       const scrollEl = document.getElementById(opts.scrollTargetId);
       if (scrollEl) requestAnimationFrame(() => scrollEl.scrollIntoView({ behavior: "smooth", block: "start" }));
     }
     showCanvasToast(isFull
-      ? "⛶ Modo inmersivo limpio activado: enfocado en lo esencial (pulsa Esc para salir)."
-      : "Restaurada vista normal de la guía.");
+      ? "⛶ Modo inmersivo activado: solo ves el recorrido de Canvas (pulsa Esc para salir)."
+      : "Volviste a la vista normal de la guía.");
   }
 
-  if (btnFullscreen) {
-    btnFullscreen.addEventListener("click", () => toggleFullscreen({ focusMode: "simulator", targetSection: "simulator", scrollTargetId: "canvas-simulator-module" }));
+  // Abre el laboratorio extra de un modo (11 o 12) dentro de su paso de ejercicios.
+  function openModeLab(mode, labId) {
+    if (currentExerciseMode !== mode) selectMode(mode);
+    const labEl = document.getElementById(labId);
+    const holder = labEl ? labEl.closest("details") : null;
+    if (holder) holder.open = true;
+    return labEl;
   }
-  if (btnExercisesFullscreen) {
-    btnExercisesFullscreen.addEventListener("click", () => toggleFullscreen({ focusMode: "exercises", targetSection: "exercises", scrollTargetId: "canvas-exercises-module" }));
-  }
-  if (btnHudImmersive) {
-    btnHudImmersive.addEventListener("click", () => toggleFullscreen({ focusMode: currentImmersiveFocus === "all" ? "simulator" : currentImmersiveFocus }));
-  }
+
+  if (btnHudImmersive) btnHudImmersive.addEventListener("click", () => toggleFullscreen({}));
   if (btnMmFullscreen) {
     btnMmFullscreen.addEventListener("click", () => {
-      if (currentExerciseMode !== "multimodal-vision") selectMode("multimodal-vision");
+      openModeLab("multimodal-vision", "multimodal-simulator-module");
       toggleFullscreen({ forceState: true, targetSection: "labs", scrollTargetId: "multimodal-simulator-module" });
     });
   }
   if (btnGemFullscreen) {
     btnGemFullscreen.addEventListener("click", () => {
-      if (currentExerciseMode !== "gem-studio") selectMode("gem-studio");
+      openModeLab("gem-studio", "gem-studio-module");
       toggleFullscreen({ forceState: true, targetSection: "labs", scrollTargetId: "gem-studio-module" });
     });
   }
 
-  focusBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const focusVal = btn.getAttribute("data-immersive-focus");
-      applyImmersiveFocus(focusVal);
-      if (focusVal === "simulator") setActiveGuidedStation("simulator");
-      if (focusVal === "exercises") setActiveGuidedStation("exercises");
-    });
-  });
-
-  stationBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const targetSec = btn.getAttribute("data-guide-target");
-      applyImmersiveFocus(currentImmersiveFocus, targetSec);
-      setActiveGuidedStation(targetSec);
-      if (typeof updateJourneyPager === "function") updateJourneyPager();
-      if (targetSec === "simulator" && simModule) {
-        requestAnimationFrame(() => simModule.scrollIntoView({ behavior: "smooth", block: "start" }));
-      } else if (targetSec === "exercises" && exModule) {
-        requestAnimationFrame(() => exModule.scrollIntoView({ behavior: "smooth", block: "start" }));
-      } else if (targetSec === "labs") {
-        const labInfo = typeof getSpecializedLabForMode === "function" ? getSpecializedLabForMode(currentExerciseMode) : null;
-        const labEl = document.getElementById(labInfo ? labInfo.targetId : "canvas-advanced-labs-anchor");
-        if (labEl) requestAnimationFrame(() => labEl.scrollIntoView({ behavior: "smooth", block: "start" }));
-      }
-    });
-  });
-
-  // --- Recorrido guiado: selector de ejercicios y botones Anterior / Siguiente ---
+  // --- Recorrido guiado: barra fija con el modo actual, sus pasos y el menú de los 13 modos ---
   const journeyProgressEl = document.getElementById("canvas-journey-progress");
   const journeyRemainingEl = document.getElementById("canvas-journey-remaining");
   const journeyPrevBtn = document.getElementById("canvas-journey-prev");
   const journeyNextBtn = document.getElementById("canvas-journey-next");
+  const journeyWhereEl = document.getElementById("canvas-journey-where");
+  const modeMenuEl = document.getElementById("canvas-mode-menu");
+  const modeMenuGridEl = document.getElementById("canvas-mode-menu-grid");
+  const modeStationsEl = document.getElementById("canvas-mode-stations");
+  const workspaceTitleEl = document.getElementById("canvas-workspace-title");
+  const simModeLabelEl = document.getElementById("canvas-sim-mode-label");
+  const modeWrapUpEl = document.getElementById("canvas-mode-wrapup");
+  const modeLabEls = document.querySelectorAll("[data-lab-mode]");
+  const modeKeys = Object.keys(CANVAS_POSSIBILITIES);
 
-  function renderJourneySelect(completedIds) {
-    if (!immersiveModeSelectEl) return;
+  function partLetter(index) {
+    return String.fromCharCode(65 + index);
+  }
+  function modeNumber(mode) {
+    return modeKeys.indexOf(mode) + 1;
+  }
+  // Los nombres ya traen su número («5. Diseño…»); en los encabezados el número va aparte.
+  function modeShortName(mode) {
+    return CANVAS_POSSIBILITIES[mode].name.replace(/^\d+\.\s*/, "");
+  }
+  function modeHeading(mode) {
+    return `Modo ${modeNumber(mode)} de ${modeKeys.length} · ${modeShortName(mode)}`;
+  }
+
+  function renderModeMenu(completedIds) {
+    if (!modeMenuGridEl) return;
     const names = {};
-    Object.keys(CANVAS_POSSIBILITIES).forEach(mode => { names[mode] = CANVAS_POSSIBILITIES[mode].name; });
-    const groups = buildJourneyGroups(Object.keys(CANVAS_POSSIBILITIES), names, CANVAS_EXERCISES, completedIds);
-    immersiveModeSelectEl.innerHTML = groups.map(group =>
-      `<optgroup label="${escapeCanvasHtml(group.label)}">${group.options.map(o =>
-        `<option value="${escapeCanvasHtml(o.value)}">${escapeCanvasHtml(o.label)}</option>`).join("")}</optgroup>`).join("");
-    immersiveModeSelectEl.value = `${currentExerciseMode}|${currentExerciseIndex}`;
+    modeKeys.forEach(key => { names[key] = CANVAS_POSSIBILITIES[key].name; });
+    const groups = buildJourneyGroups(modeKeys, names, CANVAS_EXERCISES, completedIds);
+    modeMenuGridEl.innerHTML = groups.map(group => {
+      const mode = group.mode;
+      const isCurrentMode = mode === currentExerciseMode;
+      const doneCount = group.options.filter(o => o.done).length;
+      const onExample = isCurrentMode && currentGuidedStation !== "exercises";
+      const parts = group.options.map((o, i) => {
+        const isCurrent = isCurrentMode && currentGuidedStation === "exercises" && i === currentExerciseIndex;
+        return `<a class="canvas-mode-menu-part${o.done ? " is-done" : ""}" href="${buildCanvasRoute(mode, i)}" data-journey-value="${escapeCanvasHtml(o.value)}" title="${escapeCanvasHtml(o.label)}"${isCurrent ? ' aria-current="step"' : ""}>${o.done ? "✓ " : ""}${partLetter(i)}</a>`;
+      }).join("");
+      return `<li class="canvas-mode-menu-item${isCurrentMode ? " is-current" : ""}${doneCount === group.options.length ? " is-complete" : ""}">
+        <span class="canvas-mode-menu-name">${escapeCanvasHtml(CANVAS_POSSIBILITIES[mode].name)}${isCurrentMode ? ' <span class="canvas-mode-menu-here">(estás aquí)</span>' : ""}</span>
+        <span class="canvas-mode-menu-count" title="${doneCount} de ${group.options.length} ejercicios completados">${doneCount}/${group.options.length}</span>
+        <span class="canvas-mode-menu-parts">
+          <a class="canvas-mode-menu-part is-example" href="${buildCanvasRoute(mode)}" data-journey-example="${escapeCanvasHtml(mode)}" title="Ejemplo resuelto del modo ${modeNumber(mode)}"${onExample ? ' aria-current="step"' : ""}>Ejemplo</a>${parts}
+        </span>
+      </li>`;
+    }).join("");
+  }
+
+  function renderModeStations(completedIds) {
+    if (!modeStationsEl) return;
+    const stations = buildModeStations(currentExerciseMode, CANVAS_EXERCISES, completedIds, currentGuidedStation, currentExerciseIndex);
+    modeStationsEl.innerHTML = stations.map(st => {
+      const isExample = st.key === "example";
+      // En pantallas angostas se oculta la palabra «Parte»; el título y el nombre accesible conservan el texto completo.
+      const label = isExample
+        ? "① Ejemplo"
+        : `${st.done ? "✓ " : ""}<span class="canvas-station-word">Parte </span>${escapeCanvasHtml(partLetter(st.key))}`;
+      const title = isExample ? "Ejemplo resuelto en el simulador" : `${st.label} · ${st.code} · ${st.title}`;
+      return `<button type="button" class="canvas-station-btn${st.active ? " is-active" : ""}${st.done ? " is-done" : ""}" data-station="${st.key}" title="${escapeCanvasHtml(title)}" aria-label="${escapeCanvasHtml(isExample ? "Ejemplo resuelto" : `${st.label}${st.done ? ", completada" : ""}`)}"${st.active ? ' aria-current="step"' : ""}>${label}</button>`;
+    }).join(stations.length ? '<span class="canvas-station-arrow" aria-hidden="true">→</span>' : "");
+  }
+
+  function renderModeWrapUp(completedIds) {
+    if (!modeWrapUpEl) return;
+    const info = buildModeWrapUp(exerciseSequence, currentExerciseMode, currentExerciseIndex, completedIds);
+    if (!info) {
+      modeWrapUpEl.innerHTML = "";
+      return;
+    }
+    const ex = CANVAS_EXERCISES[currentExerciseMode][currentExerciseIndex];
+    const r = info.remaining;
+    const pendingText = r.pending
+      ? `Llevas ${r.done} de ${r.total} ejercicios. Te faltan ${r.pending} en ${r.pendingModes} ${r.pendingModes === 1 ? "modo" : "modos"}.`
+      : `Completaste los ${r.total} ejercicios de Gemini Canvas.`;
+    let title = "";
+    let text = "";
+    let actions = "";
+    if (info.kind === "next-part") {
+      const nextEx = CANVAS_EXERCISES[info.next.mode][info.next.exercise];
+      title = `③ Cuando termines ${ex.code}, sigue con la Parte ${partLetter(info.next.exercise)} de este modo`;
+      text = `El modo ${modeNumber(currentExerciseMode)} todavía no termina: tiene las partes A, B y C. ${pendingText}`;
+      actions = `<button type="button" class="canvas-mode-pager-btn is-primary" data-wrapup-go>Ir a ${escapeCanvasHtml(nextEx.code)}: ${escapeCanvasHtml(nextEx.title)} →</button>`;
+    } else if (info.kind === "next-mode") {
+      title = `③ Con la Parte ${partLetter(currentExerciseIndex)} terminas el modo ${modeNumber(currentExerciseMode)}`;
+      text = `Lo siguiente es revisar el ejemplo del modo ${modeNumber(info.next.mode)}: ${modeShortName(info.next.mode)}. ${pendingText}`;
+      actions = `<button type="button" class="canvas-mode-pager-btn is-primary" data-wrapup-go>Ir al ejemplo del modo ${modeNumber(info.next.mode)} →</button>`;
+    } else {
+      title = "③ Este es el último ejercicio del recorrido";
+      text = r.pending ? `${pendingText} Abre «Cambiar de modo o ejercicio» para completar los que faltan.` : `${pendingText} Ahora aplica lo aprendido en un proyecto.`;
+      actions = (r.pending ? '<button type="button" class="canvas-mode-pager-btn is-primary" data-wrapup-continue>▶ Ir al primer pendiente</button>' : "")
+        + `<a class="canvas-mode-pager-btn${r.pending ? "" : " is-primary"}" href="#proyectos">Ir al Hub de proyectos →</a>`;
+    }
+    modeWrapUpEl.innerHTML = `
+      <div class="canvas-mode-wrapup-copy">
+        <p class="canvas-mode-wrapup-title">${escapeCanvasHtml(title)}</p>
+        <p class="canvas-mode-wrapup-text">${escapeCanvasHtml(text)}</p>
+      </div>
+      <div class="canvas-mode-wrapup-actions">${actions}</div>`;
+    const goBtn = modeWrapUpEl.querySelector("[data-wrapup-go]");
+    if (goBtn) goBtn.addEventListener("click", () => goToStep(info.next));
+    const continueWrapBtn = modeWrapUpEl.querySelector("[data-wrapup-continue]");
+    if (continueWrapBtn) continueWrapBtn.addEventListener("click", () => goToStep(firstPendingExercise(exerciseSequence, readCanvasCompleted())));
+  }
+
+  // Lleva al ejemplo del modo actual sin cambiar de modo.
+  function showCurrentExample() {
+    setActiveGuidedStation("simulator");
+    if (simModule) requestAnimationFrame(() => simModule.scrollIntoView({ behavior: "smooth", block: "start" }));
+    const route = buildCanvasRoute(currentExerciseMode);
+    if (window.location.hash !== route) history.replaceState(null, "", route);
+  }
+
+  if (modeStationsEl) {
+    modeStationsEl.addEventListener("click", event => {
+      const btn = event.target.closest("[data-station]");
+      if (!btn) return;
+      const key = btn.getAttribute("data-station");
+      if (key === "example") showCurrentExample();
+      else openCanvasRoute(currentExerciseMode, Number(key));
+    });
+  }
+
+  if (modeMenuGridEl) {
+    modeMenuGridEl.addEventListener("click", event => {
+      const link = event.target.closest("a[data-journey-value], a[data-journey-example]");
+      if (!link) return;
+      event.preventDefault();
+      if (modeMenuEl) modeMenuEl.open = false;
+      if (modeTransitionBannerEl) modeTransitionBannerEl.hidden = true;
+      const exampleMode = link.getAttribute("data-journey-example");
+      if (exampleMode) {
+        if (exampleMode === currentExerciseMode) showCurrentExample();
+        else openCanvasRoute(exampleMode);
+        return;
+      }
+      const step = parseJourneyValue(link.getAttribute("data-journey-value"), exerciseSequence);
+      if (step) openCanvasRoute(step.mode, step.exercise);
+    });
+  }
+  if (modeMenuEl) {
+    modeMenuEl.addEventListener("keydown", event => {
+      if (event.key !== "Escape" || !modeMenuEl.open) return;
+      event.stopPropagation();
+      modeMenuEl.open = false;
+      const summary = modeMenuEl.querySelector("summary");
+      if (summary) summary.focus();
+    });
+    document.addEventListener("click", event => {
+      if (modeMenuEl.open && !modeMenuEl.contains(event.target)) modeMenuEl.open = false;
+    });
   }
 
   // El ciclo de cada modo es: ① ejemplo en el simulador → ② Parte A → B → C → ① ejemplo del modo siguiente.
@@ -1334,12 +1344,12 @@ function initCanvasLab() {
     if (journeyNextBtn) {
       journeyNextBtn.disabled = !next;
       journeyNextBtn.textContent = !next ? "Fin del recorrido"
-        : next.station === "simulator" ? "Siguiente modo: ver ejemplo →"
+        : next.station === "simulator" ? `Siguiente: ejemplo del modo ${modeNumber(next.mode)} →`
           : `Siguiente: ${CANVAS_EXERCISES[next.mode][next.exercise].code} →`;
     }
     if (journeyPrevBtn) {
       journeyPrevBtn.disabled = !prev;
-      journeyPrevBtn.textContent = prev && prev.station === "simulator" ? "← Ver ejemplo del modo" : "← Anterior";
+      journeyPrevBtn.textContent = prev && prev.station === "simulator" ? "← Ejemplo del modo" : "← Anterior";
     }
   }
 
@@ -1347,15 +1357,8 @@ function initCanvasLab() {
     const target = journeyTarget(direction);
     if (!target) return;
     if (target.station === "simulator") {
-      if (target.mode !== currentExerciseMode) {
-        showSimulatorForModeTransition(target);
-      } else {
-        applyImmersiveFocus(currentImmersiveFocus, "simulator");
-        setActiveGuidedStation("simulator");
-        if (simModule) requestAnimationFrame(() => simModule.scrollIntoView({ behavior: "smooth", block: "start" }));
-      }
-      setActiveGuidedStation("simulator");
-      updateJourneyPager();
+      if (target.mode !== currentExerciseMode) showSimulatorForModeTransition(target);
+      else showCurrentExample();
       return;
     }
     openCanvasRoute(target.mode, target.exercise);
@@ -1363,52 +1366,23 @@ function initCanvasLab() {
   if (journeyPrevBtn) journeyPrevBtn.addEventListener("click", () => goJourney(-1));
   if (journeyNextBtn) journeyNextBtn.addEventListener("click", () => goJourney(1));
 
-  // --- Brújula del Aprendiz y Barra de Ruta Guiada (HUD) ---
-  const hudModeBadgeEl = document.getElementById("immersive-hud-mode-badge");
-  const hudProgressEl = document.getElementById("immersive-hud-progress");
-  const stationExBadgeEl = document.getElementById("guide-station-ex-badge");
-  const compassPhaseEl = document.getElementById("canvas-compass-phase");
-  const compassTextEl = document.getElementById("canvas-compass-text");
-  const compassCtaEl = document.getElementById("canvas-compass-cta");
-
   // «var» se eleva sin zona muerta: si una tarjeta se pinta antes de crear la barra, la llamada se ignora.
   var journeyHudReady = false;
   function updateLearnerGuideHud() {
-    if (!journeyHudReady) return;
-    if (typeof computeLearnerGuideState !== "function" || typeof CANVAS_EXERCISES === "undefined") return;
-    const modeKeys = Object.keys(CANVAS_POSSIBILITIES);
-    const modeIndex = Math.max(0, modeKeys.indexOf(currentExerciseMode));
+    if (!journeyHudReady || typeof CANVAS_EXERCISES === "undefined") return;
     const list = CANVAS_EXERCISES[currentExerciseMode] || [];
-    const ex = list[currentExerciseIndex] || list[0];
-    if (!ex) return;
-
-    const card = exercisesContentEl ? exercisesContentEl.querySelector(".canvas-exercise-card") : null;
-    const stepChecks = card ? Array.from(card.querySelectorAll(".canvas-step-done")) : [];
-    const critChecks = card ? Array.from(card.querySelectorAll(".canvas-exercise-check")) : [];
-    const stepsDone = stepChecks.filter(c => c.checked).length;
-    const checksDone = critChecks.filter(c => c.checked).length;
-
-    const guideState = computeLearnerGuideState({
-      mode: currentExerciseMode,
-      modeIndex,
-      totalModes: modeKeys.length,
-      modeName: CANVAS_POSSIBILITIES[currentExerciseMode].name,
-      exerciseIndex: currentExerciseIndex,
-      totalExercisesInMode: list.length,
-      exercise: ex,
-      nextStep: exerciseNextStep(),
-      stepsDone,
-      stepsTotal: stepChecks.length || (ex.steps ? ex.steps.length : 0),
-      checksDone,
-      checksTotal: critChecks.length || (ex.criteria ? ex.criteria.length : 0)
-    });
-
+    if (!list[currentExerciseIndex]) return;
     const completedIds = readCanvasCompleted();
     const remaining = journeyRemaining(exerciseSequence, completedIds);
-    const pos = exercisePosition(exerciseSequence, currentExerciseMode, currentExerciseIndex);
-    if (hudModeBadgeEl && pos) hudModeBadgeEl.textContent = `Ejercicio ${pos.number} de ${pos.total}`;
-    renderJourneySelect(completedIds);
-    if (hudProgressEl) hudProgressEl.textContent = `${remaining.done} de ${remaining.total} completados`;
+    const heading = modeHeading(currentExerciseMode);
+    const stationText = currentGuidedStation === "exercises" ? `Parte ${partLetter(currentExerciseIndex)}` : "Ejemplo";
+    if (journeyWhereEl) journeyWhereEl.textContent = `${heading} · ${stationText}`;
+    if (workspaceTitleEl) workspaceTitleEl.textContent = heading;
+    if (simModeLabelEl) simModeLabelEl.textContent = CANVAS_POSSIBILITIES[currentExerciseMode].name;
+    renderModeMenu(completedIds);
+    renderModeStations(completedIds);
+    renderModeWrapUp(completedIds);
+    modeLabEls.forEach(el => { el.hidden = el.getAttribute("data-lab-mode") !== currentExerciseMode; });
     if (journeyProgressEl) {
       journeyProgressEl.max = remaining.total;
       journeyProgressEl.value = remaining.done;
@@ -1416,49 +1390,15 @@ function initCanvasLab() {
     }
     if (journeyRemainingEl) {
       journeyRemainingEl.textContent = remaining.pending
-        ? `Te faltan ${remaining.pending} de ${remaining.total} ejercicios en ${remaining.pendingModes} ${remaining.pendingModes === 1 ? "modo" : "modos"}. En cada modo: revisa el ejemplo y haz las partes A, B y C.`
+        ? `${remaining.done} de ${remaining.total} completados. Te faltan ${remaining.pending} ejercicios en ${remaining.pendingModes} ${remaining.pendingModes === 1 ? "modo" : "modos"}.`
         : `Completaste los ${remaining.total} ejercicios de Gemini Canvas.`;
     }
-    if (stationExBadgeEl) stationExBadgeEl.textContent = ex.code;
-    updateJourneyPager();
-
-    if (compassPhaseEl) compassPhaseEl.textContent = `Fase ${guideState.phaseNumber} de ${guideState.totalPhases}`;
-    if (compassTextEl) compassTextEl.textContent = guideState.headline;
-    if (compassCtaEl) {
-      compassCtaEl.textContent = guideState.ctaLabel;
-      compassCtaEl.dataset.compassAction = guideState.ctaAction;
+    if (continueBtn) {
+      const pending = firstPendingExercise(exerciseSequence, completedIds);
+      continueBtn.hidden = !pending;
+      continueBtn.title = pending ? `Abre: ${stepLabel(pending)}` : "";
     }
-  }
-
-  if (compassCtaEl) {
-    compassCtaEl.addEventListener("click", () => {
-      const action = compassCtaEl.dataset.compassAction;
-      const list = CANVAS_EXERCISES[currentExerciseMode] || [];
-      const ex = list[currentExerciseIndex] || list[0];
-      if (action === "go-exercises") {
-        openCanvasRoute(currentExerciseMode, currentExerciseIndex);
-      } else if (action === "copy-prompt" && ex) {
-        copyTextToClipboard(canvasCopyText(ex, "prompt"))
-          .then(() => {
-            flashCopiedButton(compassCtaEl);
-            showCanvasToast(`📋 Prompt de ${ex.code} copiado. Sigue los pasos en el ejercicio.`);
-          })
-          .catch(() => showCanvasToast("No se pudo copiar. Usa el botón «Copiar prompt completo» del ejercicio."));
-        applyImmersiveFocus(currentImmersiveFocus, "exercises");
-        setActiveGuidedStation("exercises");
-        if (exModule) requestAnimationFrame(() => exModule.scrollIntoView({ behavior: "smooth", block: "start" }));
-      } else if (action === "focus-steps" || action === "focus-checks") {
-        applyImmersiveFocus(currentImmersiveFocus, "exercises");
-        setActiveGuidedStation("exercises");
-        const selector = action === "focus-checks" ? ".canvas-exercise-checklist" : ".canvas-exercise-steps";
-        const target = (exercisesContentEl && exercisesContentEl.querySelector(selector)) || exModule;
-        if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "smooth", block: "start" }));
-      } else if (action === "next-exercise" || action === "next-mode") {
-        goToStep(exerciseNextStep());
-      } else if (action === "open-projects-hub") {
-        window.location.hash = "#proyectos";
-      }
-    });
+    updateJourneyPager();
   }
 
   // Primera pintura del recorrido, cuando ya existen todas las referencias de la barra.
@@ -1721,25 +1661,6 @@ function initCanvasLab() {
     }, 2500);
   }
 
-  // --- Filtrado por Categoría Funcional de Posibilidades ---
-  const categoryFilterBtns = document.querySelectorAll('.category-pill[data-category]');
-  categoryFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      categoryFilterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const selectedCat = btn.getAttribute('data-category');
-      
-      tabs.forEach(tab => {
-        const tabCat = tab.getAttribute('data-category');
-        if (selectedCat === 'all' || tabCat === selectedCat) {
-          tab.style.display = 'inline-flex';
-        } else {
-          tab.style.display = 'none';
-        }
-      });
-    });
-  });
-
   // Event listeners para pestañas de posibilidad
   function selectMode(pId) {
     tabs.forEach(t => {
@@ -1796,6 +1717,18 @@ function initCanvasLab() {
   if (typeof initCanvasSubnav === "function") {
     initCanvasSubnav(document, window);
   }
+
+  // Al desplazarse, la barra marca el paso que el aprendiz tiene en pantalla: el ejemplo o los ejercicios.
+  // En modo inmersivo la sección es la que se desplaza; el evento se escucha en captura para cubrir ambos casos.
+  let stationScrollPending = false;
+  document.addEventListener("scroll", () => {
+    if (stationScrollPending || !exModule || !canvasPageSection || !canvasPageSection.classList.contains("active")) return;
+    stationScrollPending = true;
+    requestAnimationFrame(() => {
+      stationScrollPending = false;
+      setActiveGuidedStation(stationAtScroll(exModule.getBoundingClientRect().top, window.innerHeight));
+    });
+  }, { capture: true, passive: true });
 
   // Reorganización de columnas arrastrando (Drag & Drop) y selector de disposición
   const splitContainerEl = document.querySelector(".canvas-split-container");
@@ -1856,7 +1789,8 @@ function initCanvasLab() {
   // Cargar la posibilidad de la ruta, la última visitada o la primera
   const lastMode = readCanvasStore("canvasLastMode", null);
   selectMode(CANVAS_POSSIBILITIES[lastMode] ? lastMode : "doc-editorial");
-  renderCanvasExerciseIndex();
+  syncCanvasProgressViews();
+  updateLearnerGuideHud();
   if (typeof window.applyHashRoute === "function") window.applyHashRoute();
 
   // Exponer a window para la Paleta de Comandos y pruebas

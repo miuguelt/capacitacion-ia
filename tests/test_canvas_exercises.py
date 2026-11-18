@@ -167,15 +167,39 @@ def test_canvas_navigation_markup():
     assert html.index('src="js/canvas-coverage.js"') < html.index('src="js/canvas-exercises.js"'), "cobertura carga antes de ejercicios"
     assert html.index('src="js/canvas-subnav.js"') < html.index('src="js/app.js"'), "subnavegación carga antes de app.js"
     assert html.index('src="js/canvas-column-dnd.js"') < html.index('src="js/app.js"'), "column-dnd carga antes de app.js"
-    assert 'id="canvas-exercise-index-list"' in html, "índice de los 24 ejercicios"
-    assert 'id="canvas-exercise-prev"' in html and 'id="canvas-exercise-next"' in html, "paginador entre ejercicios"
     assert 'canvas-mode-prev' not in html, "el paginador ya no salta modos completos"
-    assert 'id="canvas-exercise-position"' in html, "posición «Ejercicio N de 24»"
     assert 'id="canvas-continue-btn"' in html, "botón para retomar el primer ejercicio pendiente"
-    assert 'id="canvas-exercise-done-next"' in html, "aviso de ejercicio completado con salto al siguiente"
-    for section in ["canvas-fundamentals-anchor", "canvas-simulator-module", "canvas-exercises-module", "canvas-coverage-module", "canvas-advanced-labs-anchor"]:
-        assert f'data-canvas-section="{section}"' in html
+    for section in ["canvas-simulator-module", "canvas-exercises-module"]:
+        assert f'data-canvas-section="{section}"' in html, "la barra sabe qué paso está en pantalla"
         assert f'id="{section}"' in html
+
+
+def test_canvas_page_follows_one_journey_per_mode():
+    html = _html()
+    start = html.index('<section class="page-view" id="gemini-canvas">')
+    end = html.index('<section class="page-view" id="proyectos">')
+    page = html[start:end]
+    assert "canvas-quick-nav" not in page, "la navegación por secciones ya no compite con el recorrido"
+    for element_id in ["canvas-journey-bar", "canvas-mode-menu", "canvas-mode-menu-grid", "canvas-mode-stations",
+                       "canvas-journey-prev", "canvas-journey-next", "canvas-journey-progress",
+                       "canvas-mode-workspace", "canvas-workspace-title", "canvas-sim-mode-label", "canvas-mode-wrapup",
+                       "canvas-resources"]:
+        assert f'id="{element_id}"' in page, f"Falta #{element_id}"
+    order = [page.index(f'id="{i}"') for i in [
+        "canvas-start-details", "canvas-journey-bar", "canvas-mode-workspace", "canvas-simulator-module",
+        "canvas-exercises-module", "multimodal-simulator-module", "gem-studio-module", "canvas-mode-wrapup",
+        "canvas-resources", "canvas-coverage-module"]]
+    assert order == sorted(order), "orden: antes de empezar, barra, ejemplo, ejercicios, laboratorio, qué sigue y recursos"
+    workspace = page[page.index('id="canvas-mode-workspace"'):page.index('id="canvas-resources"')]
+    for inside in ["canvas-simulator-module", "canvas-exercises-module", "multimodal-simulator-module", "gem-studio-module"]:
+        assert f'id="{inside}"' in workspace, f"#{inside} vive dentro del espacio de trabajo del modo"
+    assert 'id="canvas-coverage-module"' not in workspace, "el mapa de funciones queda fuera del recorrido"
+    assert page.count('class="canvas-aside canvas-mode-lab"') == 2
+    assert 'data-lab-mode="multimodal-vision" hidden' in page and 'data-lab-mode="gem-studio" hidden' in page
+    assert 'class="canvas-tab-bar" role="tablist" aria-label="Posibilidades de Gemini Canvas" hidden' in page
+    for removed in ["canvas-learner-compass", "data-immersive-focus=", "canvas-exercise-index", "canvas-exercise-position",
+                    "canvas-category-filters", "canvas-advanced-labs-anchor", "btn-toggle-exercises-fullscreen"]:
+        assert removed not in page, f"{removed} ya no forma parte de la página"
 
 
 def test_app_uses_linear_exercise_sequence():
@@ -204,7 +228,8 @@ def test_projects_hub_markup_and_integration():
     assert 'id="proyectos"' in html, "Sección #proyectos debe existir"
     assert '<section class="page-view" id="proyectos">' in html, "Etiqueta section de proyectos debe existir"
     assert 'href="#proyectos"' in html and 'data-target="proyectos"' in html, "Enlace en sidebar debe existir"
-    assert '<a href="#proyectos" class="quick-nav-pill">' in html, "Pill en subnavegación de Canvas Lab debe existir"
+    app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
+    assert 'href="#proyectos">Ir al Hub de proyectos' in app, "el cierre del recorrido de Canvas enlaza al Hub de proyectos"
     assert '<script src="js/projects-hub.js"></script>' in html, "Script projects-hub.js referenciado"
     assert html.index('src="js/projects-hub.js"') < html.index('src="js/app.js"'), "projects-hub.js debe cargar antes de app.js"
     for element_id in [
@@ -222,14 +247,12 @@ def test_projects_hub_markup_and_integration():
     assert 'data-hub-reset-order' in html
 
 
-def test_immersive_mode_includes_exercises_and_guided_compass():
+def test_immersive_mode_and_journey_bar():
     html = _html()
     app = (BASE_DIR / "js" / "app.js").read_text(encoding="utf-8")
     css = (BASE_DIR / "css" / "styles.css").read_text(encoding="utf-8")
     for required_id in [
-        "canvas-immersive-hud",
-        "canvas-learner-compass",
-        "btn-toggle-exercises-fullscreen",
+        "canvas-journey-bar",
         "btn-hud-toggle-immersive",
         "btn-toggle-mm-fullscreen",
         "btn-toggle-gem-fullscreen",
@@ -240,11 +263,10 @@ def test_immersive_mode_includes_exercises_and_guided_compass():
         "dia3-sim-bridge",
     ]:
         assert f'id="{required_id}"' in html, f"Falta #{required_id} en index.html"
-    for focus_mode in ["all", "split", "simulator", "exercises"]:
-        assert f'data-immersive-focus="{focus_mode}"' in html
     assert "#gemini-canvas.is-immersive" in css
     assert "#canvas-exercises-module.is-fullscreen" in css
-    assert "computeLearnerGuideState(" in app
+    for fn in ["buildModeStations(", "buildModeWrapUp(", "buildJourneyGroups(", "parseJourneyValue("]:
+        assert fn in app, f"app.js debe usar {fn}"
     assert "resolveImmersiveFocus(" in app
     assert "getSpecializedLabForMode(" in app
 
@@ -269,9 +291,8 @@ def test_simulator_live_enhancements_and_360_vision():
     assert "buildCanvasTransformPreviewHtml(" in poss and "buildCanvasTransformPreviewHtml(" in app
     assert "buildCompleteVisionSummaryHtml(" in cov
     assert "CANVAS_VISION_STAGES" in cov
-    for clean_id in ["immersive-mode-select", "btn-immersive-toggle-tools", "dia3-immersive-bar", "btn-dia3-hud-exit"]:
+    for clean_id in ["canvas-mode-menu", "canvas-mode-stations", "dia3-immersive-bar", "btn-dia3-hud-exit"]:
         assert f'id="{clean_id}"' in html, f"Falta #{clean_id} en index.html"
-    assert "show-immersive-tools" in app
 
 
 
